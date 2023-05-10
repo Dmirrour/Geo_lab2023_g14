@@ -36,3 +36,9 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+.idea/
+/wildfly-27.0.1.Final/
+/Geo_lab2023_g14-ear/target/
+/Geo_lab2023_g14-ejb/target/
+/Geo_lab2023_g14-web/target/

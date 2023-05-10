@@ -1,40 +1,24 @@
-package uy.edu.tsig.model;
+package uy.edu.tsig.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
 
 
-@Entity(name = "usuario")
-@javax.persistence.Table(name = "usuario")
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
 public class Usuario implements Serializable{
 	@Id
 	private String usuario;
+
 	private String pass;
-	
-	public Usuario(){
-		super();
-	}
-	
-	public Usuario(String usuario,String pass) {
-		super();
-		this.usuario=usuario;
-		this.pass=pass;
-	}
-	
-	public String getUsuario() {
-		return usuario;
-	}
-	public void setUsuario(String usuario) {
-		this.usuario = usuario;
-	}
-	public String getPass() {
-		return pass;
-	}
-	public void setPass(String pass) {
-		this.pass = pass;
-	}
-	
-	
+
 }

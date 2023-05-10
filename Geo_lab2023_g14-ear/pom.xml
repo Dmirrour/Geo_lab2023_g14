@@ -41,6 +41,7 @@
             <artifactId>Geo_lab2023_g14-web</artifactId>
             <type>war</type>
         </dependency>
+
     </dependencies>
 
     <build>

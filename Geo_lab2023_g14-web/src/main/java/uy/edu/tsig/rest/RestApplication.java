@@ -1,4 +1,4 @@
-package uy.edu.fing.tse.CargaUY.rest;
+package uy.edu.tsig.rest;
 
 import jakarta.ws.rs.ApplicationPath;
 import jakarta.ws.rs.core.Application;

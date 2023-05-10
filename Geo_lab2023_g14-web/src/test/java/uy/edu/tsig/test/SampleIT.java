@@ -1,4 +1,4 @@
-package org.example.test;
+package uy.edu.tsig.test;
 
 import java.io.File;
 
