@@ -1,5 +1,7 @@
 package uy.edu.tsig.persistence.impl;
 
+import jakarta.ejb.Remote;
+import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import uy.edu.tsig.dto.UsuarioDTO;
@@ -7,6 +9,7 @@ import uy.edu.tsig.entity.Usuario;
 import uy.edu.tsig.persistence.IUsuarioDAO;
 import uy.edu.tsig.util.qualifier.Geo_lab2023_g14PersistenceUnit;
 
+@Stateless
 public class UsuarioDAO implements IUsuarioDAO {
     @Geo_lab2023_g14PersistenceUnit
     @Inject
