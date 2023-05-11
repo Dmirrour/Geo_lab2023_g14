@@ -123,6 +123,27 @@
             <version>12.0.0</version>
             <classifier>jakarta</classifier>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.webjars/openlayers -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>openlayers</artifactId>
+            <version>5.2.0</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.scala-js/scalajs-library -->
+        <dependency>
+            <groupId>org.scala-js</groupId>
+            <artifactId>scalajs-library_2.13</artifactId>
+            <version>1.13.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.webjars/openlayers -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>openlayers</artifactId>
+            <version>5.2.0</version>
+        </dependency>
+
+
 
 
     </dependencies>

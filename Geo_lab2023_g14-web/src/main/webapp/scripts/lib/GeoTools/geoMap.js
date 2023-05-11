@@ -7,7 +7,7 @@ function GeoMap(){
 GeoMap.prototype.CrearMapa= function(target,layers,center,zoom){
     var _target = target || 'map',
     _layers = layers || [],
-    _center = center || [-68.162635, -16.503637],
+    _center = center || [-56.166824,-34.915633],
     _zoom = zoom || 15;
 
     this.map = new ol.Map({
