@@ -8,6 +8,7 @@
       xmlns:p="http://primefaces.org/ui">
 <h:head>
     <title>CargaUY</title>
+    #{sesion.init()}
 </h:head>
 <h:body>
     <h:form>
@@ -18,17 +19,17 @@
             <div class="field grid">
                 <p:outputLabel for="nombreU" class="col-12 mb-2 md:col-4 md:mb-0">Nombre Usuario:</p:outputLabel>
                 <div class="col-12 md:col-8">
-                    <p:inputText id="nombreU" required="true" value="#{sesion.usuario.usuario}" />
+                    <p:inputText id="nombreU" required="true" value="#{sesion.idUser}" />
                 </div>
             </div>
             <div class="field grid">
                 <p:outputLabel for="pass" class="col-12 mb-2 md:col-4 md:mb-0">Contraseña</p:outputLabel>
                 <div class="col-12 md:col-8">
-                    <p:password id="pass" required="true" value="#{sesion.usuario.pass}" />
+                    <p:password id="pass" required="true" value="#{sesion.pass}" />
                 </div>
             </div>
             <div class="text-right">
-                <p:commandButton value="login" icon="ui-icon-key" action="#{sesion.iniciarSesion}" />
+                <p:commandButton value="login" icon="ui-icon-key" action="#{sesion.iniciarSesion()}" />
             </div>
         </div>
     </h:form>

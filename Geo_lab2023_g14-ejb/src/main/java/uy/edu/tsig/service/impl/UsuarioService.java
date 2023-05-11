@@ -8,13 +8,15 @@ import uy.edu.tsig.persistence.IUsuarioDAO;
 import uy.edu.tsig.service.IUsuarioSevice;
 
 @Stateless
-@Named("userService")
+@Named("usuarioService")
 public class UsuarioService implements IUsuarioSevice {
 
     @EJB
     IUsuarioDAO iUsuarioDAO;
     @Override
-    public UsuarioDTO incioSesion(String usuario, String pass) {
+    public UsuarioDTO incioSesion(UsuarioDTO u) {
+        String usuario= u.getUsuario();
+        String pass= u.getPass();
         return iUsuarioDAO.InicioSecion(usuario, pass);
     }
 }

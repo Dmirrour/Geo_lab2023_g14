@@ -16,6 +16,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Entity
 public class Usuario implements Serializable{
+
+	private static final Long serialVersionUID = 1L;
 	@Id
 	private String usuario;
 

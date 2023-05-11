@@ -1,9 +1,9 @@
 package uy.edu.tsig.persistence.impl;
 
-import jakarta.ejb.Remote;
 import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import uy.edu.tsig.dto.UsuarioDTO;
 import uy.edu.tsig.entity.Usuario;
 import uy.edu.tsig.persistence.IUsuarioDAO;

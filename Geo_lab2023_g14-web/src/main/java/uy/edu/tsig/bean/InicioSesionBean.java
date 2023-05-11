@@ -2,6 +2,8 @@ package uy.edu.tsig.bean;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.EJB;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import uy.edu.tsig.dto.UsuarioDTO;
@@ -15,17 +17,29 @@ public class InicioSesionBean implements Serializable {
    @EJB
     IUsuarioSevice iUsuarioSevice;
     private UsuarioDTO usuario;
+    private String idUser;
+    private String pass;
 
-    @PostConstruct
+
     public void init(){
         usuario= new UsuarioDTO();
     }
-    public String iniciarSesion(String usuario,String pass){
-        String redireccion = null;
-        UsuarioDTO u=iUsuarioSevice.incioSesion(usuario, pass);
 
+    public String iniciarSesion(){
+        String redireccion = null;
+        UsuarioDTO auxU= UsuarioDTO.builder()
+                .usuario(idUser).
+                pass(pass)
+                .build();
+        UsuarioDTO u=iUsuarioSevice.incioSesion(auxU);
+        System.out.println(u);
         if(u!=null){
-            redireccion= "/Protegido/loguinPass.jsf";
+            System.out.println("Entre a encotro");
+            redireccion = "/index.xhtml";
+            redireccion= "/loginPass.xhtml";
+
+        }else{
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_FATAL, "Aviso", "Credenciales Incorrectas"));
         }
         return redireccion;
 
@@ -39,4 +53,19 @@ public class InicioSesionBean implements Serializable {
         return usuario;
     }
 
+    public void setPass(String pass) {
+        this.pass = pass;
+    }
+
+    public String getPass() {
+        return pass;
+    }
+
+    public String getIdUser() {
+        return idUser;
+    }
+
+    public void setIdUser(String idUser) {
+        this.idUser = idUser;
+    }
 }
