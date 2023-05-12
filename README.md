@@ -57,3 +57,29 @@ The goal "verify" (which triggers the maven-surefire-plugin) is executed later i
 artifacts ("Geo_lab2023_g14-ejb.jar" and "Geo_lab2023_g14-web.war") are already built. You can build
 the final EAR by including those files. The "maven-surefire-plugin" is executed before the JAR/WAR files
 are created, so those JAR/WAR files would have to be built in the "@Deployment" method, too. 
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+Utilizaccion
+
+Persistencia
+3.0
+
+Java 11.0.18 (correto en intellij)
+WildFly 27.0.1
+ -libreria posgres 42.6.0
+
+temporalmente para prubas
+GeoServer versión 2.19.7  .bin .exe  futuro posible .war
+
+intellig
+ plugins
+  Arquillian jet Brain 231.8109.9
+  Jakarta EE: Enterprse Java Beans (EJB) 231.8109.9
+  Jakarta EE: Server Faces (JSF)
+
+  
+ 
+
+
+

@@ -35,8 +35,9 @@ public class InicioSesionBean implements Serializable {
         System.out.println(u);
         if(u!=null){
             System.out.println("Entre a encotro");
-            redireccion = "/index.xhtml";
             redireccion= "/loginPass.xhtml";
+
+            //consulta seccion
 
         }else{
             FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_FATAL, "Aviso", "Credenciales Incorrectas"));
