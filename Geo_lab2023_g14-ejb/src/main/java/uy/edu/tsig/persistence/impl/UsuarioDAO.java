@@ -21,7 +21,7 @@ public class UsuarioDAO implements IUsuarioDAO {
         return ur;
     }
     @Override
-    public UsuarioDTO InicioSecion(String usuario, String pass){
+    public UsuarioDTO InicioSesion(String usuario, String pass){
         Usuario u= em.find(Usuario.class, usuario);
 
         if(u!=null && u.getPass().equals(pass)){
