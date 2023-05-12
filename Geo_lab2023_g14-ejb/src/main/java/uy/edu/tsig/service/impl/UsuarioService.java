@@ -17,6 +17,6 @@ public class UsuarioService implements IUsuarioSevice {
     public UsuarioDTO incioSesion(UsuarioDTO u) {
         String usuario= u.getUsuario();
         String pass= u.getPass();
-        return iUsuarioDAO.InicioSecion(usuario, pass);
+        return iUsuarioDAO.InicioSesion(usuario, pass);
     }
 }

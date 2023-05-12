@@ -6,5 +6,5 @@ import uy.edu.tsig.dto.UsuarioDTO;
 @Remote
 public interface IUsuarioDAO {
     UsuarioDTO buscarUsuario(String usuario);
-    UsuarioDTO InicioSecion(String usuario, String pass);
+    UsuarioDTO InicioSesion(String usuario, String pass);
 }

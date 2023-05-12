@@ -14,7 +14,8 @@ import java.io.Serializable;
 @Named("sesion")
 @ViewScoped
 public class InicioSesionBean implements Serializable {
-   @EJB
+    @EJB
+    // private ??
     IUsuarioSevice iUsuarioSevice;
     private UsuarioDTO usuario;
     private String idUser;
@@ -32,15 +33,13 @@ public class InicioSesionBean implements Serializable {
                 pass(pass)
                 .build();
         UsuarioDTO u=iUsuarioSevice.incioSesion(auxU);
-        System.out.println(u);
-        if(u!=null){
-            System.out.println("Entre a encotro");
-            redireccion= "/loginPass.xhtml";
-
-            //consulta seccion
-
+        // System.out.println(u);
+        if(u != null){
+            // System.out.println("Entre a encontro");
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", u);
+            redireccion= "/admin/inicio.xhtml";
         }else{
-            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_FATAL, "Aviso", "Credenciales Incorrectas"));
+            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "Credenciales Incorrectas"));
         }
         return redireccion;
 
