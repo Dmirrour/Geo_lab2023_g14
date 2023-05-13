@@ -21,7 +21,7 @@
 * Apache Tomcat 9.0.74
 * Geoserver 2.19.7
 * Persistencia 3.0
-* Apache Maven 3.9.0 ****
+* Apache Maven 3.9.0
 
 ### **Java**
 * Java 11.0.18
