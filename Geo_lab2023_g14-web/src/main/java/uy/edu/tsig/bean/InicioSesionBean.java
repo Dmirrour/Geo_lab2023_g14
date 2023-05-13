@@ -21,25 +21,24 @@ public class InicioSesionBean implements Serializable {
     private String idUser;
     private String pass;
 
-
-    public void init(){
-        usuario= new UsuarioDTO();
+    public void init() {
+        usuario = new UsuarioDTO();
     }
 
-    public String iniciarSesion(){
+    public String iniciarSesion() {
         String redireccion = null;
-        UsuarioDTO auxU= UsuarioDTO.builder()
-                .usuario(idUser).
-                pass(pass)
+        UsuarioDTO auxU = UsuarioDTO.builder()
+                .usuario(idUser).pass(pass)
                 .build();
-        UsuarioDTO u=iUsuarioSevice.incioSesion(auxU);
+        UsuarioDTO u = iUsuarioSevice.incioSesion(auxU);
         System.out.println(u);
-        if(u != null){
+        if (u != null) {
             // almacenamos en la variable sesion de JSF
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", u);
-            redireccion= "/admin/inicio.xhtml?faces-redirect=true";
-        }else{
-            FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "Credenciales Incorrectas"));
+            redireccion = "/admin/inicio.xhtml?faces-redirect=true";
+        } else {
+            FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "Credenciales Incorrectas"));
         }
         return redireccion;
 

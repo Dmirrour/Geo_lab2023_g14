@@ -1,8 +1,8 @@
-function CargarMapa(){
-    var map =new GeoMap();
+function CargarMapa() {
+    var map = new GeoMap();
     var layers = new GeoLayers();
-   
-    map.CrearMapa('map',[layers.ObtenerLayersBase(), layers.ObtenerLayersSobrepuestos(), layers.ObtenerLayersPruebas(),layers.ObtenerLayersGeoJSON()],null,15);
+
+    map.CrearMapa('map', [layers.ObtenerLayersBase(), layers.ObtenerLayersSobrepuestos(), layers.ObtenerLayersPruebas(), layers.ObtenerLayersGeoJSON()], null, 15);
     map.CrearControlBarra();
     map.CrearControlBarraDibujo();
     map.CrearBarraBusquedaGeoJson(layers.vectorGeoJson);

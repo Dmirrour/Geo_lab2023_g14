@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:p="http://primefaces.org/ui">
 <h:head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -20,52 +15,43 @@
 </h:head>
 <h:body Class="bg-gradient-primary">
     <div class="container">
-    <div class="row justify-content-center">
-    <div class="col-xl-10 col-lg-12 col-md-9">
-    <div class="card o-hidden border-0 shadow-lg my-5">
-    <div class="card-body p-0">
-    <div class="d-grid gap-2 mx-auto col-lg-8">
-    <div class="p-5">
-    <div class="text-center">
-    <h1 class="h4 text-gray-900 mb-4">Iniciar Sesion</h1>
-    </div>
-    <h:form Class="user">
+        <div class="row justify-content-center">
+            <div class="col-xl-10 col-lg-12 col-md-9">
+                <div class="card o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <div class="d-grid gap-2 mx-auto col-lg-8">
+                            <div class="p-5">
+                                <div class="text-center">
+                                    <h1 class="h4 text-gray-900 mb-4">Iniciar Sesion</h1>
+                                </div>
+                                <h:form Class="user">
 
-            <p:growl>
-                <p:autoUpdate />
-            </p:growl>
+                                    <p:growl>
+                                        <p:autoUpdate />
+                                    </p:growl>
 
-        <p:messages autoUpdate="true"/>
-        <div class="form-group p-1">
-            <p:inputText class="form-control form-control-user"
-                         id="nombreU"
-                         required="true"
-                         value="#{sesion.idUser}"
-                         validatorMessage="El usuario es incorrecto."
-                         placeholder="Escriba su usuario...." />
+                                    <p:messages autoUpdate="true" />
+                                    <div class="form-group p-1">
+                                        <p:inputText class="form-control form-control-user" id="nombreU" required="true" value="#{sesion.idUser}" validatorMessage="El usuario es incorrecto." placeholder="Escriba su usuario...." />
+                                    </div>
+                                    <div class="form-group p-1">
+                                        <p:password class="form-control form-control-user" id="pass" required="true" value="#{sesion.pass}" validatorMessage="La clave es incorrecta." placeholder="Password..." />
+                                    </div>
+                                    <div class="d-grid gap-2 col-6 mx-auto p-1">
+                                        <p:commandButton class="btn btn-primary btn-user btn-block" value="login" icon="pi pi-sign-in" action="#{sesion.iniciarSesion()}" />
+                                    </div>
+                                    <hr />
+                                    <div class="d-grid col-6 mx-auto p-1">
+                                        <a class="nav-link" aria-current="page" href="/Geo_lab2023_g14-web/index.html">Volver...</a>
+                                    </div>
+                                </h:form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="form-group p-1">
-            <p:password class="form-control form-control-user"
-                        id="pass"
-                        required="true"
-                        value="#{sesion.pass}"
-                        validatorMessage="La clave es incorrecta."
-                        placeholder="Password..." />
-        </div>
-        <div class="d-grid gap-2 col-6 mx-auto p-1">
-            <p:commandButton class="btn btn-primary btn-user btn-block" value="login" icon="pi pi-sign-in" action="#{sesion.iniciarSesion()}" />
-        </div>
-        <hr/>
-        <div class="d-grid col-6 mx-auto p-1">
-            <a class="nav-link" aria-current="page" href="/Geo_lab2023_g14-web/index.html">Volver...</a>
-        </div>
-    </h:form>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
     </div>
 </h:body>
+
 </html>
