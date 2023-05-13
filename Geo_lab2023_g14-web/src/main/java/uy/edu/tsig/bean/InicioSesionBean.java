@@ -2,9 +2,9 @@ package uy.edu.tsig.bean;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.EJB;
+import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
-import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
 import uy.edu.tsig.dto.UsuarioDTO;
 import uy.edu.tsig.service.IUsuarioSevice;
@@ -12,7 +12,7 @@ import uy.edu.tsig.service.IUsuarioSevice;
 import java.io.Serializable;
 
 @Named("sesion")
-@ViewScoped
+@SessionScoped
 public class InicioSesionBean implements Serializable {
     @EJB
     // private ??
@@ -33,16 +33,23 @@ public class InicioSesionBean implements Serializable {
                 pass(pass)
                 .build();
         UsuarioDTO u=iUsuarioSevice.incioSesion(auxU);
-        // System.out.println(u);
+        System.out.println(u);
         if(u != null){
-            // System.out.println("Entre a encontro");
+            // almacenamos en la variable sesion de JSF
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", u);
-            redireccion= "/admin/inicio.xhtml";
+            redireccion= "/admin/inicio.xhtml?faces-redirect=true";
         }else{
             FacesContext.getCurrentInstance().addMessage(null,new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "Credenciales Incorrectas"));
         }
         return redireccion;
 
+    }
+
+    public String cerrarSesion() {
+        System.out.println("cerrarSesion");
+        String redireccion = "/Geo_lab2023_g14-web/index.html?faces-redirect=true";
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        return redireccion;
     }
 
     public void setUsuario(UsuarioDTO usuario) {
