@@ -49,22 +49,23 @@
                             <a class="nav-link" href="javascript:void(0)">Opciones</a>
                         </li>
                         <li class="nav-item">
-                            <!-- a class="nav-link" href="/Geo_lab2023_g14-web/login.xhtml">Cerrar Sesion</a -->
-                            <p:commandButton action="#{sesion.cerrarSesion()}" id="withIcon" value="Cerrar sesión" title="Cerrar sesion." icon="pi pi-power-off" />
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+                            <!-- a class="nav-link" href="/Geo_lab2023_g14-web/login.xhtml">Cerrar Sesion</a
+                            <p:commandButton id="withIcon" value="Cerrar sesión" title="Cerrar sesion." icon="pi pi-power-off" action="#{sesion.cerrarSesion()}"/>-->
+                            <p:commandButton id="withIcon" value="Cerrar sesión" icon="pi pi-power-off" action="#{sesion.cerrarSesion()}"/>
+                         </li>
+                     </ul>
+                 </div>
+             </div>
+         </div>
+     </div>
 
-    <div class="container-fluid mt-3">
-        <div id="map"></div>
-        <div id="mouse-position"></div>
-        <script type="javascript">
-            CargarMapa();
-        </script>
-    </div>
+     <div class="container-fluid mt-3">
+         <div id="map"></div>
+         <div id="mouse-position"></div>
+         <script type="javascript">
+             CargarMapa();
+         </script>
+     </div>
 
-</h:body>
-</html>
+ </h:body>
+ </html>

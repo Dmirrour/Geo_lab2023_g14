@@ -60,25 +60,31 @@ are created, so those JAR/WAR files would have to be built in the "@Deployment" 
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-Utilizaccion
 
-Persistencia
-3.0
+# Tecnologias utilizadas
 
-Java 11.0.18 (correto en intellij)
-WildFly 27.0.1
- -libreria posgres 42.6.0
+>Persistencia 3.0
 
-temporalmente para prubas
+>WildFly 27.0.1
+
+>PostgreSQL 42.6.0
+
+
+## Java
+>Java 11.0.18
+
+# IntelliJ plugins
+>Arquillian jet Brain 231.8109.9
+
+>Jakarta EE: Enterprse Java Beans (EJB) 231.8109.9
+
+>Jakarta EE: Server Faces (JSF)
+
+
 GeoServer versión 2.19.7  .bin .exe  futuro posible .war
 
-intellig
- plugins
-  Arquillian jet Brain 231.8109.9
-  Jakarta EE: Enterprse Java Beans (EJB) 231.8109.9
-  Jakarta EE: Server Faces (JSF)
-
-  
+Apache Tomcat/9.0.74
+geoserver 2.19.7.
  
 
 

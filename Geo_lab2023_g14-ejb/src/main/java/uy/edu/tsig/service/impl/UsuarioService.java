@@ -10,7 +10,6 @@ import uy.edu.tsig.service.IUsuarioSevice;
 @Stateless
 @Named("usuarioService")
 public class UsuarioService implements IUsuarioSevice {
-
     @EJB
     IUsuarioDAO iUsuarioDAO;
     @Override

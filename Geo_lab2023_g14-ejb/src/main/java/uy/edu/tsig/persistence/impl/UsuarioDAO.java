@@ -16,10 +16,11 @@ public class UsuarioDAO implements IUsuarioDAO {
     public EntityManager em;
     @Override
     public UsuarioDTO buscarUsuario(String usuario){
-        Usuario u= em.find(Usuario.class, usuario);
+       Usuario u= em.find(Usuario.class, usuario);
         UsuarioDTO ur= new UsuarioDTO(u.getUsuario(),u.getPass());
-        return ur;
+       return ur;
     }
+
     @Override
     public UsuarioDTO InicioSesion(String usuario, String pass){
         Usuario u= em.find(Usuario.class, usuario);

@@ -7,10 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Usuarios implements Serializable {
-
     private static final Long serialVersionUID = 1L;
     private ArrayList<UsuarioDTO> usuarios;
-
     public void setListaUsuarios(ArrayList<UsuarioDTO> usuarios) {
         this.usuarios = usuarios;
     }

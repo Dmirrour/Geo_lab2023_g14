@@ -15,5 +15,4 @@ public class UsuarioDTO implements Serializable {
 	private static final Long serialVersionUID = 1L;
 	private String usuario;
 	private String pass;
-
 }

@@ -40,6 +40,45 @@ GeoLayers.prototype.ObtenerLayersBase = function(){
     });
 };
 
+GeoLayers.prototype.ObtenerLayersPruebas=function(){
+    var listaLayers = [];
+
+    var lyrPrueba = new ol.layer.Tile({
+        title:'Montevideo',
+        visible:true,
+        source:new ol.source.TileWMS({
+            url:'http://localhost:8081/geoserver/tsige/wms?',
+            params:{
+                VERSION:'1.1.0',
+                FORMAT:'image/png',
+                TRANSPARENT:true,
+                LAYERS:'tsige:tt00_departamento'
+            }
+        })
+    })
+    listaLayers.push(lyrPrueba);
+
+    var lyrPruebaRuta = new ol.layer.Tile({
+        title:'Ruta',
+        visible:true,
+        source:new ol.source.TileWMS({
+            url:'http://localhost:8081/geoserver/tsige/wms?',
+            params:{
+                VERSION:'1.1.0',
+                FORMAT:'image/png',
+                TRANSPARENT:true,
+                LAYERS:'tsige:t00_cam_dig'
+            }
+        })
+    })
+    listaLayers.push(lyrPruebaRuta);
+
+    return new ol.layer.Group({
+        title:'Capas Pruebas',
+        layers:listaLayers
+    });
+}
+
 GeoLayers.prototype.ObtenerLayersSobrepuestos=function(){
     var listaLayers = [];
     
