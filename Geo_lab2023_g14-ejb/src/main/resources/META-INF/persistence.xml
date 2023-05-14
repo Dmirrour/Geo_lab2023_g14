@@ -25,6 +25,9 @@
          data source, this configuration uses the JakartaEE default data source is just for development and testing! -->
       <jta-data-source>java:/TsigLab2023</jta-data-source>
       <class>uy.edu.tsig.entity.Usuario</class>
+      <class>uy.edu.tsig.entity.ServicioEmergencia</class>
+      <class>uy.edu.tsig.entity.Ambulancia</class>
+      <class>uy.edu.tsig.entity.Hospital</class>
 
       <exclude-unlisted-classes>false</exclude-unlisted-classes>
 

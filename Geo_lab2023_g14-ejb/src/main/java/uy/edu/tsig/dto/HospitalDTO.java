@@ -17,16 +17,18 @@ import java.util.ArrayList;
 public class HospitalDTO implements Serializable {
     private static final Long serialVersionUID = 1L;
 
+    private Long idHospital;
     private String nombreHospital;
     private TipoHospital tipoHospital;
 
     private ServicioEmergencia servicioEmergencia;
     @Builder.Default
-    private ArrayList<AmbulanciasDTO> ambulanciasDTOS =new ArrayList<>();
+    ArrayList<AmbulanciaDTO> ambulanciaDTOS =new ArrayList<>();
 
-    public HospitalDTO (String nombreHospital, TipoHospital tipoHospital){
+    public HospitalDTO (Long idHospital, String nombreHospital, TipoHospital tipoHospital){
         this.nombreHospital=nombreHospital;
         this.tipoHospital=tipoHospital;
+        this.idHospital=idHospital;
     }
 
 }

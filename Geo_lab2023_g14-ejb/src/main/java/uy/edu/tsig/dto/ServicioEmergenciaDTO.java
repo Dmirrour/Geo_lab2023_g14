@@ -15,13 +15,13 @@ import java.io.Serializable;
 public class ServicioEmergenciaDTO implements Serializable {
     private static final Long serialVersionUID = 1L;
 
-    private String idServicio;
+    private Long idServicio;
     private int totalCama;
     private int camasLibres;
 
     private Hospital hospital;
 
-    public ServicioEmergenciaDTO(String idServicio, int totalCama, int camasLibres){
+    public ServicioEmergenciaDTO(Long idServicio, int totalCama, int camasLibres){
         this.camasLibres=camasLibres;
         this.totalCama=totalCama;
         this.idServicio=idServicio;

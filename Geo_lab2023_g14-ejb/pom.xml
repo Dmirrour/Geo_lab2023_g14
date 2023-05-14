@@ -52,6 +52,13 @@
             <artifactId>hibernate-validator</artifactId>
             <scope>provided</scope>
         </dependency>
+        <!--dependecia para base de datos espaciales-->
+        <!-- https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-spatial -->
+        <!--<dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-spatial</artifactId>
+            <version>6.2.2.Final</version>
+        </dependency>-->
 
         <!-- Import the JPA API, we use provided scope as the API is included in WildFly / JBoss EAP -->
         <dependency>

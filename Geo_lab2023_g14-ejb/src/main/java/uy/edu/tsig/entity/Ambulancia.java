@@ -1,8 +1,6 @@
 package uy.edu.tsig.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,25 +14,32 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Ambulacias implements Serializable {
+public class Ambulancia implements Serializable {
 
     private static final Long serialVersionUID = 1L;
     @Id
-    private String idAmbulacia;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idAmbulancia;
+    @Column(unique = true)
+    private int idCodigo;
+    private int distanciaMaxDesvio;
 
     @ManyToOne
     private Hospital hospital;
 
-    public Ambulacias (String idAmbulacia){
-        this.idAmbulacia=idAmbulacia;
+    public Ambulancia(Long idAmbulancia, int idCodigo, int distanciaMaxDesvio){
+        this.idAmbulancia =idAmbulancia;
+        this.idCodigo=idCodigo;
+        this.distanciaMaxDesvio=distanciaMaxDesvio;
     }
 
     public HospitalDTO geHospitalDTO(){
         return HospitalDTO.builder()
+                .idHospital(hospital.getIdHospital())
                 .nombreHospital(hospital.getNombreHospital())
                 .tipoHospital(hospital.getTipoHospital())
                 .servicioEmergencia(hospital.getServicioEmergencia())
-                .ambulanciasDTOS(hospital.getAmbulanciasDTOS())
+                .ambulanciaDTOS(hospital.getAmbulanciasDTOS())
                 .build();
     }
 }
