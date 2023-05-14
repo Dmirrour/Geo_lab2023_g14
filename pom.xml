@@ -122,6 +122,13 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <!-- https://mvnrepository.com/artifact/org.geoserver.web/gs-web-core -->
+            <dependency>
+                <groupId>org.geoserver.web</groupId>
+                <artifactId>gs-web-core</artifactId>
+                <version>2.23.0</version>
+            </dependency>
+
 
 
         </dependencies>
