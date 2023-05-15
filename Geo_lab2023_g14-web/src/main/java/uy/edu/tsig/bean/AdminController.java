@@ -16,7 +16,7 @@ public class AdminController implements Serializable {
             FacesContext FC = FacesContext.getCurrentInstance();
             UsuarioDTO u = (UsuarioDTO) FC.getExternalContext().getSessionMap().get("usuario");
 
-            if ( u == null ) {
+            if (u == null) {
                 // acceso sin privilegios
                 FC.getExternalContext().redirect("/Geo_lab2023_g14-web/login.xhtml?faces-redirect=true");
             }

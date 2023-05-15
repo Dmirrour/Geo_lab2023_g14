@@ -1,0 +1,13 @@
+.leaflet-draw-toolbar .leaflet-draw-draw-shapefile {
+	background-image: url('../images/draw-linea16.png') !important;
+	background-size: 9px 13px;
+}
+
+#leaflet-draw-draw-shapefile-btn {
+	height: 26px;
+	width: 26px;
+}
+
+#leaflet-draw-shapefile-selector {
+	display: none;
+}

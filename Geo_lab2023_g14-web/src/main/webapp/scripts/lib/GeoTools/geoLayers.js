@@ -28,7 +28,7 @@ GeoLayers.prototype.ObtenerLayersBase = function () {
         visible: false,
         baseLayer: true,
         source: new ol.source.XYZ({
-            url: "http://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}"
+            url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png?"
         })
     });
     listaLayers.push(lyrGoogleMapS);
