@@ -35,18 +35,17 @@ public class InicioSesionBean implements Serializable {
         if (u != null) {
             // almacenamos en la variable sesion de JSF
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", u);
-            redireccion = "/admin/inicio.xhtml?faces-redirect=true";
+            redireccion = "/admin/indexAdm.xhtml?faces-redirect=true";
         } else {
             FacesContext.getCurrentInstance().addMessage(null,
                     new FacesMessage(FacesMessage.SEVERITY_WARN, "Aviso", "Credenciales Incorrectas"));
         }
         return redireccion;
-
     }
 
     public String cerrarSesion() {
-        System.out.println("cerrarSesion");
-        String redireccion = "/Geo_lab2023_g14-web/index.html?faces-redirect=true";
+        String redireccion;
+        redireccion = "/Geo_lab2023_g14-web/login.xhtml";
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return redireccion;
     }

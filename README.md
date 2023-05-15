@@ -42,6 +42,7 @@
 * OpenLayer
 * QGIS
 
+<<<<<<< HEAD
 
 
 
@@ -50,3 +51,8 @@
 
 
 
+=======
+### Datos
+Geoserver
+Geo_lab2023_g14PersistenceUnit
+>>>>>>> 45d5d75bb364d3e99db399f608f8018fa464a27d

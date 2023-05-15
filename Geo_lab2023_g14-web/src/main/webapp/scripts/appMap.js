@@ -6,4 +6,7 @@ function CargarMapa() {
     map.CrearControlBarra();
     map.CrearControlBarraDibujo();
     map.CrearBarraBusquedaGeoJson(layers.vectorGeoJson);
+   // layers.ObtenerLayersPruebas.name;
+   // console.log("asd", layers.ObtenerLayersPruebas.name)
+    
 }
