@@ -16,7 +16,7 @@ import uy.edu.tsig.service.IHospitalService;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-@Named("adminController")
+@Named("adminBean")
 @SessionScoped
 public class AdminBean implements Serializable {
     @EJB

@@ -97,38 +97,38 @@
 			handlers: {
 				circle: {
 					tooltip: {
-						start: 'Haga clic y arrastre para dibujar un círculo.'
+						start: 'Haga clic y arrastre para dibujar un círculo'
 					},
 					radius: 'Radio'
 				},
 				marker: {
 					tooltip: {
-						start: 'Haga clic en el mapa para colocar el marcador.'
+						start: 'Haga clic en el mapa para colocar el marcador'
 					}
 				},
 				polygon: {
 					tooltip: {
-						start: 'Haz clic para comenzar a dibujar la forma.',
-						cont: 'Haz clic para continuar dibujando la forma.',
-						end: 'Haga clic en el primer punto para cerrar esta forma.'
+						start: 'Haz clic para comenzar a dibujar',
+						cont: 'Haz clic para continuar dibujando',
+						end: 'Haga clic en el primer punto para cerrar el poligono'
 					}
 				},
 				polyline: {
-					error: '<strong>Error:</strong> los bordes de la forma no se pueden cruzar!',
+					error: '<strong>Error:</strong> los bordes no se pueden cruzar!',
 					tooltip: {
-						start: 'Haz clic para comenzar a dibujar la línea.',
-						cont: 'Haga clic para continuar dibujando la línea.',
-						end: 'Haga clic en el último punto para terminar la línea.'
+						start: 'Haz clic para comenzar a dibujar la línea',
+						cont: 'Haga clic para continuar dibujando la línea',
+						end: 'Haga clic en el último punto para terminar la línea'
 					}
 				},
 				rectangle: {
 					tooltip: {
-						start: 'Haga clic y arrastre para dibujar un rectángulo.'
+						start: 'Haga clic y arrastre para dibujar un rectángulo'
 					}
 				},
 				simpleshape: {
 					tooltip: {
-						end: 'Suelta el ratón para terminar de dibujar.'
+						end: 'Suelta el ratón para terminar de dibujar'
 					}
 				}
 			}
@@ -137,31 +137,31 @@
 			toolbar: {
 				actions: {
 					save: {
-						title: 'Guardar cambios.',
+						title: 'Guardar cambios',
 						text: 'Guardar'
 					},
 					cancel: {
-						title: 'Cancelar edición, descarta todos los cambios.',
+						title: 'Cancelar edición, descarta todos los cambios',
 						text: 'Cancelar'
 					}
 				},
 				buttons: {
-					edit: 'Editar capas.',
-					editDisabled: 'No hay capas para editar.',
-					remove: 'Eliminar capas.',
-					removeDisabled: 'No hay capas para eliminar.'
+					edit: 'Editar capas',
+					editDisabled: 'No hay capas para editar',
+					remove: 'Eliminar capas',
+					removeDisabled: 'No hay capas para eliminar'
 				}
 			},
 			handlers: {
 				edit: {
 					tooltip: {
-						text: 'Arrastre las manijas o el marcador para editar la característica.',
-						subtexto: 'Haga clic en cancelar para deshacer los cambios.'
+						text: 'Arrastre los puntos para editar',
+						subtexto: 'Haga clic en cancelar para deshacer los cambios'
 					}
 				},
 				remove: {
 					tooltip: {
-						text: 'Haga clic en una función para eliminar'
+						text: 'Haga clic en la capa para eliminar'
 					}
 				}
 			}

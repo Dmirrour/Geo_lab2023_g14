@@ -1,6 +1,6 @@
 var mapa = L.map("contenedor-mapa").setView([-34.8797018070320851, -56.262557241497211], 12) // establece la vista del mapa (coordenadas y zoom) 
-L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png?", {}).addTo(mapa)
-//L.tileLayer("http://tile.stamen.com/toner/{z}/{x}/{y}.png", {}).addTo(mapa)
+//L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png?", {}).addTo(mapa)
+L.tileLayer("http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png", {}).addTo(mapa)
 
 var marcador = L.marker([-34.8797018070320851, -56.262557241497211]).addTo(mapa) // establece icono del marcado
 marcador.bindPopup("Casa Sebastián")

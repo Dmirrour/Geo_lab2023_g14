@@ -28,7 +28,7 @@ GeoLayers.prototype.ObtenerLayersBase = function () {
         visible: false,
         baseLayer: true,
         source: new ol.source.XYZ({
-            url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png?"
+            url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}"
         })
     });
     listaLayers.push(lyrGoogleMapS);
