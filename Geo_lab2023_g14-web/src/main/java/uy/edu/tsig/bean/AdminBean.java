@@ -19,38 +19,36 @@ import java.util.ArrayList;
 @Named("adminController")
 @SessionScoped
 public class AdminBean implements Serializable {
-
     @EJB
     IHospitalService iHospitalService;
     @EJB
     IAmbulaciasService iAmbulaciasService;
 
-    //alta hospital
+    // alta hospital
     private String nombreH;
     private TipoHospital tipoH;
 
-
-    //alta Ambulancia
+    // alta Ambulancia
     private long idHospital;
     private int desvio;
     private int codigo;
     private Hospitales h;
     private ArrayList<HospitalDTO> hospitalDTOS;
 
-
-    public void initH(){
-        h=iHospitalService.obtenerHospitales();
-        hospitalDTOS=h.getListHospitales();
+    public void initH() {
+        h = iHospitalService.obtenerHospitales();
+        hospitalDTOS = h.getListHospitales();
     }
-    public void addAmbulancia(){
-        Ambulancia a=Ambulancia.builder()
+
+    public void addAmbulancia() {
+        Ambulancia a = Ambulancia.builder()
                 .idCodigo(codigo)
                 .distanciaMaxDesvio(desvio)
                 .build();
         iAmbulaciasService.altaAmbulacia(a, idHospital);
     }
 
-    public void addHospital(){
+    public void addHospital() {
         Hospital h = Hospital.builder()
                 .nombreHospital(nombreH)
                 .tipoHospital(tipoH)
@@ -58,16 +56,12 @@ public class AdminBean implements Serializable {
         iHospitalService.altaHospital(h);
     }
 
-
-
-
-
     public void verificarSesion() {
         try {
             FacesContext FC = FacesContext.getCurrentInstance();
             UsuarioDTO u = (UsuarioDTO) FC.getExternalContext().getSessionMap().get("usuario");
 
-            if ( u == null ) {
+            if (u == null) {
                 // acceso sin privilegios
                 FC.getExternalContext().redirect("/Geo_lab2023_g14-web/login.xhtml?faces-redirect=true");
             }
@@ -92,7 +86,7 @@ public class AdminBean implements Serializable {
         return tipoH;
     }
 
-    //ambulacias
+    // ambulacias
 
     public ArrayList<HospitalDTO> getHospitalDTOS() {
         return hospitalDTOS;
