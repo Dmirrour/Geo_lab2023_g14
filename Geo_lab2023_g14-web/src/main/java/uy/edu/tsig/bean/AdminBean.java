@@ -2,6 +2,7 @@ package uy.edu.tsig.bean;
 
 import jakarta.ejb.EJB;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
 import uy.edu.tsig.dto.HospitalDTO;
@@ -27,6 +28,10 @@ public class AdminBean implements Serializable {
     IAmbulaciasService iAmbulaciasService;
     @EJB
     IServicioEmergenciaService iServicioEmergenciaService;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 63986cf429605ebc976650426a9559cc4fd33b31
     // alta hospital
     private String nombreH;
     private TipoHospital tipoH;
@@ -38,11 +43,17 @@ public class AdminBean implements Serializable {
     private Hospitales h;
     private ArrayList<HospitalDTO> hospitalDTOS;
 
+<<<<<<< HEAD
     // Alta Servicio de Emergencia
     private Long idServicio;
     private int totalC;
     private int camasLi;
     private Hospital hospital;
+=======
+    //alta Servicio de Emergencia
+    private int totalCama;
+
+>>>>>>> 63986cf429605ebc976650426a9559cc4fd33b31
 
     public void initH() {
         h = iHospitalService.obtenerHospitales();
@@ -55,6 +66,13 @@ public class AdminBean implements Serializable {
                 .distanciaMaxDesvio(desvio)
                 .build();
         iAmbulaciasService.altaAmbulacia(a, idHospital);
+        String msj = String.format("Se agregó la ambulancia %s.", codigo);
+        addMensaje("Ambulancias", msj);
+    }
+
+    private void addMensaje(String summary, String detail) {
+        FacesMessage mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+        FacesContext.getCurrentInstance().addMessage(null, mensaje);
     }
 
     public void addHospital() {
@@ -63,8 +81,11 @@ public class AdminBean implements Serializable {
                 .tipoHospital(tipoH)
                 .build();
         iHospitalService.altaHospital(h);
+        String msj = String.format("Se agregó el hospital %s.", nombreH);
+        addMensaje("Hospitales", msj);
     }
 
+<<<<<<< HEAD
     // Servicio E
     public void addServicioEmergencia() {
         // try {
@@ -97,6 +118,15 @@ public class AdminBean implements Serializable {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+=======
+    public void addServicioE(){
+        ServicioEmergencia se =ServicioEmergencia.builder()
+                .totalCama(totalCama)
+                .build();
+        iServicioEmergenciaService.altaServicioE(se,idHospital);
+        String msj = String.format("Se agregó el servicio de emergencia con %s camas.", totalCama);
+        addMensaje("S. Emergencia", msj);
+>>>>>>> 63986cf429605ebc976650426a9559cc4fd33b31
     }
 
     public String getNombreH() {
@@ -149,4 +179,11 @@ public class AdminBean implements Serializable {
         this.desvio = desvio;
     }
 
+    public int getTotalCama() {
+        return totalCama;
+    }
+
+    public void setTotalCama(int totalCama) {
+        this.totalCama = totalCama;
+    }
 }

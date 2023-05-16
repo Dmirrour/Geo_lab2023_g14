@@ -7,6 +7,7 @@ import jakarta.persistence.Query;
 import uy.edu.tsig.dto.HospitalDTO;
 import uy.edu.tsig.entity.Ambulancia;
 import uy.edu.tsig.entity.Hospital;
+import uy.edu.tsig.entity.ServicioEmergencia;
 import uy.edu.tsig.persistence.IHospitalDAO;
 import uy.edu.tsig.util.qualifier.Geo_lab2023_g14PersistenceUnit;
 
@@ -34,6 +35,12 @@ public class HospitalDAO implements IHospitalDAO {
     public void asignarAmbulacia(Hospital hospital, Ambulancia a) {
         Hospital h = em.find(Hospital.class, hospital.getIdHospital());
         h.getAmbulancia().add(a);
+        em.merge(h);
+    }
+    @Override
+    public void asignarServicioE(Hospital hospital, ServicioEmergencia s){
+        Hospital h = em.find(Hospital.class, hospital.getIdHospital());
+        h.setServicioEmergencia(s);
         em.merge(h);
     }
 

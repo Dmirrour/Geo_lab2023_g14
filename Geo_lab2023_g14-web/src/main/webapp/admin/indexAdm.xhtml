@@ -2,6 +2,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core" lang="es" xml:lang="es">
 
 <h:head>
+   <!-- VERIFICAR SESION -->
+   <f:event type="preRenderView" listener="#{sesion.verificarSesion()}"></f:event>
+   <!-- VERIFICAR SESION -->
+
    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
    <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -34,22 +38,39 @@
    </style>
    <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
    #{sesion.init()}
+   #{adminBean.initH()}
 </h:head>
 
 <body>
+   <p:growl id="messages" showDetail="true" />
    <div id="top">
       <div class="navbar navbar-expand-sm navbar-dark bg-dark">
          <div class="container-fluid">
             <a class="navbar-brand" href="javascript:void(0)">Administrador</a>
+            <h2>
+               <h:outputText styleClass="text-primary" value="Bienvenido #{sessionScope.usuario.usuario}" />
+            </h2>
             <div class="d-flex" id="mynavbar">
-               <ul class="navbar-nav me-auto">
-                  <li class="nav-item">
-                     <a class="nav-link" href="javascript:void(0)">Opciones</a>
-                  </li>
-                  <li class="nav-item">
-                     <a class="nav-link" value="Cerrar sesión" href="/Geo_lab2023_g14-web/login.xhtml">Cerrar Sesión</a>
-                  </li>
-               </ul>
+               <h:form>
+                  <p:menuButton value="Eliminar">
+                     <p:menuitem value="Eliminar Hospital" type="button" icon="pi pi-external-link" onclick="PF('dlg8').show()" />
+                     <p:menuitem value="Eliminar Ambulancia" type="button" icon="pi pi-external-link" onclick="PF('dlg7').show()" />
+                     <p:menuitem value="Eliminar S. Emergencia" type="button" icon="pi pi-external-link" onclick="PF('dlg6').show()" />
+                  </p:menuButton>
+                  <span> - </span>
+                  <p:menuButton value="Modificar">
+                     <p:menuitem value="Modificar Ambulancia" type="button" icon="pi pi-external-link" onclick="PF('dlg5').show()" />
+                     <p:menuitem value="Modificar S. Emergencia" type="button" icon="pi pi-external-link" onclick="PF('dlg4').show()" />
+                  </p:menuButton>
+                  <span> - </span>
+                  <p:menuButton value="Alta">
+                     <p:menuitem value="Alta Hospital" type="button" icon="pi pi-external-link" onclick="PF('dlg1').show()" />
+                     <p:menuitem value="Alta Ambulancia" type="button" icon="pi pi-external-link" onclick="PF('dlg2').show()" />
+                     <p:menuitem value="Alta S. Emergencia" type="button" icon="pi pi-external-link" onclick="PF('dlg3').show()" />
+                  </p:menuButton>
+                  <span> - </span>
+                  <p:commandButton value="Salir" actionListener="#{sesion.cerrarSesion()}" class="btn btn-danger" icon="pi pi-power-off" action="/Geo_lab2023_g14-web/login.xhtml" />
+               </h:form>
             </div>
          </div>
       </div>
@@ -60,6 +81,154 @@
          CargarMap();
       </script>
    </div>
+
+
+   <p:dialog header="Alta hospitales" widgetVar="dlg1" minHeight="600" width="850" showEffect="fade" modal="true">
+      <f:view>
+         <p:card styleClass="flex justify-content-center">
+            <h:form>
+               <div class="row m-auto mb-4">
+                  <div class="col-12 py-2">
+                     <h:outputLabel for="nombreH" class="col-12 col-md-6">Nombre Hospital:</h:outputLabel>
+                     <h:inputText id="nombreH" value="#{adminBean.nombreH}" class="col-12 col-md-6" required="true" requiredMessage="La razon social es requerida"/>
+                  </div>
+                  <div class="col-12 py-2">
+                     <h:outputLabel for="enum" class="col-12 col-md-6">Tipo de Hospital</h:outputLabel>
+                     <p:selectOneMenu id="enum" value="#{adminBean.tipoH}" class="col-12 col-md-6">
+                        <f:selectItem itemLabel="MUTUALISTA" itemValue="MUTUALISTA" />
+                        <f:selectItem itemLabel="SEGURO PRIVADO" itemValue="SEGUROPRIVADO" />
+                        <f:selectItem itemLabel="SERVICIO ESTATAL" itemValue="SERVICIOESTATAL" />
+                     </p:selectOneMenu>
+                  </div>
+                  <div class="d-grid col-6 mx-auto pt-2">
+                     <p:commandButton value="Crear" action="#{adminBean.addHospital()}" update="messages" class="col-md-6" onclick="PF('dlg2').hidden()" />
+                  </div>
+               </div>
+            </h:form>
+         </p:card>
+      </f:view>
+   </p:dialog>
+
+   <p:dialog header="Alta ambulancia" widgetVar="dlg2" minHeight="600" width="850" showEffect="fade" modal="true">
+      <f:view>
+         <p:card styleClass="flex justify-content-center">
+            <h:form>
+               <div class="row m-auto mb-4">
+                  <div class="col-12 py-2">
+                     <h:outputLabel for="codigo" class="col-12 col-md-6">Codigo guia:</h:outputLabel>
+                     <h:inputText id="codigo"  type="number" value="#{adminBean.codigo}" class="col-12 col-md-6" required="true" requiredMessage="La razon social es requerida"/>
+                  </div>
+                  <div class="col-12 py-2">
+                     <h:outputLabel for="desvio" class="col-12 col-md-6">Maximo desvio:</h:outputLabel>
+                     <h:inputText id="desvio" type="number" value="#{adminBean.desvio}" class="col-12 col-md-6" required="true" requiredMessage="La razon social es requerida"/>
+                  </div>
+                  <hr />
+                  <div class="col-12 py-2">
+                     <h:outputLabel for="rubro" class="col-12 col-md-6">Hospital</h:outputLabel>
+                     <p:selectOneMenu id="rubro" value="#{adminBean.idHospital}" filter="true" filterMatchMode="contains">
+                        <f:selectItems value="#{adminBean.hospitalDTOS}" var="ab" itemLabel="[ #{ab.idHospital} ] - #{ab.nombreHospital}" itemValue="#{ab.idHospital}" class="col-12 col-md-6" required="true" requiredMessage="El Rubro es requerida"/>
+                     </p:selectOneMenu>
+                  </div>
+
+                  <div class="d-grid col-12 mx-auto pt-2">
+                     <p:commandButton value="Crear" action="#{adminBean.addAmbulancia()}" update="messages" styleClass="ui-button-raised ui-button-success ui-button-flat" class="col-md-6" onclick="PF('dlg2').hidden()"/>
+                  </div>
+               </div>
+            </h:form>
+         </p:card>
+      </f:view>
+   </p:dialog>
+
+   <p:dialog header="Alta servicio de emergencia" widgetVar="dlg3" minHeight="600" width="850" showEffect="fade" modal="true">
+      <f:view>
+         <p:card styleClass="flex justify-content-center">
+            <h:form>
+               <div class="row m-auto mb-4">
+                  <div class="col-12 py-2">
+                     <h:outputLabel for="camas" class="col-12 col-md-6">Total de Camas:</h:outputLabel>
+                     <h:inputText id="camas"  type="number" value="#{adminBean.totalCama}" class="col-12 col-md-6" required="true" requiredMessage="La razon social es requerida"/>
+                  </div>
+
+                  <div class="col-12 py-2">
+                     <h:outputLabel for="rubro2" class="col-12 col-md-6">Hospital</h:outputLabel>
+                     <p:selectOneMenu id="rubro2" value="#{adminBean.idHospital}" filter="true" filterMatchMode="contains" class="col-12 col-md-6">
+                        <f:selectItems value="#{adminBean.hospitalDTOS}" var="ab" itemLabel="[ #{ab.idHospital} ] - #{ab.nombreHospital}" itemValue="#{ab.idHospital}" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true" requiredMessage="El Rubro es requerida"/>
+                     </p:selectOneMenu>
+                  </div>
+
+                  <div class="td-grid col-6 mx-auto pt-2">
+                     <p:commandButton value="Crear" action="#{adminBean.addServicioE()}" update="messages" class="col-md-6" onclick="PF('dlg3').hidden()" />
+                  </div>
+               </div>
+            </h:form>
+         </p:card>
+      </f:view>
+   </p:dialog>
+
+   <p:dialog header="Modificar S. Emergencia" widgetVar="dlg4" minHeight="600" width="850" showEffect="fade" modal="true">
+      <f:view>
+         <p:card styleClass="flex justify-content-center">
+            <p:dataTable>
+               <p:column headerText="id"></p:column>
+               <p:column headerText="hospital"></p:column>
+               <p:column headerText="Cant.Camas"></p:column>
+               <p:column headerText="Acciones"></p:column>
+            </p:dataTable>
+         </p:card>
+      </f:view>
+   </p:dialog>
+
+   <p:dialog header="Eliminar S. Emergencia" widgetVar="dlg6" minHeight="600" width="850" showEffect="fade" modal="true">
+      <f:view>
+         <p:card styleClass="flex justify-content-center">
+            <p:dataTable>
+               <p:column headerText="idServicio"></p:column>
+               <p:column headerText="hospital"></p:column>
+               <p:column headerText="Cant.Camas"></p:column>
+               <p:column headerText="Acciones"></p:column>
+            </p:dataTable>
+         </p:card>
+      </f:view>
+   </p:dialog>
+
+   <p:dialog header="Eliminar Ambulancia" widgetVar="dlg7" minHeight="600" width="850" showEffect="fade" modal="true">
+      <f:view>
+         <p:card styleClass="flex justify-content-center">
+            <p:dataTable>
+               <p:column headerText="idAmbulancia"></p:column>
+               <p:column headerText="Distancia Maxima"></p:column>
+               <p:column headerText="Código"></p:column>
+               <p:column headerText="Hospital"></p:column>
+            </p:dataTable>
+         </p:card>
+      </f:view>
+   </p:dialog>
+
+   <p:dialog header="Eliminar Hospital" widgetVar="dlg8" minHeight="600" width="850" showEffect="fade" modal="true">
+      <f:view>
+         <p:card styleClass="flex justify-content-center">
+            <p:dataTable value="#{adminBean.hospitalDTOS}" var="hospitales">
+               <p:column headerText="idHospital">
+                  <h:outputText value="#{hospitales.idHospital}" />
+               </p:column>
+               <p:column headerText="nombre">
+                  <h:outputText value="#{hospitales.nombreHospital}" />
+               </p:column>
+               <p:column headerText="tipo">
+                  <h:outputText value="#{hospitales.tipoHospital}" />
+               </p:column>
+               <p:column headerText="s. emergencia">
+                  <h:outputText value="#{hospitales.servicioEmergencia.idServicio}" />
+               </p:column>
+               <p:column headerText="Acciones">
+                  <h:commandLink>
+                     <h:button value="Eliminar" />
+                  </h:commandLink>
+               </p:column>
+            </p:dataTable>
+         </p:card>
+      </f:view>
+   </p:dialog>
 </body>
 
 </html>

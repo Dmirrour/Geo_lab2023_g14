@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+   <link rel="stylesheet" href="https://unpkg.com/primeflex@^3/primeflex.css"/>
+   <title>AdminGeo</title>
+   #{adminBean.initH()}
+</h:head>
+<h:body>
+   <f:view>
+      <p:card styleClass="flex justify-content-center">
+         <h2 class="text-center">Alta Servicio de Emergencia</h2>
+         <h:form>
+            <p:growl>
+               <p:autoUpdate />
+            </p:growl>
+            <div class="w-fit m-auto mb-4">
+               <div class="field grid">
+                  <h:outputLabel for="camas" class="col-12 mb-2 md:col-4 md:mb-0">Camas Disponibles:</h:outputLabel>
+                  <div class="col-12 md:col-8">
+                     <h:inputText id="camas"  type="number" value="#{adminBean.totalCama}" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true" requiredMessage="La razon social es requerida"/>
+                  </div>
+               </div>
+
+               <div class="field grid">
+                  <h:outputLabel for="rubro" class="col-12 mb-2 md:col-4 md:mb-0">Hospital</h:outputLabel>
+                  <div class="col-12 md:col-8">
+                     <p:selectOneMenu id="rubro" value="#{adminBean.idHospital}" filter="true" filterMatchMode="contains">
+                        <f:selectItems value="#{adminBean.hospitalDTOS}" var="ab" itemLabel="#{ab.idHospital},#{ab.nombreHospital}" itemValue="#{ab.idHospital}" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true" requiredMessage="El Rubro es requerida"/>
+                     </p:selectOneMenu>
+                  </div>
+               </div>
+
+               <div class="text-right">
+                  <p:commandButton value="Crear" action="#{adminBean.addServicioE()}" class="text-white bg-primary-500 border-primary-500 px-3 py-2 text-base border-1 border-solid border-round cursor-pointer transition-all transition-duration-200 hover:bg-primary-600 hover:border-primary-600 active:bg-primary-700 active:border-primary-700"/>
+               </div>
+            </div>
+         </h:form>
+      </p:card>
+   </f:view>
+</h:body>
+</html>
