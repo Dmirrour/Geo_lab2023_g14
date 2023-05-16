@@ -10,17 +10,18 @@ import uy.edu.tsig.persistence.IHospitalDAO;
 import uy.edu.tsig.service.IHospitalService;
 
 @Stateless
-public class HospitalService implements IHospitalService{
+public class HospitalService implements IHospitalService {
     @EJB
     IHospitalDAO iHospitalDAO;
 
     @Override
-    public void altaHospital(Hospital h){
+    public void altaHospital(Hospital h) {
         iHospitalDAO.altaHospital(h);
     }
+
     @Override
-    public Hospitales obtenerHospitales(){
-        Hospitales h=new Hospitales();
+    public Hospitales obtenerHospitales() {
+        Hospitales h = new Hospitales();
         h.setListHospitales(iHospitalDAO.obtenerHospitales());
         return h;
     }

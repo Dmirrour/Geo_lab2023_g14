@@ -24,24 +24,24 @@ public class Hospital implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idHospital;
     @Column(unique = true)
-    private String nombreHospital;
+    private String nombreHospital; // nom
 
-    private TipoHospital tipoHospital;
+    private TipoHospital tipoHospital; // tipo
 
     @OneToOne
-    ServicioEmergencia servicioEmergencia;
+    ServicioEmergencia servicioEmergencia; // DS
 
     @Builder.Default
     @OneToMany(orphanRemoval = true)
     List<Ambulancia> Ambulancia = new ArrayList<>();
 
-    public Hospital (Long idHospital, String nombreHospital, TipoHospital tipoHospital){
-        this.nombreHospital=nombreHospital;
-        this.tipoHospital=tipoHospital;
-        this.idHospital=idHospital;
+    public Hospital(Long idHospital, String nombreHospital, TipoHospital tipoHospital) {
+        this.nombreHospital = nombreHospital;
+        this.tipoHospital = tipoHospital;
+        this.idHospital = idHospital;
     }
 
-    public ServicioEmergenciaDTO geServicioEmergenciaDTO(){
+    public ServicioEmergenciaDTO geServicioEmergenciaDTO() {
         return ServicioEmergenciaDTO.builder()
                 .idServicio(servicioEmergencia.getIdServicio())
                 .totalCama(servicioEmergencia.getTotalCama())
@@ -50,8 +50,8 @@ public class Hospital implements Serializable {
                 .build();
     }
 
-    public ArrayList<AmbulanciaDTO> getAmbulanciasDTOS(){
-        ArrayList<AmbulanciaDTO> result =new ArrayList<>();
+    public ArrayList<AmbulanciaDTO> getAmbulanciasDTOS() {
+        ArrayList<AmbulanciaDTO> result = new ArrayList<>();
         Ambulancia.forEach(ambulacia -> {
             result.add(AmbulanciaDTO.builder()
                     .idCodigo(ambulacia.getIdCodigo())

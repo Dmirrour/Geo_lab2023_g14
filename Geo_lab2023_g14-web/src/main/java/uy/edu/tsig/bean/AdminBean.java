@@ -8,10 +8,12 @@ import uy.edu.tsig.dto.HospitalDTO;
 import uy.edu.tsig.dto.UsuarioDTO;
 import uy.edu.tsig.entity.Ambulancia;
 import uy.edu.tsig.entity.Hospital;
+import uy.edu.tsig.entity.ServicioEmergencia;
 import uy.edu.tsig.entity.TipoHospital;
 import uy.edu.tsig.model.Hospitales;
 import uy.edu.tsig.service.IAmbulaciasService;
 import uy.edu.tsig.service.IHospitalService;
+import uy.edu.tsig.service.IServicioEmergenciaService;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,7 +25,8 @@ public class AdminBean implements Serializable {
     IHospitalService iHospitalService;
     @EJB
     IAmbulaciasService iAmbulaciasService;
-
+    @EJB
+    IServicioEmergenciaService iServicioEmergenciaService;
     // alta hospital
     private String nombreH;
     private TipoHospital tipoH;
@@ -31,9 +34,15 @@ public class AdminBean implements Serializable {
     // alta Ambulancia
     private long idHospital;
     private int desvio;
-    private int codigo;
+    private String codigo;
     private Hospitales h;
     private ArrayList<HospitalDTO> hospitalDTOS;
+
+    // Alta Servicio de Emergencia
+    private Long idServicio;
+    private int totalC;
+    private int camasLi;
+    private Hospital hospital;
 
     public void initH() {
         h = iHospitalService.obtenerHospitales();
@@ -54,6 +63,26 @@ public class AdminBean implements Serializable {
                 .tipoHospital(tipoH)
                 .build();
         iHospitalService.altaHospital(h);
+    }
+
+    // Servicio E
+    public void addServicioEmergencia() {
+        // try {
+
+        // if (camasLi < totalC) {
+        // throw new Error("La cantidad de camas libre no puede ser mayor a la cantidad
+        // de camas totales");
+        // }
+        ServicioEmergencia servicio = ServicioEmergencia.builder()
+                .idServicio(idServicio)
+                .camasLibres(camasLi)
+                .totalCama(totalC)
+                .build();
+        iServicioEmergenciaService.asignarServicioEmergencia(servicio, hospital);
+
+        // } catch (Exception e) {
+        // System.out.println("Error: " + e);
+        // }
     }
 
     public void verificarSesion() {
@@ -92,7 +121,7 @@ public class AdminBean implements Serializable {
         return hospitalDTOS;
     }
 
-    public int getCodigo() {
+    public String getCodigo() {
         return codigo;
     }
 
@@ -112,7 +141,7 @@ public class AdminBean implements Serializable {
         this.idHospital = idHospital;
     }
 
-    public void setCodigo(int codigo) {
+    public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
 

@@ -18,12 +18,11 @@ public class ServicioEmergenciaDTO implements Serializable {
     private Long idServicio;
     private int totalCama;
     private int camasLibres;
-
     private Hospital hospital;
 
-    public ServicioEmergenciaDTO(Long idServicio, int totalCama, int camasLibres){
-        this.camasLibres=camasLibres;
-        this.totalCama=totalCama;
-        this.idServicio=idServicio;
+    public ServicioEmergenciaDTO(Long idServicio, int totalCama, int camasLibres) {
+        this.idServicio = idServicio;
+        this.totalCama = totalCama;
+        this.camasLibres = camasLibres;
     }
 }

@@ -15,7 +15,6 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Entity
 public class ServicioEmergencia implements Serializable {
-
     private static final Long serialVersionUID = 1L;
 
     @Id
@@ -26,13 +25,13 @@ public class ServicioEmergencia implements Serializable {
     @OneToOne
     private Hospital hospital;
 
-    public ServicioEmergencia (Long idServicio, int totalCama, int camasLibres){
-        this.camasLibres=camasLibres;
-        this.idServicio=idServicio;
-        this.totalCama=totalCama;
+    public ServicioEmergencia(Long idServicio, int totalCama, int camasLibres) {
+        this.idServicio = idServicio;
+        this.totalCama = totalCama;
+        this.camasLibres = camasLibres;
     }
 
-    public HospitalDTO getHospitalDTO(){
+    public HospitalDTO getHospitalDTO() {
         return HospitalDTO.builder()
                 .idHospital(hospital.getIdHospital())
                 .nombreHospital(hospital.getNombreHospital())

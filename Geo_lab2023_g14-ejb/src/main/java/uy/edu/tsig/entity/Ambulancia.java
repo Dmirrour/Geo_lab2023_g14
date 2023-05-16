@@ -15,25 +15,24 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Entity
 public class Ambulancia implements Serializable {
-
     private static final Long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idAmbulancia;
     @Column(unique = true)
-    private int idCodigo;
-    private int distanciaMaxDesvio;
+    private String idCodigo;
+    private int distanciaMaxDesvio; // DS
 
     @ManyToOne
     private Hospital hospital;
 
-    public Ambulancia(Long idAmbulancia, int idCodigo, int distanciaMaxDesvio){
-        this.idAmbulancia =idAmbulancia;
-        this.idCodigo=idCodigo;
-        this.distanciaMaxDesvio=distanciaMaxDesvio;
+    public Ambulancia(Long idAmbulancia, String idCodigo, int distanciaMaxDesvio) {
+        this.idAmbulancia = idAmbulancia;
+        this.idCodigo = idCodigo;
+        this.distanciaMaxDesvio = distanciaMaxDesvio;
     }
 
-    public HospitalDTO geHospitalDTO(){
+    public HospitalDTO geHospitalDTO() {
         return HospitalDTO.builder()
                 .idHospital(hospital.getIdHospital())
                 .nombreHospital(hospital.getNombreHospital())

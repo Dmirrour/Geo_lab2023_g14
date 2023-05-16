@@ -4,12 +4,16 @@ function LeafMap() {
     drawLayers = null;
     marcador = null;
     circulo = null;
-
     // drawControl, drawLayers, marcador, circulo;
-
 }
+
+// https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png
+// http://{s}.tile.thunderforest.com/cycle/{z}/{x}/{y}.png
+// http://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png
+// http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png
+
 LeafMap.prototype.Crear = function () {
-    var topo = L.tileLayer('http://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+    var topo = L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
         attribution: '© Grupo 14'
     });
 
@@ -21,7 +25,11 @@ LeafMap.prototype.Crear = function () {
         layers: [topo],
         zoomControl: true
     });
-    marcador = L.marker([-34.8797018070320851, -56.262557241497211]).addTo(map) // establece icono del marcado
+    
+    console.log(Math.floor(Math.random() * (56 - 34 + 1)) + 25);
+
+
+    marcador = L.marker([Math.floor(Math.random() * (56 - 34 + 1)) + 25, -56.262557241497211]).addTo(map) // establece icono del marcado
     marcador.bindPopup("Casa Sebastián")
 
     circulo = L.circle([-34.8797018070320851, -56.262557241497211], {

@@ -8,12 +8,12 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
-@Data
+@Data // Getter y Setter
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@AllArgsConstructor // Consdtructor con argumentos
+@NoArgsConstructor // Consdtructor sin argumentos
 @Entity
-public class Usuario implements Serializable{
+public class Usuario implements Serializable {
 	private static final Long serialVersionUID = 1L;
 	@Id
 	private String usuario;
