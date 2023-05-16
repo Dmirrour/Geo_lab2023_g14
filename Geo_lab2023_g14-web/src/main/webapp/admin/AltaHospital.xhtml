@@ -22,19 +22,19 @@
                <div class="field grid">
                   <h:outputLabel for="nombreH" class="col-12 mb-2 md:col-4 md:mb-0">Nombre Hospital:</h:outputLabel>
                   <div class="col-12 md:col-8">
-                     <h:inputText id="nombreH" value="#{adminController.nombreH}" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true" requiredMessage="La razon social es requerida"/>
+                     <h:inputText id="nombreH" value="#{adminBean.nombreH}" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true" requiredMessage="La razon social es requerida"/>
                   </div>
                </div>
                <div class="field grid">
                   <h:outputLabel for="enum" class="col-12 mb-2 md:col-4 md:mb-0">Tipo de Hospital</h:outputLabel>
-                  <p:selectOneMenu id="enum" value="#{adminController.tipoH}">
+                  <p:selectOneMenu id="enum" value="#{adminBean.tipoH}">
                      <f:selectItem itemLabel="MUTUALISTA" itemValue="MUTUALISTA" />
                      <f:selectItem itemLabel="SEGURO PRIVADO" itemValue="SEGUROPRIVADO" />
                      <f:selectItem itemLabel="SERVICIO ESTATAL" itemValue="SERVICIOESTATAL" />
                   </p:selectOneMenu>
                </div>
                <div class="text-right">
-                  <p:commandButton value="Crear" action="#{adminController.addHospital()}" class="text-white bg-primary-500 border-primary-500 px-3 py-2 text-base border-1 border-solid border-round cursor-pointer transition-all transition-duration-200 hover:bg-primary-600 hover:border-primary-600 active:bg-primary-700 active:border-primary-700"/>
+                  <p:commandButton value="Crear" action="#{adminBean.addHospital()}" class="text-white bg-primary-500 border-primary-500 px-3 py-2 text-base border-1 border-solid border-round cursor-pointer transition-all transition-duration-200 hover:bg-primary-600 hover:border-primary-600 active:bg-primary-700 active:border-primary-700"/>
                </div>
             </div>
          </h:form>

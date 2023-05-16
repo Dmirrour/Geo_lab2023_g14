@@ -8,10 +8,12 @@ import uy.edu.tsig.dto.HospitalDTO;
 import uy.edu.tsig.dto.UsuarioDTO;
 import uy.edu.tsig.entity.Ambulancia;
 import uy.edu.tsig.entity.Hospital;
+import uy.edu.tsig.entity.ServicioEmergencia;
 import uy.edu.tsig.entity.TipoHospital;
 import uy.edu.tsig.model.Hospitales;
 import uy.edu.tsig.service.IAmbulaciasService;
 import uy.edu.tsig.service.IHospitalService;
+import uy.edu.tsig.service.IServicioEmergenciaService;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -23,6 +25,8 @@ public class AdminBean implements Serializable {
     IHospitalService iHospitalService;
     @EJB
     IAmbulaciasService iAmbulaciasService;
+    @EJB
+    IServicioEmergenciaService iServicioEmergenciaService;
 
     // alta hospital
     private String nombreH;
@@ -34,6 +38,10 @@ public class AdminBean implements Serializable {
     private int codigo;
     private Hospitales h;
     private ArrayList<HospitalDTO> hospitalDTOS;
+
+    //alta Servicio de Emergencia
+    private int totalCama;
+
 
     public void initH() {
         h = iHospitalService.obtenerHospitales();
@@ -54,6 +62,13 @@ public class AdminBean implements Serializable {
                 .tipoHospital(tipoH)
                 .build();
         iHospitalService.altaHospital(h);
+    }
+
+    public void addServicioE(){
+        ServicioEmergencia se =ServicioEmergencia.builder()
+                .totalCama(totalCama)
+                .build();
+        iServicioEmergenciaService.altaServicioE(se,idHospital);
     }
 
     public void verificarSesion() {
@@ -120,4 +135,11 @@ public class AdminBean implements Serializable {
         this.desvio = desvio;
     }
 
+    public int getTotalCama() {
+        return totalCama;
+    }
+
+    public void setTotalCama(int totalCama) {
+        this.totalCama = totalCama;
+    }
 }
