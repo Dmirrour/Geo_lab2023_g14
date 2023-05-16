@@ -2,6 +2,7 @@ package uy.edu.tsig.bean;
 
 import jakarta.ejb.EJB;
 import jakarta.enterprise.context.SessionScoped;
+import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
 import uy.edu.tsig.dto.HospitalDTO;
@@ -54,6 +55,13 @@ public class AdminBean implements Serializable {
                 .distanciaMaxDesvio(desvio)
                 .build();
         iAmbulaciasService.altaAmbulacia(a, idHospital);
+        String msj = String.format("Se agregó la ambulancia %s.", codigo);
+        addMensaje("Ambulancias", msj);
+    }
+
+    private void addMensaje(String summary, String detail) {
+        FacesMessage mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+        FacesContext.getCurrentInstance().addMessage(null, mensaje);
     }
 
     public void addHospital() {
@@ -62,6 +70,8 @@ public class AdminBean implements Serializable {
                 .tipoHospital(tipoH)
                 .build();
         iHospitalService.altaHospital(h);
+        String msj = String.format("Se agregó el hospital %s.", nombreH);
+        addMensaje("Hospitales", msj);
     }
 
     public void addServicioE(){
@@ -69,20 +79,8 @@ public class AdminBean implements Serializable {
                 .totalCama(totalCama)
                 .build();
         iServicioEmergenciaService.altaServicioE(se,idHospital);
-    }
-
-    public void verificarSesion() {
-        try {
-            FacesContext FC = FacesContext.getCurrentInstance();
-            UsuarioDTO u = (UsuarioDTO) FC.getExternalContext().getSessionMap().get("usuario");
-
-            if (u == null) {
-                // acceso sin privilegios
-                FC.getExternalContext().redirect("/Geo_lab2023_g14-web/login.xhtml?faces-redirect=true");
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        String msj = String.format("Se agregó el servicio de emergencia con %s camas.", totalCama);
+        addMensaje("S. Emergencia", msj);
     }
 
     public String getNombreH() {

@@ -50,6 +50,19 @@ public class InicioSesionBean implements Serializable {
         return redireccion;
     }
 
+    public void verificarSesion() {
+        try {
+            FacesContext FC = FacesContext.getCurrentInstance();
+            UsuarioDTO u = (UsuarioDTO) FC.getExternalContext().getSessionMap().get("usuario");
+
+            if (u == null) {
+                // acceso sin privilegios
+                FC.getExternalContext().redirect("/Geo_lab2023_g14-web/login.xhtml?faces-redirect=true");
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
     public void setUsuario(UsuarioDTO usuario) {
         this.usuario = usuario;
     }
