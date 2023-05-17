@@ -36,6 +36,12 @@ public class HospitalDAO implements IHospitalDAO {
         em.merge(h);
     }
     @Override
+    public void updateDesviculo(Hospital hospital){
+        Hospital h = em.find(Hospital.class, hospital.getIdHospital());
+        em.merge(h);
+    }
+
+    @Override
     public void asignarServicioE(Hospital hospital, ServicioEmergencia s){
         Hospital h = em.find(Hospital.class, hospital.getIdHospital());
         h.setServicioEmergencia(s);
@@ -60,6 +66,16 @@ public class HospitalDAO implements IHospitalDAO {
                 .ambulanciaDTOS(hospital.getAmbulanciasDTOS())
                 .build()));
         return res;
+    }
+    @Override
+    public boolean eliminarH(Long idHospital){
+        Hospital h= buscarHospital(idHospital);
+        if(h!=null){
+            em.remove(h);
+            return true;
+        }else{
+            return false;
+        }
     }
 
 

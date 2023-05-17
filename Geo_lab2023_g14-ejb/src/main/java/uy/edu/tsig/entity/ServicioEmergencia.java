@@ -32,6 +32,7 @@ public class ServicioEmergencia implements Serializable {
         this.totalCama=totalCama;
     }
 
+
     public HospitalDTO getHospitalDTO(){
         return HospitalDTO.builder()
                 .idHospital(hospital.getIdHospital())

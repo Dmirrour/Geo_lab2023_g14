@@ -39,6 +39,7 @@
    <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
    #{sesion.init()}
    #{adminBean.initH()}
+   #{adminBean.initS()}
 </h:head>
 
 <body>
@@ -179,20 +180,36 @@
       </f:view>
    </p:dialog>
 
-   <p:dialog header="Eliminar S. Emergencia" widgetVar="dlg6" minHeight="600" width="850" showEffect="fade" modal="true">
+   <p:dialog id="tablase" header="Eliminar S. Emergencia" widgetVar="dlg6" minHeight="600" width="850" showEffect="fade" modal="true">
       <f:view>
          <p:card styleClass="flex justify-content-center">
-            <p:dataTable>
-               <p:column headerText="idServicio"></p:column>
-               <p:column headerText="hospital"></p:column>
-               <p:column headerText="Cant.Camas"></p:column>
-               <p:column headerText="Acciones"></p:column>
+            <p:dataTable value="#{adminBean.servicioEmergenciaDTOS}" var="SE">
+               <p:column headerText="idServicio">
+                  <h:outputText value="#{SE.idServicio}" />
+               </p:column>
+               <p:column headerText="Camas Totales">
+                  <h:outputText value="#{SE.totalCama}" />
+               </p:column>
+               <p:column headerText="Camas Libres">
+                  <h:outputText value="#{SE.camasLibres}" />
+               </p:column>
+               <p:column headerText="Hospital Name">
+                  <h:outputText value="#{SE.hospital.nombreHospital}" />
+               </p:column>
+               <p:column headerText="false">
+                  <p:commandButton styleClass="rounded-button ui-button-danger"
+                                   icon="pi pi-trash"
+                                   process="@this"
+                                   action="#{adminBean.eliminarB(SE.idServicio,SE.hospital.idHospital)}"
+
+                  />
+               </p:column>
             </p:dataTable>
          </p:card>
       </f:view>
    </p:dialog>
 
-   <p:dialog header="Eliminar Ambulancia" widgetVar="dlg7" minHeight="600" width="850" showEffect="fade" modal="true">
+   <p:dialog  header="Eliminar Ambulancia" widgetVar="dlg7" minHeight="600" width="850" showEffect="fade" modal="true">
       <f:view>
          <p:card styleClass="flex justify-content-center">
             <p:dataTable>
@@ -200,12 +217,13 @@
                <p:column headerText="Distancia Maxima"></p:column>
                <p:column headerText="Código"></p:column>
                <p:column headerText="Hospital"></p:column>
+
             </p:dataTable>
          </p:card>
       </f:view>
    </p:dialog>
 
-   <p:dialog header="Eliminar Hospital" widgetVar="dlg8" minHeight="600" width="850" showEffect="fade" modal="true">
+   <p:dialog id="table" header="Eliminar Hospital" widgetVar="dlg8" minHeight="600" width="850" showEffect="fade" modal="true">
       <f:view>
          <p:card styleClass="flex justify-content-center">
             <p:dataTable value="#{adminBean.hospitalDTOS}" var="hospitales">
@@ -221,10 +239,49 @@
                <p:column headerText="s. emergencia">
                   <h:outputText value="#{hospitales.servicioEmergencia.idServicio}" />
                </p:column>
-               <p:column headerText="Acciones">
-                  <h:commandLink>
-                     <h:button value="Eliminar" />
-                  </h:commandLink>
+
+<!--               <p:column headerText="Ambulacias">
+                  <p:dialog header="Ambulacias" widgetVar="listaAmbulacias" modal="true" resizable="false">
+                     <p:dataTable paginator="true" rows="8" id="table_vehiculos" value="#{hospitales.ambulanciaDTOS}" var="vehiculoEmpresa" disabledSelection="true">
+                        <p:column headerText="Matricula">
+                           <p:outputLabel value="#{hospitales.ambulanciaDTOS}"/>
+                        </p:column>
+                        <p:column headerText="Marca">
+                           <p:outputLabel value="#{vehiculoEmpresa.marca}"/>
+                        </p:column>
+                        <p:column headerText="Modelo">
+                           <p:outputLabel value="#{vehiculoEmpresa.modelo}"/>
+                        </p:column>
+                        <p:column headerText="Peso">
+                           <p:outputLabel value="#{vehiculoEmpresa.peso}"/>
+                        </p:column>
+                        <p:column headerText="CapacidadCarga">
+                           <p:outputLabel value="#{vehiculoEmpresa.capacidadCarga}"/>
+                        </p:column>
+                        <p:column headerText="ITV">
+                           <p:outputLabel value="#{vehiculoEmpresa.itv}"/>
+                        </p:column>
+                        <p:column headerText="PNC">
+                           <p:outputLabel value="#{vehiculoEmpresa.pnc}"/>
+                        </p:column>
+                     </p:dataTable>
+                  </p:dialog>
+                  <p:commandButton
+                          id="mostrarVehiculosEmpresa"
+                          styleClass="rounded-button ui-button-primary"
+                          icon="pi pi-plus"
+                          onclick="PF('listaVehiculosEmpresa').show();"
+                  />
+               </p:column>-->
+
+
+               <p:column headerText="false">
+                  <p:commandButton styleClass="rounded-button ui-button-danger"
+                                   icon="pi pi-trash"
+                                   process="@this"
+                                   action="#{adminBean.eliminarH(hospitales.idHospital)}"
+                                   update="table"
+                  />
                </p:column>
             </p:dataTable>
          </p:card>

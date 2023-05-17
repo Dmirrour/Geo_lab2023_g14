@@ -9,4 +9,5 @@ import uy.edu.tsig.model.Hospitales;
 public interface IHospitalService {
     void altaHospital(Hospital h);
     Hospitales obtenerHospitales();
+    boolean borrarH(Long idHospital);
 }

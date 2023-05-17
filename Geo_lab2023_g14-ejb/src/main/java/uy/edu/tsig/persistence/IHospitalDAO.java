@@ -14,4 +14,6 @@ public interface IHospitalDAO {
     ArrayList<HospitalDTO> obtenerHospitales();
     void altaHospital(Hospital h);
     Hospital buscarHospital(Long idHospital);
+    boolean eliminarH(Long idHospital);
+    void updateDesviculo(Hospital hospital);
 }

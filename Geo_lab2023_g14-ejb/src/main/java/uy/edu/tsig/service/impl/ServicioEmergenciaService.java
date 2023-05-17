@@ -4,6 +4,7 @@ import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 import uy.edu.tsig.entity.Hospital;
 import uy.edu.tsig.entity.ServicioEmergencia;
+import uy.edu.tsig.model.ServiciosEmergencias;
 import uy.edu.tsig.persistence.IHospitalDAO;
 import uy.edu.tsig.persistence.IServicioEmergenciaDAO;
 import uy.edu.tsig.service.IServicioEmergenciaService;
@@ -22,5 +23,18 @@ public class ServicioEmergenciaService implements IServicioEmergenciaService {
         se.setCamasLibres(se.getTotalCama());
         ServicioEmergencia persist=iServicioEmergenciaDAO.altaServicioE(se);
         iHospitalDAO.asignarServicioE(h,persist);
+    }
+
+    @Override
+    public boolean borrarSE(Long idSE, Long idHospital){
+
+        return iServicioEmergenciaDAO.borrarSE(idSE, idHospital);
+    }
+
+    @Override
+    public ServiciosEmergencias listarServiciosEmergensias(){
+        ServiciosEmergencias s= new ServiciosEmergencias();
+        s.setListServiciosEmergencias(iServicioEmergenciaDAO.obtenerServicioE());
+        return s;
     }
 }

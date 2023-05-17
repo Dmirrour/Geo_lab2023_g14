@@ -6,12 +6,14 @@ import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
 import uy.edu.tsig.dto.HospitalDTO;
+import uy.edu.tsig.dto.ServicioEmergenciaDTO;
 import uy.edu.tsig.dto.UsuarioDTO;
 import uy.edu.tsig.entity.Ambulancia;
 import uy.edu.tsig.entity.Hospital;
 import uy.edu.tsig.entity.ServicioEmergencia;
 import uy.edu.tsig.entity.TipoHospital;
 import uy.edu.tsig.model.Hospitales;
+import uy.edu.tsig.model.ServiciosEmergencias;
 import uy.edu.tsig.service.IAmbulaciasService;
 import uy.edu.tsig.service.IHospitalService;
 import uy.edu.tsig.service.IServicioEmergenciaService;
@@ -43,10 +45,18 @@ public class AdminBean implements Serializable {
     //alta Servicio de Emergencia
     private int totalCama;
 
+    private ServiciosEmergencias s;
+    private ArrayList<ServicioEmergenciaDTO> servicioEmergenciaDTOS;
+
 
     public void initH() {
         h = iHospitalService.obtenerHospitales();
         hospitalDTOS = h.getListHospitales();
+    }
+
+    public void initS(){
+        s = iServicioEmergenciaService.listarServiciosEmergensias();
+        servicioEmergenciaDTOS =s.getListServiciosEmergencias();
     }
 
     public void addAmbulancia() {
@@ -81,6 +91,32 @@ public class AdminBean implements Serializable {
         iServicioEmergenciaService.altaServicioE(se,idHospital);
         String msj = String.format("Se agregó el servicio de emergencia con %s camas.", totalCama);
         addMensaje("S. Emergencia", msj);
+    }
+
+    public void eliminarH(Long idHospital) {
+        boolean r = iHospitalService.borrarH(idHospital);
+        if (r) {
+            initH();
+            String msj = String.format("Se Borro el Hospital con id %s.", idHospital);
+            addMensaje("Hospitales", msj);
+        }
+        else{
+            String msj = String.format("No se puedo Borrar el Hospital con id %s", idHospital);
+            addMensaje("Hospitales", msj);
+       }
+    }
+
+    public void eliminarB(Long idSE,Long idHospital){
+        boolean r = iServicioEmergenciaService.borrarSE(idSE,idHospital);
+        if (r) {
+            initS();
+            String msj = String.format("Se Borro el Hospital con id %s.", idHospital);
+            addMensaje("Hospitales", msj);
+        }
+        else{
+            String msj = String.format("No se puedo Borrar el Hospital con id %s", idHospital);
+            addMensaje("Hospitales", msj);
+        }
     }
 
     public String getNombreH() {
@@ -139,5 +175,13 @@ public class AdminBean implements Serializable {
 
     public void setTotalCama(int totalCama) {
         this.totalCama = totalCama;
+    }
+
+    public ArrayList<ServicioEmergenciaDTO> getServicioEmergenciaDTOS() {
+        return servicioEmergenciaDTOS;
+    }
+
+    public void setServicioEmergenciaDTOS(ArrayList<ServicioEmergenciaDTO> servicioEmergenciaDTOS) {
+        this.servicioEmergenciaDTOS = servicioEmergenciaDTOS;
     }
 }

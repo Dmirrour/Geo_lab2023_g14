@@ -28,7 +28,7 @@ public class Hospital implements Serializable {
 
     private TipoHospital tipoHospital;
 
-    @OneToOne
+    @OneToOne(orphanRemoval = true)
     ServicioEmergencia servicioEmergencia;
 
     @Builder.Default
