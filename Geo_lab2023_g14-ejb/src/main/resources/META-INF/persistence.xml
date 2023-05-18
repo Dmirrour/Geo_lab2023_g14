@@ -39,7 +39,7 @@
              <property name="hibernate.hbm2ddl.auto" value="create-drop" />
          -->
          <!--  "none" para evitar la generación automática del esquema por parte de JPA: antes "create"-->
-         <property name="javax.persistence.schema-generation.database.action" value="none"/>
+         <property name="javax.persistence.schema-generation.database.action" value="create"/>
          <property name="javax.persistence.schema-generation.create-source" value="metadata"/>
          <property name="javax.persistence.schema-generation.drop-source" value="metadata"/>
 

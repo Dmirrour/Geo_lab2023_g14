@@ -29,8 +29,8 @@ public class Hospital implements Serializable {
 
     private TipoHospital tipoHospital;
 
-    @Column(name = "point", nullable = false, columnDefinition = "geometry(Point,4326)")
-    private Geometry point;
+    @OneToOne
+    private GeomPunto geomPunto;
 
     @OneToOne
     ServicioEmergencia servicioEmergencia;

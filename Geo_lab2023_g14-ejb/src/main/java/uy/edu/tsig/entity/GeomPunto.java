@@ -24,10 +24,7 @@ public class GeomPunto implements Serializable {
     @Column(name = "point", nullable = false, columnDefinition = "geometry(Point,4326)")
     private Geometry point;
 
-    /**
-     * implementar
-     * @OneToOne
-     */
-    private Long idHospital;
+    @OneToOne
+    private Hospital hospital;
 
 }

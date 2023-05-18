@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.locationtech.jts.geom.Geometry;
+import uy.edu.tsig.entity.Hospital;
 
 import java.io.Serializable;
 
@@ -16,5 +17,5 @@ public class GeomPuntoDTO implements Serializable {
     private static final Long serialVersionUID = 1L;
     private Long idPunto;
     private Geometry point;
-    private Long idHospital;
+    private HospitalDTO hospital;
 }
