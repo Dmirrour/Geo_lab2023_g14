@@ -257,14 +257,14 @@
 
    <script>
       // Definimos la URL del servicio WMS de GeoServer
-      var geoserverUrl = 'http://localhost:8088/geoserver/aaas/wms';
+      var geoserverUrl = 'http://localhost:8088/geoserver/tsig2023/wms';
 
       // Crea el mapa Leaflet
       var mymap = L.map('mapid').setView([-34.8797018070320851, -56.262557241497211], 13);
 
       // Añadimos el grupo de capas a nuestro mapa Leaflet
       var layerGroup = L.tileLayer.wms(geoserverUrl, {
-         layers: 'aaas:aaasg',  // Nombre del grupo de capas
+         layers: 'tsig2023:ft_01parcelas',  // Nombre del grupo de capas
          format: 'image/png',
          transparent: true
       }).addTo(mymap);

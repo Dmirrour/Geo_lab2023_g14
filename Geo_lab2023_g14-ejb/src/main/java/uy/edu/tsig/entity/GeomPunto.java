@@ -21,7 +21,7 @@ public class GeomPunto implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPunto;
 
-    @Column(name = "point", nullable = false, columnDefinition = "geometry(Point,4326)")
+    @Column(name = "point", columnDefinition = "geometry(Point,32721)")
     private Geometry point;
 
     @OneToOne
