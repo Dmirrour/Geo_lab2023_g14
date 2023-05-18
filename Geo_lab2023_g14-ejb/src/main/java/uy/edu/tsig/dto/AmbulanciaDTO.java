@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import uy.edu.tsig.entity.Hospital;
 import java.io.Serializable;
 
+import com.vividsolutions.jts.geom.Geometry;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -19,7 +21,7 @@ public class AmbulanciaDTO implements Serializable {
     private Hospital hospital;
     private int distanciaMaxDesvio;
 
-    public AmbulanciaDTO(Long idAmbulancia, String idCodigo, int distanciaMaxDesvio) {
+    public AmbulanciaDTO(Long idAmbulancia, String idCodigo, int distanciaMaxDesvio, Geometry geom) {
         this.idAmbulancia = idAmbulancia;
         this.idCodigo = idCodigo;
         this.distanciaMaxDesvio = distanciaMaxDesvio;

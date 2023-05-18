@@ -17,7 +17,18 @@ import uy.edu.tsig.service.IHospitalService;
 import uy.edu.tsig.service.IServicioEmergenciaService;
 
 import java.io.Serializable;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.Point;
 
 @Named("adminBean")
 @SessionScoped
@@ -28,10 +39,7 @@ public class AdminBean implements Serializable {
     IAmbulaciasService iAmbulaciasService;
     @EJB
     IServicioEmergenciaService iServicioEmergenciaService;
-<<<<<<< HEAD
-=======
 
->>>>>>> 63986cf429605ebc976650426a9559cc4fd33b31
     // alta hospital
     private String nombreH;
     private TipoHospital tipoH;
@@ -42,18 +50,10 @@ public class AdminBean implements Serializable {
     private String codigo;
     private Hospitales h;
     private ArrayList<HospitalDTO> hospitalDTOS;
+    private String geometria;
 
-<<<<<<< HEAD
-    // Alta Servicio de Emergencia
-    private Long idServicio;
-    private int totalC;
-    private int camasLi;
-    private Hospital hospital;
-=======
-    //alta Servicio de Emergencia
+    // alta Servicio de Emergencia
     private int totalCama;
-
->>>>>>> 63986cf429605ebc976650426a9559cc4fd33b31
 
     public void initH() {
         h = iHospitalService.obtenerHospitales();
@@ -61,6 +61,17 @@ public class AdminBean implements Serializable {
     }
 
     public void addAmbulancia() {
+        // Coordenadas de ejemplo
+        // double longitud = -75.1652;
+        // double latitud = 39.9526;
+
+        // Crear un objeto de fábrica de geometría
+        GeometryFactory geometryFactory = new GeometryFactory();
+        // Crear un objeto Point utilizando las coordenadas
+        Coordinate coordinate = new Coordinate(-34, -54);
+        Point point = geometryFactory.createPoint(coordinate);
+
+        // crearGeometria();
         Ambulancia a = Ambulancia.builder()
                 .idCodigo(codigo)
                 .distanciaMaxDesvio(desvio)
@@ -68,6 +79,8 @@ public class AdminBean implements Serializable {
         iAmbulaciasService.altaAmbulacia(a, idHospital);
         String msj = String.format("Se agregó la ambulancia %s.", codigo);
         addMensaje("Ambulancias", msj);
+
+        System.out.println("geometris: " + geometria);
     }
 
     private void addMensaje(String summary, String detail) {
@@ -85,49 +98,58 @@ public class AdminBean implements Serializable {
         addMensaje("Hospitales", msj);
     }
 
-<<<<<<< HEAD
-    // Servicio E
-    public void addServicioEmergencia() {
-        // try {
-
-        // if (camasLi < totalC) {
-        // throw new Error("La cantidad de camas libre no puede ser mayor a la cantidad
-        // de camas totales");
-        // }
-        ServicioEmergencia servicio = ServicioEmergencia.builder()
-                .idServicio(idServicio)
-                .camasLibres(camasLi)
-                .totalCama(totalC)
-                .build();
-        iServicioEmergenciaService.asignarServicioEmergencia(servicio, hospital);
-
-        // } catch (Exception e) {
-        // System.out.println("Error: " + e);
-        // }
-    }
-
-    public void verificarSesion() {
-        try {
-            FacesContext FC = FacesContext.getCurrentInstance();
-            UsuarioDTO u = (UsuarioDTO) FC.getExternalContext().getSessionMap().get("usuario");
-
-            if (u == null) {
-                // acceso sin privilegios
-                FC.getExternalContext().redirect("/Geo_lab2023_g14-web/login.xhtml?faces-redirect=true");
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-=======
-    public void addServicioE(){
-        ServicioEmergencia se =ServicioEmergencia.builder()
+    public void addServicioE() {
+        ServicioEmergencia se = ServicioEmergencia.builder()
                 .totalCama(totalCama)
                 .build();
-        iServicioEmergenciaService.altaServicioE(se,idHospital);
+        iServicioEmergenciaService.altaServicioE(se, idHospital);
         String msj = String.format("Se agregó el servicio de emergencia con %s camas.", totalCama);
         addMensaje("S. Emergencia", msj);
->>>>>>> 63986cf429605ebc976650426a9559cc4fd33b31
     }
+
+    public void crearGeometria() {
+        /*
+         * String url =
+         * "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
+         * String usuario = "postgres";
+         * String contraseña = "lapass";
+         * Connection conn;
+         * try {
+         * conn = DriverManager.getConnection(url, usuario, contraseña);
+         * Statement stmt = conn.createStatement();
+         * ResultSet rs = stmt.executeQuery(
+         * "UPDATE ambulancia SET geom=(ST_SetSRID(ST_MakePoint(-35, -54), 32721)) WHERE idambulancia=8"
+         * );
+         * System.out.println("Punto insertado correctamente.");
+         * } catch (SQLException e) {
+         * e.printStackTrace();
+         * }
+         */
+    }
+    // try (Connection conn = DriverManager.getConnection(url, usuario, contraseña))
+    // {
+    // // Coordenadas de ejemplo
+    // double longitud = -75.1652;
+    // double latitud = 39.9526;
+
+    // // Consulta SQL con ST_MakePoint
+    // String sql = "UPDATE ambulancia SET geom=(ST_SetSRID(ST_MakePoint(?, ?),
+    // 32721)) WHERE idambulancia=1";
+
+    // try (PreparedStatement pstmt = conn.prepareStatement(sql)) { // Establecer
+    // los parámetros de la consulta
+    // pstmt.setDouble(1, longitud);
+    // pstmt.setDouble(2, latitud);
+
+    // // Ejecutar la consulta
+    // pstmt.executeUpdate();
+
+    // }
+    // } catch (SQLException e) {
+    // System.out.println("Error al conectar a la base de datos: " +
+    // e.getMessage());
+    // }
+    // }
 
     public String getNombreH() {
         return nombreH;
@@ -186,4 +208,5 @@ public class AdminBean implements Serializable {
     public void setTotalCama(int totalCama) {
         this.totalCama = totalCama;
     }
+
 }

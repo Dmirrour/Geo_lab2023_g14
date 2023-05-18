@@ -90,7 +90,7 @@
                <div class="row m-auto mb-4">
                   <div class="col-12 py-2">
                      <h:outputLabel for="nombreH" class="col-12 col-md-6">Nombre Hospital:</h:outputLabel>
-                     <h:inputText id="nombreH" value="#{adminBean.nombreH}" class="col-12 col-md-6" required="true" requiredMessage="La razon social es requerida"/>
+                     <h:inputText id="nombreH" value="#{adminBean.nombreH}" class="col-12 col-md-6" required="true" requiredMessage="La razon social es requerida" />
                   </div>
                   <div class="col-12 py-2">
                      <h:outputLabel for="enum" class="col-12 col-md-6">Tipo de Hospital</h:outputLabel>
@@ -116,22 +116,26 @@
                <div class="row m-auto mb-4">
                   <div class="col-12 py-2">
                      <h:outputLabel for="codigo" class="col-12 col-md-6">Codigo guia:</h:outputLabel>
-                     <h:inputText id="codigo"  type="number" value="#{adminBean.codigo}" class="col-12 col-md-6" required="true" requiredMessage="La razon social es requerida"/>
+                     <h:inputText id="codigo" type="number" value="#{adminBean.codigo}" class="col-12 col-md-6" required="true" requiredMessage="La razon social es requerida" />
                   </div>
                   <div class="col-12 py-2">
                      <h:outputLabel for="desvio" class="col-12 col-md-6">Maximo desvio:</h:outputLabel>
-                     <h:inputText id="desvio" type="number" value="#{adminBean.desvio}" class="col-12 col-md-6" required="true" requiredMessage="La razon social es requerida"/>
+                     <h:inputText id="desvio" type="number" value="#{adminBean.desvio}" class="col-12 col-md-6" required="true" requiredMessage="La razon social es requerida" />
+                  </div>
+                  <div class="col-12 py-2">
+                     <h:outputLabel class="col-12 col-md-6">geometria:</h:outputLabel>
+                     <h:inputText type="text" class="col-12 col-md-6" required="true" requiredMessage="La razon social es requerida" />
                   </div>
                   <hr />
                   <div class="col-12 py-2">
                      <h:outputLabel for="rubro" class="col-12 col-md-6">Hospital</h:outputLabel>
                      <p:selectOneMenu id="rubro" value="#{adminBean.idHospital}" filter="true" filterMatchMode="contains">
-                        <f:selectItems value="#{adminBean.hospitalDTOS}" var="ab" itemLabel="[ #{ab.idHospital} ] - #{ab.nombreHospital}" itemValue="#{ab.idHospital}" class="col-12 col-md-6" required="true" requiredMessage="El Rubro es requerida"/>
+                        <f:selectItems value="#{adminBean.hospitalDTOS}" var="ab" itemLabel="[ #{ab.idHospital} ] - #{ab.nombreHospital}" itemValue="#{ab.idHospital}" class="col-12 col-md-6" required="true" requiredMessage="El Rubro es requerida" />
                      </p:selectOneMenu>
                   </div>
 
                   <div class="d-grid col-12 mx-auto pt-2">
-                     <p:commandButton value="Crear" action="#{adminBean.addAmbulancia()}" update="messages" styleClass="ui-button-raised ui-button-success ui-button-flat" class="col-md-6" onclick="PF('dlg2').hidden()"/>
+                     <p:commandButton value="Crear" action="#{adminBean.addAmbulancia()}" update="messages" styleClass="ui-button-raised ui-button-success ui-button-flat" class="col-md-6" onclick="PF('dlg2').hidden()" />
                   </div>
                </div>
             </h:form>
@@ -146,13 +150,13 @@
                <div class="row m-auto mb-4">
                   <div class="col-12 py-2">
                      <h:outputLabel for="camas" class="col-12 col-md-6">Total de Camas:</h:outputLabel>
-                     <h:inputText id="camas"  type="number" value="#{adminBean.totalCama}" class="col-12 col-md-6" required="true" requiredMessage="La razon social es requerida"/>
+                     <h:inputText id="camas" type="number" value="#{adminBean.totalCama}" class="col-12 col-md-6" required="true" requiredMessage="La razon social es requerida" />
                   </div>
 
                   <div class="col-12 py-2">
                      <h:outputLabel for="rubro2" class="col-12 col-md-6">Hospital</h:outputLabel>
                      <p:selectOneMenu id="rubro2" value="#{adminBean.idHospital}" filter="true" filterMatchMode="contains" class="col-12 col-md-6">
-                        <f:selectItems value="#{adminBean.hospitalDTOS}" var="ab" itemLabel="[ #{ab.idHospital} ] - #{ab.nombreHospital}" itemValue="#{ab.idHospital}" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true" requiredMessage="El Rubro es requerida"/>
+                        <f:selectItems value="#{adminBean.hospitalDTOS}" var="ab" itemLabel="[ #{ab.idHospital} ] - #{ab.nombreHospital}" itemValue="#{ab.idHospital}" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true" requiredMessage="El Rubro es requerida" />
                      </p:selectOneMenu>
                   </div>
 
