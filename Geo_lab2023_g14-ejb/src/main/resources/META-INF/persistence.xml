@@ -28,6 +28,7 @@
       <class>uy.edu.tsig.entity.ServicioEmergencia</class>
       <class>uy.edu.tsig.entity.Ambulancia</class>
       <class>uy.edu.tsig.entity.Hospital</class>
+      <!-- TODO: se debe agregar aqui las demas tablas creadas??? -->
 
       <exclude-unlisted-classes>false</exclude-unlisted-classes>
 
@@ -37,12 +38,15 @@
              Hibernate property instead:
              <property name="hibernate.hbm2ddl.auto" value="create-drop" />
          -->
-         <property name="javax.persistence.schema-generation.database.action" value="create"/>
+         <!--  "none" para evitar la generación automática del esquema por parte de JPA: antes "create"-->
+         <property name="javax.persistence.schema-generation.database.action" value="none"/>
          <property name="javax.persistence.schema-generation.create-source" value="metadata"/>
          <property name="javax.persistence.schema-generation.drop-source" value="metadata"/>
 
 
          <!-- Properties for Hibernate -->
+         <!--  "update", lo que indica que Hibernate debe actualizar automáticamente el esquema de la base de datos según los cambios en las entidades -->
+         <property name="hibernate.hbm2ddl.auto" value="update"/>
          <property name="hibernate.show_sql" value="false" />
       </properties>
    </persistence-unit>

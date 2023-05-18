@@ -37,6 +37,8 @@ public class AdminBean implements Serializable {
     private long idHospital;
     private int desvio;
     private int codigo;
+    private double latitud; // agregamos la propiedad latitud
+    private double longitud; // agregamos la propiedad longitud
     private Hospitales h;
     private ArrayList<HospitalDTO> hospitalDTOS;
 
@@ -131,6 +133,22 @@ public class AdminBean implements Serializable {
 
     public void setDesvio(int desvio) {
         this.desvio = desvio;
+    }
+
+    public double getLatitud() {
+        return latitud;
+    }
+
+    public void setLatitud(double latitud) {
+        this.latitud = latitud;
+    }
+
+    public double getLongitud() {
+        return longitud;
+    }
+
+    public void setLongitud(double longitud) {
+        this.longitud = longitud;
     }
 
     public int getTotalCama() {

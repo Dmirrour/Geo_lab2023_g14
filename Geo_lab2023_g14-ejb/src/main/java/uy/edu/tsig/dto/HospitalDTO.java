@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.locationtech.jts.geom.Geometry;
 import uy.edu.tsig.entity.ServicioEmergencia;
 import uy.edu.tsig.entity.TipoHospital;
 
@@ -20,6 +21,7 @@ public class HospitalDTO implements Serializable {
     private Long idHospital;
     private String nombreHospital;
     private TipoHospital tipoHospital;
+    private Geometry point;
 
     private ServicioEmergencia servicioEmergencia;
     @Builder.Default

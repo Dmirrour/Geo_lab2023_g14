@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.locationtech.jts.geom.Geometry;
 import uy.edu.tsig.dto.AmbulanciaDTO;
 import uy.edu.tsig.dto.ServicioEmergenciaDTO;
 
@@ -27,6 +28,9 @@ public class Hospital implements Serializable {
     private String nombreHospital;
 
     private TipoHospital tipoHospital;
+
+    @Column(name = "point", nullable = false, columnDefinition = "geometry(Point,4326)")
+    private Geometry point;
 
     @OneToOne
     ServicioEmergencia servicioEmergencia;

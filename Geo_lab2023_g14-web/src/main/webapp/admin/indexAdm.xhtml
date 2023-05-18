@@ -12,8 +12,17 @@
    <title>Administrador</title>
 
    <link rel="stylesheet" href="lib/css/style.css" />
+
+   <!-- Incluimos la librería de Bootstrap -->
    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous" />
    <script type="javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+
+   <!-- manipular geometrias con JS -->
+   <script src='https://unpkg.com/@turf/turf@6/turf.min.js'></script>
+
+   <!-- Incluimos la librería de Leaflet -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
 
    <script src="lib/js/leaflet-src.js"></script>
    <script src="lib/js/leaflet.draw-src.js"></script>
@@ -83,23 +92,39 @@
       </script>
    </div>
 
-
    <p:dialog header="Alta hospitales" widgetVar="dlg1" minHeight="600" width="850" showEffect="fade" modal="true">
       <f:view>
          <p:card styleClass="flex justify-content-center">
             <h:form>
                <div class="row m-auto mb-4">
-                  <div class="col-12 py-2">
-                     <h:outputLabel for="nombreH" class="col-12 col-md-6">Nombre Hospital:</h:outputLabel>
-                     <h:inputText id="nombreH" value="#{adminBean.nombreH}" class="col-12 col-md-6" required="true" requiredMessage="La razon social es requerida"/>
+                  <div class="col-6">
+                     <div class="col-12 py-2">
+                        <h:outputLabel for="nombreH" class="col-12 col-md-6">Nombre Hospital:</h:outputLabel>
+                        <h:inputText id="nombreH" value="#{adminBean.nombreH}" class="col-12 col-md-6" required="true" requiredMessage="La razon social es requerida"/>
+                     </div>
+                     <div class="col-12 py-2">
+                        <h:outputLabel for="enum" class="col-12 col-md-6">Tipo de Hospital</h:outputLabel>
+                        <p:selectOneMenu id="enum" value="#{adminBean.tipoH}" class="col-12 col-md-6">
+                           <f:selectItem itemLabel="MUTUALISTA" itemValue="MUTUALISTA" />
+                           <f:selectItem itemLabel="SEGURO PRIVADO" itemValue="SEGUROPRIVADO" />
+                           <f:selectItem itemLabel="SERVICIO ESTATAL" itemValue="SERVICIOESTATAL" />
+                        </p:selectOneMenu>
+                     </div>
+                     <div class="col-12 py-2">
+                        <h:outputLabel for="latitud" class="col-12 col-md-6">Latitud:</h:outputLabel>
+                        <h:inputText id="latitud" name="latitud" value="#{adminBean.latitud}" class="col-12 col-md-6" required="true" requiredMessage="La latitud es requerida"/>
+                     </div>
+                     <div class="col-12 py-2">
+                        <h:outputLabel for="longitud" class="col-12 col-md-6">Longitud:</h:outputLabel>
+                        <h:inputText id="longitud" value="#{adminBean.longitud}" class="col-12 col-md-6" required="true" requiredMessage="La longitud es requerida"/>
+                     </div>
+                     <div class="col-12 py-2">
+                        <h:outputLabel class="col-12 col-md-6">Geo Punto</h:outputLabel>
+                        <h:outputText id="spatial" class="col-12 col-md-6" />
+                     </div>
                   </div>
-                  <div class="col-12 py-2">
-                     <h:outputLabel for="enum" class="col-12 col-md-6">Tipo de Hospital</h:outputLabel>
-                     <p:selectOneMenu id="enum" value="#{adminBean.tipoH}" class="col-12 col-md-6">
-                        <f:selectItem itemLabel="MUTUALISTA" itemValue="MUTUALISTA" />
-                        <f:selectItem itemLabel="SEGURO PRIVADO" itemValue="SEGUROPRIVADO" />
-                        <f:selectItem itemLabel="SERVICIO ESTATAL" itemValue="SERVICIOESTATAL" />
-                     </p:selectOneMenu>
+                  <div class="col-6">
+                     <div id="mapid" style="height: 400px;"></div>
                   </div>
                   <div class="d-grid col-6 mx-auto pt-2">
                      <p:commandButton value="Crear" action="#{adminBean.addHospital()}" update="messages" class="col-md-6" onclick="PF('dlg2').hidden()" />
@@ -130,7 +155,6 @@
                         <f:selectItems value="#{adminBean.hospitalDTOS}" var="ab" itemLabel="[ #{ab.idHospital} ] - #{ab.nombreHospital}" itemValue="#{ab.idHospital}" class="col-12 col-md-6" required="true" requiredMessage="El Rubro es requerida"/>
                      </p:selectOneMenu>
                   </div>
-
                   <div class="d-grid col-12 mx-auto pt-2">
                      <p:commandButton value="Crear" action="#{adminBean.addAmbulancia()}" update="messages" styleClass="ui-button-raised ui-button-success ui-button-flat" class="col-md-6" onclick="PF('dlg2').hidden()"/>
                   </div>
@@ -230,6 +254,35 @@
          </p:card>
       </f:view>
    </p:dialog>
+
+   <script>
+      // Definimos la URL del servicio WMS de GeoServer
+      var geoserverUrl = 'http://localhost:8088/geoserver/aaas/wms';
+
+      // Crea el mapa Leaflet
+      var mymap = L.map('mapid').setView([-34.8797018070320851, -56.262557241497211], 13);
+
+      // Añadimos el grupo de capas a nuestro mapa Leaflet
+      var layerGroup = L.tileLayer.wms(geoserverUrl, {
+         layers: 'aaas:aaasg',  // Nombre del grupo de capas
+         format: 'image/png',
+         transparent: true
+      }).addTo(mymap);
+
+      // Crea un marcador y guarda la posición en los campos de latitud y longitud
+      var marker = L.marker([0, 0]).addTo(mymap);
+      mymap.on('click', function(e) {
+         marker.setLatLng(e.latlng);
+         document.getElementById("j_idt30:latitud").value = e.latlng.lat;
+         document.getElementById("j_idt30:longitud").value = e.latlng.lng;
+
+         var bbox = turf.bbox(features);
+
+         var point = turf.point(([e.latlng.lng,e.latlng.lat]));
+
+         document.getElementById("j_idt30:spatial").value = point.value;
+      });
+   </script>
 </body>
 
 <!-- <script>

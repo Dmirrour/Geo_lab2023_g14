@@ -4,6 +4,7 @@ import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
+import org.locationtech.jts.geom.Geometry;
 import uy.edu.tsig.dto.HospitalDTO;
 import uy.edu.tsig.entity.Ambulancia;
 import uy.edu.tsig.entity.Hospital;
@@ -29,6 +30,15 @@ public class HospitalDAO implements IHospitalDAO {
     public Hospital buscarHospital(Long idHospital){
         return em.find(Hospital.class, idHospital);
     }
+
+    @Override
+    public Hospital asignarPuntoHospital(int idHospital, Geometry pto) {
+        Hospital hospital = em.find(Hospital.class, idHospital);
+        hospital.setPoint(pto);
+        em.merge(hospital);
+        return hospital;
+    }
+
     @Override
     public void asignarAmbulacia(Hospital hospital, Ambulancia a){
         Hospital h = em.find(Hospital.class, hospital.getIdHospital());
