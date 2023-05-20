@@ -44,4 +44,5 @@
 
 ### Datos
 Geoserver
-Server: TsigLab2023 Base de Datos: Geo_lab2023_g14PersistenceUnit
+Server: TsigLab2023
+Base de Datos: Geo_lab2023_g14PersistenceUnit

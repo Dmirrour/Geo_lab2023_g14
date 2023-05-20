@@ -13,7 +13,6 @@ import com.vividsolutions.jts.geom.Geometry;
 
 @Stateless
 public class AmbulanciasService implements IAmbulaciasService {
-
     @EJB
     IAmbulaciaDAO iAmbulaciaDAO;
     @EJB
@@ -22,6 +21,7 @@ public class AmbulanciasService implements IAmbulaciasService {
     public void altaAmbulacia(Ambulancia a, Long hospital) {
         Hospital h = iHospitalDAO.buscarHospital(hospital);
         a.setHospital(h);
+        // iAmbulaciaDAO.crearGeometrias(a);
         Ambulancia persit = iAmbulaciaDAO.altaAmbulacia(a);
         iHospitalDAO.asignarAmbulacia(h, persit);
     }

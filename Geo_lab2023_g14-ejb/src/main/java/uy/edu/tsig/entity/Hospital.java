@@ -56,6 +56,7 @@ public class Hospital implements Serializable {
             result.add(AmbulanciaDTO.builder()
                     .idCodigo(ambulacia.getIdCodigo())
                     .distanciaMaxDesvio(ambulacia.getDistanciaMaxDesvio())
+                    .geom(ambulacia.getGeom())
                     .idAmbulancia(ambulacia.getIdAmbulancia())
                     .hospital(ambulacia.getHospital())
                     .build());

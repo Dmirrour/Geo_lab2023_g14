@@ -16,7 +16,7 @@ UPDATE ambulancia SET geom=(ST_SetSRID(ST_MakePoint(-41, -56), 32721)) WHERE ida
 CREATE TABLE st_asgml(geom) FROM ft_01_ejes WHERE nom_calle='MAGALLANES';	
 
 
-INSERT INTO ft_recorridos (geom)
+INSERT INTO ambulancia (geom)
       VALUES ('0101000020D17F00004005164262482141ABA432E665725741');
 
 
@@ -49,12 +49,19 @@ CREATE INDEX IF NOT EXISTS ft_00_vias_geom_idx
 SELECT * FROM localhost
 
 
-SELECT * FROM ft_recorridos;
 SELECT * FROM usuario;
 SELECT * FROM hospital;
 SELECT * FROM ambulancia;
 SELECT * FROM hospital_ambulancia;
 SELECT * FROM servicioemergencia;
+
+SELECT * FROM ine_barrios_mvd_nbi85;
+SELECT * FROM ine_depto;
+SELECT * FROM servicioemergencia;
+
+ine_barrios_mvd_nbi85
+
+
 
 
 SELECT * FROM ft_00_cam_dig;
@@ -67,3 +74,4 @@ SELECT * FROM ft_01_manzanas;
 SELECT * FROM ft_01_parcelas;
 SELECT * FROM ft_03_cam_dig;
 SELECT * FROM ft_03_ejes;
+SELECT * FROM ft_recorridos;

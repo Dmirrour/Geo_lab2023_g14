@@ -9,6 +9,8 @@ import uy.edu.tsig.dto.HospitalDTO;
 
 import java.io.Serializable;
 
+import com.vividsolutions.jts.geom.Geometry;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -26,10 +28,14 @@ public class Ambulancia implements Serializable {
     @ManyToOne
     private Hospital hospital;
 
-    public Ambulancia(Long idAmbulancia, String idCodigo, int distanciaMaxDesvio) {
+    @Column(columnDefinition = "geometry")
+    private Geometry geom;
+
+    public Ambulancia(Long idAmbulancia, String idCodigo, int distanciaMaxDesvio, Geometry geom) {
         this.idAmbulancia = idAmbulancia;
         this.idCodigo = idCodigo;
         this.distanciaMaxDesvio = distanciaMaxDesvio;
+        this.geom = geom;
     }
 
     public HospitalDTO geHospitalDTO() {

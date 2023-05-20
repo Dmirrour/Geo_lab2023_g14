@@ -1,4 +1,4 @@
-function CrearMapaAdmin() {
+function CrearMapaInvitado() {
     ///////////////////////// MAPAS /////////////////////////
     var openst = L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
         attribution: '© Grupo 14'
@@ -11,24 +11,16 @@ function CrearMapaAdmin() {
 
 
     ///////////////////////// CAPAS WMS /////////////////////////
-    var layerEjes = L.tileLayer.wms('http://localhost:8081/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
-        title: 'Ejes',
-        layers: 'Geo_lab2023_g14PersistenceUnit:ft01_ejes',
-        format: 'image/png',
-        transparent: true,
-        VERSION: '1.1.0',
-    });
-
     var layerDepartamento = L.tileLayer.wms('http://localhost:8081/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
         title: 'Montevideo',
-        layers: 'Geo_lab2023_g14PersistenceUnit:ft_depto',
+        layers: 'Geo_lab2023_g14PersistenceUnit:ft00_departamento',
         format: 'image/png',
         transparent: true,
         VERSION: '1.1.0',
     });
 
     var layerRuta = L.tileLayer.wms('http://localhost:8081/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
-        title: 'Rutas',
+        title: 'Ruta',
         layers: 'Geo_lab2023_g14PersistenceUnit:ft00_cam_dig',
         format: 'image/png',
         transparent: true,
@@ -53,13 +45,9 @@ function CrearMapaAdmin() {
     };
 
     var overlayers = {
-        "Ejes": layerEjes,
-        "Rutas": layerRuta,
-        "Departamentos": layerDepartamento
+        //  "Ejes": layerRuta,
+        //  "Departamentos": layerDepartamento
     };
-
-
-    L.control.layers(baselayers, overlayers, { collapsed: true }).addTo(map);
 
     marcador = L.marker([-34.8797018070320851, -56.262557241497211]).addTo(map) // Icono del marcador
     marcador.bindPopup("Mi ubicación")
@@ -82,14 +70,15 @@ function CrearMapaAdmin() {
             edit: true
         }
     });
-    map.addLayer(drawLayers);
-    map.addControl(drawControl);
+    // map.addLayer(drawLayers);
+    // map.addControl(drawControl);
 
     map.fitBounds([[-35, -56], [-34, -56]]);
     L.geolet({
-        position: 'bottomleft'
+        position: 'bottomleft',
     }).addTo(map);
 
+    L.control.layers(baselayers, overlayers, { collapsed: true }).addTo(map);
 
     map.on(L.Draw.Event.CREATED, function (e) {
         drawLayers.addLayer(e.layer);

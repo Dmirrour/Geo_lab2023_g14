@@ -11,9 +11,13 @@
    <meta name="viewport" content="width=device-width, initial-scale=1" />
    <title>Administrador</title>
 
+   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
    <link rel="stylesheet" href="lib/css/style.css" />
    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous" />
    <script type="javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+
+   <script src="../scripts/lib/ol-ext-v3.2.23/ol-ext.js"></script>
+   <link rel="stylesheet" href="../scripts/lib/ol-ext-v3.2.23/font-awesome.min.css" />
 
    <script src="lib/js/leaflet-src.js"></script>
    <script src="lib/js/leaflet.draw-src.js"></script>
@@ -23,8 +27,8 @@
    <link rel="stylesheet" href="lib/css/leaflet.draw.css" />
    <link rel="stylesheet" href="lib/css/leaflet.draw-shapefile.css" />
 
+   <script src="../scripts/geolet.js"></script>
    <script src="lib/js/index.js"></script>
-   <script src="lib/js/cargarMap.js"></script>
 
    <style>
       html,
@@ -75,13 +79,8 @@
          </div>
       </div>
    </div>
-   <div class="container-fluid mt-3">
-      <div id="map"></div>
-      <script>
-         CargarMap();
-      </script>
-   </div>
-
+   <div id="map"></div>
+   <script>CrearMapaAdmin();</script>
 
    <p:dialog header="Alta hospitales" widgetVar="dlg1" minHeight="600" width="850" showEffect="fade" modal="true">
       <f:view>
@@ -122,10 +121,12 @@
                      <h:outputLabel for="desvio" class="col-12 col-md-6">Maximo desvio:</h:outputLabel>
                      <h:inputText id="desvio" type="number" value="#{adminBean.desvio}" class="col-12 col-md-6" required="true" requiredMessage="La razon social es requerida" />
                   </div>
-                  <div class="col-12 py-2">
-                     <h:outputLabel class="col-12 col-md-6">geometria:</h:outputLabel>
-                     <h:inputText type="text" class="col-12 col-md-6" required="true" requiredMessage="La razon social es requerida" />
-                  </div>
+
+                  <!--                   <div class="col-12 py-2">
+                     <h:outputLabel for="geom" class="col-12 col-md-6">Geometria</h:outputLabel>
+                     <h:inputText id="geom" type="text" value="#{adminBean.geom}" class="col-12 col-md-6" required="true" requiredMessage="La razon social es requerida" />
+                  </div> -->
+
                   <hr />
                   <div class="col-12 py-2">
                      <h:outputLabel for="rubro" class="col-12 col-md-6">Hospital</h:outputLabel>

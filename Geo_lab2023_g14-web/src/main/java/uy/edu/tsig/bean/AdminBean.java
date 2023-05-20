@@ -50,7 +50,7 @@ public class AdminBean implements Serializable {
     private String codigo;
     private Hospitales h;
     private ArrayList<HospitalDTO> hospitalDTOS;
-    private String geometria;
+    private Geometry geome;
 
     // alta Servicio de Emergencia
     private int totalCama;
@@ -61,26 +61,17 @@ public class AdminBean implements Serializable {
     }
 
     public void addAmbulancia() {
-        // Coordenadas de ejemplo
-        // double longitud = -75.1652;
-        // double latitud = 39.9526;
-
-        // Crear un objeto de fábrica de geometría
-        GeometryFactory geometryFactory = new GeometryFactory();
-        // Crear un objeto Point utilizando las coordenadas
-        Coordinate coordinate = new Coordinate(-34, -54);
-        Point point = geometryFactory.createPoint(coordinate);
-
         // crearGeometria();
+        String as = "asd";
         Ambulancia a = Ambulancia.builder()
                 .idCodigo(codigo)
                 .distanciaMaxDesvio(desvio)
+                .geom(geome)
                 .build();
         iAmbulaciasService.altaAmbulacia(a, idHospital);
         String msj = String.format("Se agregó la ambulancia %s.", codigo);
         addMensaje("Ambulancias", msj);
-
-        System.out.println("geometris: " + geometria);
+        // System.out.println("geometris: " + geometria);
     }
 
     private void addMensaje(String summary, String detail) {
@@ -108,23 +99,19 @@ public class AdminBean implements Serializable {
     }
 
     public void crearGeometria() {
-        /*
-         * String url =
-         * "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
-         * String usuario = "postgres";
-         * String contraseña = "lapass";
-         * Connection conn;
-         * try {
-         * conn = DriverManager.getConnection(url, usuario, contraseña);
-         * Statement stmt = conn.createStatement();
-         * ResultSet rs = stmt.executeQuery(
-         * "UPDATE ambulancia SET geom=(ST_SetSRID(ST_MakePoint(-35, -54), 32721)) WHERE idambulancia=8"
-         * );
-         * System.out.println("Punto insertado correctamente.");
-         * } catch (SQLException e) {
-         * e.printStackTrace();
-         * }
-         */
+        String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
+        String usuario = "postgres";
+        String contraseña = "lapass";
+        Connection conn;
+        try {
+            conn = DriverManager.getConnection(url, usuario, contraseña);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(
+                    "UPDATE ambulancia SET geom=(ST_SetSRID(ST_MakePoint(-35, -54), 32721)) WHERE idambulancia=2");
+            System.out.println("Punto insertado correctamente.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
     // try (Connection conn = DriverManager.getConnection(url, usuario, contraseña))
     // {
@@ -207,6 +194,14 @@ public class AdminBean implements Serializable {
 
     public void setTotalCama(int totalCama) {
         this.totalCama = totalCama;
+    }
+
+    public Geometry getGeom() {
+        return geome;
+    }
+
+    public void setGeom(Geometry geome) {
+        this.geome = geome;
     }
 
 }

@@ -15,13 +15,17 @@
     <script src="scripts/lib/ol-ext-v3.2.23/ol-ext.js"></script>
     <link rel="stylesheet" href="scripts/lib/ol-ext-v3.2.23/font-awesome.min.css">
 
+    <script src="admin/lib/js/leaflet-src.js"></script>
+    <script src="admin/lib/js/leaflet.draw-src.js"></script>
+    <script src="admin/lib/js/leaflet.draw-shapefile.js"></script>
 
-    <link rel="stylesheet" href="admin/lib/css/style.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
-    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <link rel="stylesheet" href="admin/lib/css/leaflet.css" />
+    <link rel="stylesheet" href="admin/lib/css/leaflet.draw.css" />
+    <link rel="stylesheet" href="admin/lib/css/leaflet.draw-shapefile.css" />
 
-    <script src="admin/lib/js/index.js"></script>
-    <script src="admin/lib/js/cargarMap.js"></script>
+
+    <script src="scripts/geolet.js"></script>
+    <script src="scripts/lib/indexInvitado.js"></script>
 
     <style>
         #map {
@@ -52,13 +56,8 @@
         </button>
     </nav>
 
-    <div class="container-fluid mt-3">
-        <div id="map"></div>
-        <script>
-            CargarMap();
-        </script>
-    </div>
-
+    <div id="map"></div>
+    <script>CrearMapaInvitado();</script>
 </body>
 
 </html>

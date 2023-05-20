@@ -20,10 +20,12 @@ public class AmbulanciaDTO implements Serializable {
     private String idCodigo;
     private Hospital hospital;
     private int distanciaMaxDesvio;
+    private Geometry geom;
 
     public AmbulanciaDTO(Long idAmbulancia, String idCodigo, int distanciaMaxDesvio, Geometry geom) {
         this.idAmbulancia = idAmbulancia;
         this.idCodigo = idCodigo;
         this.distanciaMaxDesvio = distanciaMaxDesvio;
+        this.geom = geom;
     }
 }
