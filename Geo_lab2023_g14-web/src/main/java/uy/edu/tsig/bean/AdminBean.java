@@ -5,6 +5,7 @@ import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
+import uy.edu.tsig.dto.AmbulanciaDTO;
 import uy.edu.tsig.dto.HospitalDTO;
 import uy.edu.tsig.dto.ServicioEmergenciaDTO;
 import uy.edu.tsig.dto.UsuarioDTO;
@@ -64,7 +65,16 @@ public class AdminBean implements Serializable {
                 .idCodigo(codigo)
                 .distanciaMaxDesvio(desvio)
                 .build();
-        iAmbulaciasService.altaAmbulacia(a, idHospital);
+        AmbulanciaDTO aDTO = iAmbulaciasService.altaAmbulacia(a, idHospital);
+
+        //aDTO contiene los datos que van de la logica como el id, en lo posible para manejar vinculadas de forma trasera tranten de crear
+        //la tabla con el mismo id de la tabla de hibernate asi vamos a tener una relacion entre ellos que nosotros vamos a poder vincular
+        //esto haciendole aDTO.getid, y bueno si quieren ademas agregarle el nombre a la geografica tambien se puede
+        //aca parte geografia
+        //eso o como vi que hicieron llamar a otra funcion pero es lo mismo lo unico que a esa funcion le ban a tener que pasar el long id
+
+        //--------x------------x--------------
+
         String msj = String.format("Se agregó la ambulancia %s.", codigo);
         addMensaje("Ambulancias", msj);
     }
@@ -79,7 +89,16 @@ public class AdminBean implements Serializable {
                 .nombreHospital(nombreH)
                 .tipoHospital(tipoH)
                 .build();
-        iHospitalService.altaHospital(h);
+        HospitalDTO hos= iHospitalService.altaHospital(h);
+
+        //hos contiene los datos que van de la logica como el id, en lo posible para manejar vinculadas de forma trasera tranten de crear
+        //la tabla con el mismo id de la tabla de hibernate asi vamos a tener una relacion entre ellos que nosotros vamos a poder vincular
+        //esto haciendole hos.getidHospital, y bueno si quieren ademas agregarle el nombre a la geografica tambien se puede
+        //aca parte geografia
+        //eso o como vi que hicieron llamar a otra funcion pero es lo mismo lo unico que a esa funcion le ban a tener que pasar el long id
+
+        //--------x------------x--------------
+
         String msj = String.format("Se agregó el hospital %s.", nombreH);
         addMensaje("Hospitales", msj);
     }
@@ -88,7 +107,18 @@ public class AdminBean implements Serializable {
         ServicioEmergencia se =ServicioEmergencia.builder()
                 .totalCama(totalCama)
                 .build();
-        iServicioEmergenciaService.altaServicioE(se,idHospital);
+        ServicioEmergenciaDTO sedto = iServicioEmergenciaService.altaServicioE(se,idHospital);
+
+
+        //sedto contiene los datos que van de la logica como el id, en lo posible para manejar vinculadas de forma trasera tranten de crear
+        //la tabla con el mismo id de la tabla de hibernate asi vamos a tener una relacion entre ellos que nosotros vamos a poder vincular
+        //esto haciendole sedto.getidHospital, y bueno si quieren ademas agregarle el nombre a la geografica tambien se puede
+        //aca parte geografia
+        //eso o como vi que hicieron llamar a otra funcion pero es lo mismo lo unico que a esa funcion le ban a tener que pasar el long id
+
+        //--------x------------x--------------
+
+
         String msj = String.format("Se agregó el servicio de emergencia con %s camas.", totalCama);
         addMensaje("S. Emergencia", msj);
     }

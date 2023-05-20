@@ -22,8 +22,9 @@ public class HospitalDAO implements IHospitalDAO {
     @Inject
     public EntityManager em;
     @Override
-    public void altaHospital(Hospital h){
+    public HospitalDTO altaHospital(Hospital h){
             em.persist(h);
+            return h.getHospitalDTO();
     }
     @Override
     public Hospital buscarHospital(Long idHospital){

@@ -57,7 +57,7 @@ public class ServicioEmergenciaDAO implements IServicioEmergenciaDAO {
                 .builder()
                 .idServicio(servicioEmergencia.getIdServicio())
                 .camasLibres(servicioEmergencia.getCamasLibres())
-                .hospital(servicioEmergencia.getHospital())
+                .hospital(servicioEmergencia.getHospitalDTO())
                 .totalCama(servicioEmergencia.getTotalCama())
                 .build()
                 ));

@@ -1,6 +1,7 @@
 package uy.edu.tsig.persistence;
 
 import jakarta.ejb.Remote;
+import uy.edu.tsig.dto.AmbulanciaDTO;
 import uy.edu.tsig.entity.Ambulancia;
 @Remote
 public interface IAmbulaciaDAO {

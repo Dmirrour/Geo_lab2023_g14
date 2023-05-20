@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uy.edu.tsig.dto.AmbulanciaDTO;
+import uy.edu.tsig.dto.HospitalDTO;
 import uy.edu.tsig.dto.ServicioEmergenciaDTO;
 
 import java.io.Serializable;
@@ -32,7 +33,7 @@ public class Hospital implements Serializable {
     ServicioEmergencia servicioEmergencia;
 
     @Builder.Default
-    @OneToMany(orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true)
     List<Ambulancia> Ambulancia = new ArrayList<>();
 
     public Hospital (Long idHospital, String nombreHospital, TipoHospital tipoHospital){
@@ -46,7 +47,7 @@ public class Hospital implements Serializable {
                 .idServicio(servicioEmergencia.getIdServicio())
                 .totalCama(servicioEmergencia.getTotalCama())
                 .camasLibres(servicioEmergencia.getCamasLibres())
-                .hospital(servicioEmergencia.getHospital())
+                .hospital(servicioEmergencia.getHospitalDTO())
                 .build();
     }
 
@@ -57,10 +58,14 @@ public class Hospital implements Serializable {
                     .idCodigo(ambulacia.getIdCodigo())
                     .distanciaMaxDesvio(ambulacia.getDistanciaMaxDesvio())
                     .idAmbulancia(ambulacia.getIdAmbulancia())
-                    .hospital(ambulacia.getHospital())
+                    .hospital(ambulacia.geHospitalDTO())
                     .build());
         });
         return result;
+    }
+
+    public HospitalDTO getHospitalDTO(){
+        return new HospitalDTO(this.getIdHospital(),this.nombreHospital,this.tipoHospital,this.getServicioEmergencia(),this.getAmbulanciasDTOS());
     }
 
 }

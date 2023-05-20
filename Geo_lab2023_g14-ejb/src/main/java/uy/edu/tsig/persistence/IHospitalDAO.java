@@ -12,7 +12,7 @@ public interface IHospitalDAO {
     void asignarAmbulacia(Hospital hospital, Ambulancia a);
     void asignarServicioE(Hospital hospital, ServicioEmergencia a);
     ArrayList<HospitalDTO> obtenerHospitales();
-    void altaHospital(Hospital h);
+    HospitalDTO altaHospital(Hospital h);
     Hospital buscarHospital(Long idHospital);
     boolean eliminarH(Long idHospital);
     void updateDesviculo(Hospital hospital);

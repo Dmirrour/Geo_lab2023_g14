@@ -15,8 +15,8 @@ public class HospitalService implements IHospitalService{
     IHospitalDAO iHospitalDAO;
 
     @Override
-    public void altaHospital(Hospital h){
-        iHospitalDAO.altaHospital(h);
+    public HospitalDTO altaHospital(Hospital h){
+        return iHospitalDAO.altaHospital(h);
     }
     @Override
     public Hospitales obtenerHospitales(){
