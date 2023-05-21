@@ -37,6 +37,8 @@
       }
    </style>
    <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+   <link rel="stylesheet" href="https://unpkg.com/primeflex@^3/primeflex.css"/>
+
    #{sesion.init()}
    #{adminBean.initH()}
    #{adminBean.initS()}
@@ -240,10 +242,10 @@
       </f:view>
    </p:dialog>
 
-   <p:dialog id="table" header="Eliminar Hospital" widgetVar="dlg8" minHeight="600" width="850" showEffect="fade" modal="true">
+   <p:dialog  header="Eliminar Hospital" widgetVar="dlg8" minHeight="600" width="850" showEffect="fade" modal="true">
       <f:view>
          <p:card styleClass="flex justify-content-center">
-            <p:dataTable value="#{adminBean.hospitalDTOS}" var="hospitales">
+            <p:dataTable id="table" value="#{adminBean.hospitalDTOS}" var="hospitales">
                <p:column headerText="idHospital">
                   <h:outputText value="#{hospitales.idHospital}" />
                </p:column>
@@ -258,7 +260,7 @@
                </p:column>
 
                <p:column headerText="Ambulacias">
-                  <p:dialog header="Ambulacias" widgetVar="listaAmbulacias" modal="true" resizable="false">
+                  <p:dialog id="h_ambu" header="Ambulacias" widgetVar="listaAmbulacias"  resizable="false">
                      <p:dataTable paginator="true" rows="8" id="table_ambulancias" value="#{hospitales.ambulanciaDTOS}" var="amb" disabledSelection="true">
                         <p:column headerText="ID Ambulancia">
                            <p:outputLabel value="#{amb.idAmbulancia}"/>

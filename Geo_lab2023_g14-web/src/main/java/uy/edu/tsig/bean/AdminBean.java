@@ -104,7 +104,6 @@ public class AdminBean implements Serializable {
         //esto haciendole hos.getidHospital, y bueno si quieren ademas agregarle el nombre a la geografica tambien se puede
         //aca parte geografia
         //eso o como vi que hicieron llamar a otra funcion pero es lo mismo lo unico que a esa funcion le ban a tener que pasar el long id
-
         //--------x------------x--------------
 
         String msj = String.format("Se agregó el hospital %s.", nombreH);
