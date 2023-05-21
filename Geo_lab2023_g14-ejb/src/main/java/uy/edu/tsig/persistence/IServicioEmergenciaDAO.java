@@ -9,7 +9,7 @@ import java.util.ArrayList;
 @Remote
 public interface IServicioEmergenciaDAO {
     ServicioEmergencia altaServicioE(ServicioEmergencia se);
-    boolean borrarSE(Long idSE,Long idHospital);
+    boolean borrarSE(Long idSE);
     ArrayList<ServicioEmergenciaDTO> obtenerServicioE();
 
 }

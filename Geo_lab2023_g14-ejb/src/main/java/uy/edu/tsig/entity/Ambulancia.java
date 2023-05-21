@@ -34,7 +34,7 @@ public class Ambulancia implements Serializable {
         this.distanciaMaxDesvio=distanciaMaxDesvio;
     }
 
-    public HospitalDTO geHospitalDTO(){
+    public HospitalDTO getHospitalDTO(){
         return HospitalDTO.builder()
                 .idHospital(hospital.getIdHospital())
                 .nombreHospital(hospital.getNombreHospital())

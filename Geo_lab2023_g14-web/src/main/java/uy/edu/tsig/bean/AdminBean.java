@@ -13,6 +13,7 @@ import uy.edu.tsig.entity.Ambulancia;
 import uy.edu.tsig.entity.Hospital;
 import uy.edu.tsig.entity.ServicioEmergencia;
 import uy.edu.tsig.entity.TipoHospital;
+import uy.edu.tsig.model.Ambulacias;
 import uy.edu.tsig.model.Hospitales;
 import uy.edu.tsig.model.ServiciosEmergencias;
 import uy.edu.tsig.service.IAmbulaciasService;
@@ -41,6 +42,8 @@ public class AdminBean implements Serializable {
     private int desvio;
     private int codigo;
     private Hospitales h;
+    private Ambulacias a;
+    private ArrayList<AmbulanciaDTO> ambulanciaDTOS;
     private ArrayList<HospitalDTO> hospitalDTOS;
 
     //alta Servicio de Emergencia
@@ -58,6 +61,11 @@ public class AdminBean implements Serializable {
     public void initS(){
         s = iServicioEmergenciaService.listarServiciosEmergensias();
         servicioEmergenciaDTOS =s.getListServiciosEmergencias();
+    }
+
+    public void initA(){
+        a = iAmbulaciasService.listarAmbulancias();
+        ambulanciaDTOS = a.getListaAmbulancias();
     }
 
     public void addAmbulancia() {
@@ -136,17 +144,22 @@ public class AdminBean implements Serializable {
        }
     }
 
-    public void eliminarB(Long idSE,Long idHospital){
-        boolean r = iServicioEmergenciaService.borrarSE(idSE,idHospital);
+    public void eliminarB(Long idSE){
+        boolean r = iServicioEmergenciaService.borrarSE(idSE);
+
         if (r) {
             initS();
-            String msj = String.format("Se Borro el Hospital con id %s.", idHospital);
-            addMensaje("Hospitales", msj);
+            String msj = String.format("Se Borro el Servicio con id %s.", idSE);
+            addMensaje("Servicio", msj);
         }
         else{
-            String msj = String.format("No se puedo Borrar el Hospital con id %s", idHospital);
-            addMensaje("Hospitales", msj);
+            String msj = String.format("No se puedo Borrar el Servicio con id %s", idSE);
+            addMensaje("Servicio", msj);
         }
+    }
+
+    public void eliminarA(Long idAmbulancia){
+        iAmbulaciasService.borrarA(idAmbulancia);
     }
 
     public String getNombreH() {
@@ -213,5 +226,13 @@ public class AdminBean implements Serializable {
 
     public void setServicioEmergenciaDTOS(ArrayList<ServicioEmergenciaDTO> servicioEmergenciaDTOS) {
         this.servicioEmergenciaDTOS = servicioEmergenciaDTOS;
+    }
+
+    public ArrayList<AmbulanciaDTO> getAmbulanciaDTOS() {
+        return ambulanciaDTOS;
+    }
+
+    public void setAmbulanciaDTOS(ArrayList<AmbulanciaDTO> ambulanciaDTOS) {
+        this.ambulanciaDTOS = ambulanciaDTOS;
     }
 }

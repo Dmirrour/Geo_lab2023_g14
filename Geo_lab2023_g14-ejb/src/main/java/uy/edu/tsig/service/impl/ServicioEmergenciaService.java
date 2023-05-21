@@ -28,9 +28,9 @@ public class ServicioEmergenciaService implements IServicioEmergenciaService {
     }
 
     @Override
-    public boolean borrarSE(Long idSE, Long idHospital){
+    public boolean borrarSE(Long idSE){
 
-        return iServicioEmergenciaDAO.borrarSE(idSE, idHospital);
+        return iServicioEmergenciaDAO.borrarSE(idSE);
     }
 
     @Override

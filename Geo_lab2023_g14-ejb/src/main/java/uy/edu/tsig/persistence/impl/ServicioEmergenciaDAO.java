@@ -5,6 +5,7 @@ import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
+import jakarta.transaction.Transactional;
 import uy.edu.tsig.dto.ServicioEmergenciaDTO;
 import uy.edu.tsig.entity.Hospital;
 import uy.edu.tsig.entity.ServicioEmergencia;
@@ -29,12 +30,14 @@ public class ServicioEmergenciaDAO implements IServicioEmergenciaDAO {
         return se;
     }
     @Override
-    public boolean borrarSE(Long idSE, Long idHospital){
-        Hospital h= iHospitalDAO.buscarHospital(idHospital);
-
+    @Transactional
+    public boolean borrarSE(Long idSE){
         ServicioEmergencia se= em.find(ServicioEmergencia.class,idSE);
+
         if(se!=null){
+            Hospital h = se.getHospital();
             h.setServicioEmergencia(null);
+            se.setHospital(null);
             em.remove(se);
             return true;
         }else{
