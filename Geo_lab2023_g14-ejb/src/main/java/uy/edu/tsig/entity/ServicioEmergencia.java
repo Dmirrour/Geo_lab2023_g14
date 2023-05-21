@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uy.edu.tsig.dto.HospitalDTO;
+import uy.edu.tsig.dto.ServicioEmergenciaDTO;
 
 import java.io.Serializable;
 
@@ -32,6 +33,7 @@ public class ServicioEmergencia implements Serializable {
         this.totalCama=totalCama;
     }
 
+
     public HospitalDTO getHospitalDTO(){
         return HospitalDTO.builder()
                 .idHospital(hospital.getIdHospital())
@@ -39,6 +41,10 @@ public class ServicioEmergencia implements Serializable {
                 .tipoHospital(hospital.getTipoHospital())
                 .ambulanciaDTOS(hospital.getAmbulanciasDTOS())
                 .build();
+    }
+
+    public ServicioEmergenciaDTO getServicioEmergenciaDTO(){
+        return new ServicioEmergenciaDTO(this.getIdServicio(),this.totalCama,this.camasLibres,this.getHospitalDTO());
     }
 
 }

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import uy.edu.tsig.dto.AmbulanciaDTO;
 import uy.edu.tsig.dto.HospitalDTO;
 
 import java.io.Serializable;
@@ -33,13 +34,17 @@ public class Ambulancia implements Serializable {
         this.distanciaMaxDesvio=distanciaMaxDesvio;
     }
 
-    public HospitalDTO geHospitalDTO(){
+    public HospitalDTO getHospitalDTO(){
         return HospitalDTO.builder()
                 .idHospital(hospital.getIdHospital())
                 .nombreHospital(hospital.getNombreHospital())
                 .tipoHospital(hospital.getTipoHospital())
                 .servicioEmergencia(hospital.getServicioEmergencia())
-                .ambulanciaDTOS(hospital.getAmbulanciasDTOS())
+                //.ambulanciaDTOS(hospital.getAmbulanciasDTOS())
                 .build();
+    }
+
+    public AmbulanciaDTO getAmbulanciaDTO(){
+        return new AmbulanciaDTO(this.idAmbulancia,this.idCodigo,this.distanciaMaxDesvio);
     }
 }

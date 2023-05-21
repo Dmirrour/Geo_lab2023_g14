@@ -23,8 +23,9 @@ public class HospitalDAO implements IHospitalDAO {
     @Inject
     public EntityManager em;
     @Override
-    public void altaHospital(Hospital h){
+    public HospitalDTO altaHospital(Hospital h){
             em.persist(h);
+            return h.getHospitalDTO();
     }
     @Override
     public Hospital buscarHospital(Long idHospital){
@@ -45,6 +46,12 @@ public class HospitalDAO implements IHospitalDAO {
         h.getAmbulancia().add(a);
         em.merge(h);
     }
+    @Override
+    public void updateDesviculo(Hospital hospital){
+        Hospital h = em.find(Hospital.class, hospital.getIdHospital());
+        em.merge(h);
+    }
+
     @Override
     public void asignarServicioE(Hospital hospital, ServicioEmergencia s){
         Hospital h = em.find(Hospital.class, hospital.getIdHospital());
@@ -70,6 +77,16 @@ public class HospitalDAO implements IHospitalDAO {
                 .ambulanciaDTOS(hospital.getAmbulanciasDTOS())
                 .build()));
         return res;
+    }
+    @Override
+    public boolean eliminarH(Long idHospital){
+        Hospital h= buscarHospital(idHospital);
+        if(h!=null){
+            em.remove(h);
+            return true;
+        }else{
+            return false;
+        }
     }
 
 
