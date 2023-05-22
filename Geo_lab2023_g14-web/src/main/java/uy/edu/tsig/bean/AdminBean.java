@@ -21,6 +21,7 @@ import uy.edu.tsig.service.IHospitalService;
 import uy.edu.tsig.service.IServicioEmergenciaService;
 
 import java.io.Serializable;
+import java.sql.*;
 import java.util.ArrayList;
 
 @Named("adminBean")
@@ -104,6 +105,7 @@ public class AdminBean implements Serializable {
         //esto haciendole hos.getidHospital, y bueno si quieren ademas agregarle el nombre a la geografica tambien se puede
         //aca parte geografia
         //eso o como vi que hicieron llamar a otra funcion pero es lo mismo lo unico que a esa funcion le ban a tener que pasar el long id
+
         //--------x------------x--------------
 
         String msj = String.format("Se agregó el hospital %s.", nombreH);
@@ -123,8 +125,21 @@ public class AdminBean implements Serializable {
         //aca parte geografia
         //eso o como vi que hicieron llamar a otra funcion pero es lo mismo lo unico que a esa funcion le ban a tener que pasar el long id
 
+        String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
+        String usuario = "postgres";
+        String contraseña = "123456d";
+        Connection conn;
+        try {
+            conn = DriverManager.getConnection(url, usuario, contraseña);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(
+                    "UPDATE servicioemergencia set point = (ST_SetSRID(ST_MakePoint(-35, -54), 32721)) WHERE idservicio="+sedto.getIdServicio()+";");
+            System.out.println("Punto insertado correctamente.");
+        } catch (SQLException e) {
+            // e.printStackTrace();
+            System.out.println("No conecta.");
+        }
         //--------x------------x--------------
-
 
         String msj = String.format("Se agregó el servicio de emergencia con %s camas.", totalCama);
         addMensaje("S. Emergencia", msj);

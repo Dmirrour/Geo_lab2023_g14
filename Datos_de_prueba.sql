@@ -1,5 +1,16 @@
 -- Script Datos de Prueba
 
+/**
+ * DROP TABLE CASCADE
+ */
+
+DROP TABLE ambulancia CASCADE;
+DROP TABLE hospital CASCADE;
+DROP TABLE hospital_ambulancia CASCADE;
+DROP TABLE servicioemergencia CASCADE;
+
+ALTER TABLE servicioemergencia ADD COLUMN point GEOMETRY(Point, 32721);
+
 INSERT INTO usuario(usuario, pass) VALUES('grupo14','admin');
 INSERT INTO usuario(usuario, pass) VALUES('admin','admin');
 INSERT INTO usuario(usuario, pass) VALUES('sgonzalez','123');
