@@ -63,7 +63,7 @@ public class HospitalDAO implements IHospitalDAO {
                 .idHospital(hospital.getIdHospital())
                 .nombreHospital(hospital.getNombreHospital())
                 .tipoHospital(hospital.getTipoHospital())
-                .servicioEmergencia(hospital.getServicioEmergencia())
+                .servicioEmergencia(hospital.getServicioEmergenciaDTO())
                 .ambulanciaDTOS(hospital.getAmbulanciasDTOS())
                 .build()));
         return res;

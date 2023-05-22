@@ -42,13 +42,18 @@ public class Hospital implements Serializable {
         this.idHospital=idHospital;
     }
 
-    public ServicioEmergenciaDTO geServicioEmergenciaDTO(){
-        return ServicioEmergenciaDTO.builder()
-                .idServicio(servicioEmergencia.getIdServicio())
-                .totalCama(servicioEmergencia.getTotalCama())
-                .camasLibres(servicioEmergencia.getCamasLibres())
-                .hospital(servicioEmergencia.getHospitalDTO())
-                .build();
+    public ServicioEmergenciaDTO getServicioEmergenciaDTO(){
+        if(servicioEmergencia!=null){
+            return ServicioEmergenciaDTO.builder()
+                    .idServicio(servicioEmergencia.getIdServicio())
+                    .totalCama(servicioEmergencia.getTotalCama())
+                    .camasLibres(servicioEmergencia.getCamasLibres())
+                    //.hospital(servicioEmergencia.getHospitalDTO())
+                    .build();
+        }else{
+            return null;
+        }
+
     }
 
     public ArrayList<AmbulanciaDTO> getAmbulanciasDTOS(){
@@ -65,7 +70,7 @@ public class Hospital implements Serializable {
     }
 
     public HospitalDTO getHospitalDTO(){
-        return new HospitalDTO(this.getIdHospital(),this.nombreHospital,this.tipoHospital,this.getServicioEmergencia(),this.getAmbulanciasDTOS());
+        return new HospitalDTO(this.getIdHospital(),this.nombreHospital,this.tipoHospital,this.getServicioEmergenciaDTO(),this.getAmbulanciasDTOS());
     }
 
 }

@@ -21,7 +21,8 @@ public class HospitalDTO implements Serializable {
     private String nombreHospital;
     private TipoHospital tipoHospital;
 
-    private ServicioEmergencia servicioEmergencia;
+    private ServicioEmergenciaDTO servicioEmergencia;
+
     @Builder.Default
     ArrayList<AmbulanciaDTO> ambulanciaDTOS =new ArrayList<>();
 
