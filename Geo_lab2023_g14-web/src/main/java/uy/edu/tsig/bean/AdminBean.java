@@ -5,30 +5,24 @@ import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
+import uy.edu.tsig.dto.AmbulanciaDTO;
 import uy.edu.tsig.dto.HospitalDTO;
+import uy.edu.tsig.dto.ServicioEmergenciaDTO;
 import uy.edu.tsig.dto.UsuarioDTO;
 import uy.edu.tsig.entity.Ambulancia;
 import uy.edu.tsig.entity.Hospital;
 import uy.edu.tsig.entity.ServicioEmergencia;
 import uy.edu.tsig.entity.TipoHospital;
+import uy.edu.tsig.model.Ambulacias;
 import uy.edu.tsig.model.Hospitales;
+import uy.edu.tsig.model.ServiciosEmergencias;
 import uy.edu.tsig.service.IAmbulaciasService;
 import uy.edu.tsig.service.IHospitalService;
 import uy.edu.tsig.service.IServicioEmergenciaService;
 
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
-
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.Point;
 
 @Named("adminBean")
 @SessionScoped
@@ -47,31 +41,51 @@ public class AdminBean implements Serializable {
     // alta Ambulancia
     private long idHospital;
     private int desvio;
-    private String codigo;
+    private int codigo;
     private Hospitales h;
+    private Ambulacias a;
+    private ArrayList<AmbulanciaDTO> ambulanciaDTOS;
     private ArrayList<HospitalDTO> hospitalDTOS;
-    private Geometry geome;
 
-    // alta Servicio de Emergencia
+    //alta Servicio de Emergencia
     private int totalCama;
+
+    private ServiciosEmergencias s;
+    private ArrayList<ServicioEmergenciaDTO> servicioEmergenciaDTOS;
+
 
     public void initH() {
         h = iHospitalService.obtenerHospitales();
         hospitalDTOS = h.getListHospitales();
     }
 
+    public void initS(){
+        s = iServicioEmergenciaService.listarServiciosEmergensias();
+        servicioEmergenciaDTOS =s.getListServiciosEmergencias();
+    }
+
+    public void initA(){
+        a = iAmbulaciasService.listarAmbulancias();
+        ambulanciaDTOS = a.getListaAmbulancias();
+    }
+
     public void addAmbulancia() {
-        // crearGeometria();
-        String as = "asd";
         Ambulancia a = Ambulancia.builder()
                 .idCodigo(codigo)
                 .distanciaMaxDesvio(desvio)
-                .geom(geome)
                 .build();
-        iAmbulaciasService.altaAmbulacia(a, idHospital);
+        AmbulanciaDTO aDTO = iAmbulaciasService.altaAmbulacia(a, idHospital);
+
+        //aDTO contiene los datos que van de la logica como el id, en lo posible para manejar vinculadas de forma trasera tranten de crear
+        //la tabla con el mismo id de la tabla de hibernate asi vamos a tener una relacion entre ellos que nosotros vamos a poder vincular
+        //esto haciendole aDTO.getid, y bueno si quieren ademas agregarle el nombre a la geografica tambien se puede
+        //aca parte geografia
+        //eso o como vi que hicieron llamar a otra funcion pero es lo mismo lo unico que a esa funcion le ban a tener que pasar el long id
+
+        //--------x------------x--------------
+
         String msj = String.format("Se agregó la ambulancia %s.", codigo);
         addMensaje("Ambulancias", msj);
-        // System.out.println("geometris: " + geometria);
     }
 
     private void addMensaje(String summary, String detail) {
@@ -84,59 +98,83 @@ public class AdminBean implements Serializable {
                 .nombreHospital(nombreH)
                 .tipoHospital(tipoH)
                 .build();
-        iHospitalService.altaHospital(h);
+        HospitalDTO hos= iHospitalService.altaHospital(h);
+
+        //hos contiene los datos que van de la logica como el id, en lo posible para manejar vinculadas de forma trasera tranten de crear
+        //la tabla con el mismo id de la tabla de hibernate asi vamos a tener una relacion entre ellos que nosotros vamos a poder vincular
+        //esto haciendole hos.getidHospital, y bueno si quieren ademas agregarle el nombre a la geografica tambien se puede
+        //aca parte geografia
+        //eso o como vi que hicieron llamar a otra funcion pero es lo mismo lo unico que a esa funcion le ban a tener que pasar el long id
+
+        //--------x------------x--------------
+
         String msj = String.format("Se agregó el hospital %s.", nombreH);
         addMensaje("Hospitales", msj);
     }
 
-    public void addServicioE() {
-        ServicioEmergencia se = ServicioEmergencia.builder()
+    public void addServicioE(){
+        ServicioEmergencia se =ServicioEmergencia.builder()
                 .totalCama(totalCama)
                 .build();
-        iServicioEmergenciaService.altaServicioE(se, idHospital);
-        String msj = String.format("Se agregó el servicio de emergencia con %s camas.", totalCama);
-        addMensaje("S. Emergencia", msj);
-    }
+        ServicioEmergenciaDTO sedto = iServicioEmergenciaService.altaServicioE(se,idHospital);
 
-    public void crearGeometria() {
+
+        //sedto contiene los datos que van de la logica como el id, en lo posible para manejar vinculadas de forma trasera tranten de crear
+        //la tabla con el mismo id de la tabla de hibernate asi vamos a tener una relacion entre ellos que nosotros vamos a poder vincular
+        //esto haciendole sedto.getidHospital, y bueno si quieren ademas agregarle el nombre a la geografica tambien se puede
+        //aca parte geografia
+        //eso o como vi que hicieron llamar a otra funcion pero es lo mismo lo unico que a esa funcion le ban a tener que pasar el long id
+
         String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
         String usuario = "postgres";
-        String contraseña = "lapass";
+        String contraseña = "123456d";
         Connection conn;
         try {
             conn = DriverManager.getConnection(url, usuario, contraseña);
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(
-                    "UPDATE ambulancia SET geom=(ST_SetSRID(ST_MakePoint(-35, -54), 32721)) WHERE idambulancia=2");
+                    "UPDATE servicioemergencia set point = (ST_SetSRID(ST_MakePoint(-35, -54), 32721)) WHERE idservicio="+sedto.getIdServicio()+";");
             System.out.println("Punto insertado correctamente.");
         } catch (SQLException e) {
-            e.printStackTrace();
+            // e.printStackTrace();
+            System.out.println("No conecta.");
+        }
+        //--------x------------x--------------
+
+        String msj = String.format("Se agregó el servicio de emergencia con %s camas.", totalCama);
+        addMensaje("S. Emergencia", msj);
+    }
+
+    public void eliminarH(Long idHospital) {
+        boolean r = iHospitalService.borrarH(idHospital);
+        if (r) {
+            initH();
+            String msj = String.format("Se Borro el Hospital con id %s.", idHospital);
+            addMensaje("Hospitales", msj);
+        }
+        else{
+            String msj = String.format("No se puedo Borrar el Hospital con id %s", idHospital);
+            addMensaje("Hospitales", msj);
+       }
+    }
+
+    public void eliminarB(Long idSE){
+        boolean r = iServicioEmergenciaService.borrarSE(idSE);
+
+        if (r) {
+            initS();
+            String msj = String.format("Se Borro el Servicio con id %s.", idSE);
+            addMensaje("Servicio", msj);
+        }
+        else{
+            String msj = String.format("No se puedo Borrar el Servicio con id %s", idSE);
+            addMensaje("Servicio", msj);
         }
     }
-    // try (Connection conn = DriverManager.getConnection(url, usuario, contraseña))
-    // {
-    // // Coordenadas de ejemplo
-    // double longitud = -75.1652;
-    // double latitud = 39.9526;
 
-    // // Consulta SQL con ST_MakePoint
-    // String sql = "UPDATE ambulancia SET geom=(ST_SetSRID(ST_MakePoint(?, ?),
-    // 32721)) WHERE idambulancia=1";
-
-    // try (PreparedStatement pstmt = conn.prepareStatement(sql)) { // Establecer
-    // los parámetros de la consulta
-    // pstmt.setDouble(1, longitud);
-    // pstmt.setDouble(2, latitud);
-
-    // // Ejecutar la consulta
-    // pstmt.executeUpdate();
-
-    // }
-    // } catch (SQLException e) {
-    // System.out.println("Error al conectar a la base de datos: " +
-    // e.getMessage());
-    // }
-    // }
+    public void eliminarA(Long idAmbulancia){
+        iAmbulaciasService.borrarA(idAmbulancia);
+    }
 
     public String getNombreH() {
         return nombreH;
@@ -160,7 +198,7 @@ public class AdminBean implements Serializable {
         return hospitalDTOS;
     }
 
-    public String getCodigo() {
+    public int getCodigo() {
         return codigo;
     }
 
@@ -180,7 +218,7 @@ public class AdminBean implements Serializable {
         this.idHospital = idHospital;
     }
 
-    public void setCodigo(String codigo) {
+    public void setCodigo(int codigo) {
         this.codigo = codigo;
     }
 
@@ -196,12 +234,19 @@ public class AdminBean implements Serializable {
         this.totalCama = totalCama;
     }
 
-    public Geometry getGeom() {
-        return geome;
+    public ArrayList<ServicioEmergenciaDTO> getServicioEmergenciaDTOS() {
+        return servicioEmergenciaDTOS;
     }
 
-    public void setGeom(Geometry geome) {
-        this.geome = geome;
+    public void setServicioEmergenciaDTOS(ArrayList<ServicioEmergenciaDTO> servicioEmergenciaDTOS) {
+        this.servicioEmergenciaDTOS = servicioEmergenciaDTOS;
     }
 
+    public ArrayList<AmbulanciaDTO> getAmbulanciaDTOS() {
+        return ambulanciaDTOS;
+    }
+
+    public void setAmbulanciaDTOS(ArrayList<AmbulanciaDTO> ambulanciaDTOS) {
+        this.ambulanciaDTOS = ambulanciaDTOS;
+    }
 }

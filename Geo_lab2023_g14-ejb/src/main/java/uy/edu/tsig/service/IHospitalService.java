@@ -7,6 +7,7 @@ import uy.edu.tsig.model.Hospitales;
 
 @Remote
 public interface IHospitalService {
-    void altaHospital(Hospital h);
+    HospitalDTO altaHospital(Hospital h);
     Hospitales obtenerHospitales();
+    boolean borrarH(Long idHospital);
 }

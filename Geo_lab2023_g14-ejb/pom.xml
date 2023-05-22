@@ -15,8 +15,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -38,14 +37,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.vividsolutions/jts -->
-        <dependency>
-            <groupId>com.vividsolutions</groupId>
-            <artifactId>jts</artifactId>
-            <version>1.13</version>
-        </dependency>
-
-
         <!-- Test scope dependencies -->
         <dependency>
             <groupId>junit</groupId>
@@ -56,18 +47,36 @@
         <!-- Bean Validation Implementation
              Provides portable constraints such as @Email
              Hibernate Validator is shipped in WildFly / JBoss EAP -->
+        <!-- probando persistencia spatial -->
         <dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <!--dependecia para base de datos espaciales-->
-        <!-- https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-spatial -->
-        <!--<dependency>
-            <groupId>org.hibernate.orm</groupId>
+            <groupId>org.hibernate</groupId>
             <artifactId>hibernate-spatial</artifactId>
-            <version>6.2.2.Final</version>
-        </dependency>-->
+            <version>5.6.1.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.6.1.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>6.2.0.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.vividsolutions</groupId>
+            <artifactId>jts</artifactId>
+            <version>1.13</version>
+        </dependency>
+
+        <dependency>
+            <groupId>jakarta.inject</groupId>
+            <artifactId>jakarta.inject-api</artifactId>
+            <version>2.0.1</version>
+        </dependency>
 
         <!-- Import the JPA API, we use provided scope as the API is included in WildFly / JBoss EAP -->
         <dependency>
@@ -136,17 +145,17 @@
 		     a non versioned name is required e.g. when building a deployable artifact using the ShrinkWrap API -->
         <finalName>${project.artifactId}</finalName>
 
-        <plugins>
-            <!--Configure the EJB plugin: we create EJB 4.0. If not specified, an error will arise because the plugin expects an Ejb-jar by default. -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-ejb-plugin</artifactId>
-                <version>${version.ejb.plugin}</version>
-                <configuration>
-                    <!-- Tell Maven we are using EJB 4.0 -->
-                    <ejbVersion>4.0</ejbVersion>
-                </configuration>
-            </plugin>
+        <plugins>			
+			<!--Configure the EJB plugin: we create EJB 4.0. If not specified, an error will arise because the plugin expects an Ejb-jar by default. -->
+			<plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-ejb-plugin</artifactId>
+                    <version>${version.ejb.plugin}</version>
+                    <configuration>
+                        <!-- Tell Maven we are using EJB 4.0 -->
+                        <ejbVersion>4.0</ejbVersion>
+                    </configuration>
+                </plugin>
         </plugins>
     </build>
 </project>

@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uy.edu.tsig.dto.AmbulanciaDTO;
+import uy.edu.tsig.dto.HospitalDTO;
 import uy.edu.tsig.dto.ServicioEmergenciaDTO;
 
 import java.io.Serializable;
@@ -24,44 +25,52 @@ public class Hospital implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idHospital;
     @Column(unique = true)
-    private String nombreHospital; // nom
+    private String nombreHospital;
 
-    private TipoHospital tipoHospital; // tipo
+    private TipoHospital tipoHospital;
 
-    @OneToOne
-    ServicioEmergencia servicioEmergencia; // DS
+    @OneToOne(orphanRemoval = true)
+    ServicioEmergencia servicioEmergencia;
 
     @Builder.Default
-    @OneToMany(orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true)
     List<Ambulancia> Ambulancia = new ArrayList<>();
 
-    public Hospital(Long idHospital, String nombreHospital, TipoHospital tipoHospital) {
-        this.nombreHospital = nombreHospital;
-        this.tipoHospital = tipoHospital;
-        this.idHospital = idHospital;
+    public Hospital (Long idHospital, String nombreHospital, TipoHospital tipoHospital){
+        this.nombreHospital=nombreHospital;
+        this.tipoHospital=tipoHospital;
+        this.idHospital=idHospital;
     }
 
-    public ServicioEmergenciaDTO geServicioEmergenciaDTO() {
-        return ServicioEmergenciaDTO.builder()
-                .idServicio(servicioEmergencia.getIdServicio())
-                .totalCama(servicioEmergencia.getTotalCama())
-                .camasLibres(servicioEmergencia.getCamasLibres())
-                .hospital(servicioEmergencia.getHospital())
-                .build();
+    public ServicioEmergenciaDTO getServicioEmergenciaDTO(){
+        if(servicioEmergencia!=null){
+            return ServicioEmergenciaDTO.builder()
+                    .idServicio(servicioEmergencia.getIdServicio())
+                    .totalCama(servicioEmergencia.getTotalCama())
+                    .camasLibres(servicioEmergencia.getCamasLibres())
+                    //.hospital(servicioEmergencia.getHospitalDTO())
+                    .build();
+        }else{
+            return null;
+        }
+
     }
 
-    public ArrayList<AmbulanciaDTO> getAmbulanciasDTOS() {
-        ArrayList<AmbulanciaDTO> result = new ArrayList<>();
+    public ArrayList<AmbulanciaDTO> getAmbulanciasDTOS(){
+        ArrayList<AmbulanciaDTO> result =new ArrayList<>();
         Ambulancia.forEach(ambulacia -> {
             result.add(AmbulanciaDTO.builder()
                     .idCodigo(ambulacia.getIdCodigo())
                     .distanciaMaxDesvio(ambulacia.getDistanciaMaxDesvio())
-                    .geom(ambulacia.getGeom())
                     .idAmbulancia(ambulacia.getIdAmbulancia())
-                    .hospital(ambulacia.getHospital())
+                    .hospital(ambulacia.getHospitalDTO())
                     .build());
         });
         return result;
+    }
+
+    public HospitalDTO getHospitalDTO(){
+        return new HospitalDTO(this.getIdHospital(),this.nombreHospital,this.tipoHospital,this.getServicioEmergenciaDTO(),this.getAmbulanciasDTOS());
     }
 
 }

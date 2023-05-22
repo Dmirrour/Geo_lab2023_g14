@@ -5,9 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uy.edu.tsig.entity.Hospital;
-import java.io.Serializable;
 
-import com.vividsolutions.jts.geom.Geometry;
+import java.io.Serializable;
 
 @Data
 @Builder
@@ -17,15 +16,15 @@ public class AmbulanciaDTO implements Serializable {
     private static final Long serialVersionUID = 1L;
 
     private Long idAmbulancia;
-    private String idCodigo;
-    private Hospital hospital;
+    private int idCodigo;
+    private HospitalDTO hospital;
     private int distanciaMaxDesvio;
-    private Geometry geom;
 
-    public AmbulanciaDTO(Long idAmbulancia, String idCodigo, int distanciaMaxDesvio, Geometry geom) {
-        this.idAmbulancia = idAmbulancia;
-        this.idCodigo = idCodigo;
-        this.distanciaMaxDesvio = distanciaMaxDesvio;
-        this.geom = geom;
+    public AmbulanciaDTO(Long idAmbulancia, int idCodigo, int distanciaMaxDesvio){
+        this.idAmbulancia =idAmbulancia;
+        this.idCodigo=idCodigo;
+        this.distanciaMaxDesvio=distanciaMaxDesvio;
     }
+
+
 }

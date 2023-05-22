@@ -21,14 +21,15 @@ public class HospitalDTO implements Serializable {
     private String nombreHospital;
     private TipoHospital tipoHospital;
 
-    private ServicioEmergencia servicioEmergencia;
-    @Builder.Default
-    ArrayList<AmbulanciaDTO> ambulanciaDTOS = new ArrayList<>();
+    private ServicioEmergenciaDTO servicioEmergencia;
 
-    public HospitalDTO(Long idHospital, String nombreHospital, TipoHospital tipoHospital) {
-        this.nombreHospital = nombreHospital;
-        this.tipoHospital = tipoHospital;
-        this.idHospital = idHospital;
+    @Builder.Default
+    ArrayList<AmbulanciaDTO> ambulanciaDTOS =new ArrayList<>();
+
+    public HospitalDTO (Long idHospital, String nombreHospital, TipoHospital tipoHospital){
+        this.nombreHospital=nombreHospital;
+        this.tipoHospital=tipoHospital;
+        this.idHospital=idHospital;
     }
 
 }

@@ -63,7 +63,6 @@ public class InicioSesionBean implements Serializable {
             throw new RuntimeException(e);
         }
     }
-
     public void setUsuario(UsuarioDTO usuario) {
         this.usuario = usuario;
     }

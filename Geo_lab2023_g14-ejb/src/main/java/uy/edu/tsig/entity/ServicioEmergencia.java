@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uy.edu.tsig.dto.HospitalDTO;
+import uy.edu.tsig.dto.ServicioEmergenciaDTO;
 
 import java.io.Serializable;
 
@@ -15,6 +16,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Entity
 public class ServicioEmergencia implements Serializable {
+
     private static final Long serialVersionUID = 1L;
 
     @Id
@@ -25,13 +27,20 @@ public class ServicioEmergencia implements Serializable {
     @OneToOne
     private Hospital hospital;
 
-    public ServicioEmergencia(Long idServicio, int totalCama, int camasLibres) {
-        this.idServicio = idServicio;
-        this.totalCama = totalCama;
-        this.camasLibres = camasLibres;
+    // En tu clase de entidad, donde tienes el campo point, asegúrate de utilizar la anotación @Type de Hibernate para
+    // especificar el tipo de datos espacial. Además, utiliza la anotación @Column(columnDefinition = "geometry(Point,32721)")
+    // para definir la columna en la base de datos con el SRID requerido. Por ejemplo:
+    //@Transient
+    /*@Column(name = "point", columnDefinition = "geometry(Point,32721)")
+    private Point geometry;*/
+
+    public ServicioEmergencia (Long idServicio, int totalCama, int camasLibres){
+        this.camasLibres=camasLibres;
+        this.idServicio=idServicio;
+        this.totalCama=totalCama;
     }
 
-    public HospitalDTO getHospitalDTO() {
+    public HospitalDTO getHospitalDTO(){
         return HospitalDTO.builder()
                 .idHospital(hospital.getIdHospital())
                 .nombreHospital(hospital.getNombreHospital())
@@ -40,4 +49,7 @@ public class ServicioEmergencia implements Serializable {
                 .build();
     }
 
+    public ServicioEmergenciaDTO getServicioEmergenciaDTO(){
+        return new ServicioEmergenciaDTO(this.getIdServicio(),this.totalCama,this.camasLibres,this.getHospitalDTO());
+    }
 }

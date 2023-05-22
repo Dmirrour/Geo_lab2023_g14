@@ -2,28 +2,39 @@ package uy.edu.tsig.service.impl;
 
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
-import jakarta.persistence.Entity;
+import uy.edu.tsig.dto.AmbulanciaDTO;
 import uy.edu.tsig.entity.Ambulancia;
 import uy.edu.tsig.entity.Hospital;
+import uy.edu.tsig.model.Ambulacias;
 import uy.edu.tsig.persistence.IAmbulaciaDAO;
 import uy.edu.tsig.persistence.IHospitalDAO;
 import uy.edu.tsig.service.IAmbulaciasService;
 
-import com.vividsolutions.jts.geom.Geometry;
-
 @Stateless
 public class AmbulanciasService implements IAmbulaciasService {
+
     @EJB
     IAmbulaciaDAO iAmbulaciaDAO;
     @EJB
     IHospitalDAO iHospitalDAO;
-
-    public void altaAmbulacia(Ambulancia a, Long hospital) {
-        Hospital h = iHospitalDAO.buscarHospital(hospital);
+    @Override
+    public AmbulanciaDTO altaAmbulacia(Ambulancia a, Long hospital){
+        Hospital h= iHospitalDAO.buscarHospital(hospital);
         a.setHospital(h);
-        // iAmbulaciaDAO.crearGeometrias(a);
-        Ambulancia persit = iAmbulaciaDAO.altaAmbulacia(a);
+        Ambulancia persit=iAmbulaciaDAO.altaAmbulacia(a);
         iHospitalDAO.asignarAmbulacia(h, persit);
+        return persit.getAmbulanciaDTO();
     }
 
+    @Override
+    public void borrarA(long idAmbulancia){
+        iAmbulaciaDAO.borrarambulancia(idAmbulancia);
+    }
+
+    @Override
+    public Ambulacias listarAmbulancias() {
+        Ambulacias a= new Ambulacias();
+        a.setListaAmbulancias(iAmbulaciaDAO.obtenerAmbulanciaDtos());
+        return a;
+    }
 }
