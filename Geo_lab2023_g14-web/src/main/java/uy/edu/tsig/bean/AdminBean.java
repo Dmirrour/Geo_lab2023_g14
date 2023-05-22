@@ -42,10 +42,13 @@ public class AdminBean implements Serializable {
     private long idHospital;
     private int desvio;
     private int codigo;
+    private double latitud; // agregamos la propiedad latitud
+    private double longitud; // agregamos la propiedad longitud
     private Hospitales h;
     private Ambulacias a;
     private ArrayList<AmbulanciaDTO> ambulanciaDTOS;
     private ArrayList<HospitalDTO> hospitalDTOS;
+
 
     //alta Servicio de Emergencia
     private int totalCama;
@@ -113,7 +116,7 @@ public class AdminBean implements Serializable {
     }
 
     public void addServicioE(){
-        ServicioEmergencia se =ServicioEmergencia.builder()
+        ServicioEmergencia se = ServicioEmergencia.builder()
                 .totalCama(totalCama)
                 .build();
         ServicioEmergenciaDTO sedto = iServicioEmergenciaService.altaServicioE(se,idHospital);
@@ -127,13 +130,13 @@ public class AdminBean implements Serializable {
 
         String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
         String usuario = "postgres";
-        String contraseña = "123456d";
+        String contraseña = "admin";
         Connection conn;
         try {
             conn = DriverManager.getConnection(url, usuario, contraseña);
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(
-                    "UPDATE servicioemergencia set point = (ST_SetSRID(ST_MakePoint(-35, -54), 32721)) WHERE idservicio="+sedto.getIdServicio()+";");
+                    "UPDATE servicioemergencia set point = (ST_SetSRID(ST_MakePoint("+latitud+", "+longitud+"), 32721)) WHERE idservicio="+sedto.getIdServicio()+";");
             System.out.println("Punto insertado correctamente.");
         } catch (SQLException e) {
             // e.printStackTrace();
@@ -202,6 +205,9 @@ public class AdminBean implements Serializable {
         return codigo;
     }
 
+    public double getLatitud() { return latitud;}
+    public double getLongitud() { return longitud;}
+
     public int getDesvio() {
         return desvio;
     }
@@ -222,6 +228,9 @@ public class AdminBean implements Serializable {
         this.codigo = codigo;
     }
 
+    public void setLatitud(double latitud) { this.latitud = latitud; }
+    public void setLongitud(double longitud) {this.longitud = longitud; }
+
     public void setDesvio(int desvio) {
         this.desvio = desvio;
     }
@@ -241,7 +250,6 @@ public class AdminBean implements Serializable {
     public void setServicioEmergenciaDTOS(ArrayList<ServicioEmergenciaDTO> servicioEmergenciaDTOS) {
         this.servicioEmergenciaDTOS = servicioEmergenciaDTOS;
     }
-
     public ArrayList<AmbulanciaDTO> getAmbulanciaDTOS() {
         return ambulanciaDTOS;
     }

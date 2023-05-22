@@ -126,3 +126,45 @@ function CrearMapaAdmin() {
 
 }
 
+function cargarMapaAltaSE() {
+    ///////////////////////// MAPAS /////////////////////////
+    let openst = L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', { // Agregar capa base de OpenStreetMap
+        attribution: '© Grupo 14'
+    });
+    ///////////////////////// FIN MAPAS /////////////////////////
+
+    ///////////////////////// OPCIONES DE MAPA /////////////////////////
+    let mapSE = L.map('mapSE', {
+        center: [-34.8797018070320851, -56.262557241497211],
+        zoom: 11,
+        minZoom: 2,
+        maxZoom: 18,
+        layers: [openst],
+        zoomControl: true
+    });
+
+    let baselayers = {
+        "Open Street Map": openst
+    };
+
+    let overlayers = {
+
+    };
+
+    L.control.layers(
+        baselayers,
+        overlayers, {
+            collapsed: true
+        }).addTo(mapSE);
+
+    ///////////////////////// FIN OPCIONES DE MAPA /////////////////////////
+
+
+    // Crea un marcador y guarda la posición en los campos de latitud y longitud
+    let marker = L.marker([0, 0]).addTo(mapSE);
+    mapSE.on('click', function(e) {
+        marker.setLatLng(e.latlng);
+        document.getElementById("j_idt61:latitud").value = e.latlng.lat;
+        document.getElementById("j_idt61:longitud").value = e.latlng.lng;
+    });
+}
