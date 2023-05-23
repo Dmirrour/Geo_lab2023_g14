@@ -11,20 +11,40 @@ function CrearMapaInvitado() {
 
 
     ///////////////////////// CAPAS WMS /////////////////////////
-    var layerDepartamento = L.tileLayer.wms('http://localhost:8081/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
-        title: 'Montevideo',
-        layers: 'Geo_lab2023_g14PersistenceUnit:ft00_departamento',
+    var layerEjes = L.tileLayer.wms('http://localhost:8088/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
+        title: 'ft_01_ejes',
+        layers: 'Geo_lab2023_g14PersistenceUnit:ft_01_ejes',
+        srs: 'EPSG:32721',
         format: 'image/png',
         transparent: true,
-        VERSION: '1.1.0',
+        VERSION: '1.1.0'
     });
 
-    var layerRuta = L.tileLayer.wms('http://localhost:8081/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
-        title: 'Ruta',
-        layers: 'Geo_lab2023_g14PersistenceUnit:ft00_cam_dig',
+    var layerDepartamento = L.tileLayer.wms('http://localhost:8088/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
+        title: 'ft_00departamento',
+        layers: 'Geo_lab2023_g14PersistenceUnit:ft_00departamento',
+        srs: 'EPSG:32721',
         format: 'image/png',
         transparent: true,
-        VERSION: '1.1.0',
+        VERSION: '1.1.0'
+    });
+
+    var layerRuta = L.tileLayer.wms('http://localhost:8088/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
+        title: 'Rutas',
+        layers: 'Geo_lab2023_g14PersistenceUnit:ft_00cam_dig',
+        srs: 'EPSG:32721',
+        format: 'image/png',
+        transparent: true,
+        VERSION: '1.1.0'
+    });
+
+    var servicioEH = L.tileLayer.wms('http://localhost:8088/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
+        title: 'servicioemergencia',
+        layers: 'Geo_lab2023_g14PersistenceUnit:servicioemergencia',
+        srs: 'EPSG:32721',
+        format: 'image/png',
+        transparent: true,
+        VERSION: '1.1.0'
     });
     ///////////////////////// FIN CAPAS WMS  /////////////////////////
 
@@ -45,8 +65,10 @@ function CrearMapaInvitado() {
     };
 
     var overlayers = {
-        //  "Ejes": layerRuta,
-        //  "Departamentos": layerDepartamento
+        "Ejes": layerEjes,
+        "Rutas": layerRuta,
+        "Departamentos": layerDepartamento,
+        "Serv. Eme.": servicioEH
     };
 
     marcador = L.marker([-34.8797018070320851, -56.262557241497211]).addTo(map) // Icono del marcador
