@@ -24,7 +24,8 @@ public class HospitalDTO implements Serializable {
     private TipoHospital tipoHospital;
     private GeomPuntoDTO geomPunto;
 
-    private ServicioEmergencia servicioEmergencia;
+    private ServicioEmergenciaDTO servicioEmergencia;
+
     @Builder.Default
     ArrayList<AmbulanciaDTO> ambulanciaDTOS =new ArrayList<>();
 

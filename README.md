@@ -21,7 +21,7 @@
 * Apache Tomcat 9.0.74
 * Geoserver 2.19.7
 * Persistencia 3.0
-* Apache Maven 3.9.0
+* Apache Maven 4.0.0
 
 ### **Java**
 * Java 11.0.18
@@ -43,5 +43,7 @@
 * QGIS
 
 ### Datos
-Geoserver
-Server: TsigLab2023 Base de Datos: Geo_lab2023_g14PersistenceUnit
+* Geoserver
+* Server: TsigLab2023
+* Espacio de trabajo: Geo_lab2023_g14PersistenceUnit
+* Almacen de datos: Geo_lab2023_g14PersistenceUnit

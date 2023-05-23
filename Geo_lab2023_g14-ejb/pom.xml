@@ -47,13 +47,6 @@
         <!-- Bean Validation Implementation
              Provides portable constraints such as @Email
              Hibernate Validator is shipped in WildFly / JBoss EAP -->
-        <dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <!--dependecia para base de datos espaciales-->
-        <!-- https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-spatial -->
         <!-- probando persistencia spatial -->
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -138,7 +131,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.3.1</version>
+            <version>42.6.0</version>
         </dependency>
         <dependency>
             <groupId>org.teiid</groupId>

@@ -17,7 +17,7 @@ public class AmbulanciaDTO implements Serializable {
 
     private Long idAmbulancia;
     private int idCodigo;
-    private Hospital hospital;
+    private HospitalDTO hospital;
     private int distanciaMaxDesvio;
 
     public AmbulanciaDTO(Long idAmbulancia, int idCodigo, int distanciaMaxDesvio){
@@ -25,4 +25,6 @@ public class AmbulanciaDTO implements Serializable {
         this.idCodigo=idCodigo;
         this.distanciaMaxDesvio=distanciaMaxDesvio;
     }
+
+
 }

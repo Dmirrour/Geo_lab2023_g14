@@ -5,18 +5,23 @@ import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
+import uy.edu.tsig.dto.AmbulanciaDTO;
 import uy.edu.tsig.dto.HospitalDTO;
+import uy.edu.tsig.dto.ServicioEmergenciaDTO;
 import uy.edu.tsig.dto.UsuarioDTO;
 import uy.edu.tsig.entity.Ambulancia;
 import uy.edu.tsig.entity.Hospital;
 import uy.edu.tsig.entity.ServicioEmergencia;
 import uy.edu.tsig.entity.TipoHospital;
+import uy.edu.tsig.model.Ambulacias;
 import uy.edu.tsig.model.Hospitales;
+import uy.edu.tsig.model.ServiciosEmergencias;
 import uy.edu.tsig.service.IAmbulaciasService;
 import uy.edu.tsig.service.IHospitalService;
 import uy.edu.tsig.service.IServicioEmergenciaService;
 
 import java.io.Serializable;
+import java.sql.*;
 import java.util.ArrayList;
 
 @Named("adminBean")
@@ -39,16 +44,31 @@ public class AdminBean implements Serializable {
     private int codigo;
     private double latitud; // agregamos la propiedad latitud
     private double longitud; // agregamos la propiedad longitud
+    private double rec;
     private Hospitales h;
+    private Ambulacias a;
+    private ArrayList<AmbulanciaDTO> ambulanciaDTOS;
     private ArrayList<HospitalDTO> hospitalDTOS;
 
-    //alta Servicio de Emergencia
+    // alta Servicio de Emergencia
     private int totalCama;
 
+    private ServiciosEmergencias s;
+    private ArrayList<ServicioEmergenciaDTO> servicioEmergenciaDTOS;
 
     public void initH() {
         h = iHospitalService.obtenerHospitales();
         hospitalDTOS = h.getListHospitales();
+    }
+
+    public void initS() {
+        s = iServicioEmergenciaService.listarServiciosEmergensias();
+        servicioEmergenciaDTOS = s.getListServiciosEmergencias();
+    }
+
+    public void initA() {
+        a = iAmbulaciasService.listarAmbulancias();
+        ambulanciaDTOS = a.getListaAmbulancias();
     }
 
     public void addAmbulancia() {
@@ -56,7 +76,20 @@ public class AdminBean implements Serializable {
                 .idCodigo(codigo)
                 .distanciaMaxDesvio(desvio)
                 .build();
-        iAmbulaciasService.altaAmbulacia(a, idHospital);
+        AmbulanciaDTO aDTO = iAmbulaciasService.altaAmbulacia(a, idHospital);
+
+        // aDTO contiene los datos que van de la logica como el id, en lo posible para
+        // manejar vinculadas de forma trasera tranten de crear
+        // la tabla con el mismo id de la tabla de hibernate asi vamos a tener una
+        // relacion entre ellos que nosotros vamos a poder vincular
+        // esto haciendole aDTO.getid, y bueno si quieren ademas agregarle el nombre a
+        // la geografica tambien se puede
+        // aca parte geografia
+        // eso o como vi que hicieron llamar a otra funcion pero es lo mismo lo unico
+        // que a esa funcion le ban a tener que pasar el long id
+
+        // --------x------------x--------------
+
         String msj = String.format("Se agregó la ambulancia %s.", codigo);
         addMensaje("Ambulancias", msj);
     }
@@ -71,18 +104,88 @@ public class AdminBean implements Serializable {
                 .nombreHospital(nombreH)
                 .tipoHospital(tipoH)
                 .build();
-        iHospitalService.altaHospital(h);
+        HospitalDTO hos = iHospitalService.altaHospital(h);
+
+        // hos contiene los datos que van de la logica como el id, en lo posible para
+        // manejar vinculadas de forma trasera tranten de crear
+        // la tabla con el mismo id de la tabla de hibernate asi vamos a tener una
+        // relacion entre ellos que nosotros vamos a poder vincular
+        // esto haciendole hos.getidHospital, y bueno si quieren ademas agregarle el
+        // nombre a la geografica tambien se puede
+        // aca parte geografia
+        // eso o como vi que hicieron llamar a otra funcion pero es lo mismo lo unico
+        // que a esa funcion le ban a tener que pasar el long id
+
+        // --------x------------x--------------
+
         String msj = String.format("Se agregó el hospital %s.", nombreH);
         addMensaje("Hospitales", msj);
     }
 
-    public void addServicioE(){
-        ServicioEmergencia se =ServicioEmergencia.builder()
+    public void addServicioE() {
+        ServicioEmergencia se = ServicioEmergencia.builder()
                 .totalCama(totalCama)
                 .build();
-        iServicioEmergenciaService.altaServicioE(se,idHospital);
+        ServicioEmergenciaDTO sedto = iServicioEmergenciaService.altaServicioE(se, idHospital);
+
+        // sedto contiene los datos que van de la logica como el id, en lo posible para
+        // manejar vinculadas de forma trasera tranten de crear
+        // la tabla con el mismo id de la tabla de hibernate asi vamos a tener una
+        // relacion entre ellos que nosotros vamos a poder vincular
+        // esto haciendole sedto.getidHospital, y bueno si quieren ademas agregarle el
+        // nombre a la geografica tambien se puede
+        // aca parte geografia
+        // eso o como vi que hicieron llamar a otra funcion pero es lo mismo lo unico
+        // que a esa funcion le ban a tener que pasar el long id
+
+        String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
+        String usuario = "postgres";
+        String contraseña = "lapass";
+        Connection conn;
+        try {
+            conn = DriverManager.getConnection(url, usuario, contraseña);
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(
+                    "UPDATE servicioemergencia set point = (ST_SetSRID(ST_MakePoint(" + latitud + ", " + longitud
+                            + "), 32721)) WHERE idservicio=" + sedto.getIdServicio() + ";");
+            System.out.println("Punto insertado correctamente.");
+        } catch (SQLException e) {
+            // e.printStackTrace();
+            System.out.println("No conecta.");
+        }
+        // --------x------------x--------------
+
         String msj = String.format("Se agregó el servicio de emergencia con %s camas.", totalCama);
         addMensaje("S. Emergencia", msj);
+    }
+
+    public void eliminarH(Long idHospital) {
+        boolean r = iHospitalService.borrarH(idHospital);
+        if (r) {
+            initH();
+            String msj = String.format("Se Borro el Hospital con id %s.", idHospital);
+            addMensaje("Hospitales", msj);
+        } else {
+            String msj = String.format("No se puedo Borrar el Hospital con id %s", idHospital);
+            addMensaje("Hospitales", msj);
+        }
+    }
+
+    public void eliminarB(Long idSE) {
+        boolean r = iServicioEmergenciaService.borrarSE(idSE);
+
+        if (r) {
+            initS();
+            String msj = String.format("Se Borro el Servicio con id %s.", idSE);
+            addMensaje("Servicio", msj);
+        } else {
+            String msj = String.format("No se puedo Borrar el Servicio con id %s", idSE);
+            addMensaje("Servicio", msj);
+        }
+    }
+
+    public void eliminarA(Long idAmbulancia) {
+        iAmbulaciasService.borrarA(idAmbulancia);
     }
 
     public String getNombreH() {
@@ -111,6 +214,18 @@ public class AdminBean implements Serializable {
         return codigo;
     }
 
+    public double getLatitud() {
+        return latitud;
+    }
+
+    public double getRec() {
+        return rec;
+    }
+
+    public double getLongitud() {
+        return longitud;
+    }
+
     public int getDesvio() {
         return desvio;
     }
@@ -131,24 +246,20 @@ public class AdminBean implements Serializable {
         this.codigo = codigo;
     }
 
-    public void setDesvio(int desvio) {
-        this.desvio = desvio;
-    }
-
-    public double getLatitud() {
-        return latitud;
-    }
-
     public void setLatitud(double latitud) {
         this.latitud = latitud;
     }
 
-    public double getLongitud() {
-        return longitud;
-    }
-
     public void setLongitud(double longitud) {
         this.longitud = longitud;
+    }
+
+    public void setRec(double rec) {
+        this.rec = rec;
+    }
+
+    public void setDesvio(int desvio) {
+        this.desvio = desvio;
     }
 
     public int getTotalCama() {
@@ -157,5 +268,21 @@ public class AdminBean implements Serializable {
 
     public void setTotalCama(int totalCama) {
         this.totalCama = totalCama;
+    }
+
+    public ArrayList<ServicioEmergenciaDTO> getServicioEmergenciaDTOS() {
+        return servicioEmergenciaDTOS;
+    }
+
+    public void setServicioEmergenciaDTOS(ArrayList<ServicioEmergenciaDTO> servicioEmergenciaDTOS) {
+        this.servicioEmergenciaDTOS = servicioEmergenciaDTOS;
+    }
+
+    public ArrayList<AmbulanciaDTO> getAmbulanciaDTOS() {
+        return ambulanciaDTOS;
+    }
+
+    public void setAmbulanciaDTOS(ArrayList<AmbulanciaDTO> ambulanciaDTOS) {
+        this.ambulanciaDTOS = ambulanciaDTOS;
     }
 }
