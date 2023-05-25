@@ -1,4 +1,29 @@
-    class ControladorMapa {
+/**
+ * Para crear la vista de los servicios de emergencias con la informacion del hosptial al que pertences
+ * Hay que crear una vista en Postgres con el siguiente codifo sql
+ *
+ * -- View: public.vista_se_h
+ *
+ * -- DROP VIEW public.vista_se_h;
+ *
+ * CREATE OR REPLACE VIEW public.vista_se_h
+ *  AS
+ *  SELECT se.idservicio,
+ *     se.camaslibres,
+ *     se.totalcama,
+ *     se.point,
+ *     h.idhospital,
+ *     h.nombrehospital,
+ *     h.tipohospital
+ *    FROM servicioemergencia se
+ *      JOIN hospital h ON se.hospital_idhospital = h.idhospital;
+ *
+ * ALTER TABLE public.vista_se_h
+ *     OWNER TO postgres;
+ *
+ */
+
+    class ControladorMapa extends Configuracion {
         openst;
         google;
         layerEjes;
@@ -11,18 +36,23 @@
 
 
         constructor() {
+            super();
             ///////////////////////// MAPAS /////////////////////////
-            this.openst = L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', { // Agregar capa base de OpenStreetMap
+            this.openst = L.tileLayer(this.urlOpenStreet, { // Agregar capa base de OpenStreetMap
                 attribution: '© Grupo 14'
             });
 
-            this.google = L.tileLayer('https://mt1.googles.com/vt/lyrs=r&x={x}&y={y}&z={z}', { // Agregar capa base de Google
+            this.google = L.tileLayer(this.urlGoogle, { // Agregar capa base de Google
                 attribution: '© Grupo 14'
             });
             ///////////////////////// FIN MAPAS /////////////////////////
 
             ///////////////////////// CAPAS WMS /////////////////////////
-            this.layerEjes = L.tileLayer.wms('http://localhost:8088/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
+            this.layerEjes = L.tileLayer.wms('http://localhost:'
+                +this.puertoGeoServer
+                +'/geoserver/'
+                +this.baseDatos
+                +'/wms?', {
                 title: 'ft_01_ejes',
                 layers: 'Geo_lab2023_g14PersistenceUnit:ft_01_ejes',
                 srs: 'EPSG:32721',
