@@ -19,7 +19,7 @@
                         <h:outputText value="#{SE.hospital.nombreHospital}" />
                     </p:column>
                     <p:column headerText="false">
-                        <p:commandButton styleClass="rounded-button ui-button-danger" icon="pi pi-trash" process="@this" action="#{adminBean.eliminarB(SE.idServicio)}" onclick="hideForm('formSE')"/>
+                        <p:commandButton styleClass="rounded-button ui-button-danger" icon="pi pi-trash" process="@this" action="#{adminBean.eliminarB(SE.idServicio)}"/>
                     </p:column>
                 </p:dataTable>
                 <div class="d-grid col-6 mx-auto pt-2">
