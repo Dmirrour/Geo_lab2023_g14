@@ -146,7 +146,7 @@ public class AdminBean implements Serializable {
             conn = DriverManager.getConnection(url, usuario, contraseña);
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(
-                    "UPDATE servicioemergencia set point = (ST_SetSRID(ST_MakePoint(" + latitud + ", " + longitud
+                    "UPDATE servicioemergencia set point = (ST_SetSRID(ST_MakePoint(" + longitud + ", " + latitud
                             + "), 32721)) WHERE idservicio=" + sedto.getIdServicio() + ";");
             System.out.println("Punto insertado correctamente.");
         } catch (SQLException e) {

@@ -16,7 +16,9 @@
    <link rel="stylesheet" href="lib/css/leaflet.draw.css" />
    <link rel="stylesheet" href="lib/css/leaflet.draw-shapefile.css" />
 
+   <!-- no es necesario icnluir este CSS ya que esta incluido por la cabecera del xtml
    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+   -->
 
    <!-- boostrap -->
    <link rel="stylesheet" href="lib/css/style.css" />
@@ -27,7 +29,7 @@
    <script src="lib/js/leaflet-src.js"></script>
    <script src="lib/js/leaflet.draw-src.js"></script>
    <script src="lib/js/leaflet.draw-shapefile.js"></script>
-   <script src="lib/js/index.js"></script>
+   <script src="lib/js/class.ControladorMapa.js"></script>
    <script src="../scripts/geolet.js"></script>
    <script src="lib/js/layerWFS.js"></script>
 
@@ -36,25 +38,17 @@
    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
    <!-- cONSULTAS query -->
 
+   <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
+   <link rel="stylesheet" href="https://unpkg.com/primeflex@^3/primeflex.css" />
+
    <style>
-      html,
-      body,
       #map {
          padding: 0;
          margin: 0;
          width: 100%;
          height: 90%;
       }
-
-      .map {
-         padding: 0;
-         margin: 0;
-         width: 400px;
-         height: 400px;
-      }
    </style>
-   <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
-   <link rel="stylesheet" href="https://unpkg.com/primeflex@^3/primeflex.css" />
 
    #{sesion.init()}
    #{adminBean.initH()}
@@ -90,7 +84,7 @@
                      <p:menuitem value="Alta S. Emergencia" type="button" icon="pi pi-external-link" onclick="PF('dlg3').show()" />
                   </p:menuButton>
                   <span> - </span>
-                  <p:commandButton value="Salir" actionListener="#{sesion.cerrarSesion()}" class="btn btn-danger" icon="pi pi-power-off" action="/Geo_lab2023_g14-web/login.xhtml" />
+                  <p:commandButton value="Salir" actionListener="#{sesion.cerrarSesion()}" class="btn btn-rojo" icon="pi pi-power-off" action="/Geo_lab2023_g14-web/login.xhtml" />
                </h:form>
             </div>
 
@@ -99,10 +93,7 @@
    </div>
    <div class="container-fluid mt-3">
       <div id="map" style="position: absolute !important;"></div>
-      <script> CrearMapaAdmin();  </script>
    </div>
-   <script>  addLayersWFS();  </script>
-   <script>  addLayers();  </script>
    <p:dialog header="Alta hospitales" widgetVar="dlg1" minHeight="600" width="850" showEffect="fade" modal="true">
       <f:view>
          <p:card styleClass="flex justify-content-center">
@@ -129,7 +120,7 @@
       </f:view>
    </p:dialog>
 
-   <p:dialog header="Alta ambulancia" widgetVar="dlg2" minHeight="600" width="850" showEffect="fade" modal="true">
+   <p:dialog header="Alta ambulancia" widgetVar="dlg2" minHeight="600" width="850" showEffect="fade" modal="true" >
       <f:view>
          <p:card styleClass="flex justify-content-center">
             <h:form>
@@ -168,12 +159,13 @@
       </f:view>
    </p:dialog>
 
-   <p:dialog header="Alta servicio de emergencia" widgetVar="dlg3" minHeight="600" width="850" showEffect="fade" modal="true">
+   <p:dialog id="dialogALtaSE" header="Alta servicio de emergencia" widgetVar="dlg3" minHeight="600" draggable="false" styleClass="my-dialog-style" showEffect="fade" onHide="mapaAdmin.BorrarMarcadorALtaSE()">
       <f:view>
          <div class="flex justify-content-center">
-            <h:form>
+            <h:form id="frmAltaSE">
                <div class="row m-auto mb-4">
-                  <div class="col-6">
+
+                  <div class="col-12">
                      <div class="col-12 py-2">
                         <h:outputLabel for="camas" class="col-12 col-md-6">Total de Camas:</h:outputLabel>
                         <h:inputText id="camas" type="number" value="#{adminBean.totalCama}" class="col-12 col-md-6" required="true" requiredMessage="La razon social es requerida" />
@@ -186,19 +178,11 @@
                         </p:selectOneMenu>
                      </div>
 
-                     <div class="col-12 py-2">
-                        <h:outputLabel for="latitud" class="col-12 col-md-6">Latitud:</h:outputLabel>
-                        <h:inputText id="latitud" name="latitud" value="#{adminBean.latitud}" class="col-12 col-md-6" required="true" requiredMessage="La latitud es requerida" />
-                     </div>
+                     <h:inputText id="latitud" name="latitud" value="#{adminBean.latitud}" class="col-12 col-md-6" required="true" style="display: none;" requiredMessage="La latitud es requerida" />
+                     <h:inputText id="longitud" value="#{adminBean.longitud}" class="col-12 col-md-6" required="true" style="display: none;" requiredMessage="La longitud es requerida" />
 
-                     <div class="col-12 py-2">
-                        <h:outputLabel for="longitud" class="col-12 col-md-6">Longitud:</h:outputLabel>
-                        <h:inputText id="longitud" value="#{adminBean.longitud}" class="col-12 col-md-6" required="true" requiredMessage="La longitud es requerida" />
-                     </div>
                   </div>
-                  <div class="col-6">
-                     <div id="mapSE" class="map"></div>
-                  </div>
+
                   <div class="td-grid col-6 mx-auto pt-2">
                      <p:commandButton value="Crear" action="#{adminBean.addServicioE()}" update="messages" class="col-md-6" onclick="PF('dlg3').hidden()" />
                   </div>
@@ -315,65 +299,12 @@
    </p:dialog>
 </body>
 <script>
-   cargarMapaAltaSE();
+   var mapaAdmin = new ControladorMapa();
+   mapaAdmin.crearMapaAdmin();
+   mapaAdmin.addLayersWFS();
+   // addLayers();
+   mapaAdmin.cargarMapaAltaSE();
+   mapaAdmin.cargarMapaAltaAmbulancia();
 </script>
-<script>
-   cargarMapaAltaAmbulancia();
-</script>
-
-<!-- <script>
-   var map, drawControl, drawLayers, marcador, circulo;
-   function init() {
-      var topo = L.tileLayer('http://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
-         attribution: '© Grupo 14'
-      });
-
-      map = L.map('map', {
-         center: [-34.8797018070320851, -56.262557241497211],
-         zoom: 13,
-         minZoom: 2,
-         maxZoom: 18,
-         layers: [topo],
-         zoomControl: true
-      });
-      marcador = L.marker([-34.8797018070320851, -56.262557241497211]).addTo(map) // establece icono del marcado
-      marcador.bindPopup("Casa Sebastián")
-
-      circulo = L.circle([-34.8797018070320851, -56.262557241497211], {
-         radius: 1500,
-         color: "green"
-      }).addTo(map)
-      circulo.bindPopup("Villa del Cerro")
-
-      drawLayers = new L.FeatureGroup();
-      drawControl = new L.Control.DrawPlus({
-         position: 'topright',
-         draw: {
-            circle: true,
-            polyline: true,
-         },
-         edit: {
-            featureGroup: drawLayers,
-            edit: true
-         }
-      });
-      map.addLayer(drawLayers);
-      map.addControl(drawControl);
-
-      map.on(L.Draw.Event.CREATED, function (e) {
-         drawLayers.addLayer(e.layer);
-      });
-
-      drawLayers.on('click', function (e) {
-         let latitud = e.latlng.lat;
-         let longitud = e.latlng.lng;
-         alert("Click en coordenadas: " + "\n" + "[" + latitud + "] [" + longitud + "]")
-         console.log("Click en coordenadas: ")
-         console.log("Latitud:", latitud.toFixed(2)) // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
-         console.log("Longitud:", longitud.toFixed(2))
-         console.log(e.layer);
-      });
-   }
-</script> -->
 
 </html>
