@@ -66,6 +66,15 @@ public class ServicioEmergenciaDAO implements IServicioEmergenciaDAO {
                 ));
         return res;
     }
+    @Override
+    public void modificar(ServicioEmergencia serv) {
+        em.merge(serv);
+    }
+
+    @Override
+    public ServicioEmergencia buscarServ(Long serv) {
+        return em.find(ServicioEmergencia.class,serv);
+    }
 
 
 }

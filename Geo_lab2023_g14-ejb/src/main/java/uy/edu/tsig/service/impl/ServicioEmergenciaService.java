@@ -2,6 +2,7 @@ package uy.edu.tsig.service.impl;
 
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
+import uy.edu.tsig.dto.HospitalDTO;
 import uy.edu.tsig.dto.ServicioEmergenciaDTO;
 import uy.edu.tsig.entity.Hospital;
 import uy.edu.tsig.entity.ServicioEmergencia;
@@ -38,5 +39,13 @@ public class ServicioEmergenciaService implements IServicioEmergenciaService {
         ServiciosEmergencias s= new ServiciosEmergencias();
         s.setListServiciosEmergencias(iServicioEmergenciaDAO.obtenerServicioE());
         return s;
+    }
+
+    @Override
+    public void modificar(ServicioEmergenciaDTO serv){
+        ServicioEmergencia s =iServicioEmergenciaDAO.buscarServ(serv.getIdServicio());
+        s.setCamasLibres(serv.getCamasLibres());
+        s.setTotalCama(serv.getTotalCama());
+        iServicioEmergenciaDAO.modificar(s);
     }
 }

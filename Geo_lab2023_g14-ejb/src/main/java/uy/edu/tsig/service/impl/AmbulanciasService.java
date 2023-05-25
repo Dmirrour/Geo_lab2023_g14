@@ -3,6 +3,7 @@ package uy.edu.tsig.service.impl;
 import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 import uy.edu.tsig.dto.AmbulanciaDTO;
+import uy.edu.tsig.dto.ServicioEmergenciaDTO;
 import uy.edu.tsig.entity.Ambulancia;
 import uy.edu.tsig.entity.Hospital;
 import uy.edu.tsig.model.Ambulacias;
@@ -36,5 +37,15 @@ public class AmbulanciasService implements IAmbulaciasService {
         Ambulacias a= new Ambulacias();
         a.setListaAmbulancias(iAmbulaciaDAO.obtenerAmbulanciaDtos());
         return a;
+    }
+    @Override
+    public void modificar(AmbulanciaDTO ambu){
+
+        Ambulancia a= iAmbulaciaDAO.buscarAmbu(ambu.getIdAmbulancia());
+        a.setIdCodigo(ambu.getIdCodigo());
+        a.setDistanciaMaxDesvio(ambu.getDistanciaMaxDesvio());
+
+        iAmbulaciaDAO.modificar(a);
+
     }
 }

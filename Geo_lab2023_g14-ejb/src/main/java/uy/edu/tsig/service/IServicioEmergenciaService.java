@@ -10,4 +10,5 @@ public interface IServicioEmergenciaService {
     ServicioEmergenciaDTO altaServicioE(ServicioEmergencia se, Long hospital);
     boolean borrarSE(Long idSE);
     ServiciosEmergencias listarServiciosEmergensias();
+    void modificar(ServicioEmergenciaDTO serv);
 }

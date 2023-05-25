@@ -13,4 +13,6 @@ public interface IAmbulaciaDAO {
     void borrarambulancia(Long idAmbulancia);
 
     ArrayList<AmbulanciaDTO> obtenerAmbulanciaDtos();
+    void modificar(Ambulancia ambu);
+    Ambulancia buscarAmbu(Long ambu);
 }

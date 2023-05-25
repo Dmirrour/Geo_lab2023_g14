@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import uy.edu.tsig.dto.HospitalDTO;
 import uy.edu.tsig.dto.ServicioEmergenciaDTO;
 
+import java.awt.*;
 import java.io.Serializable;
 
 @Data
@@ -30,9 +31,9 @@ public class ServicioEmergencia implements Serializable {
     // En tu clase de entidad, donde tienes el campo point, asegúrate de utilizar la anotación @Type de Hibernate para
     // especificar el tipo de datos espacial. Además, utiliza la anotación @Column(columnDefinition = "geometry(Point,32721)")
     // para definir la columna en la base de datos con el SRID requerido. Por ejemplo:
-    //@Transient
-    /*@Column(name = "point", columnDefinition = "geometry(Point,32721)")
-    private Point geometry;*/
+    @Transient
+    @Column(name = "point", columnDefinition = "geometry(Point,32721)")
+    private Point geometry;
 
     public ServicioEmergencia (Long idServicio, int totalCama, int camasLibres){
         this.camasLibres=camasLibres;

@@ -33,7 +33,8 @@ public class ServicioEmBean {
             // Establecer la conexión a la base de datos
             String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
             String usuario = "postgres";
-            String pass = "lapass";
+            //String pass = "lapass";//Seba
+            String pass = "123456d";//Damian
             Connection conn = DriverManager.getConnection(url, usuario, pass);
 
             // Crear y ejecutar la consulta SQL

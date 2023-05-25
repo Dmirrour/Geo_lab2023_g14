@@ -10,5 +10,6 @@ public interface IAmbulaciasService {
     AmbulanciaDTO altaAmbulacia(Ambulancia a, Long hospital);
     void borrarA(long idAmbulancia);
     Ambulacias listarAmbulancias();
+    void modificar(AmbulanciaDTO ambu);
 
 }
