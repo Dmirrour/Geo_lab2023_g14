@@ -1,6 +1,6 @@
 /**
  * Para crear la vista de los servicios de emergencias con la informacion del hosptial al que pertences
- * Hay que crear una vista en Postgres con el siguiente codifo sql
+ * Hay que crear una vista en Postgres con el siguiente codigo sql
  *
  * -- View: public.vista_se_h
  *
@@ -18,6 +18,8 @@
  *    FROM servicioemergencia se
  *      JOIN hospital h ON se.hospital_idhospital = h.idhospital;
  *
+ * Probablemente no sea necesario asignar el propieatrio esto ya lo hace autoamtico pero por si acaso:
+ * 
  * ALTER TABLE public.vista_se_h
  *     OWNER TO postgres;
  *
