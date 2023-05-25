@@ -166,6 +166,7 @@ function cargarMapaAltaSE() {
         marker.setLatLng(e.latlng);
         document.getElementById("j_idt61:latitud").value = e.latlng.lat;
         document.getElementById("j_idt61:longitud").value = e.latlng.lng;
+        document.getElementById("")
     });
 }
 

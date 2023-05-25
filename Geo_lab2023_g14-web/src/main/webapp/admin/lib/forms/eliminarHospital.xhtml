@@ -1,0 +1,50 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view>
+        <form id="formEH">
+        <p:card styleClass="flex justify-content-center">
+            <p:dataTable id="table" value="#{adminBean.hospitalDTOS}" var="hospitales">
+                <p:column headerText="idHospital">
+                    <h:outputText value="#{hospitales.idHospital}" />
+                </p:column>
+                <p:column headerText="nombre">
+                    <h:outputText value="#{hospitales.nombreHospital}" />
+                </p:column>
+                <p:column headerText="tipo">
+                    <h:outputText value="#{hospitales.tipoHospital}" />
+                </p:column>
+                <p:column headerText="s. emergencia">
+                    <h:outputText value="#{hospitales.servicioEmergencia.idServicio}" />
+                </p:column>
+
+                <p:column headerText="Ambulacias">
+                    <p:dialog id="h_ambu" header="Ambulacias" widgetVar="listaAmbulacias" resizable="false">
+                        <p:dataTable paginator="true" rows="8" id="table_ambulancias" value="#{hospitales.ambulanciaDTOS}" var="amb" disabledSelection="true">
+                            <p:column headerText="ID Ambulancia">
+                                <p:outputLabel value="#{amb.idAmbulancia}" />
+                            </p:column>
+                            <p:column headerText="Codigo">
+                                <p:outputLabel value="#{amb.idCodigo}" />
+                            </p:column>
+                            <p:column headerText="Distancia Maxima Desvio">
+                                <p:outputLabel value="#{amb.distanciaMaxDesvio}" />
+                            </p:column>
+                        </p:dataTable>
+                    </p:dialog>
+                    <p:commandButton id="mostrarAmbulacias" styleClass="rounded-button ui-button-primary" icon="pi pi-plus" onclick="PF('listaAmbulacias').show();" />
+                </p:column>
+
+
+                <p:column headerText="false">
+                    <p:commandButton styleClass="rounded-button ui-button-danger" icon="pi pi-trash" process="@this" action="#{adminBean.eliminarH(hospitales.idHospital)}" update="table" onclick="hideForm('formEH')"/>
+                </p:column>
+            </p:dataTable>
+            <div class="d-grid col-6 mx-auto pt-2">
+                <p:commandButton value="Cerrar" class="col-md-6" onclick="hideForm('formEH')" />
+            </div>
+        </p:card>
+        </form>
+    </f:view>
+</html>

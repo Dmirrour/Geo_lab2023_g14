@@ -1,0 +1,42 @@
+<!-- altaServicioEmergencia.xhtml -->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:form id="formASE">
+        <div class="flex justify-content-center">
+
+                <div class="row m-auto mb-4">
+                    <div class="col-6">
+                        <div class="col-12 py-2">
+                            <h:outputLabel for="camas" class="col-12 col-md-6">Total de Camas:</h:outputLabel>
+                            <h:inputText id="camas" type="number" value="#{adminBean.totalCama}" class="col-12 col-md-6" required="true" requiredMessage="La razon social es requerida" />
+                        </div>
+
+                        <div class="col-12 py-2">
+                            <h:outputLabel for="rubro2" class="col-12 col-md-6">Hospital</h:outputLabel>
+                            <p:selectOneMenu id="rubro2" value="#{adminBean.idHospital}" filter="true" filterMatchMode="contains" class="col-12 col-md-6">
+                                <f:selectItems value="#{adminBean.hospitalDTOS}" var="ab" itemLabel="[ #{ab.idHospital} ] - #{ab.nombreHospital}" itemValue="#{ab.idHospital}" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true" requiredMessage="El Rubro es requerida" />
+                            </p:selectOneMenu>
+                        </div>
+
+                        <div class="col-12 py-2">
+                            <h:outputLabel for="latitud" class="col-12 col-md-6">Latitud:</h:outputLabel>
+                            <h:inputText id="latitud" name="latitud" value="#{adminBean.latitud}" class="col-12 col-md-6" required="true" requiredMessage="La latitud es requerida" />
+                        </div>
+
+                        <div class="col-12 py-2">
+                            <h:outputLabel for="longitud" class="col-12 col-md-6">Longitud:</h:outputLabel>
+                            <h:inputText id="longitud" value="#{adminBean.longitud}" class="col-12 col-md-6" required="true" requiredMessage="La longitud es requerida" />
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div id="mapSE" class="map">vacio</div>
+                    </div>
+                    <div class="td-grid col-6 mx-auto pt-2">
+                        <p:commandButton value="Crear" action="#{adminBean.addServicioE()}" update="messages" class="col-md-6" onclick="hideForm('formASE')" />
+                    </div>
+                </div>
+        </div>
+    </h:form>
+</html>

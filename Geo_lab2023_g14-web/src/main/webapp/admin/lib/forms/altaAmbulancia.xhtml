@@ -1,0 +1,40 @@
+<!-- altaAmbulancia.xhtml -->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+        <h:form id="formAA">
+            <p:card styleClass="flex justify-content-center">
+                <div class="row m-auto mb-4">
+                    <div class="col-12 py-2">
+                        <h:outputLabel for="codigo" class="col-12 col-md-6">Codigo guia:</h:outputLabel>
+                        <h:inputText id="codigo" type="number" value="#{adminBean.codigo}" class="col-12 col-md-6" required="true" requiredMessage="La razon social es requerida" />
+                    </div>
+                    <div class="col-12 py-2">
+                        <h:outputLabel for="desvio" class="col-12 col-md-6">Maximo desvio:</h:outputLabel>
+                        <h:inputText id="desvio" type="number" value="#{adminBean.desvio}" class="col-12 col-md-6" required="true" requiredMessage="La razon social es requerida" />
+                    </div>
+                    <hr />
+                    <div class="col-12 py-2">
+                        <h:outputLabel for="rubro" class="col-12 col-md-6">Hospital</h:outputLabel>
+                        <p:selectOneMenu id="rubro" value="#{adminBean.idHospital}" filter="true" filterMatchMode="contains">
+                            <f:selectItems value="#{adminBean.hospitalDTOS}" var="ab" itemLabel="[ #{ab.idHospital} ] - #{ab.nombreHospital}" itemValue="#{ab.idHospital}" class="col-12 col-md-6" required="true" requiredMessage="El Rubro es requerida" />
+                        </p:selectOneMenu>
+                    </div>
+
+                    <div class="col-12 py-2">
+                        <h:outputLabel for="rec" class="col-12 col-md-6">Latitud:</h:outputLabel>
+                        <h:inputText id="rec" name="rec" value="#{adminBean.rec}" class="col-12 col-md-6" required="true" requiredMessage="La latitud es requerida" />
+                    </div>
+
+                    <div class="col-6">
+                        <div id="mapAmbulancia" class="map"></div>
+                    </div>
+
+                    <div class="d-grid col-12 mx-auto pt-2">
+                        <p:commandButton value="Crear" action="#{adminBean.addAmbulancia()}" update="messages" styleClass="ui-button-raised ui-button-success ui-button-flat" class="col-md-6" onclick="hideForm('formAA')" />
+                    </div>
+                </div>
+        </p:card>
+    </h:form>
+</html>
