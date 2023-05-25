@@ -4,8 +4,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui">
     <h:form id="formASE">
-        <div class="flex justify-content-center">
-
+        <p:dialog header="Alta servicio de emergencia" widgetVar="dlg3" minHeight="600" width="850" showEffect="fade" modal="true">
+            <div class="flex justify-content-center">
                 <div class="row m-auto mb-4">
                     <div class="col-6">
                         <div class="col-12 py-2">
@@ -34,9 +34,10 @@
                         <div id="mapSE" class="map">vacio</div>
                     </div>
                     <div class="td-grid col-6 mx-auto pt-2">
-                        <p:commandButton value="Crear" action="#{adminBean.addServicioE()}" update="messages" class="col-md-6" onclick="hideForm('formASE')" />
+                        <p:commandButton value="Crear" action="#{adminBean.addServicioE()}" update="messages" class="col-md-6" onclick="PF('dlg3').hidden()" />
                     </div>
                 </div>
-        </div>
+            </div>
+        </p:dialog>
     </h:form>
 </html>

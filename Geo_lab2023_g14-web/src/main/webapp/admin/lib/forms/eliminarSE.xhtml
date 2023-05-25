@@ -2,30 +2,30 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui">
-    <f:view>
-        <form id="formESE">
-        <p:card styleClass="flex justify-content-center">
-            <p:dataTable value="#{adminBean.servicioEmergenciaDTOS}" var="SE">
-                <p:column headerText="idServicio">
-                    <h:outputText value="#{SE.idServicio}" />
-                </p:column>
-                <p:column headerText="Camas Totales">
-                    <h:outputText value="#{SE.totalCama}" />
-                </p:column>
-                <p:column headerText="Camas Libres">
-                    <h:outputText value="#{SE.camasLibres}" />
-                </p:column>
-                <p:column headerText="Hospital Name">
-                    <h:outputText value="#{SE.hospital.nombreHospital}" />
-                </p:column>
-                <p:column headerText="false">
-                    <p:commandButton styleClass="rounded-button ui-button-danger" icon="pi pi-trash" process="@this" action="#{adminBean.eliminarB(SE.idServicio)}" onclick="hideForm('formSE')"/>
-                </p:column>
-            </p:dataTable>
-            <div class="d-grid col-6 mx-auto pt-2">
-                <p:commandButton value="Cerrar" class="col-md-6" onclick="hideForm('formESE')" />
-            </div>
-        </p:card>
-        </form>
-    </f:view>
+    <h:form id="formESE">
+        <p:dialog id="tablase" header="Eliminar S. Emergencia" widgetVar="dlg6" minHeight="600" width="850" showEffect="fade" modal="true">
+            <p:card styleClass="flex justify-content-center">
+                <p:dataTable value="#{adminBean.servicioEmergenciaDTOS}" var="SE">
+                    <p:column headerText="idServicio">
+                        <h:outputText value="#{SE.idServicio}" />
+                    </p:column>
+                    <p:column headerText="Camas Totales">
+                        <h:outputText value="#{SE.totalCama}" />
+                    </p:column>
+                    <p:column headerText="Camas Libres">
+                        <h:outputText value="#{SE.camasLibres}" />
+                    </p:column>
+                    <p:column headerText="Hospital Name">
+                        <h:outputText value="#{SE.hospital.nombreHospital}" />
+                    </p:column>
+                    <p:column headerText="false">
+                        <p:commandButton styleClass="rounded-button ui-button-danger" icon="pi pi-trash" process="@this" action="#{adminBean.eliminarB(SE.idServicio)}" onclick="hideForm('formSE')"/>
+                    </p:column>
+                </p:dataTable>
+                <div class="d-grid col-6 mx-auto pt-2">
+                    <p:commandButton value="Cerrar" class="col-md-6" onclick="PF('dlg6').hidden()" />
+                </div>
+            </p:card>
+        </p:dialog>
+    </h:form>
 </html>

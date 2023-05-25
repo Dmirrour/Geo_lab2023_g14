@@ -2,8 +2,8 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui">
-    <f:view>
-        <form id="formEA">
+    <form id="formEA">
+        <p:dialog header="Eliminar Ambulancia" widgetVar="dlg7" minHeight="600" width="850" showEffect="fade" modal="true">
             <p:card styleClass="flex justify-content-center">
                 <p:dataTable value="#{adminBean.ambulanciaDTOS}" var="ambu">
                     <p:column headerText="Id Ambulancia">
@@ -20,10 +20,10 @@
                     </p:column>
 
                     <div class="d-grid col-6 mx-auto pt-2">
-                        <p:commandButton value="Cerrar" class="col-md-6" onclick="hideForm('formEA')" />
+                        <p:commandButton value="Cerrar" class="col-md-6" onclick="PF('dlg7').hidden()" />
                     </div>
                 </p:dataTable>
             </p:card>
-        </form>
-    </f:view>
+        </p:dialog>
+    </form>
 </html>

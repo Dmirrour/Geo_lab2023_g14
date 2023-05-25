@@ -50,6 +50,8 @@ public class AdminBean implements Serializable {
     private ArrayList<AmbulanciaDTO> ambulanciaDTOS;
     private ArrayList<HospitalDTO> hospitalDTOS;
 
+    private boolean mostrarFormAA; // Variable para controlar la visibilidad del formulario altaAmbulancia.xhtml
+
     // alta Servicio de Emergencia
     private int totalCama;
 
@@ -93,6 +95,7 @@ public class AdminBean implements Serializable {
         String msj = String.format("Se agregó la ambulancia %s.", codigo);
         addMensaje("Ambulancias", msj);
     }
+
 
     private void addMensaje(String summary, String detail) {
         FacesMessage mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
@@ -182,6 +185,14 @@ public class AdminBean implements Serializable {
             String msj = String.format("No se puedo Borrar el Servicio con id %s", idSE);
             addMensaje("Servicio", msj);
         }
+    }
+
+    public boolean getMostrarFormAA() {
+        return mostrarFormAA;
+    }
+
+    public void setMostrarFormAA(boolean mostrarFormAA) {
+        this.mostrarFormAA = mostrarFormAA;
     }
 
     public void eliminarA(Long idAmbulancia) {

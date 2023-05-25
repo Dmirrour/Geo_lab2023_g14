@@ -4,6 +4,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui">
         <h:form id="formAA">
+            <p:dialog header="Alta ambulancia" widgetVar="dlg2" minHeight="600" width="850" showEffect="fade" modal="true">
             <p:card styleClass="flex justify-content-center">
                 <div class="row m-auto mb-4">
                     <div class="col-12 py-2">
@@ -32,9 +33,10 @@
                     </div>
 
                     <div class="d-grid col-12 mx-auto pt-2">
-                        <p:commandButton value="Crear" action="#{adminBean.addAmbulancia()}" update="messages" styleClass="ui-button-raised ui-button-success ui-button-flat" class="col-md-6" onclick="hideForm('formAA')" />
+                        <p:commandButton value="Crear" action="#{adminBean.addAmbulancia()}" update="messages" styleClass="ui-button-raised ui-button-success ui-button-flat" class="col-md-6" onclick="PF('dlg2').hidden()" />
                     </div>
                 </div>
         </p:card>
+            </p:dialog>
     </h:form>
 </html>
