@@ -46,7 +46,10 @@ function CrearMapaInvitado() {
         transparent: true,
         VERSION: '1.1.0'
     });
+
     ///////////////////////// FIN CAPAS WMS  /////////////////////////
+
+
 
 
     ///////////////////////// OPCIONES DE MAPA /////////////////////////
@@ -67,8 +70,7 @@ function CrearMapaInvitado() {
     var overlayers = {
         "Ejes": layerEjes,
         "Rutas": layerRuta,
-        "Departamentos": layerDepartamento,
-        "Serv. Eme.": servicioEH
+        "Departamentos": layerDepartamento
     };
 
     marcador = L.marker([-34.8797018070320851, -56.262557241497211]).addTo(map) // Icono del marcador
@@ -92,7 +94,7 @@ function CrearMapaInvitado() {
             edit: true
         }
     });
-    // map.addLayer(drawLayers);
+    map.addLayer(drawLayers);
     // map.addControl(drawControl);
 
     map.fitBounds([[-35, -56], [-34, -56]]);
@@ -107,6 +109,38 @@ function CrearMapaInvitado() {
     });
     ///////////////////////// FIN OPCIONES DE MAPA /////////////////////////
 
+    let geojsonLayer = L.geoJSON().addTo(map); // Crear una capa de GeoJSON
+    let url =
+        'http://localhost:8088/geoserver/wfs?' +
+        'service=WFS&' +
+        // 'version=1.1.0&' +
+        'request=GetFeature&' +
+        'typeName=Geo_lab2023_g14PersistenceUnit:vista_se_h&' +
+        'srsName=EPSG:32721&' +
+        'outputFormat=application/json';
+    console.log(url);
+    fetch(url)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            geojsonLayer.addData(data);      // Agregar los datos a la capa de GeoJSON
+            // Configurar el evento de clic en los marcadores
+            geojsonLayer.eachLayer(function (layer) {
+                layer.on('click', function (e) {
+                    let properties = e.target.feature.properties;
+                    let popupContent =
+                        'Camas libres: ' + properties.camaslibres + '<br>' +
+                        'Total de camas: ' + properties.totalcama + '<br>' +
+                        'Hospital Nombre: ' + properties.nombrehospital + '<br>' +
+                        'Hospital Tipo: ' + properties.tipohospital;
+                    layer.bindPopup(popupContent).openPopup();
+                });
+            });
+        })
+        .catch(function (error) {
+            console.error('Error:', error);
+        });
 
     ///////////////////////// COORDENAS EVENTO CLICK /////////////////////////
     drawLayers.on('click', function (e) {

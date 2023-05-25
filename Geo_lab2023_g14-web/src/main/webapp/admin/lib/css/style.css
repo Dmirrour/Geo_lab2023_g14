@@ -1,3 +1,10 @@
-#contenedor-mapa {
-  height: 500px;
+
+.btn-rojo {
+  background: red !important;
+}
+
+.my-dialog-style {
+  position: fixed !important;
+  left: 0px !important;
+  top: 113px !important;
 }
