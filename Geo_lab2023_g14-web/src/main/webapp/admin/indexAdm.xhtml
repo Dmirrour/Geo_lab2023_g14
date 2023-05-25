@@ -166,9 +166,7 @@
                      <h:inputText id="rec" name="rec" value="#{adminBean.rec}" class="col-12 col-md-6" required="true" requiredMessage="La latitud es requerida" />
                   </div>
 
-                  <div class="col-6">
-                     <div id="mapAmbulancia" class="map"></div>
-                  </div>
+
 
                   <div class="d-grid col-12 mx-auto pt-2">
                      <p:commandButton value="Crear" action="#{adminBean.addAmbulancia()}" update="messages" styleClass="ui-button-raised ui-button-success ui-button-flat" class="col-md-6" onclick="PF('dlg2').hidden()" />
