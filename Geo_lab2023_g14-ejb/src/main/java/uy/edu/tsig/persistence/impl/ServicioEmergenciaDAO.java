@@ -59,6 +59,7 @@ public class ServicioEmergenciaDAO implements IServicioEmergenciaDAO {
         lSE.forEach(servicioEmergencia -> res.add(ServicioEmergenciaDTO
                 .builder()
                 .idServicio(servicioEmergencia.getIdServicio())
+                .nombre(servicioEmergencia.getNombre())
                 .camasLibres(servicioEmergencia.getCamasLibres())
                 .hospital(servicioEmergencia.getHospitalDTO())
                 .totalCama(servicioEmergencia.getTotalCama())

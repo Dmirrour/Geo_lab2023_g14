@@ -185,6 +185,11 @@
 
                   <div class="row">
                      <div class="form-group row">
+                        <h:outputLabel for="nombreS" class="col-sm-8 col-form-label">Nombre:</h:outputLabel>
+
+                        <h:inputText id="nombreS" class="col-sm-4" value="#{adminBean.nombreS}" required="true" requiredMessage="La razon social es requerida" />
+                     </div>
+                     <div class="form-group row">
                         <h:outputLabel for="camas" class="col-sm-8 col-form-label">Total de Camas:</h:outputLabel>
 
                         <h:inputText id="camas" class="col-sm-4" type="number" value="#{adminBean.totalCama}" required="true" requiredMessage="La razon social es requerida" />
@@ -231,6 +236,9 @@
             <p:dataTable value="#{adminBean.servicioEmergenciaDTOS}" var="SE" scrollable="true" scrollHeight="400px">
                <p:column headerText="idServicio">
                   <h:outputText value="#{SE.idServicio}" />
+               </p:column>
+               <p:column headerText="nombre">
+                  <h:outputText value="#{SE.nombre}" />
                </p:column>
                <p:column headerText="Camas Totales">
                   <h:outputText value="#{SE.totalCama}" />
@@ -287,10 +295,26 @@
                <p:column headerText="tipo">
                   <h:outputText value="#{hospitales.tipoHospital}" />
                </p:column>
-               <p:column headerText="s. eme.">
-                  <h:outputText value="#{hospitales.servicioEmergencia.idServicio}" />
-               </p:column>
 
+               <p:column headerText="Servicios.E">
+                  <p:dialog id="s_eme" header="Servicios de Emergencia" widgetVar="listaServicios" resizable="false">
+                     <p:dataTable paginator="true" rows="4" id="table_servicios" value="#{hospitales.servicioEmergencia}" var="ser" disabledSelection="true">
+                        <p:column headerText="ID Servicios.E" sortBy="#{ser.idServicio}" filterBy="#{ser.idServicio}" filterMatchMode="contains" >
+                           <p:outputLabel value="#{ser.idServicio}" />
+                        </p:column>
+                        <p:column headerText="Nombre">
+                           <p:outputLabel value="#{ser.nombre}" />
+                        </p:column>
+                        <p:column headerText="Camas totales">
+                           <p:outputLabel value="#{ser.totalCama}" />
+                        </p:column>
+                        <p:column headerText="Camas libres">
+                           <p:outputLabel value="#{ser.camasLibres}" />
+                        </p:column>
+                     </p:dataTable>
+                  </p:dialog>
+                  <p:commandButton id="mostraServicios" styleClass="rounded-button ui-button-primary" icon="pi pi-plus" onclick="PF('listaServicios').show();" />
+               </p:column>
                <p:column headerText="Ambulacias">
                   <p:dialog id="h_ambu" header="Ambulacias" widgetVar="listaAmbulacias" resizable="false">
                      <p:dataTable paginator="true" rows="4" id="table_ambulancias" value="#{hospitales.ambulanciaDTOS}" var="amb" disabledSelection="true">

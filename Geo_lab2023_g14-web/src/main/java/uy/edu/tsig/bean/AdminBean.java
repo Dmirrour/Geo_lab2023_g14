@@ -51,6 +51,7 @@ public class AdminBean implements Serializable {
     private ArrayList<HospitalDTO> hospitalDTOS;
 
     // alta Servicio de Emergencia
+    private String nombreS;
     private int totalCama;
 
     private ServiciosEmergencias s;
@@ -125,6 +126,7 @@ public class AdminBean implements Serializable {
     public void addServicioE() {
         ServicioEmergencia se = ServicioEmergencia.builder()
                 .totalCama(totalCama)
+                .nombre(nombreS)
                 .build();
         ServicioEmergenciaDTO sedto = iServicioEmergenciaService.altaServicioE(se, idHospital);
 
@@ -151,7 +153,7 @@ public class AdminBean implements Serializable {
                             + "), 32721)) WHERE idservicio=" + sedto.getIdServicio() + ";");
             System.out.println("Punto insertado correctamente.");
         } catch (SQLException e) {
-            // e.printStackTrace();
+            // e.printStackTrace();s
             System.out.println("No conecta.");
         }
         // --------x------------x--------------
@@ -277,6 +279,14 @@ public class AdminBean implements Serializable {
 
     public void setServicioEmergenciaDTOS(ArrayList<ServicioEmergenciaDTO> servicioEmergenciaDTOS) {
         this.servicioEmergenciaDTOS = servicioEmergenciaDTOS;
+    }
+
+    public String getNombreS() {
+        return nombreS;
+    }
+
+    public void setNombreS(String nombreS) {
+        this.nombreS = nombreS;
     }
 
     public ArrayList<AmbulanciaDTO> getAmbulanciaDTOS() {
