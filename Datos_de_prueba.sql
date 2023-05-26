@@ -16,17 +16,24 @@
 
   CREATE OR REPLACE VIEW public.vista_se_h
    AS
-   SELECT se.idservicio,
-     se.camaslibres,
-     se.totalcama,
-     se.point,
-     h.idhospital,
-     h.nombrehospital,
-     h.tipohospital
-     FROM servicioemergencia se
-       JOIN hospital h ON se.hospital_idhospital = h.idhospital;
+    SELECT se.idservicio,
+           se.camaslibres,
+           se.nombre,
+           se.totalcama,
+           se.point,
+           h.idhospital,
+           h.nombrehospital,
+           CASE h.tipohospital
+               WHEN 0 THEN 'MUTUALISTA'
+               WHEN 1 THEN 'SEGURO PRIVADO'
+               WHEN 2 THEN 'SERVICIO ESTATAL'
+               ELSE 'Desconocido'
+               END AS tipohospital
+    FROM servicioemergencia se
+             JOIN hospital h ON se.hospital_idhospital = h.idhospital;
 
- Probablemente no sea necesario asignar el propieatrio esto ya lo hace autoamtico pero por si acaso:
+
+Probablemente no sea necesario asignar el propieatrio esto ya lo hace autoamtico pero por si acaso:
 
   ALTER TABLE public.vista_se_h
       OWNER TO postgres;

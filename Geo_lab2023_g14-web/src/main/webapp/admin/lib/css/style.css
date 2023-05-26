@@ -1,6 +1,57 @@
+html,
+body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 100%;
+}
+#map {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  position: relative;
+}
+
+#top {
+  position: absolute;
+  top: 2px;
+  left: 37px;
+  z-index: 1700;
+  width: 950px;
+}
+#contenedorNavbar {
+  width: 317px;
+}
+#contenedorMnuSalir {
+  width: 100px;
+}
+#contenedorTitulo {
+  text-align: center;
+  width: 500px;
+}
+.map {
+  padding: 0;
+  margin: 0;
+  width: 485px;
+  height: 400px;
+}
+
+#contenedor-mapa {
+  height: 500px;
+}
+
+.textoborde {
+  text-align:center;
+  color: #fff;
+  font-family: impact;
+  font-size: 40px;
+  letter-spacing: 0;
+  text-shadow: -3px -3px 3px #0000DF, 3px -3px 3px #0000DF, -3px 3px 3px #0000DF, 3px 3px 3px #0000DF;
+}
 
 .btn-rojo {
   background: red !important;
+  padding: 10px !important;
 }
 
 .my-dialog-style {

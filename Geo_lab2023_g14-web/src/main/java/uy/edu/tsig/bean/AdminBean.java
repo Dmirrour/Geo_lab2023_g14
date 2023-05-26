@@ -142,8 +142,8 @@ public class AdminBean implements Serializable {
 
         String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
         String usuario = "postgres";
-        //String contraseña = "1234";
-        String contraseña = "123456d";//Damian
+        String contraseña = "1234";
+        //String contraseña = "123456d";//Damian
         Connection conn;
         try {
             conn = DriverManager.getConnection(url, usuario, contraseña);

@@ -192,29 +192,8 @@ class ControladorMapa extends Configuracion {
 
         cargarMapaAltaAmbulancia() {
 
-            ///////////////////////// OPCIONES DE MAPA /////////////////////////
-            let mapAmbulancia = L.map('mapAmbulancia', {
-                center: [-34.8797018070320851, -56.262557241497211],
-                zoom: 11,
-                minZoom: 2,
-                maxZoom: 18,
-                layers: [this.openst],
-                zoomControl: true
-            });
-
-            let baselayers = {
-                "Open Street Map": this.openst
-            };
-
-            let overlayers = {};
-
-            L.control.layers(
-                baselayers,
-                overlayers, {
-                    collapsed: true
-                }).addTo(mapAmbulancia);
-
             ///////////////////////// FIN OPCIONES DE MAPA /////////////////////////
+            /*
             var recorrido = [];
             let marker = L.marker([0, 0]).addTo(mapAmbulancia);
             mapAmbulancia.on('click', function (e) {
@@ -234,16 +213,8 @@ class ControladorMapa extends Configuracion {
                 var data = 'LINESTRING(' + punto + ')';
                 console.log('Punto:', data);
                 marker.setLatLng(e.latlng);
-                document.getElementById("j_idt61:rec").value = data;
-                //  document.getElementById("j_idt61:rec").value = e.latlng.lng;
+                document.getElementById("j_idt61:rec").value = data;;
             });
-
-            // Crea un marcador y guarda la posición en los campos de latitud y longitud
-            // let marker = L.marker([0, 0]).addTo(mapAmbulancia);
-            // mapAmbulancia.on('click', function (e) {
-            //     marker.setLatLng(e.latlng);
-            //     document.getElementById("j_idt61:latitud").value = e.latlng.lat;
-            //     document.getElementById("j_idt61:longitud").value = e.latlng.lng;
-            // });
+            */
         }
     }
