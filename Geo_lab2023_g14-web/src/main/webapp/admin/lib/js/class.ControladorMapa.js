@@ -32,7 +32,6 @@ class ControladorMapa extends Configuracion {
     layerDepartamento;
     layerRuta;
     servicioEH;
-    vista_se_h;
     map;
     markerSE;
 
@@ -63,16 +62,16 @@ class ControladorMapa extends Configuracion {
             VERSION: '1.1.0'
         });
 
-        this.layerDepartamento = L.tileLayer.wms('http://localhost:8088/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
-            title: 'ft_00departamento',
-            layers: 'Geo_lab2023_g14PersistenceUnit:ft_00departamento',
+        this.layerDepartamento = L.tileLayer.wms('http://localhost:8081/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
+            title: 'ft_ine_depto',
+            layers: 'Geo_lab2023_g14PersistenceUnit:ft_depto',
             srs: 'EPSG:32721',
             format: 'image/png',
             transparent: true,
             VERSION: '1.1.0'
         });
 
-        this.layerRuta = L.tileLayer.wms('http://localhost:8088/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
+        this.layerRuta = L.tileLayer.wms('http://localhost:8081/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
             title: 'Rutas',
             layers: 'Geo_lab2023_g14PersistenceUnit:ft_00cam_dig',
             srs: 'EPSG:32721',
@@ -81,7 +80,7 @@ class ControladorMapa extends Configuracion {
             VERSION: '1.1.0'
         });
 
-        this.servicioEH = L.tileLayer.wms('http://localhost:8088/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
+        this.servicioEH = L.tileLayer.wms('http://localhost:8081/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
             title: 'servicioemergencia',
             layers: 'Geo_lab2023_g14PersistenceUnit:servicioemergencia',
             srs: 'EPSG:32721',
@@ -90,14 +89,6 @@ class ControladorMapa extends Configuracion {
             VERSION: '1.1.0'
         });
 
-        this.vista_se_h = L.tileLayer.wms('http://localhost:8088/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
-            title: 'vista_se_h',
-            layers: 'Geo_lab2023_g14PersistenceUnit:vista_se_h',
-            srs: 'EPSG:32721',
-            format: 'image/png',
-            transparent: true,
-            VERSION: '1.1.0'
-        });
         ///////////////////////// FIN CAPAS WMS  /////////////////////////
 
 
@@ -121,7 +112,8 @@ class ControladorMapa extends Configuracion {
         let overlayers = {
             "Departamentos": this.layerDepartamento,
             "Ejes": this.layerEjes,
-            "Rutas": this.layerRuta
+            "Rutas": this.layerRuta,
+            "serviceE": this.servicioEH
         };
 
 
@@ -159,11 +151,11 @@ class ControladorMapa extends Configuracion {
     addLayersWFS() {
         let geojsonLayer = L.geoJSON().addTo(this.map); // Crear una capa de GeoJSON
         let url =
-            'http://localhost:8088/geoserver/wfs?' +
+            'http://localhost:8081/geoserver/wfs?' +
             'service=WFS&' +
             // 'version=1.1.0&' +
             'request=GetFeature&' +
-            'typeName=Geo_lab2023_g14PersistenceUnit:vista_se_h&' +
+            'typeName=Geo_lab2023_g14PersistenceUnit:servicioemergencia&' +
             'srsName=EPSG:32721&' +
             'outputFormat=application/json';
         console.log(url);
@@ -210,12 +202,11 @@ class ControladorMapa extends Configuracion {
         });
     }
 
-    BorrarMarcadorALtaSE() {
+    BorrarMarcadorAltaSE() {
         // Elimina el marcador del mapa
         console.log("borrando marcador");
         this.map.removeLayer(this.markerSE);
     }
-
 
     cargarMapaAltaAmbulancia() {
 
@@ -253,7 +244,7 @@ class ControladorMapa extends Configuracion {
                 latitud,
                 longitud
             });
-            for (var i = 0; i < recorrido.length; i++) {
+            for (let i = 0; i < recorrido.length; i++) {
                 punto = recorrido[i];
             }
             console.log('Latitud:', punto.latitud, 'Longitud:', punto.longitud);

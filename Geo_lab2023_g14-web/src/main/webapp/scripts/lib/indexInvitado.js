@@ -39,7 +39,7 @@ function CrearMapaInvitado() {
         zoomControl: true
     });
 
-    var baselayers = {
+    let baselayers = {
         "Open Street Map": openst,
         "Google Maps": google
     };
