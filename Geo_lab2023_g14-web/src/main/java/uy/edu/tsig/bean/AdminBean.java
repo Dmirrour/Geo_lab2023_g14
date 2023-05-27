@@ -126,12 +126,12 @@ public class AdminBean implements Serializable {
         addMensaje("Hospitales", msj);
     }
 
-    /*public void addServicioE() {
+/*    public void addServicioE() {
         ServicioEmergencia se = ServicioEmergencia.builder()
                 .totalCama(totalCama)
                 .nombre(nombreS)
                 .build();
-        ServicioEmergenciaDTO sedto = iServicioEmergenciaService.altaServicioE(se, idHospital);
+        ServicioEmergenciaDTO sedto = iServicioEmergenciaService.altaServicioE(se, idHospital,1,1);
 
         // sedto contiene los datos que van de la logica como el id, en lo posible para
         // manejar vinculadas de forma trasera tranten de crear
@@ -145,7 +145,7 @@ public class AdminBean implements Serializable {
 
         String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
         String usuario = "postgres";
-        String contraseña = "admin";
+        String contraseña = "123456d";
 
         Connection conn;
         try {
