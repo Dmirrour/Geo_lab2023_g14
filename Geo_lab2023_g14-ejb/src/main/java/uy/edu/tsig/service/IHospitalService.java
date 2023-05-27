@@ -10,4 +10,5 @@ public interface IHospitalService {
     HospitalDTO altaHospital(Hospital h);
     Hospitales obtenerHospitales();
     boolean borrarH(Long idHospital);
+    void modificar(HospitalDTO h);
 }

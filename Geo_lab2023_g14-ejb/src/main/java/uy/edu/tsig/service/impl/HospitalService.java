@@ -28,4 +28,14 @@ public class HospitalService implements IHospitalService{
     public boolean borrarH(Long idHospital){
         return iHospitalDAO.eliminarH(idHospital);
     }
+
+    @Override
+    public void modificar(HospitalDTO h){
+
+        Hospital r = iHospitalDAO.buscarHospital(h.getIdHospital());
+        r.setTipoHospital(h.getTipoHospital());
+        r.setNombreHospital(h.getNombreHospital());
+
+        iHospitalDAO.modificar(r);
+    }
 }

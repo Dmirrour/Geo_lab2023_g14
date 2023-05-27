@@ -53,6 +53,7 @@ public class AdminBean implements Serializable {
     private boolean mostrarFormAA; // Variable para controlar la visibilidad del formulario altaAmbulancia.xhtml
 
     // alta Servicio de Emergencia
+    private String nombreS;
     private int totalCama;
 
     private ServiciosEmergencias s;
@@ -128,6 +129,7 @@ public class AdminBean implements Serializable {
     public void addServicioE() {
         ServicioEmergencia se = ServicioEmergencia.builder()
                 .totalCama(totalCama)
+                .nombre(nombreS)
                 .build();
         ServicioEmergenciaDTO sedto = iServicioEmergenciaService.altaServicioE(se, idHospital);
 
@@ -143,17 +145,18 @@ public class AdminBean implements Serializable {
 
         String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
         String usuario = "postgres";
-        String contraseña = "contrasenia";
+        String contraseña = "admin";
+
         Connection conn;
         try {
             conn = DriverManager.getConnection(url, usuario, contraseña);
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(
-                    "UPDATE servicioemergencia set point = (ST_SetSRID(ST_MakePoint(" + latitud + ", " + longitud
+                    "UPDATE servicioemergencia set point = (ST_SetSRID(ST_MakePoint(" + longitud + ", " + latitud
                             + "), 32721)) WHERE idservicio=" + sedto.getIdServicio() + ";");
             System.out.println("Punto insertado correctamente.");
         } catch (SQLException e) {
-            // e.printStackTrace();
+            // e.printStackTrace();s
             System.out.println("No conecta.");
         }
         // --------x------------x--------------
@@ -287,6 +290,14 @@ public class AdminBean implements Serializable {
 
     public void setServicioEmergenciaDTOS(ArrayList<ServicioEmergenciaDTO> servicioEmergenciaDTOS) {
         this.servicioEmergenciaDTOS = servicioEmergenciaDTOS;
+    }
+
+    public String getNombreS() {
+        return nombreS;
+    }
+
+    public void setNombreS(String nombreS) {
+        this.nombreS = nombreS;
     }
 
     public ArrayList<AmbulanciaDTO> getAmbulanciaDTOS() {

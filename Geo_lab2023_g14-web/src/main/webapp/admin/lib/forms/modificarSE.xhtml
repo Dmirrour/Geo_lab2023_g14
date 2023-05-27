@@ -4,17 +4,16 @@
       xmlns:p="http://primefaces.org/ui">
     <h:form id="formMSE">
         <p:dialog header="Modificar S. Emergencia" widgetVar="dlg4" minHeight="600" width="850" showEffect="fade" modal="true">
-            <p:card styleClass="flex justify-content-center">
-                <p:dataTable>
-                    <p:column headerText="id">id</p:column>
-                    <p:column headerText="hospital">nombre</p:column>
-                    <p:column headerText="Cant.Camas">cantidad camas</p:column>
-                    <p:column headerText="Acciones">Acciones</p:column>
-                </p:dataTable>
-                <div class="d-grid col-6 mx-auto pt-2">
-                    <p:commandButton value="Cerrar" class="col-md-6" onclick="PF('dlg4').hidden()" />
-                </div>
-            </p:card>
+            <f:view>
+                <p:card styleClass="flex justify-content-center">
+                    <p:dataTable  scrollable="true" scrollHeight="400px">
+                        <p:column headerText="id"></p:column>
+                        <p:column headerText="hospital"></p:column>
+                        <p:column headerText="Cant.Camas"></p:column>
+                        <p:column headerText="Acciones"></p:column>
+                    </p:dataTable>
+                </p:card>
+            </f:view>
         </p:dialog>
     </h:form>
 </html>

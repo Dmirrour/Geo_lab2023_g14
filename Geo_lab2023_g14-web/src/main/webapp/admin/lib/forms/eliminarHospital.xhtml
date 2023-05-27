@@ -5,47 +5,61 @@
 
     <h:form id="formEH">
         <p:dialog header="Eliminar Hospital" widgetVar="dlg8" minHeight="600" width="850" showEffect="fade" modal="true">
-            <p:card styleClass="flex justify-content-center">
-                <p:dataTable id="table" value="#{adminBean.hospitalDTOS}" var="hospitales">
-                    <p:column headerText="idHospital">
-                        <h:outputText value="#{hospitales.idHospital}" />
-                    </p:column>
-                    <p:column headerText="nombre">
-                        <h:outputText value="#{hospitales.nombreHospital}" />
-                    </p:column>
-                    <p:column headerText="tipo">
-                        <h:outputText value="#{hospitales.tipoHospital}" />
-                    </p:column>
-                    <p:column headerText="s. emergencia">
-                        <h:outputText value="#{hospitales.servicioEmergencia.idServicio}" />
-                    </p:column>
+            <f:view>
+                <p:card styleClass="flex justify-content-center">
+                    <p:dataTable id="table" value="#{adminBean.hospitalDTOS}" var="hospitales" scrollable="true" scrollHeight="400px">
+                        <p:column headerText="idHospital">
+                            <h:outputText value="#{hospitales.idHospital}" />
+                        </p:column>
+                        <p:column headerText="nombre">
+                            <h:outputText value="#{hospitales.nombreHospital}" />
+                        </p:column>
+                        <p:column headerText="tipo">
+                            <h:outputText value="#{hospitales.tipoHospital}" />
+                        </p:column>
 
-                    <p:column headerText="Ambulacias">
-                        <p:dialog id="h_ambu" header="Ambulacias" widgetVar="listaAmbulacias" resizable="false">
-                            <p:dataTable paginator="true" rows="8" id="table_ambulancias" value="#{hospitales.ambulanciaDTOS}" var="amb" disabledSelection="true">
-                                <p:column headerText="ID Ambulancia">
-                                    <p:outputLabel value="#{amb.idAmbulancia}" />
-                                </p:column>
-                                <p:column headerText="Codigo">
-                                    <p:outputLabel value="#{amb.idCodigo}" />
-                                </p:column>
-                                <p:column headerText="Distancia Maxima Desvio">
-                                    <p:outputLabel value="#{amb.distanciaMaxDesvio}" />
-                                </p:column>
-                            </p:dataTable>
-                        </p:dialog>
-                        <p:commandButton id="mostrarAmbulacias" styleClass="rounded-button ui-button-primary" icon="pi pi-plus" onclick="PF('listaAmbulacias').show();" />
-                    </p:column>
+                        <p:column headerText="Servicios.E">
+                            <p:dialog id="s_eme" header="Servicios de Emergencia" widgetVar="listaServicios" resizable="false">
+                                <p:dataTable paginator="true" rows="4" id="table_servicios" value="#{hospitales.servicioEmergencia}" var="ser" disabledSelection="true">
+                                    <p:column headerText="ID Servicios.E" sortBy="#{ser.idServicio}" filterBy="#{ser.idServicio}" filterMatchMode="contains" >
+                                        <p:outputLabel value="#{ser.idServicio}" />
+                                    </p:column>
+                                    <p:column headerText="Nombre">
+                                        <p:outputLabel value="#{ser.nombre}" />
+                                    </p:column>
+                                    <p:column headerText="Camas totales">
+                                        <p:outputLabel value="#{ser.totalCama}" />
+                                    </p:column>
+                                    <p:column headerText="Camas libres">
+                                        <p:outputLabel value="#{ser.camasLibres}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p:dialog>
+                            <p:commandButton id="mostraServicios" styleClass="rounded-button ui-button-primary" icon="pi pi-plus" onclick="PF('listaServicios').show();" />
+                        </p:column>
+                        <p:column headerText="Ambulacias">
+                            <p:dialog id="h_ambu" header="Ambulacias" widgetVar="listaAmbulacias" resizable="false">
+                                <p:dataTable paginator="true" rows="4" id="table_ambulancias" value="#{hospitales.ambulanciaDTOS}" var="amb" disabledSelection="true">
+                                    <p:column headerText="ID Ambulancia">
+                                        <p:outputLabel value="#{amb.idAmbulancia}" />
+                                    </p:column>
+                                    <p:column headerText="Codigo">
+                                        <p:outputLabel value="#{amb.idCodigo}" />
+                                    </p:column>
+                                    <p:column headerText="Distancia Maxima Desvio">
+                                        <p:outputLabel value="#{amb.distanciaMaxDesvio}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p:dialog>
+                            <p:commandButton id="mostrarAmbulacias" styleClass="rounded-button ui-button-primary" icon="pi pi-plus" onclick="PF('listaAmbulacias').show();" />
+                        </p:column>
 
-
-                    <p:column headerText="false">
-                        <p:commandButton styleClass="rounded-button ui-button-danger" icon="pi pi-trash" process="@this" action="#{adminBean.eliminarH(hospitales.idHospital)}" update="table"/>
-                    </p:column>
-                </p:dataTable>
-                <div class="d-grid col-6 mx-auto pt-2">
-                    <p:commandButton value="Cerrar" class="col-md-6" onclick="PF('dlg8').hidden()" />
-                </div>
-            </p:card>
+                        <p:column headerText="false">
+                            <p:commandButton styleClass="rounded-button ui-button-danger" icon="pi pi-trash" process="@this" action="#{adminBean.eliminarH(hospitales.idHospital)}" update="table" />
+                        </p:column>
+                    </p:dataTable>
+                </p:card>
+            </f:view>
         </p:dialog>
     </h:form>
 </html>
