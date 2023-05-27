@@ -13,27 +13,27 @@
                             <div class="row">
                                 <div class="form-group row pt-2">
                                     <h:outputLabel for="nombreS" class="col-sm-12 col-form-label">Nombre:</h:outputLabel>
-                                    <h:inputText id="nombreS" class="col-sm-12" value="#{adminBean.nombreS}" required="true" requiredMessage="El NOMBRE es requerido." />
+                                    <h:inputText id="nombreS" class="col-sm-12" value="#{servicioEBean.nombreS}" required="true" requiredMessage="El NOMBRE es requerido." />
                                 </div>
                                 <div class="form-group row pt-2">
                                     <h:outputLabel for="camas" class="col-sm-12 col-form-label">Camas:</h:outputLabel>
-                                    <h:inputText id="camas" class="col-sm-12" type="number" value="#{adminBean.totalCama}" required="true" requiredMessage="Las CAMAS son requeridas" />
+                                    <h:inputText id="camas" class="col-sm-12" type="number" value="#{servicioEBean.totalCama}" required="true" requiredMessage="Las CAMAS son requeridas" />
                                 </div>
 
                                 <div class="form-group row pt-2">
                                     <h:outputLabel for="rubro2" class="col-sm-12 col-form-label">Hospital</h:outputLabel>
-                                    <h:selectOneMenu id="rubro2" value="#{adminBean.idHospital}" filter="true" filterMatchMode="contains" class="col-sm-12">
+                                    <h:selectOneMenu id="rubro2" value="#{servicioEBean.idHospital}" filter="true" filterMatchMode="contains" class="col-sm-12">
                                         <f:selectItem itemLabel="Elegir uno..." itemValue="" disabled="true" />
                                         <f:selectItems value="#{adminBean.hospitalDTOS}" var="ab" itemLabel="[ #{ab.idHospital} ] - #{ab.nombreHospital}" itemValue="#{ab.idHospital}" required="true" requiredMessage="Debe elegir un hospital." />
                                     </h:selectOneMenu>
                                 </div>
 
-                                <h:inputText id="latitud" name="latitud" value="#{adminBean.latitud}" class="col-md-6 col-sm-12" required="true" style="display: none;" requiredMessage="La latitud es requerida" />
-                                <h:inputText id="longitud" value="#{adminBean.longitud}" class="col-md-6 col-sm-12" required="true" style="display: none;" requiredMessage="La longitud es requerida" />
+                                <h:inputText id="latitud" name="latitud" value="#{servicioEBean.latitud}" class="col-md-6 col-sm-12" required="true" style="display: none;" requiredMessage="La latitud es requerida" />
+                                <h:inputText id="longitud" value="#{servicioEBean.longitud}" class="col-md-6 col-sm-12" required="true" style="display: none;" requiredMessage="La longitud es requerida" />
                             </div>
 
                             <div class="td-grid col-sm-6 mx-auto pt-2">
-                                <p:commandButton value="Crear" action="#{adminBean.addServicioE()}" update="messages" class="col-sm-12" onclick="PF('dlg3').hidden()" />
+                                <p:commandButton value="Crear" action="#{servicioEBean.addServicioE()}" update="messages" class="col-sm-12" onclick="PF('dlg3').hidden()" />
                             </div>
                         </div>
                     </h:form>

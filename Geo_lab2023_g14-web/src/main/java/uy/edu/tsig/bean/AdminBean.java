@@ -126,7 +126,7 @@ public class AdminBean implements Serializable {
         addMensaje("Hospitales", msj);
     }
 
-    public void addServicioE() {
+    /*public void addServicioE() {
         ServicioEmergencia se = ServicioEmergencia.builder()
                 .totalCama(totalCama)
                 .nombre(nombreS)
@@ -163,7 +163,7 @@ public class AdminBean implements Serializable {
 
         String msj = String.format("Se agregó el servicio de emergencia con %s camas.", totalCama);
         addMensaje("S. Emergencia", msj);
-    }
+    }*/
 
     public void eliminarH(Long idHospital) {
         boolean r = iHospitalService.borrarH(idHospital);
@@ -177,7 +177,7 @@ public class AdminBean implements Serializable {
         }
     }
 
-    public void eliminarB(Long idSE) {
+/*    public void eliminarB(Long idSE) {
         boolean r = iServicioEmergenciaService.borrarSE(idSE);
 
         if (r) {
@@ -188,7 +188,7 @@ public class AdminBean implements Serializable {
             String msj = String.format("No se puedo Borrar el Servicio con id %s", idSE);
             addMensaje("Servicio", msj);
         }
-    }
+    }*/
 
     public boolean getMostrarFormAA() {
         return mostrarFormAA;
