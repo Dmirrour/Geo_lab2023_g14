@@ -39,12 +39,12 @@ function CrearMapaInvitado() {
         zoomControl: true
     });
 
-    var baselayers = {
+     baselayers = {
         "Open Street Map": openst,
         "Google Maps": google
     };
 
-    var overlayers = {
+     overlayers = {
         //  "Ejes": layerRuta,
         //  "Departamentos": layerDepartamento
     };

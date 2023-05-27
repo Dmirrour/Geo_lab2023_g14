@@ -20,7 +20,7 @@ function CrearMapaAdmin() {
         VERSION: '1.1.0'
     });
 
-    var layerDepartamento = L.tileLayer.wms('http://localhost:8081/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
+   var layerDepartamento = L.tileLayer.wms('http://localhost:8081/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
         title: 'Montevideo',
         layers: 'Geo_lab2023_g14PersistenceUnit:ft_depto',
         srs: 'EPSG:32721',
@@ -31,7 +31,7 @@ function CrearMapaAdmin() {
 
     var layerRuta = L.tileLayer.wms('http://localhost:8081/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
         title: 'Rutas',
-        layers: 'Geo_lab2023_g14PersistenceUnit:ft00_cam_dig',
+        layers: 'Geo_lab2023_g14PersistenceUnit:serv',
         srs: 'EPSG:32721',
         format: 'image/png',
         transparent: true,
@@ -50,18 +50,18 @@ function CrearMapaAdmin() {
         zoomControl: true
     });
 
-    var baselayers = {
+     baselayers = {
         "Open Street Map": openst,
         "Google Maps": google
     };
 
-    var overlayers = {
+     overlayers = {
         "Ejes": layerEjes,
         "Rutas": layerRuta,
         "Departamentos": layerDepartamento
     };
-    //marcador = L.marker([-54, -56]).addTo(map); // Icono del marcador
-    //marcador.bindPopup("Mi ubicación");
+    marcador = L.marker([-54, -56]).addTo(map); // Icono del marcador
+    marcador.bindPopup("Mi ubicación");
 
     // circulo = L.circle([-34.8797018070320851, -56.262557241497211], { // Circulo verde zona
     //     radius: 1500,
@@ -84,16 +84,12 @@ function CrearMapaAdmin() {
     map.addLayer(drawLayers);
     map.addControl(drawControl);
 
-    L.control.layers(
-        baselayers,
-        overlayers, {
-        collapsed: true
-    }).addTo(map);
-
     map.fitBounds([[-35, -56], [-34, -56]]); // btn Ubicacion
     L.geolet({
         position: 'bottomleft'
     }).addTo(map);
+
+    L.control.layers(baselayers, overlayers, { collapsed: true }).addTo(map);
 
     map.on(L.Draw.Event.CREATED,
         function (e) {
@@ -102,31 +98,33 @@ function CrearMapaAdmin() {
     ///////////////////////// FIN OPCIONES DE MAPA /////////////////////////
 
     ///////////////////////// COORDENAS EVENTO CLICK /////////////////////////
-    var recorrido = [];
+ /*   var recorrido = [];*/
     map.on('click', function (e) {
-        let latitud = e.latlng.lat;
-        let longitud = e.latlng.lng;
+        let la = e.latlng.lat;
+        let lo = e.latlng.lng;
         //   alert("Click en coordenadas: " + "\n" + "[" + latitud + "] [" + longitud + "]")
         console.log("Click en coordenadas: ");
-        console.log("Latitud:", latitud.toFixed(2)); // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
-        console.log("Longitud:", longitud.toFixed(2));
+        console.log("Latitud:", la.toFixed(2)); // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
+        console.log("Longitud:", lo.toFixed(2));
         console.log(e.featureGroup);
-
+/*
         recorrido.push({
             latitud,
             longitud
-        });
+        });*/
         // L.marker([lat, lot]).addTo(map);
         // console.log("Latitud:", lat) // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
-        console.log("rec:", recorrido.toString);
+     /*   console.log("rec:", recorrido.toString);
         console.log("Longitud:", recorrido.values);
-        console.log("rec:", recorrido.forEach);
+        console.log("rec:", recorrido.forEach);*/
     });
     ///////////////////////// FIN COORDENAS EVENTO CLICK /////////////////////////
 
 }
 
+
 function cargarMapaAltaSE() {
+
     ///////////////////////// MAPAS /////////////////////////
     let openst = L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', { // Agregar capa base de OpenStreetMap
         attribution: '© Grupo 14'
@@ -134,7 +132,7 @@ function cargarMapaAltaSE() {
     ///////////////////////// FIN MAPAS /////////////////////////
 
     ///////////////////////// OPCIONES DE MAPA /////////////////////////
-    let mapSE = L.map('mapSE', {
+   let mapSE = L.map('mapSE', {
         center: [-34.8797018070320851, -56.262557241497211],
         zoom: 11,
         minZoom: 2,
@@ -151,35 +149,35 @@ function cargarMapaAltaSE() {
 
     };
 
-    L.control.layers(
-        baselayers,
-        overlayers, {
-        collapsed: true
-    }).addTo(mapSE);
+    L.control.layers(baselayers, overlayers, { collapsed: true }).addTo(mapSE);
 
     ///////////////////////// FIN OPCIONES DE MAPA /////////////////////////
 
 
     // Crea un marcador y guarda la posición en los campos de latitud y longitud
-    let marker = L.marker([0, 0]).addTo(mapSE);
-    mapSE.on('click', function (e) {
-        marker.setLatLng(e.latlng);
-        document.getElementById("j_idt61:latitud").value = e.latlng.lat;
-        document.getElementById("j_idt61:longitud").value = e.latlng.lng;
+     let marker = L.marker([0, 0]).addTo(mapSE);
+
+    mapSE.on('click', function (ex) {
+       let latitud= ex.latlng.lat;
+        let longitud = ex.latlng.lng;
+        marker.setLatLng(ex.latlng);
+        document.getElementById("j_idt61:latitud").value = ex.latlng.lng;
+        document.getElementById("j_idt61:longitud").value = ex.latlng.lng;
     });
 }
 
 
+/*
 
 function cargarMapaAltaAmbulancia() {
     ///////////////////////// MAPAS /////////////////////////
-    let openst = L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', { // Agregar capa base de OpenStreetMap
+    var openst = L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', { // Agregar capa base de OpenStreetMap
         attribution: '© Grupo 14'
     });
     ///////////////////////// FIN MAPAS /////////////////////////
 
     ///////////////////////// OPCIONES DE MAPA /////////////////////////
-    let mapAmbulancia = L.map('mapAmbulancia', {
+    mapAmbulancia = L.map('mapAmbulancia', {
         center: [-34.8797018070320851, -56.262557241497211],
         zoom: 11,
         minZoom: 2,
@@ -188,11 +186,11 @@ function cargarMapaAltaAmbulancia() {
         zoomControl: true
     });
 
-    let baselayers = {
+    baselayers = {
         "Open Street Map": openst
     };
 
-    let overlayers = {
+    overlayers = {
 
     };
 
@@ -202,12 +200,26 @@ function cargarMapaAltaAmbulancia() {
         collapsed: true
     }).addTo(mapAmbulancia);
 
-    ///////////////////////// FIN OPCIONES DE MAPA /////////////////////////
-    var recorrido = [];
-    let marker = L.marker([0, 0]).addTo(mapAmbulancia);
+
+ /!*  var marker = L.marker([0, 0]).addTo(mapAmbulancia);
     mapAmbulancia.on('click', function (e) {
-        let latitud = e.latlng.lat;
-        let longitud = e.latlng.lng;
+        marker.setLatLng(e.latlng);
+        document.getElementById("j_idt61:rec").value = e.latlng.lat;
+
+    });*!/
+
+    var marker = L.marker([0, 0]).addTo(mapAmbulancia);
+    mapAmbulancia.on('click', function (e) {
+        marker.setLatLng(e.latlng);
+        document.getElementById("j_idt61:latitud").value = e.latlng.lat;
+        document.getElementById("j_idt61:longitud").value = e.latlng.lng;
+    });
+   /!* ///////////////////////// FIN OPCIONES DE MAPA /////////////////////////
+    recorrido = [];
+    var marker = L.marker([0, 0]).addTo(mapAmbulancia);
+    mapAmbulancia.on('click', function (e) {
+        var latitud = e.latlng.lat;
+        var longitud = e.latlng.lng;
 
         recorrido.push({
             latitud,
@@ -221,9 +233,9 @@ function cargarMapaAltaAmbulancia() {
         var data = 'LINESTRING(' + punto + ')';
         console.log('Punto:', data);
         marker.setLatLng(e.latlng);
-        document.getElementById("j_idt61:rec").value = data;
+        document.getElementById("j_idt61:rec").value =e.latlng.lng;;
         //  document.getElementById("j_idt61:rec").value = e.latlng.lng;
-    });
+    });*!/
 
     // Crea un marcador y guarda la posición en los campos de latitud y longitud
     // let marker = L.marker([0, 0]).addTo(mapAmbulancia);
@@ -232,4 +244,4 @@ function cargarMapaAltaAmbulancia() {
     //     document.getElementById("j_idt61:latitud").value = e.latlng.lat;
     //     document.getElementById("j_idt61:longitud").value = e.latlng.lng;
     // });
-}
+}*/

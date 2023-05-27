@@ -97,13 +97,13 @@
          </div>
       </div>
    </div>
-   <div class="container-fluid mt-3">
+ <!--  <div class="container-fluid mt-3">-->
       <div id="map" style="position: absolute !important;"></div>
-      <script> CrearMapaAdmin();  </script>
-   </div>
-   <script>  addLayersWFS();  </script>
-   <script>  addLayers();  </script>
-   <p:dialog header="Alta hospitales" widgetVar="dlg1" minHeight="600" width="850" showEffect="fade" modal="true">
+      <script>CrearMapaAdmin();</script>
+<!--   </div>-->
+   <script>addLayersWFS();</script>
+   <script>addLayers();</script>
+   <p:dialog header="Altsa hospitales" widgetVar="dlg1" minHeight="600" width="850" showEffect="fade" modal="true">
       <f:view>
          <p:card styleClass="flex justify-content-center">
             <h:form>
@@ -131,7 +131,7 @@
 
    <p:dialog header="Alta ambulancia" widgetVar="dlg2" minHeight="600" width="850" showEffect="fade" modal="true">
       <f:view>
-         <p:card styleClass="flex justify-content-center">
+         <div class="flex justify-content-center">
             <h:form>
                <div class="row m-auto mb-4">
                   <div class="col-12 py-2">
@@ -150,21 +150,21 @@
                      </p:selectOneMenu>
                   </div>
 
-                  <div class="col-12 py-2">
-                     <h:outputLabel for="rec" class="col-12 col-md-6">Latitud:</h:outputLabel>
-                     <h:inputText id="rec" name="rec" value="#{adminBean.rec}" class="col-12 col-md-6" required="true" requiredMessage="La latitud es requerida" />
-                  </div>
+          <!--        <div class="col-12 py-2">
+                     <h:outputLabel for="rec" class="col-12 col-md-6">Recorrido:</h:outputLabel>
+                     <h:inputText id="rec" name="rec" class="col-12 col-md-6" required="true" requiredMessage="La latitud es requerida" />
+                  </div>-->
 
-                  <div class="col-6">
+                <!--  <div class="col-6">
                      <div id="mapAmbulancia" class="map"></div>
-                  </div>
+                  </div>-->
 
-                  <div class="d-grid col-12 mx-auto pt-2">
+                  <div class="td-grid col-6 mx-auto pt-2">
                      <p:commandButton value="Crear" action="#{adminBean.addAmbulancia()}" update="messages" styleClass="ui-button-raised ui-button-success ui-button-flat" class="col-md-6" onclick="PF('dlg2').hidden()" />
                   </div>
                </div>
             </h:form>
-         </p:card>
+         </div>
       </f:view>
    </p:dialog>
 
@@ -186,18 +186,23 @@
                         </p:selectOneMenu>
                      </div>
 
-                     <div class="col-12 py-2">
+                   <div class="col-12 py-2">
                         <h:outputLabel for="latitud" class="col-12 col-md-6">Latitud:</h:outputLabel>
-                        <h:inputText id="latitud" name="latitud" value="#{adminBean.latitud}" class="col-12 col-md-6" required="true" requiredMessage="La latitud es requerida" />
+                        <h:inputText id="latitud" value="#{adminBean.latitud}" class="col-12 col-md-6" required="true" requiredMessage="La latitud es requerida" />
                      </div>
+               <!--      <div class="col-12 py-2">
+                        <h:outputLabel for="latitud" class="col-12 col-md-6">latitud</h:outputLabel>
+                        <h:inputText id="latitud" type="text" name="latitud" value="#{adminBean.latitud}" class="col-12 col-md-6" required="true" requiredMessage="La latitud es requerida" />
+                     </div>-->
 
                      <div class="col-12 py-2">
-                        <h:outputLabel for="longitud" class="col-12 col-md-6">Longitud:</h:outputLabel>
+                        <h:outputLabel for="longitud" class="col-12 col-md-6">longitud</h:outputLabel>
                         <h:inputText id="longitud" value="#{adminBean.longitud}" class="col-12 col-md-6" required="true" requiredMessage="La longitud es requerida" />
                      </div>
                   </div>
                   <div class="col-6">
                      <div id="mapSE" class="map"></div>
+
                   </div>
                   <div class="td-grid col-6 mx-auto pt-2">
                      <p:commandButton value="Crear" action="#{adminBean.addServicioE()}" update="messages" class="col-md-6" onclick="PF('dlg3').hidden()" />
@@ -317,10 +322,8 @@
 <script>
    cargarMapaAltaSE();
 </script>
-<script>
-   cargarMapaAltaAmbulancia();
-</script>
 
+<!--<script>cargarMapaAltaAmbulancia();</script>-->
 <!-- <script>
    var map, drawControl, drawLayers, marcador, circulo;
    function init() {

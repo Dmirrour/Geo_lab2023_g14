@@ -44,7 +44,7 @@ public class AdminBean implements Serializable {
     private int codigo;
     private double latitud; // agregamos la propiedad latitud
     private double longitud; // agregamos la propiedad longitud
-    private double rec;
+ /*   private double rec;*/
     private Hospitales h;
     private Ambulacias a;
     private ArrayList<AmbulanciaDTO> ambulanciaDTOS;
@@ -140,10 +140,10 @@ public class AdminBean implements Serializable {
 
         String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
         String usuario = "postgres";
-        String contraseña = "lapass";
+        String pass = "lapass";
         Connection conn;
         try {
-            conn = DriverManager.getConnection(url, usuario, contraseña);
+            conn = DriverManager.getConnection(url, usuario, pass);
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(
                     "UPDATE servicioemergencia set point = (ST_SetSRID(ST_MakePoint(" + latitud + ", " + longitud
@@ -218,10 +218,10 @@ public class AdminBean implements Serializable {
         return latitud;
     }
 
-    public double getRec() {
+  /*  public double getRec() {
         return rec;
     }
-
+*/
     public double getLongitud() {
         return longitud;
     }
@@ -254,9 +254,9 @@ public class AdminBean implements Serializable {
         this.longitud = longitud;
     }
 
-    public void setRec(double rec) {
+/*    public void setRec(double rec) {
         this.rec = rec;
-    }
+    }*/
 
     public void setDesvio(int desvio) {
         this.desvio = desvio;
