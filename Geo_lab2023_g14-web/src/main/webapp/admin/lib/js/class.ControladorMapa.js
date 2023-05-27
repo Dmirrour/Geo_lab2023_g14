@@ -49,7 +49,7 @@ class ControladorMapa extends Configuracion {
         ///////////////////////// FIN MAPAS /////////////////////////
 
         ///////////////////////// CAPAS WMS /////////////////////////
-        this.layerEjes = L.tileLayer.wms('http://localhost:'
+        this.layerEjes = L.tileLayer.wms(\'http://localhost:'
             +this.puertoGeoServer
             +'/geoserver/'
             +this.baseDatos
