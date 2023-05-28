@@ -3,7 +3,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui">
-    <h:form id="formASE">
+
         <p:dialog id="dialogALtaSE" header="Alta servicio de emergencia" widgetVar="dlg3" width="360px" minWidth="400" minHeight="400" draggable="false" styleClass="my-dialog-style" showEffect="fade" onHide="mapaAdmin.BorrarMarcadorALtaSE()">
             <f:view>
                 <div class="flex justify-content-center">
@@ -29,7 +29,7 @@
                                 </div>
 
                                 <h:inputText id="latitud" name="latitud" value="#{servicioEBean.latitud}" class="col-md-6 col-sm-12" required="true" style="display: none;" requiredMessage="La latitud es requerida" />
-                                <h:inputText id="longitud" value="#{servicioEBean.longitud}" class="col-md-6 col-sm-12" required="true" style="display: none;" requiredMessage="La longitud es requerida" />
+                                <h:inputText id="longitud" name="longitud" value="#{servicioEBean.longitud}" class="col-md-6 col-sm-12" required="true" style="display: none;" requiredMessage="La longitud es requerida" />
                             </div>
 
                             <div class="td-grid col-sm-6 mx-auto pt-2">
@@ -40,5 +40,5 @@
                 </div>
             </f:view>
         </p:dialog>
-    </h:form>
+
 </html>

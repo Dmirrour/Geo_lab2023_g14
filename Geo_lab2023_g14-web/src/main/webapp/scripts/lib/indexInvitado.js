@@ -115,7 +115,7 @@ function CrearMapaInvitado() {
         'service=WFS&' +
         // 'version=1.1.0&' +
         'request=GetFeature&' +
-        'typeName=Geo_lab2023_g14PersistenceUnit:servicioemergencia&' +
+        'typeName=Geo_lab2023_g14PersistenceUnit:vista_se_h&' +
         'srsName=EPSG:32721&' +
         'outputFormat=application/json';
 
@@ -126,22 +126,22 @@ function CrearMapaInvitado() {
         .then(function (data) {
             geojsonLayer.addData(data);      // Agregar los datos a la capa de GeoJSON
             // Configurar el evento de clic en los marcadores
-//            geojsonLayer.eachLayer(function (layer) {
-//                layer.on('click', function (e) {
-//                   let properties = e.target.feature.properties;
-//                    let popupContent =
-//                        'Camas libres: ' + properties.camaslibres + '<br>' +
-//                        'Total de camas: ' + properties.totalcama + '<br>' +
-//                        'Hospital Nombre: ' + properties.nombrehospital + '<br>' +
-//                        'Hospital Tipo: ' + properties.tipohospital;
-//                    layer.bindPopup(popupContent).openPopup();
+            geojsonLayer.eachLayer(function (layer) {
+                layer.on('click', function (e) {
+                   let properties = e.target.feature.properties;
+                    let popupContent =
+                        'Camas libres: ' + properties.camaslibres + '<br>' +
+                        'Total de camas: ' + properties.totalcama + '<br>' +
+                        'Hospital Nombre: ' + properties.nombrehospital + '<br>' +
+                        'Hospital Tipo: ' + properties.tipohospital;
+                    layer.bindPopup(popupContent).openPopup();
                 })
-//});
-//        })
+            });
+        })
         .catch(function (error) {
             console.error('Error:', error);
         });
-
+/*
     fetch(url)
         .then(function (response) {
             return response.json();
@@ -152,7 +152,7 @@ function CrearMapaInvitado() {
         .catch(function (error) {
             console.error('Error:', error);
     });
-
+*/
     ///////////////////////// COORDENAS EVENTO CLICK /////////////////////////
     drawLayers.on('click', function (e) {
         let latitud = e.latlng.lat;

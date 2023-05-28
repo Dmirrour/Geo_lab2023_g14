@@ -31,15 +31,13 @@
    <script type="" src="lib/js/leaflet-src.js"></script>
    <script type="" src="lib/js/leaflet.draw-src.js"></script>
    <script type="" src="lib/js/leaflet.draw-shapefile.js"></script>
+   <script type="" src="lib/js/class.Configuracion.js"></script>
+   <script type="" src="lib/js/class.ControladorMapa.js"></script>
    <script type="" src="../scripts/geolet.js"></script>
 
    <!-- CONSULTAS query -->
    <script type="" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
    <script type="" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-   <!-- SCRIPTS -->
-   <script type="" src="lib/js/class.Configuracion.js"></script>
-   <script type="" src="lib/js/class.ControladorMapa.js"></script>
 
    <!-- ICONOS -->
    <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
@@ -57,15 +55,6 @@
    <div id="top">
       <div class="navbar navbar-expand-sm">
          <div class="container-fluid">
-            <div id="contenedorMnuSalir">
-               <h:form id="frmSalir">
-                  <p:commandButton id="frmBtnSalir" value="Salir" action="#{sesion.cerrarSesion()}" class="btn btn-rojo" icon="pi pi-power-off" />
-               </h:form>
-            </div>
-            <div id="contenedorTitulo">
-               <h2 class="bg">
-                  <h:outputText styleClass="textoborde" value="Bienvenido #{sessionScope.usuario.usuario}" />
-               </h2>
             <div id="contenedorNavbar">
                <p:menubar>
                   <p:submenu label="Eliminar">
@@ -84,6 +73,15 @@
                   </p:submenu>
                </p:menubar>
             </div>
+            <div id="contenedorMnuSalir">
+               <h:form id="frmSalir">
+                  <p:commandButton id="frmBtnSalir" value="Salir" action="#{sesion.cerrarSesion()}" class="btn btn-rojo" icon="pi pi-power-off" />
+               </h:form>
+            </div>
+            <div id="contenedorTitulo">
+               <h2 class="bg">
+                  <h:outputText styleClass="textoborde" value="Bienvenido #{sessionScope.usuario.usuario}" />
+               </h2>
             </div>
          </div>
       </div>

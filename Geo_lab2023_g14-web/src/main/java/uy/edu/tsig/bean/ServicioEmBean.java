@@ -40,9 +40,12 @@ public class ServicioEmBean {
                 .nombre(nombreS)
                 .build();
         ServicioEmergenciaDTO sedto=iServicioEmergenciaService.altaServicioE(se, idHospital,longitud,latitud);
+
+        System.out.println("ATENCION: si no guarda puntos en la vista, verificar el archivo ServicioEmBEan.java, metodo addServicioE(); poner la contraseña correcta para su equipo.");
+
         String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
         String usuario = "postgres";
-        String contraseña = "123456d";
+        String contraseña = "admin";
 
         Connection conn;
         try {

@@ -132,17 +132,6 @@ public class AdminBean implements Serializable {
                 .nombre(nombreS)
                 .build();
         ServicioEmergenciaDTO sedto = iServicioEmergenciaService.altaServicioE(se, idHospital,1,1);
-
-        // sedto contiene los datos que van de la logica como el id, en lo posible para
-        // manejar vinculadas de forma trasera tranten de crear
-        // la tabla con el mismo id de la tabla de hibernate asi vamos a tener una
-        // relacion entre ellos que nosotros vamos a poder vincular
-        // esto haciendole sedto.getidHospital, y bueno si quieren ademas agregarle el
-        // nombre a la geografica tambien se puede
-        // aca parte geografia
-        // eso o como vi que hicieron llamar a otra funcion pero es lo mismo lo unico
-        // que a esa funcion le ban a tener que pasar el long id
-
         String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
         String usuario = "postgres";
         String contraseña = "123456d";
