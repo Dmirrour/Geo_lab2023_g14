@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>Intro to MapView - Create a 2D map</title>
+    <style>
+        html,
+        body,
+        #viewDiv {
+            padding: 5px;
+            margin: 5px;
+            height: 300px;
+            width: 500px;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <form name="frm">
+        <input type="text" name="depto1" id="depto1" value="" onkeyup="sugerencia()">
+        <div id="res">res</div>
+    </form>
+</div>
+
+<div id="viewDiv"></div>
+
+<script src="scripts/lib/buscador/axios.min.js"></script>
+
+<script>
+    async function sugerencia() {
+        console.log()
+        var elem = document.getElementById('depto1');
+        var res = document.getElementById('res');
+
+        var buscar = true;
+
+        // [
+        //     {
+        //         "calle": "string",
+        //         "departamento": "string",
+        //         "idCalle": 0,
+        //         "idLocalidad": 0,
+        //         "localidad": "string"
+        //     }
+        // ]
+
+        if (buscar){
+            url = "https://direcciones.ide.uy/api/v0/geocode/SugerenciaCalleCompleta?entrada="+elem.value;
+
+            try {
+                const response = await axios.get(url);
+                console.log(response);
+
+                if ( response.status == 200){
+                    // console.log(response.data[0].nombre);
+
+                    options = '<ul>';
+
+                    response.data.forEach(function(item,index) {
+                        options += '<li>' + item.calle + ', ' + item.departamento + '</li>';
+                    });
+
+                    options += '</ul>';
+
+                    res.innerHTML = options;
+                }
+
+            } catch (error) {
+                console.error(error);
+            }
+        }else{
+            res.innerHTML = "Verifica el formato"
+        }
+    }
+</script>
+
+</body>
+</html>

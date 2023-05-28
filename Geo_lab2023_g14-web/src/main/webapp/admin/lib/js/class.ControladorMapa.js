@@ -154,6 +154,7 @@ class ControladorMapa extends Configuracion {
                                 'Camas libres: ' + properties.camaslibres + '<br>' +
                                 'Total de camas: ' + properties.totalcama + '<br>' +
                                 'Hospital Nombre: ' + properties.nombrehospital + '<br>' +
+                                'S. E. Nombre: ' + properties.nombre + '<br>' +
                                 'Hospital Tipo: ' + properties.tipohospital;
                             layer.bindPopup(popupContent).openPopup();
                         });

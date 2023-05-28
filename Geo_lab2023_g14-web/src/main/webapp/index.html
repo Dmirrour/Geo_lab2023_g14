@@ -19,18 +19,57 @@
     <script src="admin/lib/js/leaflet.draw-src.js"></script>
     <script src="admin/lib/js/leaflet.draw-shapefile.js"></script>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="scripts/geolet.js"></script>
+    <script src="scripts/lib/indexInvitado.js"></script>
+    <script src="scripts/lib/buscador/axios.min.js"></script>
+    <link rel="stylesheet" href="scripts/lib/buscador/estilos.css">
     <link rel="stylesheet" href="admin/lib/css/leaflet.css" />
     <link rel="stylesheet" href="admin/lib/css/leaflet.draw.css" />
     <link rel="stylesheet" href="admin/lib/css/leaflet.draw-shapefile.css" />
 
-
-    <script src="scripts/geolet.js"></script>
-    <script src="scripts/lib/indexInvitado.js"></script>
-
     <style>
+        #mostrarBuscador {
+            width: 32px;
+            height: 32px;
+            border-radius: 4px;
+            border-bottom: none;
+            background-color: #f4f4f4;
+            line-height: 15px;
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            border: 2px solid rgba(0, 0, 0, 0.2);
+            color: black;
+            font-size: 24px;
+            cursor: pointer;
+            position: absolute;
+            top: 132px;
+            margin-left: 11px;
+            z-index: 1700;
+        }
+        #mostrarBuscador:hover {
+            background-color: orange;
+        }
+        #contenedorFrmBuscar {
+            padding: 5px;
+            display: none;
+            position: absolute;
+            border-radius: 4px;
+            z-index: 1700;
+            top: 165px;
+            margin-left: 11px;
+            width: 623px;
+            background-color: gray;
+            height: 360px;
+        }
         #map {
             width: 100%;
             height: 550px;
+        }
+        .buscador-fluid {
+            max-width:700px;
         }
     </style>
 </head>
@@ -39,7 +78,6 @@
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="javascript:void(0)">TSIG - G14</a>
-
             <div class="d-flex" id="mynavbar">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
@@ -51,13 +89,261 @@
                 </ul>
             </div>
         </div>
+        <button id="mostrarBuscador"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-signpost-2" viewBox="0 0 16 16">
+            <path d="M7 1.414V2H2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h5v1H2.5a1 1 0 0 0-.8.4L.725 8.7a.5.5 0 0 0 0 .6l.975 1.3a1 1 0 0 0 .8.4H7v5h2v-5h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H9V6h4.5a1 1 0 0 0 .8-.4l.975-1.3a.5.5 0 0 0 0-.6L14.3 2.4a1 1 0 0 0-.8-.4H9v-.586a1 1 0 0 0-2 0zM13.5 3l.75 1-.75 1H2V3h11.5zm.5 5v2H2.5l-.75-1 .75-1H14z"/>
+        </svg></button>
+        <div id="contenedorFrmBuscar" style="display: none;">
+            <form id="frmBuscador" action="#" method="post">
+                <div id="ubicacion">
+                    <div class="card card-header-actions border-success mb-4">
+                        <div class="card-header ">
+                            <div class="input-group">
+                                <span class="input-group-text" id="basic-addon3">Calle</span>
+                                <input type="text" placeholder="Escriba el nombre de la calle..." class="form-control buscador-fluid"
+                                       id="buscador" name="buscador" onkeyup="sugerencia(this.value)" aria-describedby="basic-addon3 basic-addon4">
+                            </div>
+                            <div class="dropdown-notifications">
+                                <div class="dropdown-menu dropdown-menu-right border-0 shadow" id="" aria-labelledby="navbarDropdownAlerts">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <!---------------------------------------------------------------------------
+                                                UBICACION
+                            ------------------------------------------------------------------------------>
+                            <div class="row justify-content-center">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <!-- departamento -->
+                                            <div class="col-md-6">
+                                                <label for="departamentoUbi" class="form-label">Departamento</label>
+                                                <input type="text" class="form-control" id="departamentoUbi" name="departamentoUbi" disabled>
+                                            </div>
+                                            <!-- localidad -->
+                                            <div class="col-md-6">
+                                                <label for="barrioUbi" class="form-label">Localidad</label>
+                                                <input type="text" class="form-control" id="barrioUbi" name="barrioUbi" disabled>
+                                            </div>
+                                            <!-- calle -->
+                                            <div class="col-md-12">
+                                                <label for="calleUbi" class="form-label">Calle</label>
+                                                <input type="text" class="form-control" id="calleUbi" name="calleUbi" disabled >
+                                            </div>
+                                            <!-- esquina -->
+                                            <div class="col-md-12" id="1-UbiTmp-esquinaUbi-div">
+                                                <label for="esquinaUbi" class="form-label">Esquina</label>
+                                                <input type="text" class="form-control" id="esquinaUbi" name="esquinaUbi" value="" disabled>
+                                            </div>
+                                            <!-- resultado -->
+                                            <div class="col-md-12">
+                                                <label for="direccionUsu" class="form-label">Direccion</label>
+                                                <input type="text" class="form-control" id="direccionUsu" name="DireccionUsu"  value="" disabled>
+                                            </div>
+                                        </div>
+                                        <!-- notificaciones -->
+                                        <div class="dropdown-notifications">
+                                            <div class="dropdown-menu dropdown-menu-right border-0 shadow" id="visorDeListado" aria-labelledby="navbarDropdownAlerts">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--------------------------------------------termina form-->
+                </div>
+            </form>
+        </div>
+
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
     </nav>
 
     <div id="map"></div>
-    <script>CrearMapaInvitado();</script>
+    <script>
+        var dato = [];
+        CrearMapaInvitado();
+        async function sugerencia(text) {
+
+            var long = text.length;
+            var options = "";
+            var buscar = false;
+            var urlBase = "https://direcciones.ide.uy/api/v1/geocode/";
+
+            // buscar calle
+            var urlCalle = urlBase + "candidates?limit=10&q="+text+",%20Montevideo&soloLocalidad=false";
+            document.getElementById('visorDeListado').style.display = "none";
+
+            if (long > 2) {
+                buscar = true;
+                document.getElementById('visorDeListado').style.display = "block";
+            }
+
+            if (buscar){
+                try {
+                    const response = await axios.get(urlCalle);
+                    if ( response.status == 200){
+                        // console.log(response.data[0].nombre);
+                        options = '<select class="form-select" id="idElegirCalle" size="6" aria-label="size 6 select" onchange="elegirCalle();">';
+                        options += '<option class="dropdown-header dropdown-notifications-header" disabled>IDE.uy</option>';
+                        options += '<option disabled>---------------------------------</option>';
+                        options = '<h6 class="dropdown-header dropdown-notifications-header"><i data-feather="bell"></i>IDE.uy</h6>';
+                        response.data.forEach(function(item, index) {
+                            if ( item.idCalle > 0 ){
+                                // dato.push(item);
+
+                                options += '<a class="dropdown-item dropdown-notifications-item" onclick="elegirCalle('+item.idCalle+')">';
+                                options += '<div class="dropdown-notifications-item-icon';
+
+                                if (item.type == 'CALLEyPORTAL') {
+                                    options += ' bg-warning"><i class="fa-solid fa-location-dot"></i></div><div class="dropdown-notifications-item-content"><div class="dropdown-notifications-item-content-details">';
+                                    options += item.localidad+' / '+item.departamento + '</div><div class="dropdown-notifications-item-content-text">' + item.nomVia + '</div></div></a>';
+                                }else if (item.type == 'POI') {
+                                    ////LISTO
+                                    options += ' bg-danger"><i class="fa-solid fa-house-flag"></i></div><div class="dropdown-notifications-item-content"><div class="dropdown-notifications-item-content-details">';
+                                    options += item.localidad+' / '+item.departamento + '</div><div class="dropdown-notifications-item-content-text"><b>'+ item.inmueble +'</b> ' + item.nomVia + '</div></div></a>';
+                                }else if (item.type == 'CALLE'){
+                                    ////LISTO
+                                    options += ' bg-success"><i class="fa-solid fa-road"></i></div><div class="dropdown-notifications-item-content"><div class="dropdown-notifications-item-content-details">';
+                                    options += item.localidad+' / '+item.departamento + '</div><div class="dropdown-notifications-item-content-text">' + item.nomVia + '</div></div></a>';
+                                }else if (item.type = 'LOCALIDAD'){
+                                    ////LISTO
+                                    options += ' bg-info"><i class="fa-solid fa-location-pin"></i></div><div class="dropdown-notifications-item-content"><div class="dropdown-notifications-item-content-details">';
+                                    options += item.localidad+' / '+item.departamento + '</div></div></a>';
+                                }else if (item.type = 'ESQUINA'){
+                                    options += ' bg-warning"><i class="fa-solid fa-arrows-to-circle"></i></div><div class="dropdown-notifications-item-content"><div class="dropdown-notifications-item-content-details">';
+                                    options += item.localidad+' / '+item.departamento + '</div><div class="dropdown-notifications-item-content-text">' + item.nomVia + '</div></div></a>';
+                                }else if (item.type == 'MANZANAySOLAR'){
+                                    options += ' bg-warning"><i class="fa-solid fa-apple-whole"></i></div><div class="dropdown-notifications-item-content"><div class="dropdown-notifications-item-content-details">';
+                                    options += item.localidad+' / '+item.departamento + '</div><div class="dropdown-notifications-item-content-text">' + item.nomVia + '</div></div></a>';
+                                }else /* if (item.type == 'RUTAyKM') */{
+                                    options += ' bg-warning"><i class="fa-solid fa-route"></i></div><div class="dropdown-notifications-item-content"><div class="dropdown-notifications-item-content-details">';
+                                    options += item.localidad+' / '+item.departamento + '</div><div class="dropdown-notifications-item-content-text">'+ item.nomVia + '</div></div></a>';
+                                }
+
+                            }
+                        });
+                        options += '</select>';
+                        document.getElementById('visorDeListado').innerHTML = options;
+                    }
+                } catch (error) {
+                    console.error(error);
+                }
+            }else{
+                document.getElementById('visorDeListado').innerHTML = '<div class="fa-2x">Buscando <i class="fas fa-spinner fa-pulse"></i></div>';
+            }
+        }
+
+        async function sugerenciat() {
+            console.log()
+            var elem = document.getElementById('depto1');
+            var res = document.getElementById('res');
+
+            var buscar = true;
+
+            // [
+            //     {
+            //         "calle": "string",
+            //         "departamento": "string",
+            //         "idCalle": 0,
+            //         "idLocalidad": 0,
+            //         "localidad": "string"
+            //     }
+            // ]
+            if (buscar){
+                var item;
+
+                this.dato.pop();
+
+                try {
+                    const response = await fetch(urlCalle)
+                        .then( (response) => response.json())
+                        .then( (item)=> {
+
+                            options = '<select class="form-select" id="idElegirCalle" size="6" aria-label="size 6 select" onchange="elegirCalle();">';
+                            options += '<option class="dropdown-header dropdown-notifications-header" disabled>IDE.uy</option>';
+                            options += '<option disabled>---------------------------------</option>';
+
+                            options = '<h6 class="dropdown-header dropdown-notifications-header"><i data-feather="bell"></i>IDE.uy</h6>';
+
+
+                            /*
+                            calle: "MARTIN ARTIGAS"
+                            departamento: "ARTIGAS"
+                            ​​
+                            idCalle: 28087
+                            ​​
+                            idLocalidad: 135
+                            ​​
+                            localidad: "ARTIGAS"
+                            ​​
+                            type: "LOCALIDAD"
+                            */
+                            item.forEach(function(item) {
+                                console.log( "resultado en then: " + item.type );
+                                if ( item.idCalle > 0 ){
+                                    // dato.push(item);
+
+                                    options += '<a class="dropdown-item dropdown-notifications-item" onclick="elegirCalle('+item.idCalle+')">';
+                                    options += '<div class="dropdown-notifications-item-icon';
+
+                                    if (item.type == 'CALLEyPORTAL') {
+                                        options += ' bg-warning"><i class="fa-solid fa-location-dot"></i></div><div class="dropdown-notifications-item-content"><div class="dropdown-notifications-item-content-details">';
+                                        options += item.localidad+' / '+item.departamento + '</div><div class="dropdown-notifications-item-content-text">' + item.nomVia + '</div></div></a>';
+                                    }else if (item.type == 'POI') {
+                                        ////LISTO
+                                        options += ' bg-danger"><i class="fa-solid fa-house-flag"></i></div><div class="dropdown-notifications-item-content"><div class="dropdown-notifications-item-content-details">';
+                                        options += item.localidad+' / '+item.departamento + '</div><div class="dropdown-notifications-item-content-text"><b>'+ item.inmueble +'</b> ' + item.nomVia + '</div></div></a>';
+                                    }else if (item.type == 'CALLE'){
+                                        ////LISTO
+                                        options += ' bg-success"><i class="fa-solid fa-road"></i></div><div class="dropdown-notifications-item-content"><div class="dropdown-notifications-item-content-details">';
+                                        options += item.localidad+' / '+item.departamento + '</div><div class="dropdown-notifications-item-content-text">' + item.nomVia + '</div></div></a>';
+                                    }else if (item.type = 'LOCALIDAD'){
+                                        ////LISTO
+                                        options += ' bg-info"><i class="fa-solid fa-location-pin"></i></div><div class="dropdown-notifications-item-content"><div class="dropdown-notifications-item-content-details">';
+                                        options += item.localidad+' / '+item.departamento + '</div></div></a>';
+                                    }else if (item.type = 'ESQUINA'){
+                                        options += ' bg-warning"><i class="fa-solid fa-arrows-to-circle"></i></div><div class="dropdown-notifications-item-content"><div class="dropdown-notifications-item-content-details">';
+                                        options += item.localidad+' / '+item.departamento + '</div><div class="dropdown-notifications-item-content-text">' + item.nomVia + '</div></div></a>';
+                                    }else if (item.type == 'MANZANAySOLAR'){
+                                        options += ' bg-warning"><i class="fa-solid fa-apple-whole"></i></div><div class="dropdown-notifications-item-content"><div class="dropdown-notifications-item-content-details">';
+                                        options += item.localidad+' / '+item.departamento + '</div><div class="dropdown-notifications-item-content-text">' + item.nomVia + '</div></div></a>';
+                                    }else /* if (item.type == 'RUTAyKM') */{
+                                        options += ' bg-warning"><i class="fa-solid fa-route"></i></div><div class="dropdown-notifications-item-content"><div class="dropdown-notifications-item-content-details">';
+                                        options += item.localidad+' / '+item.departamento + '</div><div class="dropdown-notifications-item-content-text">'+ item.nomVia + '</div></div></a>';
+                                    }
+
+                                }
+                            }, this);
+
+                            options += '</select>';
+                            document.getElementById('visorDeListado').innerHTML = options;
+
+                        });
+                } catch (error) {
+                    console.error(error);
+                }
+            }else{
+                document.getElementById('visorDeListado').innerHTML = '<div class="fa-2x">Buscando <i class="fas fa-spinner fa-pulse"></i></div>';
+            }
+
+        }
+
+        document.getElementById('mostrarBuscador').addEventListener('click', function() {
+            var frmBuscar = document.getElementById('contenedorFrmBuscar');
+            var btnMostrarBuscador = document.getElementById('mostrarBuscador');
+            if (frmBuscar.style.display === 'none') {
+                btnMostrarBuscador.style.backgroundColor = 'rgba(38,71,191,1)';
+                frmBuscar.style.display = 'block';
+            } else {
+                frmBuscar.style.display = 'none';
+                btnMostrarBuscador.style.backgroundColor = '#f4f4f4';
+            }
+        });
+
+    </script>
 </body>
 
 </html>
