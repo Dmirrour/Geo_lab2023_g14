@@ -1,5 +1,51 @@
 -- Script Datos de Prueba
 
+/**
+ * DROP TABLE CASCADE
+ */
+
+
+
+*
+ * Para crear la vista de los servicios de emergencias con la informacion del hosptial al que pertences
+ * Hay que crear una vista en Postgres con el siguiente codigo sql
+ *
+  -- View: public.vista_se_h
+
+  -- DROP VIEW public.vista_se_h;
+
+  CREATE OR REPLACE VIEW public.vista_se_h
+   AS
+    SELECT se.idservicio,
+           se.camaslibres,
+           se.nombre,
+           se.totalcama,
+           se.point,
+           h.idhospital,
+           h.nombrehospital,
+           CASE h.tipohospital
+               WHEN 0 THEN 'MUTUALISTA'
+               WHEN 1 THEN 'SEGURO PRIVADO'
+               WHEN 2 THEN 'SERVICIO ESTATAL'
+               ELSE 'Desconocido'
+               END AS tipohospital
+    FROM servicioemergencia se
+             JOIN hospital h ON se.hospital_idhospital = h.idhospital;
+
+
+Probablemente no sea necesario asignar el propieatrio esto ya lo hace autoamtico pero por si acaso:
+
+  ALTER TABLE public.vista_se_h
+      OWNER TO postgres;
+
+
+DROP TABLE ambulancia CASCADE;
+DROP TABLE hospital CASCADE;
+DROP TABLE hospital_ambulancia CASCADE;
+DROP TABLE servicioemergencia CASCADE;
+
+ALTER TABLE servicioemergencia ADD COLUMN point GEOMETRY(Point, 32721);
+
 INSERT INTO usuario(usuario, pass) VALUES('grupo14','admin');
 INSERT INTO usuario(usuario, pass) VALUES('admin','admin');
 INSERT INTO usuario(usuario, pass) VALUES('sgonzalez','123');
@@ -32,60 +78,15 @@ UPDATE ambulancia SET recorrido='LINESTRING(-56.164666414206295 -34.898144339591
 UPDATE ambulancia SET recorrido='LINESTRING(-56.197106838226325 -34.84093351099642,-56.19352877140046 -34.837367166344926,-56.170676350593574 -34.81493528019694)' WHERE idambulancia=6;
 
 
-------------------
 
-SELECT * FROM ambulancia;
-SELECT * FROM servicioemergencia;
-SELECT * FROM hospital;
-SELECT * FROM hospital_ambulancia;
 SELECT * FROM usuario;
-
-
---  DATOS PRUEBAS TRABAJANDO!!!!!!
-
-
-
-CREATE TABLE st_asgml(geom) FROM ft_01_ejes WHERE nom_calle='MAGALLANES';	
-
-SELECT st_asgml(geom) FROM ft_recorridos;	
-
-CREATE INDEX IF NOT EXISTS ft_00_vias_geom_idx ON public.ft_00_vias USING gist (geom) TABLESPACE pg_default;
-    
-------------------
-	 
-INSERT INTO ambulancia (geom) VALUES ('0101000020D17F00004005164262482141ABA432E665725741');
-    
-UPDATE servicioemergencia SET geom=(ST_SetSRID(st_makepoint(-31, -36), 32721)) WHERE idservicio=2;
-   
-UPDATE servicioemergencia SET point =('0101000020D17F000000000000008041C000000000000038C0') WHERE idservicio=1;
-UPDATE servicioemergencia SET point =('0101000020D17F00004005164262482141ABA432E665725741') WHERE idservicio=2;
-
-UPDATE servicioemergencia SET point='LINESTRING(11.5 -0.1, 21.52 -0.25, 51.53 -2.12)' WHERE idservicio=1;
-UPDATE servicioemergencia SET point='LINESTRING(0.5 -10.1, 23.52 -30.25, 41.53 22.12)' WHERE idservicio=2;
-
-UPDATE ambulancia SET recorrido='LINESTRING(11.5 -0.1, 21.52 -0.25, 51.53 -2.12, -34 -54,-54 -34)' WHERE idambulancia=1;    
-
-UPDATE ambulancia SET recorrido='LINESTRING(-56.24198811332463 -34.871051557124574,-56.2270020617676 -34.858802768780541,-56.22209903484345 -34.861269701011145)' WHERE idambulancia=2;
-  
-UPDATE ambulancia SET recorrido='LINESTRING(-56.24 -34.87,-56.22 -34.85,-56.22 -34.86)' WHERE idambulancia=3;
-------------------
-
-
-------------------
-
-SELECT * FROM ft_ine_depto;
 SELECT * FROM ft_00_cam_dig;
-SELECT * FROM ft_01_ejes;
-
-------------------
-
 SELECT * FROM ft_00_departamento;
 SELECT * FROM ft_00_loc_pg;
 SELECT * FROM ft_00_vias;
+SELECT * FROM ft_01_ejes;
 SELECT * FROM ft_01_esp_libres;
 SELECT * FROM ft_01_manzanas;
 SELECT * FROM ft_01_parcelas;
 SELECT * FROM ft_03_cam_dig;
 SELECT * FROM ft_03_ejes;
-SELECT * FROM ft_recorridos;
-SELECT * FROM ine_barrios_mvd;

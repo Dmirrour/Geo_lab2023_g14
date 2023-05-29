@@ -43,9 +43,14 @@ public class HospitalDAO implements IHospitalDAO {
     }
 
     @Override
+    public void modificar(Hospital hospital) {
+        em.merge(hospital);
+    }
+
+    @Override
     public void asignarServicioE(Hospital hospital, ServicioEmergencia s){
         Hospital h = em.find(Hospital.class, hospital.getIdHospital());
-        h.setServicioEmergencia(s);
+        h.getServicioEmergencia().add(s);
         em.merge(h);
     }
 

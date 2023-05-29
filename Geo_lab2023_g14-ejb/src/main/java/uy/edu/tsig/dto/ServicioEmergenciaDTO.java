@@ -16,14 +16,16 @@ public class ServicioEmergenciaDTO implements Serializable {
     private static final Long serialVersionUID = 1L;
 
     private Long idServicio;
+    private String nombre;
     private int totalCama;
     private int camasLibres;
 
     private HospitalDTO hospital;
 
-    public ServicioEmergenciaDTO(Long idServicio, int totalCama, int camasLibres){
+    public ServicioEmergenciaDTO(Long idServicio,String nombre, int totalCama, int camasLibres){
         this.camasLibres=camasLibres;
         this.totalCama=totalCama;
         this.idServicio=idServicio;
+        this.nombre=nombre;
     }
 }

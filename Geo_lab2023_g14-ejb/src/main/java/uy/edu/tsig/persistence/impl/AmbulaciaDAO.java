@@ -7,6 +7,7 @@ import jakarta.persistence.Query;
 import uy.edu.tsig.dto.AmbulanciaDTO;
 import uy.edu.tsig.entity.Ambulancia;
 import uy.edu.tsig.entity.Hospital;
+import uy.edu.tsig.entity.ServicioEmergencia;
 import uy.edu.tsig.persistence.IAmbulaciaDAO;
 import uy.edu.tsig.util.qualifier.Geo_lab2023_g14PersistenceUnit;
 
@@ -58,4 +59,13 @@ public class AmbulaciaDAO implements IAmbulaciaDAO {
         ));
         return res;
     }
+    @Override
+    public Ambulancia buscarAmbu(Long ambu) {
+        return em.find(Ambulancia.class,ambu);
+    }
+    @Override
+    public void modificar(Ambulancia ambu) {
+        em.merge(ambu);
+    }
+
 }

@@ -1,0 +1,37 @@
+<!-- altaHospital.xhtml -->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="formAH">
+        <p:dialog header="Alta hospitales" widgetVar="dlg1" minHeight="600" width="850" showEffect="fade" modal="true">
+            <f:view>
+                <p:card styleClass="flex justify-content-center">
+                    <h:form>
+                        <div class="row m-auto mb-4">
+                            <div class="col-12 py-2">
+                                <h:outputLabel for="nombreH" class="col-12 col-md-6">Nombre Hospital:</h:outputLabel>
+                                <h:inputText id="nombreH" value="#{adminBean.nombreH}" class="col-12 col-md-6" required="true" requiredMessage="La razon social es requerida" />
+                            </div>
+                            <div class="col-12 py-2">
+                                <h:outputLabel for="enum" class="col-12 col-md-6">Tipo de Hospital</h:outputLabel>
+                                <p:selectOneMenu id="enum" value="#{adminBean.tipoH}" class="col-12 col-md-6">
+                                    <f:selectItem itemLabel="MUTUALISTA" itemValue="MUTUALISTA" />
+                                    <f:selectItem itemLabel="SEGURO PRIVADO" itemValue="SEGUROPRIVADO" />
+                                    <f:selectItem itemLabel="SERVICIO ESTATAL" itemValue="SERVICIOESTATAL" />
+                                </p:selectOneMenu>
+                            </div>
+                            <div class="d-grid col-6 mx-auto pt-2">
+                                <p:commandButton value="Crear" action="#{adminBean.addHospital()}" update="messages" class="col-md-6" onclick="PF('dlg2').hidden()" />
+                            </div>
+                        </div>
+                    </h:form>
+                </p:card>
+            </f:view>
+        </p:dialog>
+
+
+
+    </h:form>
+</html>

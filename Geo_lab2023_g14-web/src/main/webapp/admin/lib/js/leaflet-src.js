@@ -12888,7 +12888,7 @@
 
 			// @option hideSingleBase: Boolean = false
 			// If `true`, the base layers in the control will be hidden when there is only one.
-			hideSingleBase: true,
+			hideSingleBase: false,
 
 			// @option sortLayers: Boolean = false
 			// Whether to sort the layers. When `false`, layers will keep the order
@@ -13246,15 +13246,3 @@
 
 
 }(window, document));
-
-/*function clicSobreMapa(evento) {
-	alert("Click en coordenadas: " + "\n" + "[" + evento.latlng.lat + "] [" + evento.latlng.lng + "]")
-
-	let latitud = evento.latlng.lat;
-	let longitud = evento.latlng.lng;
-	console.log("Click en coordenadas: ")
-	console.log("Latitud:", latitud.toFixed(2)) // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
-	console.log("Longitud:", longitud.toFixed(2))
-}
-map.on("click", clicSobreMapa);*/
-//# sourceMappingURL=leaflet-src.map

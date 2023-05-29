@@ -1,0 +1,19 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:form id="formMSE">
+        <p:dialog header="Modificar S. Emergencia" widgetVar="dlg4" minHeight="600" width="850" showEffect="fade" modal="true">
+            <f:view>
+                <p:card styleClass="flex justify-content-center">
+                    <p:dataTable  scrollable="true" scrollHeight="400px">
+                        <p:column headerText="id"></p:column>
+                        <p:column headerText="hospital"></p:column>
+                        <p:column headerText="Cant.Camas"></p:column>
+                        <p:column headerText="Acciones"></p:column>
+                    </p:dataTable>
+                </p:card>
+            </f:view>
+        </p:dialog>
+    </h:form>
+</html>
