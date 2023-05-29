@@ -8,6 +8,7 @@ body {
 #map {
   padding: 0;
   margin: 0px;
-  height: 90%;
+  height: 90vh;
+  width: 100%;
   position: relative;
 }

@@ -142,7 +142,43 @@ class ControladorMapa extends Configuracion {
         }
 
         addLayersWFS() {
-            let geojsonLayer = L.geoJSON().addTo(this.map); // Crear una capa de GeoJSON
+            let geojsonLayer = L.geoJSON(null, {
+                pointToLayer: function (feature, latlng) {
+                    let idh = feature.properties.idhospital;
+                    let colors = [
+                        'red',
+                        'blue',
+                        'green',
+                        'yellow',
+                        'orange',
+                        'purple',
+                        'cyan',
+                        'magenta',
+                        'lime',
+                        'pink',
+                        'teal',
+                        'maroon',
+                        'navy',
+                        'olive',
+                        'silver',
+                        'aqua',
+                        'fuchsia',
+                        'gray',
+                        'black',
+                        'white'
+                    ];
+                    let markerColor = colors[idh - 1] || 'blue'
+
+                    return L.circleMarker(latlng, {
+                        radius: 8,
+                        fillColor: markerColor,
+                        color: '#000',
+                        weight: 1,
+                        opacity: 1,
+                        fillOpacity: 0.8
+                    });
+                }
+            }).addTo(this.map); // Crear una capa de GeoJSON
             let url =
                 'http://localhost:'
                 +this.puertoGeoServer
@@ -153,7 +189,7 @@ class ControladorMapa extends Configuracion {
                 +':'+this.vista_SEH+'&'+
                 'srsName='+this.srid+
                 '&outputFormat=application/json';
-            console.log(url);
+            //console.log(url);
 
             fetch(url)
                 .then(function (response) {
@@ -166,11 +202,19 @@ class ControladorMapa extends Configuracion {
                         layer.on('click', function (e) {
                             let properties = e.target.feature.properties;
                             let popupContent =
-                                'Camas libres: ' + properties.camaslibres + '<br>' +
-                                'Total de camas: ' + properties.totalcama + '<br>' +
-                                'Hospital Nombre: ' + properties.nombrehospital + '<br>' +
-                                'Hospital Tipo: ' + properties.tipohospital;
-                            layer.bindPopup(popupContent).openPopup();
+                                '<div class="popup-content">' +
+                                '<h4>S. E.: <em>' + properties.nombre + '</em></h4>' +
+                                '<p><em>Camas libres: </em><b>' + properties.camaslibres + '</b></p>' +
+                                '<p><em>Total de camas: </em><b>' + properties.totalcama + '</b></p>' +
+                                '<p><em>Hospital Nombre: </em><b>' + properties.nombrehospital + '</b></p>' +
+                                '<p><em>Hospital Tipo: </em><b>' + properties.tipohospital + '</b></p>' +
+                                '</div>';
+                            let popupOptions = {
+                                className: 'custom-popup'
+                            };
+
+                            layer.closePopup(); // Cerrar el popup anterior si existe
+                            layer.bindPopup(popupContent, popupOptions).openPopup();
                         });
                     });
                 })

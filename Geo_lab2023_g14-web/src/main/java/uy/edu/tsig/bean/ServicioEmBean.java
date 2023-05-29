@@ -3,6 +3,7 @@ package uy.edu.tsig.bean;
 import jakarta.ejb.EJB;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Named;
 import uy.edu.tsig.dto.ServicioEmergenciaDTO;
@@ -10,6 +11,7 @@ import uy.edu.tsig.entity.ServicioEmergencia;
 import uy.edu.tsig.model.ServiciosEmergencias;
 import uy.edu.tsig.service.IServicioEmergenciaService;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -34,7 +36,7 @@ public class ServicioEmBean {
         s = iServicioEmergenciaService.listarServiciosEmergensias();
         servicioEmergenciaDTOS = s.getListServiciosEmergencias();
     }
-    public void addServicioE() {
+    public void addServicioE() throws IOException {
         ServicioEmergencia se = ServicioEmergencia.builder()
                 .totalCama(totalCama)
                 .nombre(nombreS)
@@ -45,7 +47,7 @@ public class ServicioEmBean {
 
         String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
         String usuario = "postgres";
-        String contraseña = "admin";
+        String contraseña = "1234";
 
         Connection conn;
         try {
@@ -56,11 +58,20 @@ public class ServicioEmBean {
                             + "), 32721)) WHERE idservicio=" + sedto.getIdServicio() + ";");
             System.out.println("Punto insertado correctamente.");
         } catch (SQLException e) {
-            // e.printStackTrace();s
-            System.out.println("No conecta.");
+            // e.printStackTrace();
+            System.out.println("No conecta."+e.getMessage());
         }
         String msj = String.format("Se agregó el servicio de emergencia con %s camas.", totalCama);
         addMensaje("S. Emergencia", msj);
+        totalCama = 0;
+        nombreS = null;
+        idHospital = null;
+        latitud = 0;
+        longitud = 0;
+        System.out.println("guardado SE, redireccion....");
+        FacesContext fC = FacesContext.getCurrentInstance();
+        ExternalContext eC = fC.getExternalContext();
+        eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true"); // Reemplaza con la URL de la página de confirmación
     }
 
     public void eliminarS(Long idSE) {
@@ -107,7 +118,6 @@ public class ServicioEmBean {
         FacesContext.getCurrentInstance().addMessage(null, mensaje);
     }
 
-
     public String getNombreS() {
         return nombreS;
     }
@@ -119,7 +129,6 @@ public class ServicioEmBean {
     public void setServicioEmergenciaDTOS(ArrayList<ServicioEmergenciaDTO> servicioEmergenciaDTOS) {
         this.servicioEmergenciaDTOS = servicioEmergenciaDTOS;
     }
-
     public ArrayList<ServicioEmergenciaDTO> getServicioEmergenciaDTOS() {
         return servicioEmergenciaDTOS;
     }
