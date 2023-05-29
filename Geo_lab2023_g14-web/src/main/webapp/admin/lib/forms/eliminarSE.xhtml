@@ -1,0 +1,33 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:form id="formESE">
+        <p:dialog id="tablase" header="Eliminar S. Emergencia" widgetVar="dlg6" minHeight="600" width="850" showEffect="fade" modal="true">
+            <f:view>
+                <p:card styleClass="flex justify-content-center">
+                    <p:dataTable value="#{servicioEBean.servicioEmergenciaDTOS}" var="SE" scrollable="true" scrollHeight="400px">
+                        <p:column headerText="idServicio">
+                            <h:outputText value="#{SE.idServicio}" />
+                        </p:column>
+                        <p:column headerText="nombre">
+                            <h:outputText value="#{SE.nombre}" />
+                        </p:column>
+                        <p:column headerText="Camas Totales">
+                            <h:outputText value="#{SE.totalCama}" />
+                        </p:column>
+                        <p:column headerText="Camas Libres">
+                            <h:outputText value="#{SE.camasLibres}" />
+                        </p:column>
+                        <p:column headerText="Hospital Name">
+                            <h:outputText value="#{SE.hospital.nombreHospital}" />
+                        </p:column>
+                        <p:column headerText="false">
+                            <p:commandButton styleClass="rounded-button ui-button-danger" icon="pi pi-trash" process="@this" action="#{servicioEBean.eliminarS(SE.idServicio)}" />
+                        </p:column>
+                    </p:dataTable>
+                </p:card>
+            </f:view>
+        </p:dialog>
+    </h:form>
+</html>

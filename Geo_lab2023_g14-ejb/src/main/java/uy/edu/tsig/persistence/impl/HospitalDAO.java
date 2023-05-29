@@ -4,7 +4,6 @@ import jakarta.ejb.Stateless;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
-import org.locationtech.jts.geom.Geometry;
 import uy.edu.tsig.dto.HospitalDTO;
 import uy.edu.tsig.entity.Ambulancia;
 import uy.edu.tsig.entity.Hospital;
@@ -31,15 +30,6 @@ public class HospitalDAO implements IHospitalDAO {
     public Hospital buscarHospital(Long idHospital){
         return em.find(Hospital.class, idHospital);
     }
-
-    @Override
-    public Hospital asignarPuntoHospital(int idHospital, Geometry pto) {
-        Hospital hospital = em.find(Hospital.class, idHospital);
-        hospital.setPoint(pto);
-        em.merge(hospital);
-        return hospital;
-    }
-
     @Override
     public void asignarAmbulacia(Hospital hospital, Ambulancia a){
         Hospital h = em.find(Hospital.class, hospital.getIdHospital());
@@ -53,9 +43,14 @@ public class HospitalDAO implements IHospitalDAO {
     }
 
     @Override
+    public void modificar(Hospital hospital) {
+        em.merge(hospital);
+    }
+
+    @Override
     public void asignarServicioE(Hospital hospital, ServicioEmergencia s){
         Hospital h = em.find(Hospital.class, hospital.getIdHospital());
-        h.setServicioEmergencia(s);
+        h.getServicioEmergencia().add(s);
         em.merge(h);
     }
 
@@ -73,7 +68,7 @@ public class HospitalDAO implements IHospitalDAO {
                 .idHospital(hospital.getIdHospital())
                 .nombreHospital(hospital.getNombreHospital())
                 .tipoHospital(hospital.getTipoHospital())
-                .servicioEmergencia(hospital.getServicioEmergencia())
+                .servicioEmergencia(hospital.getServicioEmergenciaDTO())
                 .ambulanciaDTOS(hospital.getAmbulanciasDTOS())
                 .build()));
         return res;

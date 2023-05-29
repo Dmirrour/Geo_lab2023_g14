@@ -1,5 +1,6 @@
 package uy.edu.tsig.bean;
 
+import jakarta.annotation.ManagedBean;
 import jakarta.annotation.PostConstruct;
 import jakarta.ejb.EJB;
 import jakarta.enterprise.context.SessionScoped;
@@ -12,6 +13,7 @@ import uy.edu.tsig.service.IUsuarioSevice;
 import java.io.Serializable;
 
 @Named("sesion")
+@ManagedBean
 @SessionScoped
 public class InicioSesionBean implements Serializable {
     @EJB
@@ -44,8 +46,9 @@ public class InicioSesionBean implements Serializable {
     }
 
     public String cerrarSesion() {
+        System.out.println("salir");
         String redireccion;
-        redireccion = "/Geo_lab2023_g14-web/login.xhtml";
+        redireccion = "/Geo_lab2023_g14-web/login.xhtml?faces-redirect=true";
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return redireccion;
     }
@@ -63,6 +66,7 @@ public class InicioSesionBean implements Serializable {
             throw new RuntimeException(e);
         }
     }
+
     public void setUsuario(UsuarioDTO usuario) {
         this.usuario = usuario;
     }

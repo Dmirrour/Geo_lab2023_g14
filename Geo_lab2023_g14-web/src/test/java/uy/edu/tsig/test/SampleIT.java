@@ -14,7 +14,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 /**
- * Sample integration test: demonstrates how to create the EAR file using the ShrinkWrap API.
+ * Sample integration test: demonstrates how to create the EAR file using the
+ * ShrinkWrap API.
  * 
  * Delete this file if no integration test is required.
  */
@@ -31,11 +32,13 @@ public class SampleIT {
         // Create the EAR archive:
         EnterpriseArchive ear = ShrinkWrap.create(EnterpriseArchive.class, "Geo_lab2023_g14-ear.ear");
 
-        // Current directory is the root of the "Geo_lab2023_g14-web" project. Go up one level
+        // Current directory is the root of the "Geo_lab2023_g14-web" project. Go up one
+        // level
         // and enter the "Geo_lab2023_g14-ejb" project.
         // The ejb jar is found in the "target" directory:
         File f = new File("../Geo_lab2023_g14-ejb/target/Geo_lab2023_g14-ejb.jar");
-        JavaArchive ejbJar = ShrinkWrap.create(ZipImporter.class, "Geo_lab2023_g14-ejb.jar").importFrom(f).as(JavaArchive.class);
+        JavaArchive ejbJar = ShrinkWrap.create(ZipImporter.class, "Geo_lab2023_g14-ejb.jar").importFrom(f)
+                .as(JavaArchive.class);
         ear.addAsModule(ejbJar);
 
         // Now grab the web archive:
@@ -43,10 +46,12 @@ public class SampleIT {
         if (f.exists() == false) {
             throw new RuntimeException("File " + f.getAbsolutePath() + " does not exist.");
         }
-        WebArchive war = ShrinkWrap.create(ZipImporter.class, "Geo_lab2023_g14-web.war").importFrom(f).as(WebArchive.class);
+        WebArchive war = ShrinkWrap.create(ZipImporter.class, "Geo_lab2023_g14-web.war").importFrom(f)
+                .as(WebArchive.class);
         ear.addAsModule(war);
 
-        // The manifest file is auto created by the Maven EAR plugin - we don't have it here.
+        // The manifest file is auto created by the Maven EAR plugin - we don't have it
+        // here.
 
         // Add the package containing the test classes:
         war.addPackage("org.example.test");

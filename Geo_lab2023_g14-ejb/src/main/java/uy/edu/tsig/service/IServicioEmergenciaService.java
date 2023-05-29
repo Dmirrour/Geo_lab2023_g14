@@ -7,7 +7,8 @@ import uy.edu.tsig.model.ServiciosEmergencias;
 
 @Remote
 public interface IServicioEmergenciaService {
-    ServicioEmergenciaDTO altaServicioE(ServicioEmergencia se, Long hospital);
+    ServicioEmergenciaDTO altaServicioE(ServicioEmergencia se, Long hospital,double longitud,double latitud);
     boolean borrarSE(Long idSE);
     ServiciosEmergencias listarServiciosEmergensias();
+    void modificar(ServicioEmergenciaDTO serv);
 }

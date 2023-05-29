@@ -39,7 +39,7 @@ public class Ambulancia implements Serializable {
                 .idHospital(hospital.getIdHospital())
                 .nombreHospital(hospital.getNombreHospital())
                 .tipoHospital(hospital.getTipoHospital())
-                .servicioEmergencia(hospital.getServicioEmergencia())
+                .servicioEmergencia(hospital.getServicioEmergenciaDTO())
                 //.ambulanciaDTOS(hospital.getAmbulanciasDTOS())
                 .build();
     }

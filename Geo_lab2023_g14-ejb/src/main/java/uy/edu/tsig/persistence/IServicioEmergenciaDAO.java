@@ -11,5 +11,7 @@ public interface IServicioEmergenciaDAO {
     ServicioEmergencia altaServicioE(ServicioEmergencia se);
     boolean borrarSE(Long idSE);
     ArrayList<ServicioEmergenciaDTO> obtenerServicioE();
+    void modificar(ServicioEmergencia serv);
+    ServicioEmergencia buscarServ(Long serv);
 
 }

@@ -16,4 +16,5 @@ public interface IHospitalDAO {
     Hospital buscarHospital(Long idHospital);
     boolean eliminarH(Long idHospital);
     void updateDesviculo(Hospital hospital);
+    void modificar(Hospital hospital);
 }

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,32 +13,25 @@
     <link rel="stylesheet" href="scripts/lib/ol-ext-v3.2.23/ol-ext.css">
     <script src="scripts/lib/ol-ext-v3.2.23/ol-ext.js"></script>
     <link rel="stylesheet" href="scripts/lib/ol-ext-v3.2.23/font-awesome.min.css">
-    <!-- <script src="scripts/lib/GeoTools/geoMap.js"></script>
-    <script src="scripts/lib/GeoTools/geoLayers.js"></script>
-    <script src="scripts/appMap.js"></script> -->
 
-    <link rel="stylesheet" href="admin/lib/css/style.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
-    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js" integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <script src="admin/lib/js/leaflet-src.js"></script>
+    <script src="admin/lib/js/leaflet.draw-src.js"></script>
+    <script src="admin/lib/js/leaflet.draw-shapefile.js"></script>
 
-    <script src="admin/lib/js/index.js"></script>
-    <script src="admin/lib/js/cargarMap.js"></script>
+    <script src="scripts/geolet.js"></script>
+    <script src="scripts/lib/indexInvitado.js"></script>
+    <link rel="stylesheet" href="admin/lib/css/leaflet.css" />
+    <link rel="stylesheet" href="admin/lib/css/leaflet.draw.css" />
+    <link rel="stylesheet" href="admin/lib/css/leaflet.draw-shapefile.css" />
 
-    <style>
-        #map {
-            width: 100%;
-            height: 550px;
-        }
-    </style>
+    <link rel="stylesheet" href="scripts/lib/css/style.css" />
+
 </head>
 
 <body>
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="javascript:void(0)">TSIG - G14</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
 
             <div class="d-flex" id="mynavbar">
                 <ul class="navbar-nav me-auto">
@@ -52,15 +44,17 @@
                 </ul>
             </div>
         </div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
     </nav>
 
-    <div class="container-fluid mt-3">
-        <div id="map"></div>
-        <script>
-            CargarMap();
-        </script>
-    </div>
+    <div id="map"></div>
 
 </body>
+
+<script>
+    CrearMapaInvitado();
+</script>
 
 </html>

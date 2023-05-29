@@ -1,0 +1,31 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <form id="formEA">
+        <p:dialog header="Eliminar Ambulancia" widgetVar="dlg7" minHeight="600" width="850" showEffect="fade" modal="true">
+            <f:view>
+                <p:card styleClass="flex justify-content-center">
+                    <p:dataTable value="#{adminBean.ambulanciaDTOS}" var="ambu" scrollable="true" scrollHeight="400px">
+                        <p:column headerText="Id Ambulancia">
+                            <h:outputText value="#{ambu.idAmbulancia}" />
+                        </p:column>
+                        <p:column headerText="Codigo Ambulancia">
+                            <h:outputText value="#{ambu.idCodigo}" />
+                        </p:column>
+                        <p:column headerText="Distancia Maxima">
+                            <h:outputText value="#{ambu.distanciaMaxDesvio}" />
+                        </p:column>
+                        <p:column headerText="Hospital Name">
+                            <h:outputText value="#{ambu.hospital.nombreHospital}" />
+                        </p:column>
+
+                        <p:column headerText="false">
+                            <p:commandButton styleClass="rounded-button ui-button-danger" icon="pi pi-trash" process="@this" action="#{adminBean.eliminarA(ambu.idAmbulancia)}" />
+                        </p:column>
+                    </p:dataTable>
+                </p:card>
+            </f:view>
+        </p:dialog>
+    </form>
+</html>
