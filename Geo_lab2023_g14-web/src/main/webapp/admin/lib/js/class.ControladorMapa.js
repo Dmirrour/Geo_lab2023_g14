@@ -1,12 +1,18 @@
+
 class ControladorMapa extends Configuracion {
+
         openst;
         google;
+
         layerEjes;
         layerDepartamento;
         layerRuta;
+
         servicioEH;
         vista_se_h;
+
         map;
+        drawLayers;
         markerSE;
 
         constructor() {
@@ -108,19 +114,18 @@ class ControladorMapa extends Configuracion {
                 "Rutas": this.layerRuta
             };
 
-            let drawLayers = new L.FeatureGroup(); // Agrupa elementos graficos
+            this.drawLayers = new L.FeatureGroup(); // Agrupa elementos graficos
             let drawControl = new L.Control.DrawPlus({
                 position: 'topright',
                 draw: {
-                    circle: true,
                     polyline: true
                 },
                 edit: {
-                    featureGroup: drawLayers,
+                    featureGroup: this.drawLayers,
                     edit: true
                 }
             });
-            this.map.addLayer(drawLayers);
+            this.map.addLayer(this.drawLayers);
             this.map.addControl(drawControl);
 
             L.control.layers(
@@ -135,8 +140,8 @@ class ControladorMapa extends Configuracion {
             }).addTo(this.map);
 
             this.map.on(L.Draw.Event.CREATED, function (e) {
-                drawLayers.addLayer(e.layer);
-            });
+                this.drawLayers.addLayer(e.layer);
+            }, this);
         }
 
         addLayersWFS() {
@@ -221,13 +226,71 @@ class ControladorMapa extends Configuracion {
                 });
         }
 
+        addLayerWFSLine() {
+            let geojsonLayer = L.geoJSON(null, {
+                style: {
+                    color: 'red',
+                    weight: 3,
+                    opacity: 1
+                },
+                onEachFeature: function (feature, layer) {
+                    let properties = feature.properties;
+                    let popupContent =
+                        '<div class="popup-content">' +
+                        '<h4>Hospital: <em>' + properties.nombrehospital + '</em></h4>' +
+                        '<p><em>Ambulancia ID: </em><b>' + properties.idambulancia + '</b></p>' +
+                        '<p><em>Ambulancia codigo: </em><b>' + properties.idcodigo + '</b></p>' +
+                        '<p><em>Desvio Max.: </em><b>' + properties.distanciamaxdesvio + '</b></p>' +
+                        '</div>';
+                    let popupOptions = {
+                        className: 'custom-popup'
+                    };
+
+                    layer.bindPopup(popupContent, popupOptions);
+                }
+            }).addTo(this.map);
+
+            let url =
+                'http://localhost:' +
+                this.puertoGeoServer +
+                '/geoserver/wfs?' +
+                'service=WFS&' +
+                'request=GetFeature&' +
+                'typeName=' +
+                this.baseDatos +
+                ':' + this.vista_LineString + '&' +
+                'srsName=' + this.srid + '&' +
+                'outputFormat=application/json';
+
+            fetch(url)
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    geojsonLayer.addData(data);
+                    // Crear un buffer alrededor de las líneas
+                    /*
+                    let bufferedLayer = L.geoJSON(turf.buffer(data, 100, { units: 'meters' }), {
+                        style: {
+                            color: 'blue',
+                            weight: 2,
+                            opacity: 0.7
+                        }
+                    }).addTo(this.map);
+                    */
+                })
+                .catch(function (error) {
+                    console.error('Error:', error);
+                });
+        }
+
         cargarMapaAltaSE() {
             // Crea un marcador y guarda la posición en los campos de latitud y longitud
             let markerSE = L.marker([0, 0]).addTo(this.map);
             this.map.on('click', function (e) {
-                var prefijo = "frmAltaSE";
-                var latitud = e.latlng.lat;
-                var longitud = e.latlng.lng;
+                let prefijo = "frmAltaSE";
+                let latitud = e.latlng.lat;
+                let longitud = e.latlng.lng;
 
                 markerSE.setLatLng(e.latlng);
                 markerSE.bindPopup("Agregar Servicio de Emergencia en:<br>Latitud: " + latitud.toFixed(6) + "<br>Longitud: " + longitud.toFixed(6)).openPopup();
@@ -270,6 +333,59 @@ class ControladorMapa extends Configuracion {
                 document.getElementById("j_idt61:rec").value = data;;
             });
             */
+            /*
+            // Configuración del mapa Leaflet
+            var map = L.map('map').setView([51.505, -0.09], 13);
+
+            // Crear una capa de dibujo
+            var drawnItems = new L.FeatureGroup().addTo(this.map);
+
+            // Configurar la herramienta de dibujo
+            var drawControl = new L.Control.Draw({
+                draw: {
+                    polyline: true,
+                    // Otras opciones de dibujo
+                },
+                edit: {
+                    featureGroup: drawnItems,
+                    // Opciones de edición
+                }
+            }).addTo(this.map);
+            */
+            // Evento para capturar la polilínea dibujada
+            this.map.on('draw:created', function (e) {
+                var layer = e.layer;
+                var polyline = layer.toGeoJSON().geometry.coordinates;
+                var formattedPolyline = this.formatPolyline(polyline);
+                this.savePolyline(formattedPolyline);
+                this.drawLayers.addLayer(layer);
+            }, this);
+
+        }
+
+        // Función para formatear la polilínea en el formato deseado
+        formatPolyline(polyline) {
+            // Realizar la transformación o formateo necesario (ejemplo: a WKT)
+            // Puedes utilizar bibliotecas como Wicket o JTS para esta tarea
+            // Devolver la polilínea formateada
+            // Convertir la polilínea a formato WKT utilizando JSTS
+            const wktWriter = new jsts.io.WKTWriter();
+            const geometryFactory = new jsts.geom.GeometryFactory();
+            const coordinates = polyline.map(([lng, lat]) => new jsts.geom.Coordinate(lng, lat));
+            const jstsPolyline = geometryFactory.createLineString(coordinates);
+            const wkt = wktWriter.write(jstsPolyline);
+
+            // Devolver la polilínea formateada en WKT
+            return wkt;
+        }
+
+        // Función para guardar la polilínea en la base de datos
+        savePolyline(polyline) {
+            // Enviar la polilínea formateada al backend para su almacenamiento en la base de datos
+            // Utilizar las funciones de persistencia de tu framework de backend para guardar los datos en la tabla correspondiente
+            console.log(polyline);
+            let prefijo = "formAA";
+            document.getElementById(prefijo + ":rec").value = polyline;
         }
 
     }

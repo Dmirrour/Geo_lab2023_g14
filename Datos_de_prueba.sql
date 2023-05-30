@@ -12,8 +12,6 @@
  *
   -- View: public.vista_se_h
 
-  -- DROP VIEW public.vista_se_h;
-
   CREATE OR REPLACE VIEW public.vista_se_h
    AS
     SELECT se.idservicio,
@@ -33,6 +31,19 @@
              JOIN hospital h ON se.hospital_idhospital = h.idhospital;
 
 
+-- DROP VIEW vista_a_rec;
+
+CREATE OR REPLACE VIEW public.vista_a_rec
+   AS
+SELECT a.idambulancia,
+       a.distanciamaxdesvio,
+       a.idcodigo,
+       a.polyline,
+       h.idhospital,
+       h.nombrehospital
+FROM ambulancia a
+         JOIN hospital h ON a.hospital_idhospital = h.idhospital;
+
 Probablemente no sea necesario asignar el propieatrio esto ya lo hace autoamtico pero por si acaso:
 
   ALTER TABLE public.vista_se_h
@@ -45,6 +56,7 @@ DROP TABLE hospital_ambulancia CASCADE;
 DROP TABLE servicioemergencia CASCADE;
 
 ALTER TABLE servicioemergencia ADD COLUMN point GEOMETRY(Point, 32721);
+ALTER TABLE ambulancia ADD COLUMN  polyline GEOMETRY(LineString, 32721);
 
 INSERT INTO usuario(usuario, pass) VALUES('grupo14','admin');
 INSERT INTO usuario(usuario, pass) VALUES('admin','admin');

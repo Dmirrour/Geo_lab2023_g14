@@ -35,6 +35,11 @@
    <script type="" src="lib/js/class.ControladorMapa.js"></script>
    <script type="" src="../scripts/geolet.js"></script>
 
+   <!-- JTS -->
+   <script type="" src="https://cdn.jsdelivr.net/npm/elm-pep@1.0.6/dist/elm-pep.js"></script>
+   <script type="" src="https://cdn.jsdelivr.net/npm/jsts@2.3.0/dist/jsts.min.js"></script>
+
+
    <!-- CONSULTAS query -->
    <script type="" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
    <script type="" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -58,18 +63,18 @@
             <div id="contenedorNavbar">
                <p:menubar>
                   <p:submenu label="Eliminar">
-                     <p:menuitem value="Eliminar Hospital" type="button" icon="pi pi-external-link" onclick="PF('dlg8').show()" />
-                     <p:menuitem value="Eliminar Ambulancia" type="button" icon="pi pi-external-link" onclick="PF('dlg7').show()" />
-                     <p:menuitem value="Eliminar S. Emergencia" type="button" icon="pi pi-external-link" onclick="PF('dlg6').show()" />
+                     <p:menuitem value="Eliminar Hospital" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg8').show()" />
+                     <p:menuitem value="Eliminar Ambulancia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg7').show()" />
+                     <p:menuitem value="Eliminar S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg6').show()" />
                   </p:submenu>
                   <p:submenu label="Modificar">
-                     <p:menuitem value="Modificar Ambulancia" type="button" icon="pi pi-external-link" onclick="PF('dlg5').show()" />
-                     <p:menuitem value="Modificar S. Emergencia" type="button" icon="pi pi-external-link" onclick="PF('dlg4').show()" />
+                     <p:menuitem value="Modificar Ambulancia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg5').show()" />
+                     <p:menuitem value="Modificar S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg4').show()" />
                   </p:submenu>
                   <p:submenu label="Alta">
-                     <p:menuitem value="Alta Hospital" type="button" icon="pi pi-external-link" onclick="PF('dlg1').show()" />
-                     <p:menuitem value="Alta Ambulancia" type="button" icon="pi pi-external-link" onclick="PF('dlg2').show()" />
-                     <p:menuitem value="Alta S. Emergencia" type="button" icon="pi pi-external-link" onclick="PF('dlg3').show(); mostrarMarker();" />
+                     <p:menuitem value="Alta Hospital" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg1').show()" />
+                     <p:menuitem value="Alta Ambulancia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg2').show()" />
+                     <p:menuitem value="Alta S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg3').show(); mostrarMarker();" />
                   </p:submenu>
                </p:menubar>
             </div>
@@ -102,9 +107,15 @@
 </h:body>
 
 <script type="text/javascript">
+   function ocultarDlgs(){
+      PF('dlg1').hide();
+      PF('dlg2').hide();
+      PF('dlg3').hide();
+   }
    let mapaAdmin = new ControladorMapa();
    mapaAdmin.crearMapaAdmin();
    mapaAdmin.addLayersWFS();
+   mapaAdmin.addLayerWFSLine();
 
    function mostrarMarker() {
       mapaAdmin.cargarMapaAltaSE();

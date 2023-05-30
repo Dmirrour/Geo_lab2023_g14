@@ -138,6 +138,11 @@
             <artifactId>teiid-hibernate-dialect</artifactId>
             <version>16.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>net.postgis</groupId>
+            <artifactId>postgis-jdbc</artifactId>
+            <version>2.5.1</version>
+        </dependency>
     </dependencies>
 
     <build>

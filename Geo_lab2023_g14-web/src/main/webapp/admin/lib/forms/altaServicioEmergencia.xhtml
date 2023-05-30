@@ -3,7 +3,6 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui">
-
         <p:dialog id="dialogALtaSE" header="Alta servicio de emergencia" widgetVar="dlg3" width="360px" minWidth="400" minHeight="400" draggable="false" styleClass="my-dialog-style" showEffect="fade" onHide="mapaAdmin.BorrarMarcadorALtaSE()">
             <f:view>
                 <div class="flex justify-content-center">
@@ -33,7 +32,7 @@
                             </div>
 
                             <div class="td-grid col-sm-6 mx-auto pt-2">
-                                <p:commandButton value="Crear" action="#{servicioEBean.addServicioE()}" update="messages" class="col-sm-12" onclick="PF('dlg3').hidden()" />
+                                <p:commandButton value="Crear" action="#{servicioEBean.addServicioE()}" update="messages" class="col-sm-12" onclick="PF('dlg3').hide()" />
                             </div>
                         </div>
                     </h:form>
