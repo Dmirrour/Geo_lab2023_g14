@@ -47,7 +47,7 @@ public class ServicioEmBean {
 
         String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
         String usuario = "postgres";
-        String contraseña = "1234";
+        String contraseña = "admin";
 
         Connection conn;
         try {
@@ -61,6 +61,7 @@ public class ServicioEmBean {
             // e.printStackTrace();
             System.out.println("No conecta."+e.getMessage());
         }
+
         String msj = String.format("Se agregó el servicio de emergencia con %s camas.", totalCama);
         addMensaje("S. Emergencia", msj);
         totalCama = 0;

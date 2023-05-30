@@ -69,7 +69,7 @@
                   <p:submenu label="Alta">
                      <p:menuitem value="Alta Hospital" type="button" icon="pi pi-external-link" onclick="PF('dlg1').show()" />
                      <p:menuitem value="Alta Ambulancia" type="button" icon="pi pi-external-link" onclick="PF('dlg2').show()" />
-                     <p:menuitem value="Alta S. Emergencia" type="button" icon="pi pi-external-link" onclick="PF('dlg3').show()" />
+                     <p:menuitem value="Alta S. Emergencia" type="button" icon="pi pi-external-link" onclick="PF('dlg3').show(); mostrarMarker();" />
                   </p:submenu>
                </p:menubar>
             </div>
@@ -101,11 +101,15 @@
    <!-- END FORMS -->
 </h:body>
 
-<script type="">
+<script type="text/javascript">
    let mapaAdmin = new ControladorMapa();
    mapaAdmin.crearMapaAdmin();
    mapaAdmin.addLayersWFS();
-   mapaAdmin.cargarMapaAltaSE();
+
+   function mostrarMarker() {
+      mapaAdmin.cargarMapaAltaSE();
+   }
+
    mapaAdmin.cargarMapaAltaAmbulancia();
 </script>
 

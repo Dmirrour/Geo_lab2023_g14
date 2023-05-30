@@ -21,7 +21,7 @@ public class ServicioEmergenciaService implements IServicioEmergenciaService {
     IHospitalDAO iHospitalDAO;
     private String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
     private String usuario = "postgres";
-    private String contraseña = "123456d";
+    private String contraseña = "admin";
 
     @Override
     public ServicioEmergenciaDTO altaServicioE(ServicioEmergencia se, Long hospital,double longitud,double latitud){
@@ -31,18 +31,18 @@ public class ServicioEmergenciaService implements IServicioEmergenciaService {
         ServicioEmergencia persist=iServicioEmergenciaDAO.altaServicioE(se);
         iHospitalDAO.asignarServicioE(h,persist);
         //query geografica
-        /*try {
+        /*
+        System.out.println("Entrando al try query SE.");
+        try {
             Connection conn = DriverManager.getConnection(url, usuario, contraseña);
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(
                     "UPDATE servicioemergencia set point = (ST_SetSRID(ST_MakePoint(" + longitud + "," + latitud + "), 32721)) WHERE idservicio=" + persist.getIdServicio() + ";");
             System.out.println("Punto insertado correctamente.");
         } catch (SQLException e) {
-            System.out.println("No conecta.");
+            System.out.println("No conecta."+e.getMessage());
         }
-        // --------x------------x--------------*/
-
-
+        */
         return persist.getServicioEmergenciaDTO();
     }
 

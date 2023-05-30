@@ -83,13 +83,6 @@ public class HospitalBean {
         this.nombreH = nombreH;
     }
 
-    public void setH(Hospitales h) {
-        this.h = h;
-    }
-    public Hospitales getH() {
-        return h;
-    }
-
     public void setTipoH(TipoHospital tipoH) {
         this.tipoH = tipoH;
     }

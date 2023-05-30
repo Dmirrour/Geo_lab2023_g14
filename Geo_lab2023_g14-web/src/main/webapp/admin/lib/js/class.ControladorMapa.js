@@ -9,7 +9,6 @@ class ControladorMapa extends Configuracion {
         map;
         markerSE;
 
-
         constructor() {
             super();
             ///////////////////////// MAPAS /////////////////////////
@@ -108,7 +107,6 @@ class ControladorMapa extends Configuracion {
                 "Ejes": this.layerEjes,
                 "Rutas": this.layerRuta
             };
-
 
             let drawLayers = new L.FeatureGroup(); // Agrupa elementos graficos
             let drawControl = new L.Control.DrawPlus({
@@ -224,7 +222,6 @@ class ControladorMapa extends Configuracion {
         }
 
         cargarMapaAltaSE() {
-
             // Crea un marcador y guarda la posición en los campos de latitud y longitud
             let markerSE = L.marker([0, 0]).addTo(this.map);
             this.map.on('click', function (e) {
@@ -239,7 +236,7 @@ class ControladorMapa extends Configuracion {
                 document.getElementById(prefijo + ":longitud").value = e.latlng.lng;
 
                 this.markerSE = markerSE;
-            });
+            }, this);
         }
 
         BorrarMarcadorALtaSE() {
@@ -274,4 +271,5 @@ class ControladorMapa extends Configuracion {
             });
             */
         }
+
     }
