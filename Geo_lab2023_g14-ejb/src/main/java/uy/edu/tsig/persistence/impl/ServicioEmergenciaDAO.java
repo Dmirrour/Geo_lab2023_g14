@@ -59,12 +59,22 @@ public class ServicioEmergenciaDAO implements IServicioEmergenciaDAO {
         lSE.forEach(servicioEmergencia -> res.add(ServicioEmergenciaDTO
                 .builder()
                 .idServicio(servicioEmergencia.getIdServicio())
+                .nombre(servicioEmergencia.getNombre())
                 .camasLibres(servicioEmergencia.getCamasLibres())
                 .hospital(servicioEmergencia.getHospitalDTO())
                 .totalCama(servicioEmergencia.getTotalCama())
                 .build()
                 ));
         return res;
+    }
+    @Override
+    public void modificar(ServicioEmergencia serv) {
+        em.merge(serv);
+    }
+
+    @Override
+    public ServicioEmergencia buscarServ(Long serv) {
+        return em.find(ServicioEmergencia.class,serv);
     }
 
 
