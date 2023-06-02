@@ -76,7 +76,7 @@ public class AdminBean implements Serializable {
 
         String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
         String usuario = "postgres";
-        String contraseña = "1234";
+        String contraseña = "admin";
 
         Connection conn;
         try {
@@ -135,7 +135,16 @@ public class AdminBean implements Serializable {
     }
 
     public void eliminarA(Long idAmbulancia) {
-        iAmbulaciasService.borrarA(idAmbulancia);
+
+        boolean r= iAmbulaciasService.borrarA(idAmbulancia);
+        if (r) {
+            initA();
+            String msj = String.format("Se Borro el Servicio con id %s.", idAmbulancia);
+            addMensaje("Servicio", msj);
+        } else {
+            String msj = String.format("No se puedo Borrar el Servicio con id %s", idAmbulancia);
+            addMensaje("Servicio", msj);
+        }
     }
 
     public String getNombreH() {

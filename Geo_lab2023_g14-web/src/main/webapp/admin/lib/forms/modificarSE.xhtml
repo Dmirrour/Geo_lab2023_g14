@@ -1,19 +1,32 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
-    <h:form id="formMSE">
-        <p:dialog header="Modificar S. Emergencia" widgetVar="dlg4" minHeight="600" width="850" showEffect="fade" modal="true">
-            <f:view>
-                <p:card styleClass="flex justify-content-center">
-                    <p:dataTable  scrollable="true" scrollHeight="400px">
-                        <p:column headerText="id"></p:column>
-                        <p:column headerText="hospital"></p:column>
-                        <p:column headerText="Cant.Camas"></p:column>
-                        <p:column headerText="Acciones"></p:column>
-                    </p:dataTable>
-                </p:card>
-            </f:view>
-        </p:dialog>
-    </h:form>
+      xmlns:p="http://primefaces.org/ui">()"
+    <p:dialog id="dialogMODSE" header="Mofiicar servicio de emergencia" widgetVar="dlg4" width="360px" minWidth="400" minHeight="400" draggable="false" styleClass="my-dialog-style" showEffect="fade">
+    <f:view>
+        <div class="flex justify-content-center">
+            <h:form id="frmMODSE">
+                <div class="row m-auto mb-4">
+                    <p:outputLabel for="combobox" value="Seleccionar servicio de emergencia:" />
+                    <p:selectOneMenu id="combobox" value="#{servicioEBean.servselect}">
+                        <f:selectItem itemLabel="Seleccione un servicio"/>
+                        <f:selectItems value="#{servicioEBean.servicioEmergenciaDTOS}" var="servicio" itemLabel="#{servicio.nombre}" itemValue="#{servicio}" />
+                        <p:ajax event="change" listener="#{servicioEBean.actualizarCampos}" update="datosServicio" />
+                    </p:selectOneMenu>
+                    <h:panelGroup id="datosServicio">
+                        <p:outputLabel for="N" value="Nombre:" />
+                        <h:inputText id="N" class="col-sm-12" value="#{servicioEBean.nombreS}" required="true" requiredMessage="Las CAMAS son requeridas" />
+
+                        <p:outputLabel for="T" value="Total de Camas:" />
+                        <h:inputText id="T" class="col-sm-12" type="number" value="#{servicioEBean.totalCama}" required="true" requiredMessage="Las CAMAS son requeridas" />
+
+                        <p:outputLabel for="CL" value="Camas Libres:" />
+                        <h:inputText id="CL" class="col-sm-12" type="number" value="#{servicioEBean.camasLibre}" required="true" requiredMessage="Las CAMAS son requeridas" />
+
+                    </h:panelGroup>
+                </div>
+            </h:form>
+        </div>
+    </f:view>
+</p:dialog>
 </html>

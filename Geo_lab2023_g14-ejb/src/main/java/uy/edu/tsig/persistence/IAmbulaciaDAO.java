@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public interface IAmbulaciaDAO {
     Ambulancia altaAmbulacia(Ambulancia a);
 
-    void borrarambulancia(Long idAmbulancia);
+    boolean borrarambulancia(Long idAmbulancia);
 
     ArrayList<AmbulanciaDTO> obtenerAmbulanciaDtos();
     void modificar(Ambulancia ambu);

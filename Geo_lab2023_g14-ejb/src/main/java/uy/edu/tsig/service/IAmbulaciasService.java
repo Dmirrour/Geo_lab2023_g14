@@ -8,7 +8,7 @@ import uy.edu.tsig.model.Ambulacias;
 @Remote
 public interface IAmbulaciasService {
     AmbulanciaDTO altaAmbulacia(Ambulancia a, Long hospital);
-    void borrarA(long idAmbulancia);
+    boolean borrarA(long idAmbulancia);
     Ambulacias listarAmbulancias();
     void modificar(AmbulanciaDTO ambu);
 

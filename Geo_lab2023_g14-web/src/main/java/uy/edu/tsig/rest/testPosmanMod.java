@@ -33,6 +33,12 @@ public class testPosmanMod {
         return iHospitalService.obtenerHospitales();
     }
     @POST
+    @Path("/borrarser")
+    public boolean borrarserv(){
+        long i=2;
+        return iServicioEmergenciaService.borrarSE(i);
+    }
+    @POST
     @Path("/modificarH")
     public void modH(HospitalDTO h){
         //http://localhost:8080/Geo_lab2023_g14-web/rest/test/modificarH

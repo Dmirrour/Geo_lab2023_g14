@@ -62,8 +62,14 @@ public class ServicioEmergenciaService implements IServicioEmergenciaService {
     @Override
     public void modificar(ServicioEmergenciaDTO serv){
         ServicioEmergencia s =iServicioEmergenciaDAO.buscarServ(serv.getIdServicio());
+
         s.setCamasLibres(serv.getCamasLibres());
-        s.setTotalCama(serv.getTotalCama());
+        s.setNombre(serv.getNombre());
+        if(s.getTotalCama()<serv.getTotalCama()){
+            s.setTotalCama(serv.getCamasLibres());
+        }else{
+            s.setTotalCama(serv.getTotalCama());
+        }
         iServicioEmergenciaDAO.modificar(s);
     }
 }

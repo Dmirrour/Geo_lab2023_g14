@@ -28,8 +28,8 @@ public class AmbulanciasService implements IAmbulaciasService {
     }
 
     @Override
-    public void borrarA(long idAmbulancia){
-        iAmbulaciaDAO.borrarambulancia(idAmbulancia);
+    public boolean borrarA(long idAmbulancia){
+        return iAmbulaciaDAO.borrarambulancia(idAmbulancia);
     }
 
     @Override

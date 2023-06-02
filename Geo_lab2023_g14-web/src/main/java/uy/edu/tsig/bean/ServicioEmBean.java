@@ -5,6 +5,7 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.event.AjaxBehaviorEvent;
 import jakarta.inject.Named;
 import uy.edu.tsig.dto.ServicioEmergenciaDTO;
 import uy.edu.tsig.entity.ServicioEmergencia;
@@ -23,10 +24,17 @@ public class ServicioEmBean {
     IServicioEmergenciaService iServicioEmergenciaService;
     private String nombreS;
     private int totalCama;
+    private int camasLibre;
+    private Long idServE;
     private ServiciosEmergencias s;
     private ArrayList<ServicioEmergenciaDTO> servicioEmergenciaDTOS;
     private double latitud; // agregamos la propiedad latitud
     private double longitud; // agregamos la propiedad longitud
+    private String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
+    private String usuario = "postgres";
+    private String contraseña = "1234";
+
+    private ServicioEmergenciaDTO servselect;
 
     //---------atributos necesarios extras----------//
     private Long idHospital;
@@ -45,9 +53,7 @@ public class ServicioEmBean {
 
         System.out.println("ATENCION: si no guarda puntos en la vista, verificar el archivo ServicioEmBEan.java, metodo addServicioE(); poner la contraseña correcta para su equipo.");
 
-        String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
-        String usuario = "postgres";
-        String contraseña = "1234";
+
 
         Connection conn;
         try {
@@ -73,6 +79,44 @@ public class ServicioEmBean {
         FacesContext fC = FacesContext.getCurrentInstance();
         ExternalContext eC = fC.getExternalContext();
         eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true"); // Reemplaza con la URL de la página de confirmación
+    }
+
+
+    public void modServ(){
+        ServicioEmergenciaDTO mod= ServicioEmergenciaDTO.builder()
+                .idServicio(idServE)
+                .totalCama(totalCama)
+                .camasLibres(camasLibre)
+                .nombre(nombreS)
+                .build();
+        iServicioEmergenciaService.modificar(mod);
+
+        if(longitud!=0.0 && latitud!=0.0){
+            //**********************************************////////*********************************************************///
+            // FALTA CONTROLAR QUE AL MOVER ESTE PUNTO NINGUNA AMBULACCIOA DE SU HOSPITAL QUEDE SIN SERVICIO
+            //**********************************************////////*********************************************************///
+
+            Connection conn;
+            try {
+                conn = DriverManager.getConnection(url, usuario, contraseña);
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(
+                        "UPDATE servicioemergencia set point = (ST_SetSRID(ST_MakePoint(" + longitud + ", " + latitud
+                                + "), 32721)) WHERE idservicio=" + idServE + ";");
+                System.out.println("Punto modificado correctamente.");
+            } catch (SQLException e) {
+                // e.printStackTrace();
+                System.out.println("No conecta."+e.getMessage());
+            }
+        }
+    }
+
+    public void actualizarCampos(AjaxBehaviorEvent event) {
+        nombreS=servselect.getNombre();
+        totalCama=servselect.getTotalCama();
+        camasLibre=servselect.getCamasLibres();
+        idServE=servselect.getIdServicio();
+        System.out.println(nombreS+totalCama+camasLibre+idServE );
     }
 
     public void eliminarS(Long idSE) {
@@ -164,5 +208,28 @@ public class ServicioEmBean {
 
     public void setIdHospital(Long idHospital) {
         this.idHospital = idHospital;
+    }
+
+    public int getCamasLibre() {
+        return camasLibre;
+    }
+
+    public void setCamasLibre(int camasLibre) {
+        this.camasLibre = camasLibre;
+    }
+
+    public Long getIdServE() {
+        return idServE;
+    }
+
+    public void setIdServE(Long idServE) {
+        this.idServE = idServE;
+    }
+
+    public ServicioEmergenciaDTO getServselect() {
+        return servselect;
+    }
+    public void setServselect(ServicioEmergenciaDTO servselect) {
+        this.servselect = servselect;
     }
 }
