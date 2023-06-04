@@ -7,8 +7,8 @@ class Configuracion {
     rutas;
     ejes;
     deptos;
-    vista_SEH;
-    vista_LineString;
+   // vista_SEH;
+   // vista_LineString;
     colors;
 
     constructor() {
@@ -20,8 +20,8 @@ class Configuracion {
         this.rutas = 'ft_00cam_dig';
         this.ejes = 'ft_01_ejes';
         this.deptos = 'ft_00departamento';
-        this.vista_SEH = 'vista_se_h';
-        this.vista_LineString = 'vista_a_rec';
+        //this.vista_SEH = 'vista_se_h';
+        //this.vista_LineString = 'vista_a_rec';
         this.colors = [
             'red',
             'blue',
