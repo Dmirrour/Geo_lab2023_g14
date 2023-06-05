@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">()"
+      xmlns:p="http://primefaces.org/ui">
     <p:dialog id="dialogMODSE" header="Mofiicar servicio de emergencia" widgetVar="dlg4" width="360px" minWidth="400" minHeight="400" draggable="false" styleClass="my-dialog-style" showEffect="fade">
     <f:view>
         <div class="flex justify-content-center">
@@ -9,9 +9,9 @@
                 <div class="row m-auto mb-4">
                     <p:outputLabel for="combobox" value="Seleccionar servicio de emergencia:" />
                     <p:selectOneMenu id="combobox" value="#{servicioEBean.servselect}">
-                        <f:selectItem itemLabel="Seleccione un servicio"/>
+                        <p:ajax listener="#{servicioEBean.actualizarCampos}" update="datosServicio" />
+                        <f:selectItem itemLabel="Seleccione un servicio" itemValue="" noSelectionOption="true"/>
                         <f:selectItems value="#{servicioEBean.servicioEmergenciaDTOS}" var="servicio" itemLabel="#{servicio.nombre}" itemValue="#{servicio}" />
-                        <p:ajax event="change" listener="#{servicioEBean.actualizarCampos}" update="datosServicio" />
                     </p:selectOneMenu>
                     <h:panelGroup id="datosServicio">
                         <p:outputLabel for="N" value="Nombre:" />
@@ -24,7 +24,33 @@
                         <h:inputText id="CL" class="col-sm-12" type="number" value="#{servicioEBean.camasLibre}" required="true" requiredMessage="Las CAMAS son requeridas" />
 
                     </h:panelGroup>
+                    <!--<p:commandButton value="Submit" action="#{basicView.displayLocation}" icon="pi pi-check"/>-->
+
                 </div>
+
+       <!--         <div class="card">
+                    <h:form>
+                        <h5 class="mt-0">Advanced</h5>
+                        <p:growl id="msgs" showDetail="true" skipDetailIfEqualsSummary="true"/>
+
+                        <h:panelGrid columns="2" cellpadding="7" styleClass="mb-3">
+                            <p:outputLabel for="country" value="Country"/>
+                            <p:selectOneMenu id="country" value="#{basicView.country}" style="width:12rem">
+                                <p:ajax listener="#{basicView.onCountryChange}" update="city"/>
+                                <f:selectItem itemLabel="Select Country" itemValue="" noSelectionOption="true"/>
+                                <f:selectItems value="#{basicView.countries}"/>
+                            </p:selectOneMenu>
+
+                            <p:outputLabel for="city" value="City"/>
+                            <p:selectOneMenu id="city" value="#{basicView.city}" style="width:12rem">
+                                <f:selectItem itemLabel="Select City" itemValue="" noSelectionOption="true"/>
+                                <f:selectItems value="#{basicView.cities}"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+
+                        <p:commandButton value="Submit" update="msgs" action="#{basicView.displayLocation}" icon="pi pi-check"/>
+                    </h:form>
+                </div>-->
             </h:form>
         </div>
     </f:view>

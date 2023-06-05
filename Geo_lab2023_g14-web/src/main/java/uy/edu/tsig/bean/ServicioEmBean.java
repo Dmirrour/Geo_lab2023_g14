@@ -10,11 +10,16 @@ import jakarta.inject.Named;
 import uy.edu.tsig.dto.ServicioEmergenciaDTO;
 import uy.edu.tsig.entity.ServicioEmergencia;
 import uy.edu.tsig.model.ServiciosEmergencias;
+import uy.edu.tsig.service.IHospitalService;
 import uy.edu.tsig.service.IServicioEmergenciaService;
 
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
+
+
+
+
 
 @Named("servicioEBean")
 @RequestScoped
@@ -22,6 +27,8 @@ public class ServicioEmBean {
 
     @EJB
     IServicioEmergenciaService iServicioEmergenciaService;
+    @EJB
+    IHospitalService iHospitalService;
     private String nombreS;
     private int totalCama;
     private int camasLibre;
@@ -38,6 +45,7 @@ public class ServicioEmBean {
 
     //---------atributos necesarios extras----------//
     private Long idHospital;
+    private ServicioEmergenciaDTO selectedEmergencyService;
 
 
     public void initS() {
@@ -52,8 +60,6 @@ public class ServicioEmBean {
         ServicioEmergenciaDTO sedto=iServicioEmergenciaService.altaServicioE(se, idHospital,longitud,latitud);
 
         System.out.println("ATENCION: si no guarda puntos en la vista, verificar el archivo ServicioEmBEan.java, metodo addServicioE(); poner la contraseña correcta para su equipo.");
-
-
 
         Connection conn;
         try {
@@ -111,7 +117,7 @@ public class ServicioEmBean {
         }
     }
 
-    public void actualizarCampos(AjaxBehaviorEvent event) {
+    public void actualizarCampos() {
         nombreS=servselect.getNombre();
         totalCama=servselect.getTotalCama();
         camasLibre=servselect.getCamasLibres();
@@ -231,5 +237,12 @@ public class ServicioEmBean {
     }
     public void setServselect(ServicioEmergenciaDTO servselect) {
         this.servselect = servselect;
+    }
+    public ServicioEmergenciaDTO getSelectedEmergencyService() {
+        return selectedEmergencyService;
+    }
+
+    public void setSelectedEmergencyService(ServicioEmergenciaDTO selectedEmergencyService) {
+        this.selectedEmergencyService = selectedEmergencyService;
     }
 }
