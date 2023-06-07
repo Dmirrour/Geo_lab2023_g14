@@ -22,7 +22,7 @@ function CrearMapaInvitado() {
 
     var layerDepartamento = L.tileLayer.wms('http://localhost:8081/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
         title: 'ft_00departamento',
-        layers: 'Geo_lab2023_g14PersistenceUnit:ft_depto',
+        layers: 'Geo_lab2023_g14PersistenceUnit:ft_00departamento',
         srs: 'EPSG:32721',
         format: 'image/png',
         transparent: true,
@@ -31,7 +31,7 @@ function CrearMapaInvitado() {
 
     var layerRuta = L.tileLayer.wms('http://localhost:8081/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
         title: 'Rutas',
-        layers: 'Geo_lab2023_g14PersistenceUnit:ambulancia',
+        layers: 'Geo_lab2023_g14PersistenceUnit:ft_00cam_dig',
         srs: 'EPSG:32721',
         format: 'image/png',
         transparent: true,
@@ -87,6 +87,7 @@ function CrearMapaInvitado() {
         position: 'topright',
         draw: {
             circle: true,
+            circle: true,
             polyline: true
         },
         edit: {
@@ -95,21 +96,57 @@ function CrearMapaInvitado() {
         }
     });
     map.addLayer(drawLayers);
-    //map.addControl(drawControl);
+    // map.addControl(drawControl);
 
     map.fitBounds([[-35, -56], [-34, -56]]);
     L.geolet({
         position: 'bottomleft',
     }).addTo(map);
 
-    L.control.layers(baselayers, overlayers, { collapsed: true }).addTo(map);
+    L.control.layers(baselayers, overlayers, { collapsed: false }).addTo(map);
 
     map.on(L.Draw.Event.CREATED, function (e) {
         drawLayers.addLayer(e.layer);
     });
     ///////////////////////// FIN OPCIONES DE MAPA /////////////////////////
 
-    let geojsonLayer = L.geoJSON().addTo(map); // Crear una capa de GeoJSON
+    let geojsonLayer = L.geoJSON(null, {
+        pointToLayer: function (feature, latlng) {
+            let idh = feature.properties.idhospital;
+            let colors = [
+                'red',
+                'blue',
+                'green',
+                'yellow',
+                'orange',
+                'purple',
+                'cyan',
+                'magenta',
+                'lime',
+                'pink',
+                'teal',
+                'maroon',
+                'navy',
+                'olive',
+                'silver',
+                'aqua',
+                'fuchsia',
+                'gray',
+                'black',
+                'white'
+            ];
+            let markerColor = colors[idh - 1] || 'blue'
+
+            return L.circleMarker(latlng, {
+                radius: 8,
+                fillColor: markerColor,
+                color: '#000',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            });
+        }
+    }).addTo(map); // Crear una capa de GeoJSON
     let url =
         'http://localhost:8081/geoserver/wfs?' +
         'service=WFS&' +
@@ -130,29 +167,27 @@ function CrearMapaInvitado() {
                 layer.on('click', function (e) {
                     let properties = e.target.feature.properties;
                     let popupContent =
-                        'Camas libres: ' + properties.camaslibres + '<br>' +
-                        'Total de camas: ' + properties.totalcama + '<br>' +
-                        'Hospital Nombre: ' + properties.nombrehospital + '<br>' +
-                        'Hospital Tipo: ' + properties.tipohospital;
-                    layer.bindPopup(popupContent).openPopup();
+                        '<div class="popup-content">' +
+                        '<h4>S. E.: <em>' + properties.nombre + '</em></h4>' +
+                        '<p><em>Camas libres: </em><b>' + properties.camaslibres + '</b></p>' +
+                        '<p><em>Total de camas: </em><b>' + properties.totalcama + '</b></p>' +
+                        '<p><em>Hospital Nombre: </em><b>' + properties.nombrehospital + '</b></p>' +
+                        '<p><em>Hospital Tipo: </em><b>' + properties.tipohospital + '</b></p>' +
+                        '</div>';
+
+                    let popupOptions = {
+                        className: 'custom-popup'
+                    };
+
+                    layer.closePopup(); // Cerrar el popup anterior si existe
+                    layer.bindPopup(popupContent, popupOptions).openPopup();
                 })
             });
         })
         .catch(function (error) {
             console.error('Error:', error);
         });
-    /*
-        fetch(url)
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (data) {
-                geojsonLayer.addData(data);      // Agregar los datos a la capa de GeoJSON
-            })
-            .catch(function (error) {
-                console.error('Error:', error);
-        });
-    */
+
     ///////////////////////// COORDENAS EVENTO CLICK /////////////////////////
     drawLayers.on('click', function (e) {
         let latitud = e.latlng.lat;

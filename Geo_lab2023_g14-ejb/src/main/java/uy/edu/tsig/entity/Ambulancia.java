@@ -5,8 +5,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.locationtech.jts.geom.LineString;
 import uy.edu.tsig.dto.AmbulanciaDTO;
 import uy.edu.tsig.dto.HospitalDTO;
+import org.hibernate.annotations.Type;
+import org.postgis.PGgeometry;
 
 import java.io.Serializable;
 
@@ -27,6 +30,13 @@ public class Ambulancia implements Serializable {
 
     @ManyToOne
     private Hospital hospital;
+
+    // lo dejo asi entonces para q no joda, para referencia de lo q hay
+    @Transient
+    @Column(columnDefinition = "geometry(LineString, 32721)")
+    @Type(type = "org.hibernate.spatial.GeometryType")
+    private LineString polyline;
+
 
     public Ambulancia(Long idAmbulancia, int idCodigo, int distanciaMaxDesvio){
         this.idAmbulancia =idAmbulancia;

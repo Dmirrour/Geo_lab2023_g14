@@ -8,7 +8,8 @@ class Configuracion {
     ejes;
     deptos;
     vista_SEH;
-    layer_ambulancia;
+    vista_LineString;
+    colors;
 
     constructor() {
         this.urlOpenStreet = 'https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png';
@@ -17,9 +18,31 @@ class Configuracion {
         this.baseDatos = 'Geo_lab2023_g14PersistenceUnit';
         this.srid = 'EPSG:32721';
         this.rutas = 'ft_00cam_dig';
-        this.ejes = 'ft01_ejes';
-        this.deptos = 'ft_depto';
+        this.ejes = 'ft_01_ejes';
+        this.deptos = 'ft_00departamento';
         this.vista_SEH = 'vista_se_h';
-        this.layer_ambulancia = 'ambulancia';
+        this.vista_LineString = 'vista_a_rec';
+        this.colors = [
+            'red',
+            'blue',
+            'green',
+            'yellow',
+            'orange',
+            'purple',
+            'cyan',
+            'magenta',
+            'lime',
+            'pink',
+            'teal',
+            'maroon',
+            'navy',
+            'olive',
+            'silver',
+            'aqua',
+            'fuchsia',
+            'gray',
+            'black',
+            'white'
+        ];
     }
 }

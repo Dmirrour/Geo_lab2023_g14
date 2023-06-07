@@ -27,15 +27,19 @@ public class AmbulaciaDAO implements IAmbulaciaDAO {
         return a;
     }
     @Override
-    public void borrarambulancia(Long idAmbulancia){
+    public boolean borrarambulancia(Long idAmbulancia){
         Ambulancia ambulanciaEliminar = em.find(Ambulancia.class, idAmbulancia);
-        Hospital hospital = ambulanciaEliminar.getHospital();
-        hospital.getAmbulancia().remove(ambulanciaEliminar);
 
-        ambulanciaEliminar.setHospital(null);
-        em.remove(ambulanciaEliminar);
+        if(ambulanciaEliminar!=null){
+            Hospital hospital = ambulanciaEliminar.getHospital();
+            hospital.getAmbulancia().remove(ambulanciaEliminar);
 
-        System.out.println("Ambulancia eliminada correctamente.");
+            ambulanciaEliminar.setHospital(null);
+            em.remove(ambulanciaEliminar);
+            return true;
+        }else{
+            return false;
+        }
 
 
     }
