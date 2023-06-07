@@ -16,10 +16,10 @@ L.Control.Select = L.Control.extend({
     selectedDefault: false,
     additionalClass: "",
 
-    onOpen: () => {},
-    onClose: () => {},
-    onGroupOpen: (itemGroup) => {},
-    onSelect: (item) => {},
+    onOpen: () => { },
+    onClose: () => { },
+    onGroupOpen: (itemGroup) => { },
+    onSelect: (item) => { },
   },
 
   initialize(options) {
@@ -97,8 +97,7 @@ L.Control.Select = L.Control.extend({
 
     this.container = L.DomUtil.create(
       "div",
-      `leaflet-control leaflet-bar leaflet-control-select ${
-        this.options.additionalClass || ""
+      `leaflet-control leaflet-bar leaflet-control-select ${this.options.additionalClass || ""
       }`
     );
     this.container.setAttribute("id", opts.id);
@@ -129,16 +128,19 @@ L.Control.Select = L.Control.extend({
       case "ITEM_SELECT":
         if (this.options.multi) {
           newState.selected = this.state.selected.slice();
-
+          console.log("A");
           if (this.state.selected.includes(data.item.value)) {
             newState.selected = newState.selected.filter(
               (s) => s !== data.item.value
             );
+            console.log("B");
           } else {
             newState.selected.push(data.item.value);
+            console.log("C");
           }
         } else {
           newState.selected = data.item.value;
+          console.log("D");
         }
         newState.open = data.item.parent;
         break;
@@ -291,6 +293,7 @@ L.Control.Select = L.Control.extend({
   },
 
   _renderMenu(parent, items) {
+  
     const menu = L.DomUtil.create(
       "div",
       "leaflet-control-select-menu leaflet-bar ",

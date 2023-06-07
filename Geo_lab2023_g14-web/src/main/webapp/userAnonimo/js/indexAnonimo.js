@@ -61,8 +61,8 @@ function inicializarMapAnonimo() {
 
     ///////////////////////// OPCIONES DE MAPA /////////////////////////
     map = L.map('map', {
-        center: [-34.8797018070320851, -56.262557241497211],
-        zoom: 3,
+        center: [-34.8597018070320851, -56.180557241497211],
+        zoom: 12,
         minZoom: 4,
         maxZoom: 18,
         layers: [openst],
@@ -102,24 +102,24 @@ function inicializarMapAnonimo() {
 
     map.on(L.Draw.Event.CREATED, function (e) { // Se llama al finalizar dibujo de geometria
         drawLayers.addLayer(e.layer);
+
     });
 
-
-    ///////////////////////// UBICACION GEOLET /////////////////////////
+    /////////////////////// UBICACION GEOLET ///////////////////////
     //fitBounds([[-35, -56], [-34, -56]]); // ir a ubicacion
     L.geolet({
         position: 'bottomleft',
     }).addTo(map);
 
-    ///////////////////HASTA AQUI TODO OK////////////////////////////////////////////////////
-    var hospitalesItems = [];
-    // Obtener las coordenadas y datos del punto del arreglo, no va aca, es mas adelatente
-    var serviciosE = []; // arreglo de servicios
-    var ambulancias = []; // arreglo de ambulancias
+
+    /////////////////// SELECCIONAR HOSPITAL ////////////////////
+    let drawMarker;
+    let hospitalesItems = [];
+    let serviciosE = []; // arreglo de servicios
+    let ambulancias = []; // arreglo de ambulancias
     let urlHospi =
         'http://localhost:8081/geoserver/wfs?' +
         'service=WFS&' +
-        // 'version=1.1.0&' +
         'request=GetFeature&' +
         'typeName=Geo_lab2023_g14PersistenceUnit:hospital&' +
         'srsName=EPSG:32721&' +
@@ -134,32 +134,46 @@ function inicializarMapAnonimo() {
                 var item = features[i].properties.nombrehospital;
                 if (i < features.length - 1) {
                     hospitalesItems.push({ label: item });
+                    console.log(features[i].properties.nombrehospital);
                     console.log(hospitalesItems[i]);
                 }
-                // else
                 //hospitalesItems.push({label:item, servicioEH: " ", ambulancias: " "});
-
             }
-        })
+            var defaultValue = hospitalesItems[0];
 
+            L.control.select({
+                position: "topleft",
+                //    selectedDefault: defaultValue,
+                selectedDefault: defaultValue,
+                items: hospitalesItems,
+                multi: true,
+                iconChecked: "☑",
+                iconUnchecked: "❒",
+                onSelect: function () {
+                    console.log("Item seleccionado: ", hospitalesItems[0].label);
+                    // actualSelection = selection;
+                    // redrawMap(newItemValue);
+                },
+                onGroupOpen: function (groupOpened) {
+                    //     console.log(`group openend ${groupOpened}`);
+                },
+            }).addTo(map);
+
+            var marker = L.marker([49, 18]).addTo(map);
+            drawMarker = (newItemValue) => {
+                marker.setIcon(
+                    L.divIcon({
+                        html: '<div class="icon">' + newItemValue.label + "</div>",
+                        className: "marker-icon",
+                        iconSize: [50, 50],
+                    })
+                );
+            };
+            drawMarker(defaultValue);
+        })
         .catch(function (error) {
             console.error('Error:', error);
         });
-    console.log(hospitalesItems);
-    // Agregar las opciones al control desplegable
-
-    // var defaultValue = hospitalesItems[0].;
-
-    L.control
-        .select({
-            position: "topleft",
-            selectedDefault: hospitalesItems[0],
-            items: hospitalesItems,
-            onSelect: function (newItemValue) {
-                drawMarker(newItemValue);
-            },
-        })
-        .addTo(map);
 
     ///////////////////////// COORDENAS EVENTO CLICK /////////////////////////
     drawLayers.on('click', function (e) {
@@ -167,8 +181,8 @@ function inicializarMapAnonimo() {
         let longitud = e.latlng.lng;
         alert("Click en coordenadas: " + "\n" + "[" + latitud + "] [" + longitud + "]")
         console.log("Click en coordenadas: ")
-        console.log("Latitud:", latitud.toFixed(2)) // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
-        console.log("Longitud:", longitud.toFixed(2))
+        console.log("Latitud:", latitud) // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
+        console.log("Longitud:", longitud)
         console.log(e.layer);
     });
 
@@ -177,10 +191,9 @@ function inicializarMapAnonimo() {
         let longitud = e.latlng.lng;
         // alert("Click en coordenadas: " + "\n" + "[" + latitud + "] [" + longitud + "]")
         console.log("Click en coordenadas: ")
-        console.log("Latitud:", latitud.toFixed(2)) // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
-        console.log("Longitud:", longitud.toFixed(2))
+        console.log("Latitud:", latitud)//.toFixed(5)) // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
+        console.log("Longitud:", longitud)//.toFixed(5))
         console.log(e.layer);
     });
-    ///////////////////////// FIN COORDENAS EVENTO CLICK /////////////////////////
 
 }

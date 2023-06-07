@@ -38,7 +38,7 @@ function hardcodedDataPoint() {
             }
         }]
     }
-    L.geoJSON(puntos).addTo(map);
+    //  L.geoJSON(puntos).addTo(map);
 
     ///////////////////////// ADD POINT 2 /////////////////////////
     var puntos2 = {
@@ -56,29 +56,40 @@ function hardcodedDataPoint() {
     };
     //  L.geoJSON(puntos2).addTo(map);
 
+
     /////////////////// ICON ///////////////////
-    var miIcono = L.icon({
-        iconUrl: '../resources/marker-icons/mapbox-marker-icon-purple.svg',
+    var iconAnonimo = L.icon({
+        iconUrl: '../resources/marker-icons/mapbox-marker-icon-red.svg',
+        iconSize: [64, 64],
+    });
+    var iconAmbulancia = L.icon({
+        iconUrl: '../resources/marker-icons/mapbox-marker-icon-orange.svg',
         iconSize: [64, 64],
     });
 
-    /////////////////////// MARKER ///////////////////////
+    //////////////////// MARKER ////////////////////
     L.geoJSON(puntos2, {
         pointToLayer: function (feature, latlng) {
-            return L.marker(latlng, { icon: miIcono });
+            return L.marker(latlng, {
+                icon: iconAmbulancia
+            });
         }
-    }).addTo(map);
+    })//.addTo(map);
 
-    //////////////////// MARKER //////////////////// descomentar addto(map) para visualizar
-    marcador = L.marker([-34.8797018070320851, -56.262557241497211]).addTo(map) // Icono del marcador
-    marcador.bindPopup("Mi ubicación")
+    //////////////////// MARKER ////////////////////
+    // marcador = L.marker([-34.8797018070320851, -56.262557241497211], {
+    marcador = L.marker([-34.8503303549236, -56.185222811229534], {
+        icon: iconAnonimo
+    }).addTo(map) // Icono del marcador
+    marcador.bindPopup("Usuario Anonimo")
 
-    //////////////////// CIRCLE //////////////////// descomentar addto(map) para visualizar
-    circulo = L.circle([-34.8797018070320851, -56.262557241497211], { // Circulo zona personalizado
-        radius: 1700,
+
+    /////////////////// CIRCLE /////////////////// addto(map) para visualizar
+    circulo = L.circle([-34.8503303549236, -56.185222811229534], { // Circulo zona personalizado
+        radius: 1300,
         color: "green"
     }).addTo(map)
-    circulo.bindPopup("Circulo")
+    //circulo.bindPopup("Circulo")
 }
 
 

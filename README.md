@@ -11,11 +11,8 @@
 
 > Wilson Arriola
 
-<<<<<<< HEAD
-> Damian Vera
-=======
 > Damián Vera
->>>>>>> origin/rama_wilson
+
 
 ****
 
