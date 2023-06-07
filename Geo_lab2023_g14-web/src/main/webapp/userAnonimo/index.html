@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:h="http://www.w3.org/1999/html" xmlns:p="http://xmlns.jcp.org/jsf/composite">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,16 +18,20 @@
     <script src="../admin/lib/js/leaflet-src.js"></script>
     <script src="../admin/lib/js/leaflet.draw-src.js"></script>
     <script src="../admin/lib/js/leaflet.draw-shapefile.js"></script>
+    <script src="css/leaflet.control.select.css"></script>
+    <script src="scriptLeaflet/leaflet.control.select.js"></script>
 
     <script src="../scripts/geolet.js"></script>
-    <script src="js/indexAnonimo.js"></script>
+    <script src="./js/indexAnonimo.js"></script>
+    <script src="./js/cargarHospitales.js"></script>
+    <script src="./scriptLeaflet/hardcodedDataHandler.js"></script>
+
     <link rel="stylesheet" href="../admin/lib/css/leaflet.css" />
     <link rel="stylesheet" href="../admin/lib/css/leaflet.draw.css" />
     <link rel="stylesheet" href="../admin/lib/css/leaflet.draw-shapefile.css" />
 
+    <link rel="stylesheet" href="css/demo.css" />
     <link rel="stylesheet" href="../scripts/lib/css/style.css" />
-
-
 </head>
 
 <body>
@@ -37,18 +42,7 @@
             <div class="d-flex" id="mynavbar">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="javascript:void(0)">Opciones
-                        <h:form>
-                            <p:accordionPanel multiple="true">
-                                <p:tab title="Panel1">
-                                    <a>Solicitar ambulancia</a>
-                                </p:tab>
-                                <p:tab title="Panel2">
-                                    <a>Buscar Hospital</a>
-                                </p:tab>
-                            </p:accordionPanel>
-                        </h:form>
-                        </a>
+                        <a class="nav-link" href="javascript:void(0)">Opciones </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/Geo_lab2023_g14-web/login.xhtml">Ingresar</a>
@@ -62,11 +56,13 @@
     </nav>
 
     <div id="map"></div>
-
 </body>
 
 <script>
-    CrearMapaInvitado();
+    inicializarMapAnonimo();
+    addLayersAnonimoWFS();
+    hardcodedDataPoint();
+    addLayersAnonimoWFSTrabajabdo();
 </script>
 
 </html>
