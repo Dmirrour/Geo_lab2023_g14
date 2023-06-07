@@ -9,7 +9,6 @@ import uy.edu.tsig.entity.TipoHospital;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Builder
@@ -22,7 +21,7 @@ public class HospitalDTO implements Serializable {
     private String nombreHospital;
     private TipoHospital tipoHospital;
 
-    ArrayList<ServicioEmergenciaDTO> servicioEmergencia;
+    private ServicioEmergenciaDTO servicioEmergencia;
 
     @Builder.Default
     ArrayList<AmbulanciaDTO> ambulanciaDTOS =new ArrayList<>();

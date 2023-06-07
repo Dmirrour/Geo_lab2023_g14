@@ -1,129 +1,355 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html
-        xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:h="http://xmlns.jcp.org/jsf/html"
-        xmlns:p="http://primefaces.org/ui"
-        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-        xmlns:f="http://xmlns.jcp.org/jsf/core"
-        lang="es" xml:lang="es">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core" lang="es" xml:lang="es">
 
 <h:head>
    <!-- VERIFICAR SESION -->
    <f:event type="preRenderView" listener="#{sesion.verificarSesion()}"></f:event>
-
    <!-- VERIFICAR SESION -->
+
    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
    <meta name="viewport" content="width=device-width, initial-scale=1" />
    <title>Administrador</title>
 
-   <!-- MAPA CSS -->
-   <link rel="stylesheet" href="lib/css/leaflet.css" />
-   <link rel="stylesheet" href="lib/css/leaflet.draw.css" />
-   <link rel="stylesheet" href="lib/css/leaflet.draw-shapefile.css" />
-
-   <!-- BOOTSTRAP -->
    <link rel="stylesheet" href="lib/css/style.css" />
    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous" />
    <script type="javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 
-   <!-- MAPA JS -->
-   <script type="" src="lib/js/leaflet-src.js"></script>
-   <script type="" src="lib/js/leaflet.draw-src.js"></script>
-   <script type="" src="lib/js/leaflet.draw-shapefile.js"></script>
-   <script type="" src="lib/js/class.Configuracion.js"></script>
-   <script type="" src="lib/js/class.ControladorMapa.js"></script>
-   <script type="" src="../scripts/geolet.js"></script>
+   <script src="lib/js/leaflet-src.js"></script>
+   <script src="lib/js/leaflet.draw-src.js"></script>
+   <script src="lib/js/leaflet.draw-shapefile.js"></script>
 
-   <!-- JTS -->
-   <script type="" src="https://cdn.jsdelivr.net/npm/elm-pep@1.0.6/dist/elm-pep.js"></script>
-   <script type="" src="https://cdn.jsdelivr.net/npm/jsts@2.3.0/dist/jsts.min.js"></script>
+   <link rel="stylesheet" href="lib/css/leaflet.css" />
+   <link rel="stylesheet" href="lib/css/leaflet.draw.css" />
+   <link rel="stylesheet" href="lib/css/leaflet.draw-shapefile.css" />
 
+   <script src="lib/js/index.js"></script>
+   <script src="lib/js/cargarMap.js"></script>
 
-   <!-- CONSULTAS query -->
-   <script type="" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-   <script type="" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-   <!-- ICONOS -->
+   <style>
+      html,
+      body,
+      #map {
+         padding: 0;
+         margin: 0;
+         width: 100%;
+         height: 550px;
+      }
+   </style>
    <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
-   <link rel="stylesheet" href="https://unpkg.com/primeflex@^3/primeflex.css" />
+   <link rel="stylesheet" href="https://unpkg.com/primeflex@^3/primeflex.css"/>
 
    #{sesion.init()}
    #{adminBean.initH()}
-   #{servicioEBean.initS()}
+   #{adminBean.initS()}
    #{adminBean.initA()}
-
 </h:head>
 
-<h:body>
+<body>
    <p:growl id="messages" showDetail="true" />
    <div id="top">
-      <div class="navbar navbar-expand-sm">
+      <div class="navbar navbar-expand-sm navbar-dark bg-dark">
          <div class="container-fluid">
-            <div id="contenedorNavbar">
-               <p:menubar>
-                  <p:submenu label="Eliminar">
-                     <p:menuitem value="Eliminar Hospital" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg8').show()" />
-                     <p:menuitem value="Eliminar Ambulancia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg7').show()" />
-                     <p:menuitem value="Eliminar S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg6').show()" />
-                  </p:submenu>
-                  <p:submenu label="Modificar">
-                     <p:menuitem value="Modificar Ambulancia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg5').show()" />
-                     <p:menuitem value="Modificar S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg4').show()" />
-                  </p:submenu>
-                  <p:submenu label="Alta">
-                     <p:menuitem value="Alta Hospital" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg1').show()" />
-                     <p:menuitem value="Alta Ambulancia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg2').show()" />
-                     <p:menuitem value="Alta S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg3').show(); mostrarMarker();" />
-                  </p:submenu>
-               </p:menubar>
-            </div>
-            <div id="contenedorMnuSalir">
-               <h:form id="frmSalir">
-                  <p:commandButton id="frmBtnSalir" value="Salir" action="#{sesion.cerrarSesion()}" class="btn btn-rojo" icon="pi pi-power-off" />
+            <a class="navbar-brand" href="javascript:void(0)">Administrador</a>
+            <h2>
+               <h:outputText styleClass="text-primary" value="Bienvenido #{sessionScope.usuario.usuario}" />
+            </h2>
+            <div class="d-flex" id="mynavbar">
+               <h:form>
+                  <p:menuButton value="Eliminar">
+                     <p:menuitem value="Eliminar Hospital" type="button" icon="pi pi-external-link" onclick="PF('dlg8').show()" />
+                     <p:menuitem value="Eliminar Ambulancia" type="button" icon="pi pi-external-link" onclick="PF('dlg7').show()" />
+                     <p:menuitem value="Eliminar S. Emergencia" type="button" icon="pi pi-external-link" onclick="PF('dlg6').show()" />
+                  </p:menuButton>
+                  <span> - </span>
+                  <p:menuButton value="Modificar">
+                     <p:menuitem value="Modificar Ambulancia" type="button" icon="pi pi-external-link" onclick="PF('dlg5').show()" />
+                     <p:menuitem value="Modificar S. Emergencia" type="button" icon="pi pi-external-link" onclick="PF('dlg4').show()" />
+                  </p:menuButton>
+                  <span> - </span>
+                  <p:menuButton value="Alta">
+                     <p:menuitem value="Alta Hospital" type="button" icon="pi pi-external-link" onclick="PF('dlg1').show()" />
+                     <p:menuitem value="Alta Ambulancia" type="button" icon="pi pi-external-link" onclick="PF('dlg2').show()" />
+                     <p:menuitem value="Alta S. Emergencia" type="button" icon="pi pi-external-link" onclick="PF('dlg3').show()" />
+                  </p:menuButton>
+                  <span> - </span>
+                  <p:commandButton value="Salir" actionListener="#{sesion.cerrarSesion()}" class="btn btn-danger" icon="pi pi-power-off" action="/Geo_lab2023_g14-web/login.xhtml" />
                </h:form>
             </div>
-            <div id="contenedorTitulo">
-               <h2 class="bg">
-                  <h:outputText styleClass="textoborde" value="Bienvenido #{sessionScope.usuario.usuario}" />
-               </h2>
-            </div>
+
          </div>
       </div>
    </div>
-   <div id="map"></div>
+   <div class="container-fluid mt-3">
+      <div id="map"></div>
+      <script>
+         CargarMap();
+      </script>
+   </div>
 
-   <!-- FORM'S  -->
-   <p:outputPanel id="formPanel">
-      <ui:include src="lib/forms/altaAmbulancia.xhtml"/>
-      <ui:include src="lib/forms/altaHospital.xhtml"/>
-      <ui:include src="lib/forms/altaServicioEmergencia.xhtml"/>
-      <ui:include src="lib/forms/eliminarAmbulancia.xhtml"/>
-      <ui:include src="lib/forms/eliminarHospital.xhtml"/>
-      <ui:include src="lib/forms/eliminarSE.xhtml"/>
-      <ui:include src="lib/forms/modificarSE.xhtml"/>
-   </p:outputPanel>
-   <!-- END FORMS -->
-</h:body>
 
-<script type="text/javascript">
-   function ocultarDlgs(){
-      PF('dlg1').hide();
-      PF('dlg2').hide();
-      PF('dlg3').hide();
+   <p:dialog header="Alta hospitales" widgetVar="dlg1" minHeight="600" width="850" showEffect="fade" modal="true">
+      <f:view>
+         <p:card styleClass="flex justify-content-center">
+            <h:form>
+               <div class="row m-auto mb-4">
+                  <div class="col-12 py-2">
+                     <h:outputLabel for="nombreH" class="col-12 col-md-6">Nombre Hospital:</h:outputLabel>
+                     <h:inputText id="nombreH" value="#{adminBean.nombreH}" class="col-12 col-md-6" required="true" requiredMessage="La razon social es requerida"/>
+                  </div>
+                  <div class="col-12 py-2">
+                     <h:outputLabel for="enum" class="col-12 col-md-6">Tipo de Hospital</h:outputLabel>
+                     <p:selectOneMenu id="enum" value="#{adminBean.tipoH}" class="col-12 col-md-6">
+                        <f:selectItem itemLabel="MUTUALISTA" itemValue="MUTUALISTA" />
+                        <f:selectItem itemLabel="SEGURO PRIVADO" itemValue="SEGUROPRIVADO" />
+                        <f:selectItem itemLabel="SERVICIO ESTATAL" itemValue="SERVICIOESTATAL" />
+                     </p:selectOneMenu>
+                  </div>
+                  <div class="d-grid col-6 mx-auto pt-2">
+                     <p:commandButton value="Crear" action="#{adminBean.addHospital()}" update="messages" class="col-md-6" onclick="PF('dlg2').hidden()" />
+                  </div>
+               </div>
+            </h:form>
+         </p:card>
+      </f:view>
+   </p:dialog>
+
+   <p:dialog header="Alta ambulancia" widgetVar="dlg2" minHeight="600" width="850" showEffect="fade" modal="true">
+      <f:view>
+         <p:card styleClass="flex justify-content-center">
+            <h:form>
+               <div class="row m-auto mb-4">
+                  <div class="col-12 py-2">
+                     <h:outputLabel for="codigo" class="col-12 col-md-6">Codigo guia:</h:outputLabel>
+                     <h:inputText id="codigo"  type="number" value="#{adminBean.codigo}" class="col-12 col-md-6" required="true" requiredMessage="La razon social es requerida"/>
+                  </div>
+                  <div class="col-12 py-2">
+                     <h:outputLabel for="desvio" class="col-12 col-md-6">Maximo desvio:</h:outputLabel>
+                     <h:inputText id="desvio" type="number" value="#{adminBean.desvio}" class="col-12 col-md-6" required="true" requiredMessage="La razon social es requerida"/>
+                  </div>
+                  <hr />
+                  <div class="col-12 py-2">
+                     <h:outputLabel for="rubro" class="col-12 col-md-6">Hospital</h:outputLabel>
+                     <p:selectOneMenu id="rubro" value="#{adminBean.idHospital}" filter="true" filterMatchMode="contains">
+                        <f:selectItems value="#{adminBean.hospitalDTOS}" var="ab" itemLabel="[ #{ab.idHospital} ] - #{ab.nombreHospital}" itemValue="#{ab.idHospital}" class="col-12 col-md-6" required="true" requiredMessage="El Rubro es requerida"/>
+                     </p:selectOneMenu>
+                  </div>
+
+                  <div class="d-grid col-12 mx-auto pt-2">
+                     <p:commandButton value="Crear" action="#{adminBean.addAmbulancia()}" update="messages" styleClass="ui-button-raised ui-button-success ui-button-flat" class="col-md-6" onclick="PF('dlg2').hidden()"/>
+                  </div>
+               </div>
+            </h:form>
+         </p:card>
+      </f:view>
+   </p:dialog>
+
+   <p:dialog header="Alta servicio de emergencia" widgetVar="dlg3" minHeight="600" width="850" showEffect="fade" modal="true">
+      <f:view>
+         <p:card styleClass="flex justify-content-center">
+            <h:form>
+               <div class="row m-auto mb-4">
+                  <div class="col-12 py-2">
+                     <h:outputLabel for="camas" class="col-12 col-md-6">Total de Camas:</h:outputLabel>
+                     <h:inputText id="camas"  type="number" value="#{adminBean.totalCama}" class="col-12 col-md-6" required="true" requiredMessage="La razon social es requerida"/>
+                  </div>
+
+                  <div class="col-12 py-2">
+                     <h:outputLabel for="rubro2" class="col-12 col-md-6">Hospital</h:outputLabel>
+                     <p:selectOneMenu id="rubro2" value="#{adminBean.idHospital}" filter="true" filterMatchMode="contains" class="col-12 col-md-6">
+                        <f:selectItems value="#{adminBean.hospitalDTOS}" var="ab" itemLabel="[ #{ab.idHospital} ] - #{ab.nombreHospital}" itemValue="#{ab.idHospital}" class="text-base text-color surface-overlay p-2 border-1 border-solid surface-border border-round appearance-none outline-none focus:border-primary w-full" required="true" requiredMessage="El Rubro es requerida"/>
+                     </p:selectOneMenu>
+                  </div>
+
+                  <div class="td-grid col-6 mx-auto pt-2">
+                     <p:commandButton value="Crear" action="#{adminBean.addServicioE()}" update="messages" class="col-md-6" onclick="PF('dlg3').hidden()" />
+                  </div>
+               </div>
+            </h:form>
+         </p:card>
+      </f:view>
+   </p:dialog>
+
+   <p:dialog header="Modificar S. Emergencia" widgetVar="dlg4" minHeight="600" width="850" showEffect="fade" modal="true">
+      <f:view>
+         <p:card styleClass="flex justify-content-center">
+            <p:dataTable>
+               <p:column headerText="id"></p:column>
+               <p:column headerText="hospital"></p:column>
+               <p:column headerText="Cant.Camas"></p:column>
+               <p:column headerText="Acciones"></p:column>
+            </p:dataTable>
+         </p:card>
+      </f:view>
+   </p:dialog>
+
+   <p:dialog id="tablase" header="Eliminar S. Emergencia" widgetVar="dlg6" minHeight="600" width="850" showEffect="fade" modal="true">
+      <f:view>
+         <p:card styleClass="flex justify-content-center">
+            <p:dataTable value="#{adminBean.servicioEmergenciaDTOS}" var="SE">
+               <p:column headerText="idServicio">
+                  <h:outputText value="#{SE.idServicio}" />
+               </p:column>
+               <p:column headerText="Camas Totales">
+                  <h:outputText value="#{SE.totalCama}" />
+               </p:column>
+               <p:column headerText="Camas Libres">
+                  <h:outputText value="#{SE.camasLibres}" />
+               </p:column>
+               <p:column headerText="Hospital Name">
+                  <h:outputText value="#{SE.hospital.nombreHospital}" />
+               </p:column>
+               <p:column headerText="false">
+                  <p:commandButton styleClass="rounded-button ui-button-danger"
+                                   icon="pi pi-trash"
+                                   process="@this"
+                                   action="#{adminBean.eliminarB(SE.idServicio)}"
+
+                  />
+               </p:column>
+            </p:dataTable>
+         </p:card>
+      </f:view>
+   </p:dialog>
+
+   <p:dialog  header="Eliminar Ambulancia" widgetVar="dlg7" minHeight="600" width="850" showEffect="fade" modal="true">
+      <f:view>
+         <p:card styleClass="flex justify-content-center">
+            <p:dataTable value="#{adminBean.ambulanciaDTOS}" var="ambu">
+               <p:column headerText="Id Ambulancia">
+                  <h:outputText value="#{ambu.idAmbulancia}" />
+               </p:column>
+               <p:column headerText="Codigo Ambulancia">
+                  <h:outputText value="#{ambu.idCodigo}" />
+               </p:column>
+               <p:column headerText="Distancia Maxima">
+                   <h:outputText value="#{ambu.distanciaMaxDesvio}" />
+               </p:column>
+               <p:column headerText="Hospital Name">
+                  <h:outputText value="#{ambu.hospital.nombreHospital}" />
+               </p:column>
+
+               <p:column headerText="false">
+                  <p:commandButton styleClass="rounded-button ui-button-danger"
+                                   icon="pi pi-trash"
+                                   process="@this"
+                                   action="#{adminBean.eliminarA(ambu.idAmbulancia)}"
+
+                  />
+               </p:column>
+            </p:dataTable>
+         </p:card>
+      </f:view>
+   </p:dialog>
+
+   <p:dialog  header="Eliminar Hospital" widgetVar="dlg8" minHeight="600" width="850" showEffect="fade" modal="true">
+      <f:view>
+         <p:card styleClass="flex justify-content-center">
+            <p:dataTable id="table" value="#{adminBean.hospitalDTOS}" var="hospitales">
+               <p:column headerText="idHospital">
+                  <h:outputText value="#{hospitales.idHospital}" />
+               </p:column>
+               <p:column headerText="nombre">
+                  <h:outputText value="#{hospitales.nombreHospital}" />
+               </p:column>
+               <p:column headerText="tipo">
+                  <h:outputText value="#{hospitales.tipoHospital}" />
+               </p:column>
+               <p:column headerText="s. emergencia">
+                  <h:outputText value="#{hospitales.servicioEmergencia.idServicio}" />
+               </p:column>
+
+               <p:column headerText="Ambulacias">
+                  <p:dialog id="h_ambu" header="Ambulacias" widgetVar="listaAmbulacias"  resizable="false">
+                     <p:dataTable paginator="true" rows="8" id="table_ambulancias" value="#{hospitales.ambulanciaDTOS}" var="amb" disabledSelection="true">
+                        <p:column headerText="ID Ambulancia">
+                           <p:outputLabel value="#{amb.idAmbulancia}"/>
+                        </p:column>
+                        <p:column headerText="Codigo">
+                           <p:outputLabel value="#{amb.idCodigo}"/>
+                        </p:column>
+                        <p:column headerText="Distancia Maxima Desvio">
+                           <p:outputLabel value="#{amb.distanciaMaxDesvio}"/>
+                        </p:column>
+                     </p:dataTable>
+                  </p:dialog>
+
+                  <p:commandButton
+                          id="mostrarAmbulacias"
+                          styleClass="rounded-button ui-button-primary"
+                          icon="pi pi-plus"
+                          onclick="PF('listaAmbulacias').show();"
+                  />
+               </p:column>
+
+
+               <p:column headerText="false">
+                  <p:commandButton styleClass="rounded-button ui-button-danger"
+                                   icon="pi pi-trash"
+                                   process="@this"
+                                   action="#{adminBean.eliminarH(hospitales.idHospital)}"
+                                   update="table"
+                  />
+               </p:column>
+            </p:dataTable>
+         </p:card>
+      </f:view>
+   </p:dialog>
+</body>
+
+<!-- <script>
+   var map, drawControl, drawLayers, marcador, circulo;
+   function init() {
+      var topo = L.tileLayer('http://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+         attribution: '© Grupo 14'
+      });
+
+      map = L.map('map', {
+         center: [-34.8797018070320851, -56.262557241497211],
+         zoom: 13,
+         minZoom: 2,
+         maxZoom: 18,
+         layers: [topo],
+         zoomControl: true
+      });
+      marcador = L.marker([-34.8797018070320851, -56.262557241497211]).addTo(map) // establece icono del marcado
+      marcador.bindPopup("Casa Sebastián")
+
+      circulo = L.circle([-34.8797018070320851, -56.262557241497211], {
+         radius: 1500,
+         color: "green"
+      }).addTo(map)
+      circulo.bindPopup("Villa del Cerro")
+
+      drawLayers = new L.FeatureGroup();
+      drawControl = new L.Control.DrawPlus({
+         position: 'topright',
+         draw: {
+            circle: true,
+            polyline: true,
+         },
+         edit: {
+            featureGroup: drawLayers,
+            edit: true
+         }
+      });
+      map.addLayer(drawLayers);
+      map.addControl(drawControl);
+
+      map.on(L.Draw.Event.CREATED, function (e) {
+         drawLayers.addLayer(e.layer);
+      });
+
+      drawLayers.on('click', function (e) {
+         let latitud = e.latlng.lat;
+         let longitud = e.latlng.lng;
+         alert("Click en coordenadas: " + "\n" + "[" + latitud + "] [" + longitud + "]")
+         console.log("Click en coordenadas: ")
+         console.log("Latitud:", latitud.toFixed(2)) // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
+         console.log("Longitud:", longitud.toFixed(2))
+         console.log(e.layer);
+      });
    }
-   let mapaAdmin = new ControladorMapa();
-   mapaAdmin.crearMapaAdmin();
-   mapaAdmin.addLayersWFS();
-   mapaAdmin.addLayerWFSLine();
-
-   function mostrarMarker() {
-      mapaAdmin.cargarMapaAltaSE();
-   }
-
-   mapaAdmin.cargarMapaAltaAmbulancia();
-</script>
+</script> -->
 
 </html>
-
-

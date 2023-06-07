@@ -29,9 +29,8 @@ public class Hospital implements Serializable {
 
     private TipoHospital tipoHospital;
 
-    @Builder.Default
-    @OneToMany
-    List<ServicioEmergencia> ServicioEmergencia= new ArrayList<>();
+    @OneToOne(orphanRemoval = true)
+    ServicioEmergencia servicioEmergencia;
 
     @Builder.Default
     @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true)
@@ -43,18 +42,18 @@ public class Hospital implements Serializable {
         this.idHospital=idHospital;
     }
 
-    public ArrayList<ServicioEmergenciaDTO> getServicioEmergenciaDTO(){
-            ArrayList<ServicioEmergenciaDTO> result= new ArrayList<>();
-            ServicioEmergencia.forEach(servicioEmergencia -> {
-                result.add(ServicioEmergenciaDTO.builder()
-                        .idServicio(servicioEmergencia.getIdServicio())
-                        .nombre(servicioEmergencia.getNombre())
-                        .totalCama(servicioEmergencia.getTotalCama())
-                        .camasLibres(servicioEmergencia.getCamasLibres())
-                        //.hospital(servicioEmergencia.getHospitalDTO())
-                        .build());
-            });
-            return result;
+    public ServicioEmergenciaDTO getServicioEmergenciaDTO(){
+        if(servicioEmergencia!=null){
+            return ServicioEmergenciaDTO.builder()
+                    .idServicio(servicioEmergencia.getIdServicio())
+                    .totalCama(servicioEmergencia.getTotalCama())
+                    .camasLibres(servicioEmergencia.getCamasLibres())
+                    //.hospital(servicioEmergencia.getHospitalDTO())
+                    .build();
+        }else{
+            return null;
+        }
+
     }
 
     public ArrayList<AmbulanciaDTO> getAmbulanciasDTOS(){
@@ -71,7 +70,7 @@ public class Hospital implements Serializable {
     }
 
     public HospitalDTO getHospitalDTO(){
-        return new HospitalDTO(this.getIdHospital(),this.nombreHospital,this.tipoHospital);
+        return new HospitalDTO(this.getIdHospital(),this.nombreHospital,this.tipoHospital,this.getServicioEmergenciaDTO(),this.getAmbulanciasDTOS());
     }
 
 }
