@@ -92,6 +92,9 @@
       </div>
    </div>
    <div id="map"></div>
+   <button id="heatmapButton">HeatMap</button>
+   <!--  <script type="" src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>-->
+    <script type="" src="js/heatMap.js"></script>
 
    <!-- FORM'S  -->
    <p:outputPanel id="formPanel">
@@ -122,6 +125,14 @@
    }
 
    mapaAdmin.cargarMapaAltaAmbulancia();
+
+   // Obtener la referencia al botón "HeatMap"
+   let heatmapButton = document.getElementById("heatmapButton");
+
+   // Asigna un controlador de eventos al botón para mostrar el mapa de calor cuando se hace clic
+   heatmapButton.addEventListener("click", function() {
+      mapaAdmin.addHeatMap();
+   });
 </script>
 
 </html>

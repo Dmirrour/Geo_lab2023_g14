@@ -18,8 +18,8 @@ class Configuracion {
         this.baseDatos = 'Geo_lab2023_g14PersistenceUnit';
         this.srid = 'EPSG:32721';
         this.rutas = 'ft_00cam_dig';
-        this.ejes = 'ft_01_ejes';
-        this.deptos = 'ft_00departamento';
+        this.ejes = 'ft_ejes';
+        this.deptos = 'ft_depto';
         this.vista_SEH = 'vista_se_h';
         this.vista_LineString = 'vista_a_rec';
         this.colors = [

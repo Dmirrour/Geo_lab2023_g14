@@ -101,6 +101,29 @@ class ControladorMapa extends Configuracion {
                 zoomControl: true
             });
         }
+
+        addHeatMap(){
+
+        let urlAmbulancia =
+        'http://localhost:' +
+        this.puertoGeoServer +
+        '/geoserver/wfs?' +
+        'service=WFS&' +
+        'request=GetFeature&' +
+        'typeName=' +
+        this.baseDatos +
+        ':' + this.vista_LineString + '&' +
+        'srsName=' + this.srid + '&' +
+        'outputFormat=application/json';
+
+        fetch(urlAmbulancia)
+        .then(response => response.json())
+        .then(data => {
+            heatMap(data); // Llamar a la función heatMap con los datos obtenidos de la URL
+        });
+
+        }
+
         crearMapaAdmin() {
 
             let baselayers = {
