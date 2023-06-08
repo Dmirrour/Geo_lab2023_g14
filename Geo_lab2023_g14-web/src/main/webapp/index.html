@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -18,8 +18,13 @@
     <script src="admin/lib/js/leaflet.draw-src.js"></script>
     <script src="admin/lib/js/leaflet.draw-shapefile.js"></script>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script src="scripts/geolet.js"></script>
     <script src="scripts/lib/indexInvitado.js"></script>
+    <script src="scripts/lib/buscador/axios.min.js"></script>
+    <link rel="stylesheet" href="scripts/lib/buscador/estilos.css" />
+    <link rel="stylesheet" href="scripts/lib/buscador/fontawesome6.all.min.css" />
     <link rel="stylesheet" href="admin/lib/css/leaflet.css" />
     <link rel="stylesheet" href="admin/lib/css/leaflet.draw.css" />
     <link rel="stylesheet" href="admin/lib/css/leaflet.draw-shapefile.css" />
@@ -29,32 +34,151 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="javascript:void(0)">TSIG - G14</a>
-
-            <div class="d-flex" id="mynavbar">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="javascript:void(0)">Opciones</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/Geo_lab2023_g14-web/login.xhtml">Ingresar</a>
-                    </li>
-                </ul>
+    <div id="navbar">
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="javascript:void(0)">TSIG - G14</a>
+                <div class="d-flex" id="mynavbar">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/Geo_lab2023_g14-web/login.xhtml">Ingresar</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </nav>
+
+        <button id="buscarUbicacion"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-geo" viewBox="0 0 16 16">
+            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm0-15a7 7 0 1 1 0 14A7 7 0 0 1 8 1zm0 4a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm0 1a2 2 0 1 1 0 4 2 2 0 0 1 0-4z"/>
+        </svg></button>
+        <button id="mostrarBuscador"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-signpost-2" viewBox="0 0 16 16">
+            <path d="M7 1.414V2H2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h5v1H2.5a1 1 0 0 0-.8.4L.725 8.7a.5.5 0 0 0 0 .6l.975 1.3a1 1 0 0 0 .8.4H7v5h2v-5h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H9V6h4.5a1 1 0 0 0 .8-.4l.975-1.3a.5.5 0 0 0 0-.6L14.3 2.4a1 1 0 0 0-.8-.4H9v-.586a1 1 0 0 0-2 0zM13.5 3l.75 1-.75 1H2V3h11.5zm.5 5v2H2.5l-.75-1 .75-1H14z"/>
+        </svg></button>
+        <div id="contenedorFrmBuscar" style="display: none;">
+            <form id="frmBuscador" action="#" method="post">
+                <div id="ubicacion">
+                    <div class="card card-header-actions border-success mb-4">
+                        <div class="card-header ">
+                            <div class="input-group">
+                                <span class="input-group-text" id="basic-addon3">Calle</span>
+                                <input type="text" placeholder="Escriba el nombre de la calle..." class="form-control buscador-fluid"
+                                       id="buscador" name="buscador" onkeyup="sugerencia(this.value)" aria-describedby="basic-addon3 basic-addon4">
+                            </div>
+                            <div class="dropdown-notifications">
+                                <div class="dropdown-menu dropdown-menu-right border-0 shadow" id="" aria-labelledby="navbarDropdownAlerts">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <!---------------------------------------------------------------------------
+                                                UBICACION
+                            ------------------------------------------------------------------------------>
+                            <div class="row justify-content-center">
+                                <!-- notificaciones -->
+                                <div class="dropdown-notifications">
+                                    <div class="dropdown-menu dropdown-menu-right border-0 shadow" id="visorDeListado" aria-labelledby="navbarDropdownAlerts">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <!-- departamento -->
+                                            <div class="col-md-6">
+                                                <label for="departamento" class="form-label">Departamento</label>
+                                                <input type="text" class="form-control" id="departamento" name="departamento" disabled>
+                                            </div>
+                                            <!-- localidad -->
+                                            <div class="col-md-6">
+                                                <label for="barrio" class="form-label">Localidad</label>
+                                                <input type="text" class="form-control" id="barrio" name="barrio" disabled>
+                                            </div>
+                                            <!-- calle -->
+                                            <div class="col-md-12 pb-4">
+                                                <label for="calle" class="form-label">Calle</label>
+                                                <input type="text" class="form-control" id="calle" name="calle" disabled >
+                                            </div>
+                                            <!-- Acordeón 1: Selector de esquina -->
+                                            <div class="col-md-12">
+                                                <div class="accordion" id="acordeonEsquina">
+                                                    <div class="accordion-item">
+                                                        <h2 class="accordion-header" id="headingEsquina">
+                                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEsquina" aria-expanded="true" aria-controls="collapseEsquina">
+                                                                Esquina
+                                                            </button>
+                                                        </h2>
+                                                        <div id="collapseEsquina" class="accordion-collapse collapse show" aria-labelledby="headingEsquina" data-bs-parent="#acordeonEsquina">
+                                                            <div class="accordion-body">
+                                                                <div class="col-md-12" id="esquinaDiv">
+                                                                    <input type="text" class="form-control" id="idSelectEsquina" name="idSelectEsquina" value="" disabled>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- Acordeón 2: Número de calle y botón de búsqueda -->
+                                            <div class="col-md-12">
+                                                <div class="accordion" id="acordeonNumero">
+                                                    <div class="accordion-item">
+                                                        <h2 class="accordion-header" id="headingNumero">
+                                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNumero" aria-expanded="false" aria-controls="collapseNumero">
+                                                                Número de calle y búsqueda
+                                                            </button>
+                                                        </h2>
+                                                        <div id="collapseNumero" class="accordion-collapse collapse" aria-labelledby="headingNumero" data-bs-parent="#acordeonNumero">
+                                                            <div class="accordion-body">
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <input type="number" placeholder="Numero" class="form-control" id="numeroCalle" name="numeroCalle">
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <button type="button" class="btn btn-primary" onclick="buscarCalleNumero(this);">Buscar</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <input type="text" style="visibility: hidden;" id="direccion" name="Direccion"  value="" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--------------------------------------------termina form-->
+                </div>
+            </form>
         </div>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </nav>
 
-    <div id="map"></div>
+        <div id="map-container">
+            <div id="map"></div>
+        </div>
+    </div>
 
+    <script>
+        var collapseEsquina = new bootstrap.Collapse(document.getElementById("collapseEsquina"));
+        var collapseNumero = new bootstrap.Collapse(document.getElementById("collapseNumero"));
+
+        // Escuchar el evento de mostrar el acordeón de Esquina
+        document.getElementById("acordeonEsquina").addEventListener("show.bs.collapse", function() {
+            collapseNumero.hide(); // Ocultar el acordeón de Número
+        });
+
+        // Escuchar el evento de mostrar el acordeón de Número
+        document.getElementById("acordeonNumero").addEventListener("show.bs.collapse", function() {
+            collapseEsquina.hide(); // Ocultar el acordeón de Esquina
+        });
+    </script>
+
+    <script src="scripts/lib/js/buscadorCalles.js"></script>
+
+    <script>
+        CrearMapaInvitado();
+    </script>
 </body>
-
-<script>
-    CrearMapaInvitado();
-</script>
-
 </html>

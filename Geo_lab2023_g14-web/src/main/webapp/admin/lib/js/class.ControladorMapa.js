@@ -134,10 +134,10 @@ class ControladorMapa extends Configuracion {
                     collapsed: true
                 }).addTo(this.map);
 
-            this.map.fitBounds([[-35, -56], [-34, -56]]); // btn Ubicacion
-            L.geolet({
-                position: 'bottomleft'
-            }).addTo(this.map);
+            //this.map.fitBounds([[-35, -56], [-34, -56]]); // btn Ubicacion
+            //L.geolet({
+            //    position: 'bottomleft'
+            //}).addTo(this.map);
 
             this.map.on(L.Draw.Event.CREATED, function (e) {
                 this.drawLayers.addLayer(e.layer);
@@ -268,16 +268,6 @@ class ControladorMapa extends Configuracion {
                 })
                 .then(function (data) {
                     geojsonLayer.addData(data);
-                    // Crear un buffer alrededor de las líneas
-                    /*
-                    let bufferedLayer = L.geoJSON(turf.buffer(data, 100, { units: 'meters' }), {
-                        style: {
-                            color: 'blue',
-                            weight: 2,
-                            opacity: 0.7
-                        }
-                    }).addTo(this.map);
-                    */
                 })
                 .catch(function (error) {
                     console.error('Error:', error);
