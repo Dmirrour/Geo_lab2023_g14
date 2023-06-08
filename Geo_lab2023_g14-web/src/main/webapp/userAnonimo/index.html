@@ -30,7 +30,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.8.0/leaflet.min.css" integrity="sha512-oIQ0EBio8LJupRpgmDsIsvm0Fsr6c3XNHLB7at5xb+Cf6eQuCX9xuX8XXGRIcokNgdqL1ms7nqbQ6ryXMGxXpg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.8.0/leaflet-src.js" integrity="sha512-Uj3ED3j6dg1xxMgtj4kF4W60Tc1HGboQ5gweT+hG1z8sBIc0ncFuoh3qV5XZF8ZqlEGlV9mt9E6MZhLN3zFDJg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
 
-    <link\ rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css" />
 
     <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css" /> -->
@@ -49,6 +49,17 @@
     <link rel="stylesheet" href="css/demo.css" />
     <link rel="stylesheet" href="../scripts/lib/css/style.css" />
 </head>
+
+<style>
+    html,
+    body,
+    #map {
+        padding: 0px;
+        margin: 0px;
+        height: 100%;
+        width: 100%;
+    }
+</style>
 
 <body>
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
@@ -70,16 +81,21 @@
             <span class="navbar-toggler-icon"></span>
         </button>
     </nav>
-
     <div id="map"></div>
+
 </body>
 
 <script>
     inicializarMapAnonimo();
-    wfsServicioEmergencia();
-    hardcodedDataPoint();
+    wfsSelectHospitales();
+
+    // wfsServicioEmergencia();
     wfsAmbulancia();
-  //  wfsListServicioEmergencia();
+    hardcodedDataPoint();
+
+//     wfsBuscarServicioEmergencia();
+//    wfsBuscarAmbulancia();
+
 </script>
 
 </html>

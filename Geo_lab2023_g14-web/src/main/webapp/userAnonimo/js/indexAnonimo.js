@@ -102,7 +102,6 @@ function inicializarMapAnonimo() {
 
     map.on(L.Draw.Event.CREATED, function (e) { // Se llama al finalizar dibujo de geometria
         drawLayers.addLayer(e.layer);
-
     });
 
     /////////////////////// UBICACION GEOLET ///////////////////////
@@ -112,69 +111,6 @@ function inicializarMapAnonimo() {
     }).addTo(map);
 
 
-    /////////////////// SELECCIONAR HOSPITAL ////////////////////
-    let drawMarker;
-    let hospitalesItems = [];
-    let serviciosE = []; // arreglo de servicios
-    let ambulancias = []; // arreglo de ambulancias
-    let urlHospi =
-        'http://localhost:8081/geoserver/wfs?' +
-        'service=WFS&' +
-        'request=GetFeature&' +
-        'typeName=Geo_lab2023_g14PersistenceUnit:hospital&' +
-        'srsName=EPSG:32721&' +
-        'outputFormat=application/json';
-
-    fetch(urlHospi)
-        .then(function (response) {
-            return response.json();
-        }).then(function (data) {
-            var features = data.features;
-            for (var i = 0; i < features.length; i++) {
-                var item = features[i].properties.nombrehospital;
-                if (i < features.length - 1) {
-                    hospitalesItems.push({ label: item });
-                    console.log(features[i].properties.nombrehospital);
-                    console.log(hospitalesItems[i]);
-                }
-                //hospitalesItems.push({label:item, servicioEH: " ", ambulancias: " "});
-            }
-            var defaultValue = hospitalesItems[0];
-
-            L.control.select({
-                position: "topleft",
-                //    selectedDefault: defaultValue,
-                selectedDefault: defaultValue,
-                items: hospitalesItems,
-                multi: true,
-                iconChecked: "☑",
-                iconUnchecked: "❒",
-                onSelect: function () {
-                    console.log("Item seleccionado: ", hospitalesItems[0].label);
-                    // actualSelection = selection;
-                    // redrawMap(newItemValue);
-                },
-                onGroupOpen: function (groupOpened) {
-                    //     console.log(`group openend ${groupOpened}`);
-                },
-            }).addTo(map);
-
-            var marker = L.marker([49, 18]).addTo(map);
-            drawMarker = (newItemValue) => {
-                marker.setIcon(
-                    L.divIcon({
-                        html: '<div class="icon">' + newItemValue.label + "</div>",
-                        className: "marker-icon",
-                        iconSize: [50, 50],
-                    })
-                );
-            };
-            drawMarker(defaultValue);
-        })
-        .catch(function (error) {
-            console.error('Error:', error);
-        });
-
     ///////////////////////// COORDENAS EVENTO CLICK /////////////////////////
     drawLayers.on('click', function (e) {
         let latitud = e.latlng.lat;
@@ -183,7 +119,6 @@ function inicializarMapAnonimo() {
         console.log("Click en coordenadas: ")
         console.log("Latitud:", latitud) // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
         console.log("Longitud:", longitud)
-        console.log(e.layer);
     });
 
     map.on('click', function (e) {
@@ -193,7 +128,6 @@ function inicializarMapAnonimo() {
         console.log("Click en coordenadas: ")
         console.log("Latitud:", latitud)//.toFixed(5)) // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
         console.log("Longitud:", longitud)//.toFixed(5))
-        console.log(e.layer);
     });
 
 }

@@ -85,7 +85,7 @@ DROP TABLE usuario CASCADE;
 
 
 --*-*-*-*-*-*-*-*-*-  DATOS PRUEBAS TRABAJANDO -*-*-*-*-*-*-*-*-*--
-
+SELECT ST_AsText(ST_PointN(polyline, 2)) AS punto FROM ambulancia WHERE idambulancia = 1; -- Devuelve un point del linestring
 SELECT st_astext(st_union(geom)) FROM ft_01_ejes;
 SELECT st_astext(st_linemerge(st_union(polyline))) FROM ambulancia WHERE nom_calle='MAGALLANES';
 CREATE TABLE st_asgml(geom) FROM ft01_ejes WHERE nom_calle='MAGALLANES';

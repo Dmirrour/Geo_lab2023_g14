@@ -111,10 +111,11 @@ L.Control.Select = L.Control.extend({
     var newState = {};
 
     switch (action) {
+
       case "ITEM_SELECT":
         if (this.options.multi) {
           newState.selected = this.state.selected.slice();
-          //  console.log("Seleccionado:");
+          // console.log("Seleccionado:" + data.DomEvent);
           if (this.state.selected.includes(data.item.value)) {
             newState.selected = newState.selected.filter(function (s) {
               return s !== data.item.value;
@@ -125,7 +126,7 @@ L.Control.Select = L.Control.extend({
           }
         } else {
           newState.selected = data.item.value;
-        //  console.log("Seleccionado: ");
+          //  console.log("Seleccionado: ");
         }
 
         newState.open = data.item.parent;
@@ -214,6 +215,7 @@ L.Control.Select = L.Control.extend({
       });
     } else {
       this._emit("ITEM_SELECT", {
+
         item: item
       });
     }
