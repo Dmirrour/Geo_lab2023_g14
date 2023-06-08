@@ -87,6 +87,7 @@ function CrearMapaInvitado() {
         position: 'topright',
         draw: {
             circle: true,
+            circle: true,
             polyline: true
         },
         edit: {
@@ -102,7 +103,7 @@ function CrearMapaInvitado() {
         position: 'bottomleft',
     }).addTo(map);
 
-    L.control.layers(baselayers, overlayers, { collapsed: true }).addTo(map);
+    L.control.layers(baselayers, overlayers, { collapsed: false }).addTo(map);
 
     map.on(L.Draw.Event.CREATED, function (e) {
         drawLayers.addLayer(e.layer);
@@ -164,7 +165,7 @@ function CrearMapaInvitado() {
             // Configurar el evento de clic en los marcadores
             geojsonLayer.eachLayer(function (layer) {
                 layer.on('click', function (e) {
-                   let properties = e.target.feature.properties;
+                    let properties = e.target.feature.properties;
                     let popupContent =
                         '<div class="popup-content">' +
                         '<h4>S. E.: <em>' + properties.nombre + '</em></h4>' +
