@@ -120,7 +120,7 @@ public class AdminBean implements Serializable {
                 System.out.println("pase el wild");
 
                 //alta recorrido
-                ResultSet rs = stmt.executeQuery(
+                int rowsAffected  = stmt.executeUpdate(
                         "UPDATE ambulancia SET polyline = ST_SetSRID(ST_GeomFromText('"+ rec +"'), 32721)" +
                                 "WHERE idambulancia=" + aDTO.getIdAmbulancia() + ";");
                 System.out.println("Recorrido insertado correctamente.");
@@ -143,37 +143,6 @@ public class AdminBean implements Serializable {
                 eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true");
                 return;
             }
-            /*System.out.println("el resultado no es null");
-            while (resultSet.next()) {
-                ServicioEmergencia servicioEmergencia = new ServicioEmergencia();
-                servicioEmergencia.setIdServicio(resultSet.getLong("idservicio"));
-                servicioEmergencia.setNombre(resultSet.getString("nombre"));
-                servasocioados.add(servicioEmergencia);
-            }*/
-           /* System.out.println(servasocioados);
-            System.out.println("pase el wild");
-
-            //alta recorrido
-            ResultSet rs = stmt.executeQuery(
-                    "UPDATE ambulancia SET polyline = ST_SetSRID(ST_GeomFromText('"+ rec +"'), 32721)" +
-                            "WHERE idambulancia=" + aDTO.getIdAmbulancia() + ";");
-            System.out.println("Recorrido insertado correctamente.");
-
-
-            String msj = String.format("Se agregó la ambulancia %s.", codigo);
-            addMensaje("Ambulancias", msj);
-
-            codigo = 0;
-            desvio = 0;
-            idHospital = 0;
-            rec = "";
-            System.out.println("guardado recA, redireccion....");
-
-            eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true"); // Reemplaza con la URL de la página de confirmación*/
-
-
-
-
         }catch (SQLException e){
             System.out.println("No conecta."+e.getMessage());
         }
