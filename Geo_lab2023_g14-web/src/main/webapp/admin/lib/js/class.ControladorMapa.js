@@ -258,6 +258,7 @@ class ControladorMapa extends Configuracion {
             })
             .then(function (data) {
                 geojsonLayer.addData(data);
+               // heatMap(data);
             })
             .catch(function (error) {
                 console.error('Error:', error);
@@ -265,23 +266,9 @@ class ControladorMapa extends Configuracion {
     }
 
         addHeatMap(){
-            let urlAmbulancia =
-                'http://localhost:' +
-                this.puertoGeoServer +
-                '/geoserver/wfs?' +
-                'service=WFS&' +
-                'request=GetFeature&' +
-                'typeName=' +
-                this.baseDatos +
-                ':' + this.vista_LineString + '&' +
-                'srsName=' + this.srid + '&' +
-                'outputFormat=application/json';
+            var heatLayer = L.heatLayer(points, { radius: 20 }).addTo(map); // Ajusta el radio según tus necesidades
 
-            fetch(urlAmbulancia)
-                .then(response => response.json())
-                .then(data => {
-                    heatMap(data); // Llamar a la función heatMap con los datos obtenidos de la URL
-                });
+            map.fitBounds(heatLayer.getBounds());
 
         }
 

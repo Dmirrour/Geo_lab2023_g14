@@ -9,7 +9,7 @@ function heatMap(data){
     });
 
     // Crear una capa de mapa de calor en base a los puntos
-    var heatLayer = L.heatLayer(points, { radius: 20 }).addTo(map); // Ajusta el radio según tus necesidades
+   // var heatLayer = L.heatLayer(points, { radius: 20 }).addTo(map); // Ajusta el radio según tus necesidades
 
-    map.fitBounds(heatLayer.getBounds());
+ //  map.fitBounds(heatLayer.getBounds());
 }
