@@ -4,9 +4,9 @@ class ControladorMapa extends Configuracion {
     layerEjes;
     layerDepartamento;
     layerRuta;
-    vista_LineString;
     servicioEH;
     vista_se_h;
+    vista_LineString;
     map;
     drawLayers;
     markerSE;
@@ -114,7 +114,6 @@ class ControladorMapa extends Configuracion {
         let drawControl = new L.Control.DrawPlus({
             position: 'topright',
             draw: {
-                circle: true,
                 polyline: true
             },
             edit: {
@@ -129,11 +128,6 @@ class ControladorMapa extends Configuracion {
             baselayers,
             overlayers, {
             collapsed: true
-        }).addTo(this.map);
-
-        this.map.fitBounds([[-35, -56], [-34, -56]]); // btn Ubicacion
-        L.geolet({
-            position: 'bottomleft'
         }).addTo(this.map);
 
         this.map.on(L.Draw.Event.CREATED, function (e) {
@@ -189,7 +183,6 @@ class ControladorMapa extends Configuracion {
             + ':' + this.vista_SEH + '&' +
             'srsName=' + this.srid +
             '&outputFormat=application/json';
-        //console.log(url);
 
         fetch(url)
             .then(function (response) {
@@ -259,110 +252,41 @@ class ControladorMapa extends Configuracion {
             'srsName=' + this.srid + '&' +
             'outputFormat=application/json';
 
-<<<<<<< HEAD
-            this.vista_se_h = L.tileLayer.wms('http://localhost:'
-                +this.puertoGeoServer
-                +'/geoserver/'
-                +this.baseDatos
-                +'/wms?', {
-                title: this.vista_SEH,
-                layers: this.baseDatos+':'+this.vista_SEH,
-                srs: this.srid,
-                format: 'image/png',
-                transparent: true,
-                VERSION: '1.1.0'
-            });
-            ///////////////////////// FIN CAPAS WMS  /////////////////////////
-
-            ///////////////////////// OPCIONES DE MAPA /////////////////////////
-            this.map = L.map('map', {
-                center: [-34.8797018070320851, -56.262557241497211],
-                zoom: 11,
-                minZoom: 2,
-                maxZoom: 18,
-                layers: [this.openst],
-                zoomControl: true
-            });
-        }
-
-        addHeatMap(){
-
-        let urlAmbulancia =
-        'http://localhost:' +
-        this.puertoGeoServer +
-        '/geoserver/wfs?' +
-        'service=WFS&' +
-        'request=GetFeature&' +
-        'typeName=' +
-        this.baseDatos +
-        ':' + this.vista_LineString + '&' +
-        'srsName=' + this.srid + '&' +
-        'outputFormat=application/json';
-
-        fetch(urlAmbulancia)
-        .then(response => response.json())
-        .then(data => {
-            heatMap(data); // Llamar a la función heatMap con los datos obtenidos de la URL
-        });
-
-        }
-
-        crearMapaAdmin() {
-
-            let baselayers = {
-                "Open Street Map": this.openst,
-                "Google Maps": this.google
-            };
-
-            let overlayers = {
-                "Departamentos": this.layerDepartamento,
-                "Ejes": this.layerEjes,
-                "Rutas": this.layerRuta
-            };
-
-            this.drawLayers = new L.FeatureGroup(); // Agrupa elementos graficos
-            let drawControl = new L.Control.DrawPlus({
-                position: 'topright',
-                draw: {
-                    polyline: true
-                },
-                edit: {
-                    featureGroup: this.drawLayers,
-                    edit: true
-                }
-            });
-            this.map.addLayer(this.drawLayers);
-            this.map.addControl(drawControl);
-
-            L.control.layers(
-                baselayers,
-                overlayers, {
-                    collapsed: true
-=======
         fetch(url)
             .then(function (response) {
                 return response.json();
             })
             .then(function (data) {
                 geojsonLayer.addData(data);
-                // Crear un buffer alrededor de las líneas
-                /*
-                let bufferedLayer = L.geoJSON(turf.buffer(data, 100, { units: 'meters' }), {
-                    style: {
-                        color: 'blue',
-                        weight: 2,
-                        opacity: 0.7
-                    }
->>>>>>> userAnonimo
-                }).addTo(this.map);
-                */
             })
             .catch(function (error) {
                 console.error('Error:', error);
             });
     }
 
-    cargarMapaAltaSE() {
+        addHeatMap(){
+            let urlAmbulancia =
+                'http://localhost:' +
+                this.puertoGeoServer +
+                '/geoserver/wfs?' +
+                'service=WFS&' +
+                'request=GetFeature&' +
+                'typeName=' +
+                this.baseDatos +
+                ':' + this.vista_LineString + '&' +
+                'srsName=' + this.srid + '&' +
+                'outputFormat=application/json';
+
+            fetch(urlAmbulancia)
+                .then(response => response.json())
+                .then(data => {
+                    heatMap(data); // Llamar a la función heatMap con los datos obtenidos de la URL
+                });
+
+        }
+
+
+cargarMapaAltaSE() {
         // Crea un marcador y guarda la posición en los campos de latitud y longitud
         let markerSE = L.marker([0, 0]).addTo(this.map);
         this.map.on('click', function (e) {

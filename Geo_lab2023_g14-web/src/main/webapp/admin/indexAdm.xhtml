@@ -27,25 +27,27 @@
    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous" />
    <script type="javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
    
-   
-   <script src="lib/js/leaflet-src.js"></script>
-   <script src="lib/js/leaflet.draw-src.js"></script>
-   <script src="lib/js/leaflet.draw-shapefile.js"></script>
-   <script src="lib/js/index.js"></script>
-   <script src="lib/js/cargarMap.js"></script>
+   <!-- MAPA JS -->
+   <script type="" src="lib/js/leaflet-src.js"></script>
+   <script type="" src="lib/js/leaflet.draw-src.js"></script>
+   <script type="" src="lib/js/leaflet.draw-shapefile.js"></script>
+   <script type="" src="lib/js/class.Configuracion.js"></script>
+   <script type="" src="lib/js/class.ControladorMapa.js"></script>
+   <script type="" src="../scripts/geolet.js"></script>
 
-   <style>
-      html,
-      body,
-      #map {
-         padding: 0;
-         margin: 0;
-         width: 100%;
-         height: 550px;
-      }
-   </style>
+
+   <!-- JTS -->
+   <script type="" src="https://cdn.jsdelivr.net/npm/elm-pep@1.0.6/dist/elm-pep.js"></script>
+   <script type="" src="https://cdn.jsdelivr.net/npm/jsts@2.3.0/dist/jsts.min.js"></script>
+
+
+   <!-- CONSULTAS query -->
+   <script type="" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <script type="" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+   <!-- ICONOS -->
    <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
-   <link rel="stylesheet" href="https://unpkg.com/primeflex@^3/primeflex.css"/>
+   <link rel="stylesheet" href="https://unpkg.com/primeflex@^3/primeflex.css" />
 
    #{sesion.init()}
    #{adminBean.initH()}
@@ -89,12 +91,12 @@
             </div>
          </div>
       </div>
+
    </div>
    <div id="map"></div>
    <button id="heatmapButton">HeatMap</button>
-   <!--  <script type="" src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>-->
-    <script type="" src="js/heatMap.js"></script>
-
+   <!-- <script type="" src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>-->
+     <script type="" src="js/heatMap.js"></script>
    <!-- FORM'S  -->
    <p:outputPanel id="formPanel">
       <ui:include src="lib/forms/altaAmbulancia.xhtml"/>

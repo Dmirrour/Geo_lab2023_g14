@@ -17,11 +17,7 @@ class Configuracion {
         this.puertoGeoServer = 8081;
         this.baseDatos = 'Geo_lab2023_g14PersistenceUnit';
         this.srid = 'EPSG:32721';
-<<<<<<< HEAD
-        this.rutas = 'ft_00cam_dig';
-=======
         this.rutas = 'ft00cam_dig';
->>>>>>> userAnonimo
         this.ejes = 'ft_ejes';
         this.deptos = 'ft_depto';
         this.vista_SEH = 'vista_se_h';
