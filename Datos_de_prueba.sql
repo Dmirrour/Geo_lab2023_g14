@@ -93,9 +93,7 @@ SELECT st_asgml(geom) FROM ambulancia;
 
 --*-*-*-*-*-*-*-*-*-
 INSERT INTO ambulancia(recorrido)VALUES('LINESTRING(-56.197106838226325 -34.84093351099642,-56.19352877140046 -34.837367166344926,-56.170676350593574 -34.81493528019694)');
-
 UPDATE servicioemergencia SET geom=(ST_SetSRID(st_makepoint(-31, -36), 32721)) WHERE idservicio=2;
-
 
 --*-*-*-*-*-*-*-*-*- SELECT -*-*-*-*-*-*-*-*-*--
 SELECT * FROM ft_depto;
@@ -105,13 +103,51 @@ SELECT * FROM ft01_ejes;
 SELECT * FROM ft_00_departamento;
 SELECT * FROM ft_00_loc_pg;
 SELECT * FROM ft_00_vias;
-SELECT * FROM ft_01_esp_libres;
-SELECT * FROM ft_01_manzanas;
-SELECT * FROM ft_01_parcelas;
-SELECT * FROM ft_03_cam_dig;
-SELECT * FROM ft_03_ejes;
-SELECT * FROM ine_barrios_mvd;
---*-*-*-*-*-*-*-*-*--
+
+  -- View: public.vista_se_h
+  CREATE OR REPLACE VIEW public.vista_se_h
+   AS
+    SELECT se.idservicio,
+           se.camaslibres,
+           se.nombre,
+           se.totalcama,
+           se.point,
+           h.idhospital,
+           h.nombrehospital,
+           CASE h.tipohospital
+               WHEN 0 THEN 'MUTUALISTA'
+               WHEN 1 THEN 'SEGURO PRIVADO'
+               WHEN 2 THEN 'SERVICIO ESTATAL'
+               ELSE 'Desconocido'
+               END AS tipohospital
+    FROM servicioemergencia se
+             JOIN hospital h ON se.hospital_idhospital = h.idhospital;
 
 
+-- DROP VIEW vista_a_rec;
+CREATE OR REPLACE VIEW public.vista_a_rec
+   AS
+SELECT a.idambulancia,
+       a.distanciamaxdesvio,
+       a.idcodigo,
+       a.polyline,
+       h.idhospital,
+       h.nombrehospital
+FROM ambulancia a
+         JOIN hospital h ON a.hospital_idhospital = h.idhospital;
 
+-- Probablemente no sea necesario asignar el propieatrio esto ya lo hace autoamtico pero por si acaso:
+  ALTER TABLE public.vista_se_h
+      OWNER TO postgres;
+
+DROP TABLE ambulancia CASCADE;
+DROP TABLE hospital CASCADE;
+DROP TABLE hospital_ambulancia CASCADE;
+DROP TABLE servicioemergencia CASCADE;
+
+ALTER TABLE servicioemergencia ADD COLUMN point GEOMETRY(Point, 32721);
+ALTER TABLE ambulancia ADD COLUMN  polyline GEOMETRY(LineString, 32721);
+
+SELECT g.idservicio, ST_Buffer(a.polyline, 1900) AS buffer_geom
+FROM servicioemergencia g, ambulancia a 
+WHERE a.idambulancia=1 AND ST_Intersects( a.polyline,g.point);

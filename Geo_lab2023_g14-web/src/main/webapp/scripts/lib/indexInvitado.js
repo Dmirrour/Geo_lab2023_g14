@@ -1,4 +1,5 @@
 function CrearMapaInvitado() {
+    var map;
     ///////////////////////// MAPAS /////////////////////////
     var openst = L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
         attribution: '© Grupo 14'
@@ -49,14 +50,11 @@ function CrearMapaInvitado() {
 
     ///////////////////////// FIN CAPAS WMS  /////////////////////////
 
-
-
-
     ///////////////////////// OPCIONES DE MAPA /////////////////////////
     map = L.map('map', {
         center: [-34.8797018070320851, -56.262557241497211],
-        zoom: 11,
-        minZoom: 2,
+        zoom: 13,
+        minZoom: 8,
         maxZoom: 18,
         layers: [openst],
         zoomControl: true
@@ -73,6 +71,7 @@ function CrearMapaInvitado() {
         "Departamentos": layerDepartamento
     };
 
+    /*
     marcador = L.marker([-34.8797018070320851, -56.262557241497211]).addTo(map) // Icono del marcador
     marcador.bindPopup("Mi ubicación")
 
@@ -81,12 +80,12 @@ function CrearMapaInvitado() {
         color: "green"
     }).addTo(map)
     circulo.bindPopup("Circulo")
+    */
 
     drawLayers = new L.FeatureGroup(); // Agrupa elementos graficos
     drawControl = new L.Control.DrawPlus({
         position: 'topright',
         draw: {
-            circle: true,
             circle: true,
             polyline: true
         },
@@ -98,44 +97,34 @@ function CrearMapaInvitado() {
     map.addLayer(drawLayers);
     // map.addControl(drawControl);
 
-    map.fitBounds([[-35, -56], [-34, -56]]);
-    L.geolet({
-        position: 'bottomleft',
-    }).addTo(map);
+    //map.fitBounds([[-35, -56], [-34, -56]]);
+    //L.geolet({
+    //    position: 'bottomleft',
+    //}).addTo(map);
 
-    L.control.layers(baselayers, overlayers, { collapsed: false }).addTo(map);
+    L.control.layers(baselayers, overlayers, { collapsed: true }).addTo(map);
 
     map.on(L.Draw.Event.CREATED, function (e) {
         drawLayers.addLayer(e.layer);
     });
     ///////////////////////// FIN OPCIONES DE MAPA /////////////////////////
+    function generarColor(numero) {
+        // Calcula los componentes de color
+        var rojo = (numero * 17) % 256;   // Rango de 0 a 255
+        var verde = (numero * 13) % 256;  // Rango de 0 a 255
+        var azul = (numero * 19) % 256;   // Rango de 0 a 255
+
+        // Retorna el color hexadecimal en el formato "#RRGGBB"
+        return "#" + rojo.toString(16).padStart(2, '0') +
+            verde.toString(16).padStart(2, '0') +
+            azul.toString(16).padStart(2, '0');
+    }
 
     let geojsonLayer = L.geoJSON(null, {
         pointToLayer: function (feature, latlng) {
             let idh = feature.properties.idhospital;
-            let colors = [
-                'red',
-                'blue',
-                'green',
-                'yellow',
-                'orange',
-                'purple',
-                'cyan',
-                'magenta',
-                'lime',
-                'pink',
-                'teal',
-                'maroon',
-                'navy',
-                'olive',
-                'silver',
-                'aqua',
-                'fuchsia',
-                'gray',
-                'black',
-                'white'
-            ];
-            let markerColor = colors[idh - 1] || 'blue'
+
+            let markerColor = generarColor(idh) || 'blue';
 
             return L.circleMarker(latlng, {
                 radius: 8,
@@ -187,14 +176,15 @@ function CrearMapaInvitado() {
         .catch(function (error) {
             console.error('Error:', error);
         });
+        return map;
 
-    ///////////////////////// COORDENAS EVENTO CLICK /////////////////////////
-    drawLayers.on('click', function (e) {
-        let latitud = e.latlng.lat;
-        let longitud = e.latlng.lng;
-        alert("Click en coordenadas: " + "\n" + "[" + latitud + "] [" + longitud + "]")
-        console.log("Click en coordenadas: ")
-        console.log("Latitud:", latitud.toFixed(2)) // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
+        ///////////////////////// COORDENAS EVENTO CLICK /////////////////////////
+        drawLayers.on('click', function (e) {
+            let latitud = e.latlng.lat;
+            let longitud = e.latlng.lng;
+            alert("Click en coordenadas: " + "\n" + "[" + latitud + "] [" + longitud + "]")
+            console.log("Click en coordenadas: ")
+            console.log("Latitud:", latitud.toFixed(2)) // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
         console.log("Longitud:", longitud.toFixed(2))
         console.log(e.layer);
     });

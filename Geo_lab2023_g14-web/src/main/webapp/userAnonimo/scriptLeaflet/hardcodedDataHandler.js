@@ -50,8 +50,7 @@ function hardcodedDataPoint() {
                 type: 'Point',
                 coordinates: [-64.5, -34.1] // Coordenadas según sus puntos
             }
-        },
-            // Agrega más puntos
+        },  // Agrega más puntos
         ]
     };
     //  L.geoJSON(puntos2).addTo(map);
@@ -59,11 +58,11 @@ function hardcodedDataPoint() {
 
     /////////////////// ICON ///////////////////
     var iconAnonimo = L.icon({
-        iconUrl: '../resources/marker-icons/mapbox-marker-icon-red.svg',
-        iconSize: [64, 64],
+        iconUrl: '../resources/marker-icons/mapbox-marker-icon-blue.svg',
+        iconSize: [56, 56],
     });
     var iconAmbulancia = L.icon({
-        iconUrl: '../resources/marker-icons/mapbox-marker-icon-orange.svg',
+        iconUrl: '../resources/marker-icons/.svg',
         iconSize: [64, 64],
     });
 
@@ -80,7 +79,7 @@ function hardcodedDataPoint() {
     // marcador = L.marker([-34.8797018070320851, -56.262557241497211], {
     marcador = L.marker([-34.8503303549236, -56.185222811229534], {
         icon: iconAnonimo
-    }).addTo(map) // Icono del marcador
+    }).addTo(map) 
     marcador.bindPopup("Usuario Anonimo")
 
 

@@ -76,7 +76,8 @@ public class AdminBean implements Serializable {
 
         String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
         String usuario = "postgres";
-        String contraseña = "admin";
+        // String contraseña = "admin";
+        String contraseña = "lapass";
 
         Connection conn;
         try {

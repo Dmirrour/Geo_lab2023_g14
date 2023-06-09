@@ -294,7 +294,7 @@ L.Control.Select = L.Control.extend({
   },
 
   _renderMenu(parent, items) {
-  
+
     const menu = L.DomUtil.create(
       "div",
       "leaflet-control-select-menu leaflet-bar ",

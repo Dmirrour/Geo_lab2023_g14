@@ -46,6 +46,7 @@
     <link rel="stylesheet" href="../admin/lib/css/leaflet.css" />
     <link rel="stylesheet" href="../admin/lib/css/leaflet.draw.css" />
     <link rel="stylesheet" href="../admin/lib/css/leaflet.draw-shapefile.css" />
+
     <link rel="stylesheet" href="css/demo.css" />
     <link rel="stylesheet" href="../scripts/lib/css/style.css" />
 </head>
@@ -54,7 +55,7 @@
     html,
     body,
     #map {
-        padding: 0px;
+        padding-bottom: 50px;
         margin: 0px;
         height: 100%;
         width: 100%;
@@ -88,14 +89,12 @@
 <script>
     inicializarMapAnonimo();
     wfsSelectHospitales();
+    //   wfsAmbulancia();
 
-    // wfsServicioEmergencia();
-    wfsAmbulancia();
     hardcodedDataPoint();
-
-//     wfsBuscarServicioEmergencia();
+    //  wfsServicioEmergencia();
+    // wfsBuscarServicioEmergencia(); // se llama desde wfs wfsSelectHospitales
 //    wfsBuscarAmbulancia();
-
 </script>
 
 </html>

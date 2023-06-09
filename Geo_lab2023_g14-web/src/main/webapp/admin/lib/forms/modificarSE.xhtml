@@ -1,15 +1,12 @@
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">()"
-    <p:dialog id="dialogMODSE" header="Mofiicar servicio de emergencia" widgetVar="dlg4" width="360px" minWidth="400" minHeight="400" draggable="false" styleClass="my-dialog-style" showEffect="fade">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui">
+<p:dialog id="dialogMODSE" header="Mofiicar servicio de emergencia" widgetVar="dlg4" width="360px" minWidth="400" minHeight="400" draggable="false" styleClass="my-dialog-style" showEffect="fade">
     <f:view>
         <div class="flex justify-content-center">
             <h:form id="frmMODSE">
                 <div class="row m-auto mb-4">
                     <p:outputLabel for="combobox" value="Seleccionar servicio de emergencia:" />
                     <p:selectOneMenu id="combobox" value="#{servicioEBean.servselect}">
-                        <f:selectItem itemLabel="Seleccione un servicio"/>
+                        <f:selectItem itemLabel="Seleccione un servicio" />
                         <f:selectItems value="#{servicioEBean.servicioEmergenciaDTOS}" var="servicio" itemLabel="#{servicio.nombre}" itemValue="#{servicio}" />
                         <p:ajax event="change" listener="#{servicioEBean.actualizarCampos}" update="datosServicio" />
                     </p:selectOneMenu>
@@ -29,4 +26,5 @@
         </div>
     </f:view>
 </p:dialog>
+
 </html>

@@ -12,8 +12,7 @@
 > Wilson Arriola
 
 > Damian Vera
-
-****
+=======
 
 ### **Tecnologías Utilizadas**
 * WildFly 27.0.1

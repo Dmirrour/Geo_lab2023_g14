@@ -1,6 +1,7 @@
 
 /////////////////// SELECCIONAR HOSPITAL ////////////////////
 function wfsSelectHospitales() {
+
     let hospitalesItems = [];
     let defaultValue = null;
     let urlHospi =
@@ -31,7 +32,6 @@ function wfsSelectHospitales() {
                     //   drawMarker(newItemValue);
 
                     wfsBuscarServicioEmergencia(newItemValue);
-                    console.log(newItemValue);
                 },
             }).addTo(map);
         })
@@ -82,7 +82,9 @@ function wfsServicioEmergencia() {
 let userLat = -56.185222811229534;
 let userLon = -34.8503303549236;
 let ambLat = -56.18869543075562;
-let ambLon = -34.871346829572325;
+let ambLon = -34.871260000672475;
+// let ambLat = -56.19249343872071;
+// let ambLon = -34.8657268109403;
 let existe = false;
 let geoJSONLayer;
 function dibujaLinea(latitud, longitud) {
@@ -146,8 +148,8 @@ function wfsAmbulancia() {
 
     //// POINT AMBULANCIA ////
     var iconAmbulancia = L.icon({
-        iconUrl: '../resources/marker-icons/mapbox-marker-icon-purple.svg',
-        iconSize: [64, 64],
+        iconUrl: '../resources/marker-icons/ambulance.svg',
+        iconSize: [36, 36],
     });
     var fijarAmbulancia = {
         type: 'FeatureCollection',
@@ -173,9 +175,11 @@ function wfsAmbulancia() {
 
 /////////////////// WFS LIST SERVICIO EMRGENCIA ///////////////////
 function wfsBuscarServicioEmergencia(newItemValue) {
-    let strHospital = newItemValue;
+
+    console.log("wfsBuscarServicioEmergencia" + newItemValue);
+    var strHospital = newItemValue;
     var wfs = L.Geoserver.wfs("http://localhost:8081/geoserver/wfs?", {
-        layers: `Geo_lab2023_g14PersistenceUnit:servicioemergencia`,
+        layers: `Geo_lab2023_g14PersistenceUnit:vista_se_h`,
         style: {
             color: "red",
             fillOpacity: 0.5,
@@ -185,7 +189,7 @@ function wfsBuscarServicioEmergencia(newItemValue) {
         onEachFeature: function (f, l) {
             l.bindPopup('<pre>' + JSON.stringify(f.properties.nombre, null, ' ').replace(/[\{\}"]/, '') + '</pre>');
         },
-        CQL_FILTER: "hospital_idhospital =" + strHospital + "",
+        CQL_FILTER: "nombrehospital=" + newItemValue + "",
     });
     wfs.addTo(map);
 }
@@ -193,7 +197,7 @@ function wfsBuscarServicioEmergencia(newItemValue) {
 
 /////////////////// WFS LIST AMBULANCIA ///////////////////
 function wfsBuscarAmbulancia() {
-    let strHospital = 2;
+    let strHospital = 1;
     var wfs = L.Geoserver.wfs("http://localhost:8081/geoserver/wfs?", {
         layers: `Geo_lab2023_g14PersistenceUnit:ambulancia`,
         style: {
