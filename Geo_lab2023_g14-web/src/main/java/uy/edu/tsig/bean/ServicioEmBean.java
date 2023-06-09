@@ -2,11 +2,14 @@ package uy.edu.tsig.bean;
 
 import jakarta.ejb.EJB;
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
 import jakarta.faces.event.AjaxBehaviorEvent;
+import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
+import org.primefaces.event.RowEditEvent;
 import uy.edu.tsig.dto.ServicioEmergenciaDTO;
 import uy.edu.tsig.entity.ServicioEmergencia;
 import uy.edu.tsig.model.ServiciosEmergencias;
@@ -14,6 +17,7 @@ import uy.edu.tsig.service.IHospitalService;
 import uy.edu.tsig.service.IServicioEmergenciaService;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -22,8 +26,8 @@ import java.util.ArrayList;
 
 
 @Named("servicioEBean")
-@RequestScoped
-public class ServicioEmBean {
+@SessionScoped
+public class ServicioEmBean implements Serializable {
 
     @EJB
     IServicioEmergenciaService iServicioEmergenciaService;
@@ -39,7 +43,7 @@ public class ServicioEmBean {
     private double longitud; // agregamos la propiedad longitud
     private String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
     private String usuario = "postgres";
-    private String contraseña = "1234";
+    private String contraseña = "admin";
 
     private ServicioEmergenciaDTO servselect;
 
@@ -88,18 +92,36 @@ public class ServicioEmBean {
     }
 
 
-    public void modServ(){
+    public void modServ(RowEditEvent event){
+        ServicioEmergenciaDTO a = (ServicioEmergenciaDTO) event.getObject();
+        if(totalCama==0)
+            totalCama=a.getTotalCama();
+        if(camasLibre==0 && a.getCamasLibres()>totalCama) {
+            camasLibre = a.getTotalCama() - (a.getTotalCama() - a.getCamasLibres());//si se sacaron camas pero el servicio de emergencia tenia mas agarro la nuevas cantidad de camas y le resto las que estaban ocupadas
+            if(camasLibre<0){
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Tienes menos camas quelas ocupadas", ""));
+                return;
+            }
+
+        }
+        if(nombreS.isEmpty() && nombreS=="")
+            nombreS=a.getNombre();
         ServicioEmergenciaDTO mod= ServicioEmergenciaDTO.builder()
-                .idServicio(idServE)
+                .idServicio(a.getIdServicio())
                 .totalCama(totalCama)
                 .camasLibres(camasLibre)
                 .nombre(nombreS)
                 .build();
         iServicioEmergenciaService.modificar(mod);
+        System.out.println(mod+"\n");
+        System.out.println(latitud+"   "+longitud+"   "+nombreS+"   "+camasLibre+"   "+totalCama);
+
 
         if(longitud!=0.0 && latitud!=0.0){
             //**********************************************////////*********************************************************///
             // FALTA CONTROLAR QUE AL MOVER ESTE PUNTO NINGUNA AMBULACCIOA DE SU HOSPITAL QUEDE SIN SERVICIO
+
+            a.getHospital().getAmbulanciaDTOS();
             //**********************************************////////*********************************************************///
 
             Connection conn;
@@ -115,6 +137,9 @@ public class ServicioEmBean {
                 System.out.println("No conecta."+e.getMessage());
             }
         }
+    }
+    public void cancelar(RowEditEvent event) {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cancelado", ""));
     }
 
     public void actualizarCampos() {

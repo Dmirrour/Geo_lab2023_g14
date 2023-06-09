@@ -9,9 +9,11 @@ import org.locationtech.jts.geom.LineString;
 import uy.edu.tsig.dto.AmbulanciaDTO;
 import uy.edu.tsig.dto.HospitalDTO;
 import org.hibernate.annotations.Type;
-import org.postgis.PGgeometry;
+import uy.edu.tsig.dto.ServicioEmergenciaDTO;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -28,8 +30,14 @@ public class Ambulancia implements Serializable {
     private int idCodigo;
     private int distanciaMaxDesvio;
 
+    @ManyToMany
+    List<ServicioEmergencia> ServEdelRecorrido = new ArrayList<>();
+
     @ManyToOne
     private Hospital hospital;
+
+
+
 
     // lo dejo asi entonces para q no joda, para referencia de lo q hay
     @Transient
@@ -56,5 +64,17 @@ public class Ambulancia implements Serializable {
 
     public AmbulanciaDTO getAmbulanciaDTO(){
         return new AmbulanciaDTO(this.idAmbulancia,this.idCodigo,this.distanciaMaxDesvio);
+    }
+    public ArrayList<ServicioEmergenciaDTO> getServEdelRecorridoDTO(){
+        ArrayList<ServicioEmergenciaDTO> result= new ArrayList<>();
+        ServEdelRecorrido.forEach(servicioEmergencia -> {
+            result.add(ServicioEmergenciaDTO.builder()
+                    .idServicio(servicioEmergencia.getIdServicio())
+                    .nombre(servicioEmergencia.getNombre())
+                    .totalCama(servicioEmergencia.getTotalCama())
+                    .camasLibres(servicioEmergencia.getCamasLibres())
+                    .build());
+        });
+        return result;
     }
 }

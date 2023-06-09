@@ -25,6 +25,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
+
+
 
 @Named("adminBean")
 @SessionScoped
@@ -54,6 +57,11 @@ public class AdminBean implements Serializable {
     private ServiciosEmergencias s;
     private ArrayList<ServicioEmergenciaDTO> servicioEmergenciaDTOS;
 
+
+    private String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
+    private String usuario = "postgres";
+    private String contraseña = "admin";
+
     public void initH() {
         h = iHospitalService.obtenerHospitales();
         hospitalDTOS = h.getListHospitales();
@@ -65,43 +73,111 @@ public class AdminBean implements Serializable {
     }
 
     public void addAmbulancia() throws IOException {
-        Ambulancia a = Ambulancia.builder()
-                .idCodigo(codigo)
-                .distanciaMaxDesvio(desvio)
-                .build();
-        AmbulanciaDTO aDTO = iAmbulaciasService.altaAmbulacia(a, idHospital);
 
-        System.out.println(rec);
-        System.out.println("ATENCION: si no guarda linestring en la vista, verificar el archivo AdminBEan.java, metodo addAmbulancia(); poner la contraseña correcta para su equipo.");
-
-        String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
-        String usuario = "postgres";
-        String contraseña = "admin";
-
+        double  des= (desvio*100)/(6378137*0.9996);
         Connection conn;
         try {
             conn = DriverManager.getConnection(url, usuario, contraseña);
+            List<ServicioEmergencia> servasocioados= new ArrayList<>();
             Statement stmt = conn.createStatement();
+
+
+
+            //alta logicaa
+            Ambulancia a = Ambulancia.builder()
+                    .idCodigo(codigo)
+                    .distanciaMaxDesvio(desvio)
+                    //.ServEdelRecorrido(servasocioados)
+                    .build();
+            AmbulanciaDTO aDTO = iAmbulaciasService.altaAmbulacia(a, idHospital);
+
+            System.out.println(aDTO);
+            System.out.println("ATENCION: si no guarda linestring en la vista, verificar el archivo AdminBEan.java, metodo addAmbulancia(); poner la contraseña correcta para su equipo.");
+            System.out.println(des);
+
+            ResultSet resultSet = stmt.executeQuery("SELECT se.* FROM servicioemergencia se " +
+                    "JOIN (SELECT ST_Buffer(ST_SetSRID(ST_GeomFromText('"+ rec +"'), 32721)," + des +") AS buffer_geom " +
+                    "FROM ambulancia a WHERE a.idambulancia = "+ aDTO.getIdAmbulancia() +") AS buffer " +
+                    "ON ST_Within(se.point, buffer.buffer_geom) " +
+                    "WHERE se.hospital_idhospital = "+ idHospital +";");
+            System.out.println("Pase la query");
+            FacesContext fC = FacesContext.getCurrentInstance();
+            ExternalContext eC = fC.getExternalContext();
+
+            if (resultSet.next()) {
+                System.out.println("el resultado no es null");
+                do {
+
+                    ServicioEmergencia servicioEmergencia = new ServicioEmergencia();
+                    servicioEmergencia.setIdServicio(resultSet.getLong("idservicio"));
+                    servicioEmergencia.setNombre(resultSet.getString("nombre"));
+                    servasocioados.add(servicioEmergencia);
+
+
+                } while (resultSet.next());
+
+                System.out.println(servasocioados);
+                System.out.println("pase el wild");
+
+                //alta recorrido
+                ResultSet rs = stmt.executeQuery(
+                        "UPDATE ambulancia SET polyline = ST_SetSRID(ST_GeomFromText('"+ rec +"'), 32721)" +
+                                "WHERE idambulancia=" + aDTO.getIdAmbulancia() + ";");
+                System.out.println("Recorrido insertado correctamente.");
+
+
+                String msj = String.format("Se agregó la ambulancia %s.", codigo);
+                addMensaje("Ambulancias", msj);
+
+                codigo = 0;
+                desvio = 0;
+                idHospital = 0;
+                rec = "";
+                System.out.println("guardado recA, redireccion....");
+
+                eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true"); // Reemplaza con la URL de la página de confirmación
+            }else {
+                String msj = String.format("No hay servicios en su Zona.");
+                System.out.println("el resultado es null");
+                eliminarA(aDTO.getIdAmbulancia());
+                eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true");
+                return;
+            }
+            /*System.out.println("el resultado no es null");
+            while (resultSet.next()) {
+                ServicioEmergencia servicioEmergencia = new ServicioEmergencia();
+                servicioEmergencia.setIdServicio(resultSet.getLong("idservicio"));
+                servicioEmergencia.setNombre(resultSet.getString("nombre"));
+                servasocioados.add(servicioEmergencia);
+            }*/
+           /* System.out.println(servasocioados);
+            System.out.println("pase el wild");
+
+            //alta recorrido
             ResultSet rs = stmt.executeQuery(
-                "UPDATE ambulancia SET polyline = ST_SetSRID(ST_GeomFromText('"+ rec +"'), 32721)" +
-                    "WHERE idambulancia=" + aDTO.getIdAmbulancia() + ";");
+                    "UPDATE ambulancia SET polyline = ST_SetSRID(ST_GeomFromText('"+ rec +"'), 32721)" +
+                            "WHERE idambulancia=" + aDTO.getIdAmbulancia() + ";");
             System.out.println("Recorrido insertado correctamente.");
-        } catch (SQLException e) {
-            // e.printStackTrace();
+
+
+            String msj = String.format("Se agregó la ambulancia %s.", codigo);
+            addMensaje("Ambulancias", msj);
+
+            codigo = 0;
+            desvio = 0;
+            idHospital = 0;
+            rec = "";
+            System.out.println("guardado recA, redireccion....");
+
+            eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true"); // Reemplaza con la URL de la página de confirmación*/
+
+
+
+
+        }catch (SQLException e){
             System.out.println("No conecta."+e.getMessage());
         }
 
-        String msj = String.format("Se agregó la ambulancia %s.", codigo);
-        addMensaje("Ambulancias", msj);
-
-        codigo = 0;
-        desvio = 0;
-        idHospital = 0;
-        rec = "";
-        System.out.println("guardado recA, redireccion....");
-        FacesContext fC = FacesContext.getCurrentInstance();
-        ExternalContext eC = fC.getExternalContext();
-        eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true"); // Reemplaza con la URL de la página de confirmación
     }
 
 

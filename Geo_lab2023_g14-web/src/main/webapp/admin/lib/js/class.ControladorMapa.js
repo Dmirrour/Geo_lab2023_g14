@@ -250,6 +250,8 @@ class ControladorMapa extends Configuracion {
                 }
             }).addTo(this.map);
 
+
+
             let url =
                 'http://localhost:' +
                 this.puertoGeoServer +
@@ -284,7 +286,65 @@ class ControladorMapa extends Configuracion {
                 });
         }
 
-        cargarMapaAltaSE() {
+
+    addLayerWFSbuf() {
+        let geojsonLayer = L.geoJSON(null, {
+            style: {
+                color: 'red',
+                weight: 3,
+                opacity: 1
+            },
+            onEachFeature: function (feature, layer) {
+                let properties = feature.properties;
+                let popupContent =
+                    '<div class="popup-content">' +
+                    '</div>';
+                let popupOptions = {
+                    className: 'custom-popup'
+                };
+
+                layer.bindPopup(popupContent, popupOptions);
+            }
+        }).addTo(this.map);
+
+
+
+        let url =
+            'http://localhost:' +
+            this.puertoGeoServer +
+            '/geoserver/wfs?' +
+            'service=WFS&' +
+            'request=GetFeature&' +
+            'typeName=' +
+            this.baseDatos +
+            ':' +  'vista_buf &' +
+            'srsName=' + this.srid + '&' +
+            'outputFormat=application/json';
+
+        fetch(url)
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                geojsonLayer.addData(data);
+                // Crear un buffer alrededor de las líneas
+                /*
+                let bufferedLayer = L.geoJSON(turf.buffer(data, 100, { units: 'meters' }), {
+                    style: {
+                        color: 'blue',
+                        weight: 2,
+                        opacity: 0.7
+                    }
+                }).addTo(this.map);
+                */
+            })
+            .catch(function (error) {
+                console.error('Error:', error);
+            });
+    }
+
+
+    cargarMapaAltaSE() {
             // Crea un marcador y guarda la posición en los campos de latitud y longitud
             let markerSE = L.marker([0, 0]).addTo(this.map);
             this.map.on('click', function (e) {
@@ -301,6 +361,23 @@ class ControladorMapa extends Configuracion {
                 this.markerSE = markerSE;
             }, this);
         }
+    cargarMapaModSE() {
+        // Crea un marcador y guarda la posición en los campos de latitud y longitud
+        let markerSE = L.marker([0, 0]).addTo(this.map);
+        this.map.on('click', function (e) {
+            let prefijo = "frmMODSE";
+            let latitud = e.latlng.lat;
+            let longitud = e.latlng.lng;
+
+            markerSE.setLatLng(e.latlng);
+            markerSE.bindPopup("Modificar Servicio de Emergencia en:<br>Latitud: " + latitud.toFixed(6) + "<br>Longitud: " + longitud.toFixed(6)).openPopup();
+
+            document.getElementById(prefijo + ":latitud").value = e.latlng.lat;
+            document.getElementById(prefijo + ":longitud").value = e.latlng.lng;
+
+            this.markerSE = markerSE;
+        }, this);
+    }
 
         BorrarMarcadorALtaSE() {
             // Elimina el marcador del mapa

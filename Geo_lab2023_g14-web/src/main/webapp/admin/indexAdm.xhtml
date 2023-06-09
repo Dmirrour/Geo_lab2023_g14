@@ -69,7 +69,7 @@
                   </p:submenu>
                   <p:submenu label="Modificar">
                      <p:menuitem value="Modificar Ambulancia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg5').show()" />
-                     <p:menuitem value="Modificar S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg4').show()" />
+                     <p:menuitem value="Modificar S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg4').show(); mostrarMarker2();" />
                   </p:submenu>
                   <p:submenu label="Alta">
                      <p:menuitem value="Alta Hospital" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg1').show()" />
@@ -116,9 +116,13 @@
    mapaAdmin.crearMapaAdmin();
    mapaAdmin.addLayersWFS();
    mapaAdmin.addLayerWFSLine();
+   mapaAdmin.addLayerWFSbuf();
 
    function mostrarMarker() {
       mapaAdmin.cargarMapaAltaSE();
+   }
+   function mostrarMarker2() {
+      mapaAdmin.cargarMapaModSE();
    }
 
    mapaAdmin.cargarMapaAltaAmbulancia();
