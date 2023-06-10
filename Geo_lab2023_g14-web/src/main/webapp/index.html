@@ -15,19 +15,23 @@
     <script src="scripts/lib/ol-ext-v3.2.23/ol-ext.js"></script>
     <link rel="stylesheet" href="scripts/lib/ol-ext-v3.2.23/font-awesome.min.css">
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script src="admin/lib/js/leaflet-src.js"></script>
     <script src="admin/lib/js/leaflet.draw-src.js"></script>
     <script src="admin/lib/js/leaflet.draw-shapefile.js"></script>
-    <script src="userAnonimo/scriptLeaflet/leaflet.control.select.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="userAnonimo/scriptLeaflet/L.Geoserver.js"></script>
 
-    <!-- <script src="../scripts/geolet.js"></script> -->
-    <script src="userAnonimo/js/indexAnonimo.js"></script>
+    <script src="userAnonimo/scriptLeaflet/leaflet.control.select.js"></script>
+    <script src="userAnonimo/scriptLeaflet/leaflet.control.select.src.js"></script>
+    <script src="userAnonimo/scriptLeaflet/L.Geoserver.js"></script>
+    <script src="scripts/geolet.js"></script>
+    <!-- script src="userAnonimo/js/indexAnonimo.js"></script -->
     <script src="userAnonimo/js/controladorUsuario.js"></script>
     <script src="userAnonimo/scriptLeaflet/hardcodedDataHandler.js"></script>
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.8.0/leaflet.min.css" integrity="sha512-oIQ0EBio8LJupRpgmDsIsvm0Fsr6c3XNHLB7at5xb+Cf6eQuCX9xuX8XXGRIcokNgdqL1ms7nqbQ6ryXMGxXpg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+<<<<<<< HEAD
     <!-- Leaflet.Control.Select -->
     <link rel="stylesheet" href="userAnonimo/css/leaflet.control.select.css" />
     <script src="userAnonimo/scriptLeaflet/leaflet.control.select.src.js"></script>
@@ -35,14 +39,17 @@
     <!-- new -->
 
     <!-- <script src="scripts/geolet.js"></script> -->
+=======
+>>>>>>> origin/union
     <script src="scripts/lib/indexInvitado.js"></script>
     <script src="scripts/lib/buscador/axios.min.js"></script>
     <link rel="stylesheet" href="scripts/lib/buscador/estilos.css" />
     <link rel="stylesheet" href="scripts/lib/buscador/fontawesome6.all.min.css" />
+
     <link rel="stylesheet" href="admin/lib/css/leaflet.css" />
     <link rel="stylesheet" href="admin/lib/css/leaflet.draw.css" />
     <link rel="stylesheet" href="admin/lib/css/leaflet.draw-shapefile.css" />
-
+    <link rel="stylesheet" href="userAnonimo/css/leaflet.control.select.css" />
     <link rel="stylesheet" href="userAnonimo/css/demo.css" /> <!-- new -->
     <link rel="stylesheet" href="scripts/lib/css/style.css" />
 
@@ -192,14 +199,17 @@
     <script src="scripts/lib/js/buscadorCalles.js"></script>
 
     <script>
-
         wfsSelectHospitales();
         inicializarMapAnonimo();
         // CrearMapaInvitado();
 
      //   wfsServicioEmergencia();
      //   wfsAmbulancia();
+
         hardcodedDataPoint();
+        wfsBuscarServicioEmergencia(); // se llama desde wfs wfsSelectHospitales
+        wfsBuscarAmbulancia();
+
     </script>
 </body>
 

@@ -117,17 +117,28 @@ SELECT * FROM ft_00_vias;
 
 
 -- DROP VIEW vista_a_rec;
+<<<<<<< HEAD
 CREATE OR REPLACE VIEW public.vista_a_rec AS
 SELECT a.idambulancia,a.distanciamaxdesvio,a.idcodigo,a.polyline,h.idhospital,h.nombrehospital
 FROM ambulancia a JOIN hospital h ON a.hospital_idhospital = h.idhospital;
+=======
+    CREATE OR REPLACE VIEW public.vista_a_rec
+       AS
+    SELECT a.idambulancia,
+           a.distanciamaxdesvio,
+           a.idcodigo,
+           a.polyline,
+           h.idhospital,
+           h.nombrehospital
+    FROM ambulancia a
+             JOIN hospital h ON a.hospital_idhospital = h.idhospital;
+>>>>>>> origin/union
 
--- Probablemente no sea necesario asignar el propieatrio esto ya lo hace autoamtico pero por si acaso:
-  ALTER TABLE public.vista_se_h
-      OWNER TO postgres;
 
 DROP TABLE ambulancia CASCADE;
 DROP TABLE hospital CASCADE;
 DROP TABLE hospital_ambulancia CASCADE;
+DROP TABLE hospital_servicioemergencia CASCADE;
 DROP TABLE servicioemergencia CASCADE;
 
 ALTER TABLE servicioemergencia ADD COLUMN point GEOMETRY(Point, 32721);

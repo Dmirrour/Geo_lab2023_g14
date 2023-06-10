@@ -32,7 +32,9 @@ public class ServicioEmBean {
     private double longitud; // agregamos la propiedad longitud
     private String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
     private String usuario = "postgres";
-    private String contraseña = "lapass";
+    //private String contraseña = "admin";      // ?
+    //private String contraseña = "lapass";     // SEBA
+    private String contraseña = "1234";         // WIL
 
     private ServicioEmergenciaDTO servselect;
 
@@ -65,6 +67,7 @@ public class ServicioEmBean {
             System.out.println("Punto insertado correctamente.");
         } catch (SQLException e) {
             // e.printStackTrace();
+            System.out.println("ATENCION: si no guarda, verificar el archivo ServicioEmBEan.java, cambiar pass en las propiedades de la calse.");
             System.out.println("No conecta."+e.getMessage());
         }
 
@@ -106,6 +109,7 @@ public class ServicioEmBean {
                 System.out.println("Punto modificado correctamente.");
             } catch (SQLException e) {
                 // e.printStackTrace();
+                System.out.println("ATENCION: si no guarda, verificar el archivo ServicioEmBEan.java, cambiar pass en las propiedades de la calse.");
                 System.out.println("No conecta."+e.getMessage());
             }
         }
