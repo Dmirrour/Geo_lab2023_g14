@@ -39,7 +39,7 @@ function CrearMapaInvitado() {
         VERSION: '1.1.0'
     });
 
-    var servicioEH = L.tileLayer.wms('http://localhost:8081/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
+    var layerServicio = L.tileLayer.wms('http://localhost:8081/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
         title: 'servicioemergencia',
         layers: 'Geo_lab2023_g14PersistenceUnit:servicioemergencia',
         srs: 'EPSG:32721',
@@ -48,13 +48,33 @@ function CrearMapaInvitado() {
         VERSION: '1.1.0'
     });
 
+    // de anonimoIndex.js
+    var layerAmbulancia = L.tileLayer.wms('http://localhost:8081/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
+        title: 'ambulancia',
+        layers: 'Geo_lab2023_g14PersistenceUnit:ambulancia',
+        srs: 'EPSG:32721',
+        format: 'image/png',
+        transparent: true,
+        VERSION: '1.1.0'
+    });
+
+    /*
+    var layerAll = L.tileLayer.wms('http://localhost:8081/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
+        title: 'layerAll',
+        layers: 'Geo_lab2023_g14PersistenceUnit:ft01_ejes,ft_depto,servicioemergencia,ambulancia',
+        srs: 'EPSG:32721',
+        format: 'image/png',
+        transparent: true,
+        VERSION: '1.1.0'
+    });
+    */
     ///////////////////////// FIN CAPAS WMS  /////////////////////////
 
     ///////////////////////// OPCIONES DE MAPA /////////////////////////
     map = L.map('map', {
-        center: [-34.8797018070320851, -56.262557241497211],
-        zoom: 13,
-        minZoom: 8,
+        center: [-34.88219465245854 , -56.17280777776989],
+        zoom: 15,
+        minZoom: 11,
         maxZoom: 18,
         layers: [openst],
         zoomControl: true
@@ -66,21 +86,15 @@ function CrearMapaInvitado() {
     };
 
     var overlayers = {
+        //"Mostrar ": layerAll,
+        "Ambulancia": layerAmbulancia,
+        "Servicio Emergencia": layerServicio,
         "Ejes": layerEjes,
         "Rutas": layerRuta,
         "Departamentos": layerDepartamento
     };
 
-    /*
-    marcador = L.marker([-34.8797018070320851, -56.262557241497211]).addTo(map) // Icono del marcador
-    marcador.bindPopup("Mi ubicación")
-
-    circulo = L.circle([-34.8797018070320851, -56.262557241497211], { // Circulo verde zona
-        radius: 1500,
-        color: "green"
-    }).addTo(map)
-    circulo.bindPopup("Circulo")
-    */
+    L.control.layers(baselayers, overlayers, { collapsed: true, position: 'bottomright' }).addTo(map);
 
     drawLayers = new L.FeatureGroup(); // Agrupa elementos graficos
     drawControl = new L.Control.DrawPlus({
@@ -95,18 +109,12 @@ function CrearMapaInvitado() {
         }
     });
     map.addLayer(drawLayers);
-    // map.addControl(drawControl);
-
-    //map.fitBounds([[-35, -56], [-34, -56]]);
-    //L.geolet({
-    //    position: 'bottomleft',
-    //}).addTo(map);
-
-    L.control.layers(baselayers, overlayers, { collapsed: true }).addTo(map);
+    map.addControl(drawControl);
 
     map.on(L.Draw.Event.CREATED, function (e) {
         drawLayers.addLayer(e.layer);
     });
+
     ///////////////////////// FIN OPCIONES DE MAPA /////////////////////////
     function generarColor(numero) {
         // Calcula los componentes de color
@@ -136,6 +144,7 @@ function CrearMapaInvitado() {
             });
         }
     }).addTo(map); // Crear una capa de GeoJSON
+
     let url =
         'http://localhost:8081/geoserver/wfs?' +
         'service=WFS&' +
@@ -176,17 +185,24 @@ function CrearMapaInvitado() {
         .catch(function (error) {
             console.error('Error:', error);
         });
-        return map;
-
-        ///////////////////////// COORDENAS EVENTO CLICK /////////////////////////
-        drawLayers.on('click', function (e) {
-            let latitud = e.latlng.lat;
-            let longitud = e.latlng.lng;
-            alert("Click en coordenadas: " + "\n" + "[" + latitud + "] [" + longitud + "]")
-            console.log("Click en coordenadas: ")
-            console.log("Latitud:", latitud.toFixed(2)) // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
-        console.log("Longitud:", longitud.toFixed(2))
+    ///////////////////////// COORDENAS EVENTO CLICK /////////////////////////
+    drawLayers.on('click', function (e) {
+        let latitud = e.latlng.lat;
+        let longitud = e.latlng.lng;
+        alert("Click en coordenadas: " + "\n" + "[" + latitud + "] [" + longitud + "]")
+        console.log("Click en coordenadas: ")
+        console.log("Latitud:", latitud) // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
+        console.log("Longitud:", longitud)
         console.log(e.layer);
     });
+    map.on('click', function (e) {
+        let latitud = e.latlng.lat;
+        let longitud = e.latlng.lng;
+        // alert("Click en coordenadas: " + "\n" + "[" + latitud + "] [" + longitud + "]")
+        console.log("Click en coordenadas: ")
+        console.log("Latitud:", latitud)//.toFixed(5)) // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
+        console.log("Longitud:", longitud)//.toFixed(5))
+    });
     ///////////////////////// FIN COORDENAS EVENTO CLICK /////////////////////////
+    return map;
 }

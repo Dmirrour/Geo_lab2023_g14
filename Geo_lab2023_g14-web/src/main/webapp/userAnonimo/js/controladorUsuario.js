@@ -1,7 +1,7 @@
 
 /////////////////// SELECCIONAR HOSPITAL ////////////////////
 function wfsSelectHospitales() {
-
+    console.log("entro al controladorUsuario");
     let hospitalesItems = [];
     let defaultValue = null;
     let urlHospi =

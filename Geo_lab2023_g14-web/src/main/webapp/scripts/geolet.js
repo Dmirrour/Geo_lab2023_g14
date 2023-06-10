@@ -15,7 +15,7 @@ https://github.com/rhlt/leaflet-geolet/
 		return;
 	}
 
-	var _merge = function (object1, object2) {
+/*	var _merge = function (object1, object2) {
 		//Merge all properties from object 2 into object 1, recursively for plain objects
 
 		if (typeof object2 != 'object' || object2 === null)
@@ -34,8 +34,9 @@ https://github.com/rhlt/leaflet-geolet/
 		}
 
 		return object1;
-	};
+	};*/
 
+/*
 	var _defaultMarker = function (controlOptions) {
 		//Generate a default marker
 		return L.marker(null, {
@@ -286,6 +287,7 @@ https://github.com/rhlt/leaflet-geolet/
 		}
 	});
 
+*/
 
 	//Browser support test
 	L.Geolet.browserSupport = !!(navigator && navigator.geolocation && navigator.geolocation.watchPosition);
