@@ -74,7 +74,9 @@ public class AdminBean implements Serializable {
 
     public void addAmbulancia() throws IOException {
 
-        double  des= (desvio*100)/(6378137*0.9996);
+        //double  des= (desvio*100)/(6378137*0.9996); no erra casi nada presisa entre mas grande el buffer mas margen tenia ya que habria que hacerlo atraves de operacciones con longitud
+        double grados=9.41090001733132E-4;//Probado hasta que encontrara saque una equivalencia en grados este numero equivale a esto+-5m
+        double des=(desvio*grados)/100;//regla de 3
         Connection conn;
         try {
             conn = DriverManager.getConnection(url, usuario, contraseña);
@@ -138,6 +140,7 @@ public class AdminBean implements Serializable {
                 eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true"); // Reemplaza con la URL de la página de confirmación
             }else {
                 String msj = String.format("No hay servicios en su Zona.");
+                addMensaje("Ambulancias", msj);
                 System.out.println("el resultado es null");
                 eliminarA(aDTO.getIdAmbulancia());
                 eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true");

@@ -10,16 +10,27 @@
  * Para crear la vista de los servicios de emergencias con la informacion del hosptial al que pertences
  * Hay que crear una vista en Postgres con el siguiente codigo sql
  *
-     --vista de prueba de buffers se actualiza sola cada ves que agregas un recorrido o modificas el buffer ojo con modificar el buffer manual mente porque puede quedar fuera del servicio
+     /*--vista de prueba de buffers se actualiza sola cada ves que agregas un recorrido o modificas el buffer ojo con modificar el buffer manual mente porque puede quedar fuera del servicio
+     Vieja vista
      CREATE OR REPLACE VIEW public.vista_buf AS
         SELECT
             ST_Buffer(ST_Transform(st_linemerge(st_union(a.polyline)), 32721), ((a.distanciamaxdesvio*100)/(6378137*0.9996))) AS buffer_geom
         FROM
             ambulancia a
         GROUP BY
-            a.distanciamaxdesvio;
+            a.distanciamaxdesvio;*/
 
   -- View: public.vista_se_h
+
+     /*nueva vista*/
+     CREATE OR REPLACE VIEW public.vista_buf AS
+        SELECT
+            ST_Buffer(ST_SetSRID(a.polyline, 32721), ((a.distanciamaxdesvio*9.41090001733132E-4) / 100))
+                AS buffer_geom
+        FROM
+            ambulancia a
+        GROUP BY
+            a.distanciamaxdesvio,a.polyline;
 
   CREATE OR REPLACE VIEW public.vista_se_h
    AS
