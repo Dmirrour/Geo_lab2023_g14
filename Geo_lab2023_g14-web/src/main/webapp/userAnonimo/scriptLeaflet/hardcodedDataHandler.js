@@ -58,11 +58,11 @@ function hardcodedDataPoint() {
 
     /////////////////// ICON ///////////////////
     var iconAnonimo = L.icon({
-        iconUrl: '../resources/marker-icons/mapbox-marker-icon-blue.svg',
+        iconUrl: 'resources/marker-icons/mapbox-marker-icon-blue.svg',
         iconSize: [56, 56],
     });
     var iconAmbulancia = L.icon({
-        iconUrl: '../resources/marker-icons/.svg',
+        iconUrl: 'resources/marker-icons/ambulance.svg',
         iconSize: [64, 64],
     });
 
