@@ -21,7 +21,7 @@ public class ServicioEmergenciaService implements IServicioEmergenciaService {
     IHospitalDAO iHospitalDAO;
     private String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
     private String usuario = "postgres";
-    private String contraseña = "admin";
+ //   private String contraseña = "admin";
 
     @Override
     public ServicioEmergenciaDTO altaServicioE(ServicioEmergencia se, Long hospital,double longitud,double latitud){

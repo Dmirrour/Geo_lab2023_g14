@@ -105,36 +105,21 @@ SELECT * FROM ft_00_loc_pg;
 SELECT * FROM ft_00_vias;
 
   -- View: public.vista_se_h
-  CREATE OR REPLACE VIEW public.vista_se_h
-   AS
-    SELECT se.idservicio,
-           se.camaslibres,
-           se.nombre,
-           se.totalcama,
-           se.point,
-           h.idhospital,
-           h.nombrehospital,
-           CASE h.tipohospital
-               WHEN 0 THEN 'MUTUALISTA'
-               WHEN 1 THEN 'SEGURO PRIVADO'
-               WHEN 2 THEN 'SERVICIO ESTATAL'
-               ELSE 'Desconocido'
-               END AS tipohospital
-    FROM servicioemergencia se
-             JOIN hospital h ON se.hospital_idhospital = h.idhospital;
+  CREATE OR REPLACE VIEW public.vista_se_h AS
+  SELECT se.idservicio,se.camaslibres,se.nombre,se.totalcama,se.point,h.idhospital,h.nombrehospital,
+    CASE h.tipohospital
+        WHEN 0 THEN 'MUTUALISTA'
+        WHEN 1 THEN 'SEGURO PRIVADO'
+        WHEN 2 THEN 'SERVICIO ESTATAL'
+        ELSE 'Desconocido'
+        END AS tipohospital
+    FROM servicioemergencia seJOIN hospital h ON se.hospital_idhospital = h.idhospital;
 
 
 -- DROP VIEW vista_a_rec;
-CREATE OR REPLACE VIEW public.vista_a_rec
-   AS
-SELECT a.idambulancia,
-       a.distanciamaxdesvio,
-       a.idcodigo,
-       a.polyline,
-       h.idhospital,
-       h.nombrehospital
-FROM ambulancia a
-         JOIN hospital h ON a.hospital_idhospital = h.idhospital;
+CREATE OR REPLACE VIEW public.vista_a_rec AS
+SELECT a.idambulancia,a.distanciamaxdesvio,a.idcodigo,a.polyline,h.idhospital,h.nombrehospital
+FROM ambulancia a JOIN hospital h ON a.hospital_idhospital = h.idhospital;
 
 -- Probablemente no sea necesario asignar el propieatrio esto ya lo hace autoamtico pero por si acaso:
   ALTER TABLE public.vista_se_h
@@ -148,6 +133,36 @@ DROP TABLE servicioemergencia CASCADE;
 ALTER TABLE servicioemergencia ADD COLUMN point GEOMETRY(Point, 32721);
 ALTER TABLE ambulancia ADD COLUMN  polyline GEOMETRY(LineString, 32721);
 
-SELECT g.idservicio, ST_Buffer(a.polyline, 1900) AS buffer_geom
+SELECT g.idservicio, ST_Buffer(a.polyline, 0.0005) AS buffer_geom
 FROM servicioemergencia g, ambulancia a 
 WHERE a.idambulancia=1 AND ST_Intersects( a.polyline,g.point);
+
+--*-*-*-*-*-*-*-*-*- PUNTO MAS CERCANO AL USUARIO -*-*-*-*-*-*-*-*-*--
+SELECT * FROM servicioemergencia
+ORDER BY ST_Distance(point, ST_SetSRID(ST_MakePoint(-56.185222811229534,-34.8503303549236), 32721)) LIMIT 1;
+SELECT * FROM servicioemergencia
+ORDER BY ST_Distance(point, ST_SetSRID(ST_MakePoint(-56.185222811229534,-34.8503303549236), 32721)) LIMIT 3;
+
+--*-*-*-*-*-*-*-*-*- PUNTO QUE CONTINEE LA RECTA -*-*-*-*-*-*-*-*-*--
+SELECT * FROM servicioemergencia s, ambulancia h WHERE ST_Contains(h.polyline, s.point);
+
+
+--*-*-*-*-*-*-*-*-*- lONGITUD CALLE -*-*-*-*-*-*-*-*-*--
+SELECT SUM(st_length(geom)) from ft_01_ejes WHERE nom_calle='MAGALLANES';
+SELECT ST_Length(st_linemerge(st_union(st_astext(geom)))) FROM ft_01_ejes WHERE nom_calle='MAGALLANES';
+
+
+SELECT st_astext(st_linemerge(st_union(geom))) FROM ft_01_ejes WHERE nom_calle='MAGALLANES';
+
+--*-*-*-*-*-*-*-*-*- BUFFER OK -*-*-*-*-*-*-*-*-*--
+SELECT g.idservicio,ST_Buffer(a.polyline,0.05),g.point FROM servicioemergencia g, ambulancia a 
+WHERE ST_Intersects(g.point,(ST_Buffer(a.polyline,0.05)));
+
+SELECT a.nombre FROM ft_00departamento a, servicioemergencia g WHERE ST_OVERLAPS(a.geom,ST_BUFFER(g.point,0.001)) and a.nombre='MONTEVIDEO';
+DWITHIN(polyline, POINT(-34.20049069242444 -56.1905006852794), 50, meters)
+
+SELECT g.point FROM servicioemergencia g WHERE ST_BUFFER(g.point,0.001);
+SELECT ST_BUFFER(g.point,0.001) FROM servicioemergencia g;
+SELECT st_endpoint(polyline) FROM ambulancia
+
+SELECT st_endpoint(polyline) from ambulancia

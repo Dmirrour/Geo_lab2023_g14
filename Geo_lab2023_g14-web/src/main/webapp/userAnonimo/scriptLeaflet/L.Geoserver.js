@@ -83,21 +83,21 @@ L.Geoserver = L.FeatureGroup.extend({
         // for adding styles to the geojson feature
         if (typeof that.options.style === "function") {
           for (i = 0; i < layers.length; i++) {
-            that.addLayer(layers[i]);
+          that.addLayer(layers[i]);
             if (layers[i].setStyle) {
               // check if setStyle method exists
-              layers[i].setStyle(that.options.style(layers[i].feature));
+             layers[i].setStyle(that.options.style(layers[i].feature));
             }
           }
         } else {
           for (i = 0; i < layers.length; i++) {
             that.addLayer(layers[i]);
-            that.setStyle(that.options.style);
+         that.setStyle(that.options.style);
           }
         }
 
         if (that.options.fitLayer) {
-          that._map.fitBounds(that.getBounds());
+    //   that._map.fitBounds(that.getBounds());
         }
       },
     }).fail(function (jqXHR, textStatus, error) {

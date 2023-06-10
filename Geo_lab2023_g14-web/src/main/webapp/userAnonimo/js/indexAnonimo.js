@@ -5,7 +5,7 @@ function inicializarMapAnonimo() {
         attribution: '© Grupo 14'
     });
 
-    var google = L.tileLayer('https://mt1.googles.com/vt/lyrs=r&x={x}&y={y}&z={z}', {
+    var google = L.tileLayer('https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}', {
         attribution: '© Grupo 14'
     });
     ///////////////////////// FIN MAPAS /////////////////////////
@@ -23,7 +23,7 @@ function inicializarMapAnonimo() {
 
     var layerDepartamento = L.tileLayer.wms('http://localhost:8081/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
         title: 'ft_depto',
-        layers: 'Geo_lab2023_g14PersistenceUnit:ft_depto',
+        layers: 'Geo_lab2023_g14PersistenceUnit:ft_00departamento',
         srs: 'EPSG:32721',
         format: 'image/png',
         transparent: true,
@@ -50,7 +50,7 @@ function inicializarMapAnonimo() {
 
     var layerAll = L.tileLayer.wms('http://localhost:8081/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
         title: 'layerAll',
-        layers: 'Geo_lab2023_g14PersistenceUnit:ft01_ejes,ft_depto,servicioemergencia,ambulancia',
+        layers: 'Geo_lab2023_g14PersistenceUnit:ft01_ejes,ft_00departamento,servicioemergencia,ambulancia',
         srs: 'EPSG:32721',
         format: 'image/png',
         transparent: true,
@@ -106,9 +106,9 @@ function inicializarMapAnonimo() {
 
     /////////////////////// UBICACION GEOLET ///////////////////////
     //fitBounds([[-35, -56], [-34, -56]]); // ir a ubicacion
-    L.geolet({
-        position: 'bottomleft',
-    }).addTo(map);
+    // L.geolet({
+    //     position: 'bottomleft',
+    // }).addTo(map);
 
 
     ///////////////////////// COORDENAS EVENTO CLICK /////////////////////////
