@@ -66,7 +66,7 @@ function wfsBuscarAmbulancia(newItemValue) {
 
     //// POINT AMBULANCIA ////
     var iconAmbulancia = L.icon({
-        iconUrl: '../resources/marker-icons/ambulance.svg',
+        iconUrl: 'resources/marker-icons/ambulance.svg',
         iconSize: [36, 36],
     });
     var fijarAmbulancia = {
@@ -95,7 +95,6 @@ function wfsBuscarAmbulancia(newItemValue) {
 /////////////////// WFS  ///////////////////
 function wfscql() {
     var geojsonLayer = L.geoJSON().addTo(map);
-
     let urls =
         'http://localhost:8081/geoserver/wfs?' +
         'service=WFS&' +
@@ -130,29 +129,29 @@ function wfscql() {
         });
 
     //// POINT AMBULANCIA ////
-    // var iconAmbulancia = L.icon({
-    //     iconUrl: '../resources/marker-icons/ambulance.svg',
-    //     iconSize: [36, 36],
-    // });
-    // var fijarAmbulancia = {
-    //     type: 'FeatureCollection',
-    //     features: [{
-    //         type: 'Feature',
-    //         properties: {},
-    //         geometry: {
-    //             type: 'Point',
-    //             coordinates: [ambLat, ambLon]
-    //         }
-    //     },
-    //     ]
-    // };
-    // L.geoJSON(fijarAmbulancia, {
-    //     pointToLayer: function (feature, latlng) {
-    //         return L.marker(latlng, {
-    //             icon: iconAmbulancia
-    //         });
-    //     }
-    // }).addTo(map);
+    var iconAmbulancia = L.icon({
+        iconUrl: 'resources/marker-icons/ambulance.svg',
+        iconSize: [36, 36],
+    });
+    var fijarAmbulancia = {
+        type: 'FeatureCollection',
+        features: [{
+            type: 'Feature',
+            properties: {},
+            geometry: {
+                type: 'Point',
+                coordinates: [ambLat, ambLon]
+            }
+        },
+        ]
+    };
+    L.geoJSON(fijarAmbulancia, {
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, {
+                icon: iconAmbulancia
+            });
+        }
+    }).addTo(map);
 }
 
 /////////////////// WFS AMBULANCIA ///////////////////

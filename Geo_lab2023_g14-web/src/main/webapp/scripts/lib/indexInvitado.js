@@ -72,7 +72,7 @@ function CrearMapaInvitado() {
 
     ///////////////////////// OPCIONES DE MAPA /////////////////////////
     map = L.map('map', {
-        center: [-34.88219465245854 , -56.17280777776989],
+        center: [-34.88219465245854, -56.17280777776989],
         zoom: 15,
         minZoom: 11,
         maxZoom: 18,
@@ -193,7 +193,7 @@ function CrearMapaInvitado() {
         console.log("Click en coordenadas: ")
         console.log("Latitud:", latitud) // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
         console.log("Longitud:", longitud)
-        console.log(e.layer);
+        //  console.log(e.layer);
     });
     map.on('click', function (e) {
         let latitud = e.latlng.lat;
