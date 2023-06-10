@@ -24,7 +24,7 @@ function wfsSelectHospitales() {
             defaultValue = hospitalesItems[0];
             var defaultValue = hospitalesItems[0].label;
             L.control.select({
-                position: "topright",
+                position: "topleft",
                 selectedDefault: defaultValue,
                 items: hospitalesItems,
                 onSelect: function (newItemValue) {
