@@ -1,6 +1,8 @@
+import createHeatMapLayer from './heatMap.js';
 class ControladorMapa extends Configuracion {
     openst;
     google;
+    heat;
     layerEjes;
     layerDepartamento;
     layerRuta;
@@ -10,14 +12,22 @@ class ControladorMapa extends Configuracion {
     map;
     drawLayers;
     markerSE;
-
     constructor() {
+
         super();
+
+
+        ////////////////////////////////////////////////////////
+
+
         ///////////////////////// MAPAS /////////////////////////
         // Agregar capa base de OpenStreetMap
         this.openst = L.tileLayer(this.urlOpenStreet, { attribution: '© Grupo 14' });
         // Agregar capa base de Google
         this.google = L.tileLayer(this.urlGoogle, { attribution: '© Grupo 14' });
+
+       // let self = this; // Guardar una referencia a `this` para utilizarla dentro del callback
+
         ///////////////////////// FIN MAPAS /////////////////////////
 
         ///////////////////////// CAPAS WMS /////////////////////////
@@ -99,6 +109,16 @@ class ControladorMapa extends Configuracion {
     }
     crearMapaAdmin() {
 
+        this.heat =
+            'http://localhost:' +
+            this.puertoGeoServer +
+            '/geoserver/wfs?' +
+            'service=WFS&' +
+            'request=GetFeature&' +
+            'typeName=Geo_lab2023_g14PersistenceUnit:vista_a_rec&' +
+            'srsName=' + this.srid + '&' +
+            'outputFormat=application/json';
+
         let baselayers = {
             "Open Street Map": this.openst,
             "Google Maps": this.google
@@ -107,7 +127,9 @@ class ControladorMapa extends Configuracion {
         let overlayers = {
             "Departamentos": this.layerDepartamento,
             "Ejes": this.layerEjes,
-            "Rutas": this.layerRuta
+            "Rutas": this.layerRuta,
+            "HeatMap": createHeatMapLayer(this.heat)
+
         };
 
         this.drawLayers = new L.FeatureGroup(); // Agrupa elementos graficos
@@ -246,32 +268,21 @@ class ControladorMapa extends Configuracion {
             '/geoserver/wfs?' +
             'service=WFS&' +
             'request=GetFeature&' +
-            'typeName=' +
-            this.baseDatos +
-            ':' + this.vista_LineString + '&' +
+            'typeName=Geo_lab2023_g14PersistenceUnit:vista_a_rec&' +
             'srsName=' + this.srid + '&' +
             'outputFormat=application/json';
-
+        //this.urlAmbulancia = url;
         fetch(url)
             .then(function (response) {
                 return response.json();
             })
             .then(function (data) {
                 geojsonLayer.addData(data);
-               // heatMap(data);
             })
             .catch(function (error) {
                 console.error('Error:', error);
             });
     }
-
-        addHeatMap(){
-            var heatLayer = L.heatLayer(points, { radius: 20 }).addTo(map); // Ajusta el radio según tus necesidades
-
-            map.fitBounds(heatLayer.getBounds());
-
-        }
-
 
 cargarMapaAltaSE() {
         // Crea un marcador y guarda la posición en los campos de latitud y longitud
@@ -299,48 +310,7 @@ cargarMapaAltaSE() {
 
     cargarMapaAltaAmbulancia() {
         ///////////////////////// FIN OPCIONES DE MAPA /////////////////////////
-        /*
-        var recorrido = [];
-        let marker = L.marker([0, 0]).addTo(mapAmbulancia);
-        mapAmbulancia.on('click', function (e) {
-            let latitud = e.latlng.lat;
-            let longitud = e.latlng.lng;
-            let punto;
 
-            recorrido.push({
-                latitud,
-                longitud
-            });
-            for (var i = 0; i < recorrido.length; i++) {
-                punto = recorrido[i];
-            }
-            console.log('Latitud:', punto.latitud, 'Longitud:', punto.longitud);
-
-            var data = 'LINESTRING(' + punto + ')';
-            console.log('Punto:', data);
-            marker.setLatLng(e.latlng);
-            document.getElementById("j_idt61:rec").value = data;;
-        });
-        */
-        /*
-        // Configuración del mapa Leaflet
-        var map = L.map('map').setView([51.505, -0.09], 13);
-
-        // Crear una capa de dibujo
-        var drawnItems = new L.FeatureGroup().addTo(this.map);
-
-        // Configurar la herramienta de dibujo
-        var drawControl = new L.Control.Draw({
-            draw: {
-                polyline: true,
-                // Otras opciones de dibujo
-            },
-            edit: {
-                featureGroup: drawnItems,
-                // Opciones de edición
-            }
-        }).addTo(this.map);
-        */
         // Evento para capturar la polilínea dibujada
         this.map.on('draw:created', function (e) {
             var layer = e.layer;

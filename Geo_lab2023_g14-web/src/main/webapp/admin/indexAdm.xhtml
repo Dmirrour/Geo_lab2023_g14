@@ -63,6 +63,7 @@
          <div class="container-fluid">
             <div id="contenedorNavbar">
                <p:menubar>
+
                   <p:submenu label="Eliminar">
                      <p:menuitem value="Eliminar Hospital" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg8').show()" />
                      <p:menuitem value="Eliminar Ambulancia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg7').show()" />
@@ -91,12 +92,9 @@
             </div>
          </div>
       </div>
-
    </div>
    <div id="map"></div>
-   <button id="heatmapButton">HeatMap</button>
-   <!-- <script type="" src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>-->
-     <script type="" src="js/heatMap.js"></script>
+
    <!-- FORM'S  -->
    <p:outputPanel id="formPanel">
       <ui:include src="lib/forms/altaAmbulancia.xhtml"/>
@@ -127,13 +125,6 @@
 
    mapaAdmin.cargarMapaAltaAmbulancia();
 
-   // Obtener la referencia al botón "HeatMap"
-   let heatmapButton = document.getElementById("heatmapButton");
-
-   // Asigna un controlador de eventos al botón para mostrar el mapa de calor cuando se hace clic
-   heatmapButton.addEventListener("click", function() {
-      mapaAdmin.addHeatMap();
-   });
 </script>
 
 </html>

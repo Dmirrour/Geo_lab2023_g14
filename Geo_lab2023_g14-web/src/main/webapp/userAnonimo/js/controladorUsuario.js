@@ -43,7 +43,7 @@ function wfsAmbulancia() {
         'http://localhost:8081/geoserver/wfs?' +
         'service=WFS&' +
         'request=GetFeature&' +
-        'typeName=Geo_lab2023_g14PersistenceUnit:ambulancia&' +
+        'typeName=Geo_lab2023_g14PersistenceUnit:vista_a_rec&' +
         'srsName=EPSG:32721&' +
         'outputFormat=application/json';
     fetch(urls)
@@ -52,7 +52,10 @@ function wfsAmbulancia() {
         })
         .then(function (data) {
             geojsonLayer.addData(data);
+            console.log("antes")
             console.log(data)
+            console.log("despues")
+
             geojsonLayer.eachLayer(function (layer) {  // Evento clic marcadores
                 layer.on('click', function (e) {
                     let properties = e.target.feature.properties;

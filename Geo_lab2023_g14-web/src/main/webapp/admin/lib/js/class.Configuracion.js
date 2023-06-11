@@ -10,7 +10,6 @@ class Configuracion {
     vista_SEH;
     vista_LineString;
     colors;
-
     constructor() {
         this.urlOpenStreet = 'https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png';
         this.urlGoogle = 'https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}';

@@ -60,10 +60,3 @@ body {
   left: 0px !important;
   top: 113px !important;
 }
-
-#heatmapButton {
-  position: absolute;
-  top: 100px;
-  left: 10px;
-  z-index: 2000;
-}
