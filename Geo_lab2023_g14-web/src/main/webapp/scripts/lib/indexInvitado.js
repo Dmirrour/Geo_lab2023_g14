@@ -115,6 +115,7 @@ function CrearMapaInvitado() {
         drawLayers.addLayer(e.layer);
     });
 
+
     ///////////////////////// FIN OPCIONES DE MAPA /////////////////////////
     function generarColor(numero) {
         // Calcula los componentes de color
@@ -185,6 +186,7 @@ function CrearMapaInvitado() {
         .catch(function (error) {
             console.error('Error:', error);
         });
+    
     ///////////////////////// COORDENAS EVENTO CLICK /////////////////////////
     drawLayers.on('click', function (e) {
         let latitud = e.latlng.lat;
@@ -195,6 +197,7 @@ function CrearMapaInvitado() {
         console.log("Longitud:", longitud)
         //  console.log(e.layer);
     });
+    
     map.on('click', function (e) {
         let latitud = e.latlng.lat;
         let longitud = e.latlng.lng;

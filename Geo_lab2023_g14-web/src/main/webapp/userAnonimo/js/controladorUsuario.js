@@ -42,7 +42,7 @@ function wfsSelectHospitales() {
 
 /////////////////// FILTRAR SERVICIO EMRGENCIA ///////////////////
 function wfsBuscarServicioEmergencia(newItemValue) {
-    console.log(newItemValue);
+    console.log("--> " + newItemValue);
     var wfs = L.Geoserver.wfs("http://localhost:8081/geoserver/wfs?", {
         layers: `Geo_lab2023_g14PersistenceUnit:servicioemergencia`,
         onEachFeature: function (f, l) {
@@ -117,7 +117,6 @@ function wfscql() {
                     let popupOptions = {
                         className: 'custom-popup'
                     };
-
                     layer.closePopup();
                     layer.bindPopup(popupContent, popupOptions);
                     //    layer.bindPopup(popupContent, popupOptions).openPopup();

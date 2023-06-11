@@ -24,10 +24,10 @@
     <script src="userAnonimo/scriptLeaflet/leaflet.control.select.js"></script>
     <script src="userAnonimo/scriptLeaflet/leaflet.control.select.src.js"></script>
     <script src="userAnonimo/scriptLeaflet/L.Geoserver.js"></script>
-    <script src="scripts/geolet.js"></script>
     <!-- script src="userAnonimo/js/indexAnonimo.js"></script -->
     <script src="userAnonimo/scriptLeaflet/hardcodedDataHandler.js"></script>
     <script src="userAnonimo/js/controladorUsuario.js"></script>
+    <!-- <script src="scripts/geolet.js"></script> -->
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.8.0/leaflet.min.css" integrity="sha512-oIQ0EBio8LJupRpgmDsIsvm0Fsr6c3XNHLB7at5xb+Cf6eQuCX9xuX8XXGRIcokNgdqL1ms7nqbQ6ryXMGxXpg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
@@ -189,14 +189,12 @@
     <script src="scripts/lib/js/buscadorCalles.js"></script>
 
     <script>
+        hardcodedDataPoint();
         wfsSelectHospitales();
         CrearMapaInvitado();
 
         //  wfsServicioEmergencia();
         //   wfsAmbulancia();
-        //  wfsBuscarServicioEmergencia(); // se llama desde wfs wfsSelectHospitales
-        hardcodedDataPoint();
-
         //wfsBuscarServicioEmergencia(); // se llama desde wfs wfsSelectHospitales
         //wfsBuscarAmbulancia();
     </script>

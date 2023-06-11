@@ -58,11 +58,11 @@ function hardcodedDataPoint() {
 
     /////////////////// ICON ///////////////////
     var iconAnonimo = L.icon({
-        iconUrl: '../resources/marker-icons/mapbox-marker-icon-blue.svg',
+        iconUrl: 'resources/marker-icons/mapbox-marker-icon-blue.svg',
         iconSize: [56, 56],
     });
     var iconAmbulancia = L.icon({
-        iconUrl: '../resources/marker-icons/.svg',
+        iconUrl: 'resources/marker-icons/ambulance.svg',
         iconSize: [64, 64],
     });
 
@@ -79,7 +79,7 @@ function hardcodedDataPoint() {
     // marcador = L.marker([-34.8797018070320851, -56.262557241497211], {
     marcador = L.marker([-34.8503303549236, -56.185222811229534], {
         icon: iconAnonimo
-    }).addTo(map) 
+    }).addTo(map)
     marcador.bindPopup("Usuario Anonimo")
 
 
