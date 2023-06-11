@@ -34,6 +34,8 @@
    <script type="" src="lib/js/class.Configuracion.js"></script>
    <script type="" src="lib/js/class.ControladorMapa.js"></script>
    <script type="" src="../scripts/geolet.js"></script>
+    <script type="" src="lib/js/heatMap.js"></script>
+   <script type="" src="lib/js/layerWFS.js"></script>
 
 
    <!-- JTS -->
@@ -109,6 +111,7 @@
 </h:body>
 
 <script type="text/javascript">
+   addLayers();
    function ocultarDlgs(){
       PF('dlg1').hide();
       PF('dlg2').hide();

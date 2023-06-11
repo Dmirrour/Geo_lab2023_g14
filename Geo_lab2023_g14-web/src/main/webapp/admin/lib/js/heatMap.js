@@ -1,7 +1,14 @@
 // Función para crear la capa de mapa de calor
-function createHeatMapLayer(data) {
-    // Realizar la solicitud AJAX para obtener los datos de la capa de LineString desde GeoServer
-    ({
+function createHeatMapLayer() {
+    $.ajax({
+        url: 'http://localhost:8081/geoserver/wfs',
+        data: {
+            service: 'WFS',
+            request: 'GetFeature',
+            typeName: 'Geo_lab2023_g14PersistenceUnit:vista_a_rec',
+            srsName: '32721',
+            outputFormat: 'application/json'
+        },
         success: function(response) {
             // Crear un conjunto de coordenadas para las líneas
             var heatLines = [];
@@ -20,7 +27,7 @@ function createHeatMapLayer(data) {
             });
 
             // Renderizar el mapa de calor utilizando Leaflet.heat
-            var heatLayer = L.heatLayer(heatLines, {
+            L.heatLayer(heatLines, {
                 radius: 20,
                 blur: 15,
                 gradient: {
@@ -30,13 +37,7 @@ function createHeatMapLayer(data) {
                     0.8: 'yellow',
                     1.0: 'red'
                 }
-            });
-
-            // Agregar la capa de mapa de calor al mapa Leaflet
-            heatLayer.addTo(map);
-        },
-        error: function(xhr, status, error) {
-            console.error(error);
+            }).addTo(map);
         }
     });
 }

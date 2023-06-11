@@ -1,10 +1,9 @@
-import createHeatMapLayer from './heatMap.js';
 class ControladorMapa extends Configuracion {
     openst;
     google;
     heat;
     layerEjes;
-    layerDepartamento;
+    layerDepartamento
     layerRuta;
     servicioEH;
     vista_se_h;
@@ -109,16 +108,6 @@ class ControladorMapa extends Configuracion {
     }
     crearMapaAdmin() {
 
-        this.heat =
-            'http://localhost:' +
-            this.puertoGeoServer +
-            '/geoserver/wfs?' +
-            'service=WFS&' +
-            'request=GetFeature&' +
-            'typeName=Geo_lab2023_g14PersistenceUnit:vista_a_rec&' +
-            'srsName=' + this.srid + '&' +
-            'outputFormat=application/json';
-
         let baselayers = {
             "Open Street Map": this.openst,
             "Google Maps": this.google
@@ -127,8 +116,8 @@ class ControladorMapa extends Configuracion {
         let overlayers = {
             "Departamentos": this.layerDepartamento,
             "Ejes": this.layerEjes,
-            "Rutas": this.layerRuta,
-            "HeatMap": createHeatMapLayer(this.heat)
+            "Rutas": this.layerRuta
+            //"HeatMap": createHeatMapLayer()
 
         };
 
@@ -271,7 +260,7 @@ class ControladorMapa extends Configuracion {
             'typeName=Geo_lab2023_g14PersistenceUnit:vista_a_rec&' +
             'srsName=' + this.srid + '&' +
             'outputFormat=application/json';
-        //this.urlAmbulancia = url;
+       // this.heat = url;
         fetch(url)
             .then(function (response) {
                 return response.json();
