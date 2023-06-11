@@ -1,8 +1,6 @@
 # Laboratorio TSIG 2023
 ## Grupo 14
 
-> Diego Poblete 
-
 > Adriana Pisano
 
 > Sebastián González
