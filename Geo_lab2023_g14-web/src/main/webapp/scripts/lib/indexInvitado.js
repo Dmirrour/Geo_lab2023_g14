@@ -1,7 +1,7 @@
 function CrearMapaInvitado() {
     var map;
     ///////////////////////// MAPAS /////////////////////////
-    var openst = L.tileLayer('https://{s}.tile.sopenstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+    var openst = L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
         attribution: '© Grupo 14'
     });
 
@@ -212,21 +212,39 @@ function CrearMapaInvitado() {
         console.log("Click en coordenadas: ")
         console.log("Latitud:", latitud)//.toFixed(5)) // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
         console.log("Longitud:", longitud)//.toFixed(5))
-        //  console.log("distancia: " + L.extend.distance({ latitud, longitud }, { userLat, userLon }))
-        // console.log("distancia: " + L.extend.distance(latitud, userLon))
-        // var latse = [latitud, longitud];
 
         function addObjLatLng(latitud, longitud) {
             let addObjLatLng = L.GeoJSON.coordsToLatLng([latitud, longitud]);
             return addObjLatLng
         }
         let latlng1 = addObjLatLng(userLat, userLon);
-        let latlng2 = addObjLatLng(latitud, longitud);
+        let latlng2 = addObjLatLng(longitud, latitud);
         console.log("late1: " + latlng1)
         console.log("late2: " + latlng2)
         console.log("distance: " + L.CRS.Simple.distance(latlng1, latlng2))
+
+        // Distancia entre puntos
+        var punto1 = { x: userLat, y: userLon };
+        var punto2 = { x: longitud, y: latitud };
+        console.log("Distancia: " + euclideanDistancia(punto1, punto2));
+        console.log("Distancia metros: " + euclideanDistanciaMetros(punto1, punto2));
     });
 
-    ///////////////////////// FIN COORDENAS EVENTO CLICK /////////////////////////
+    ///////////////////////// DISTANCIA /////////////////////////
+    function euclideanDistancia(punto1, punto2) { // Distancia euclidiana entre dos puntos 
+        var dx = punto2.x - punto1.x;
+        var dy = punto2.y - punto1.y;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    function euclideanDistanciaMetros(punto1, punto2) { // Distancia euclidiana a metros 
+        var latlng1 = L.latLng(punto1.y, punto1.x);
+        var latlng2 = L.latLng(punto2.y, punto2.x);
+        var distanciaEnMetros = latlng1.distanceTo(latlng2);
+        return distanciaEnMetros;
+    }
+
+
+
     return map;
 }

@@ -116,20 +116,6 @@ function wfsSelectHospitales() {
 
 
 
-function euclideanDistance(point1, point2) {
-    var dx = point2.x - point1.x;
-    var dy = point2.y - point1.y;
-    return Math.sqrt(dx * dx + dy * dy);
-}
-
-// Ejemplo de uso
-var point1 = { x: 0, y: 0 };
-var point2 = { x: 3, y: 4 };
-var distance = euclideanDistance(point1, point2);
-console.log(distance);
-
-
-
 
 /////////////////// FILTRAR SERVICIO EMRGENCIA ///////////////////
 function wfsBuscarServicioEmergencia(newItemValue) {
