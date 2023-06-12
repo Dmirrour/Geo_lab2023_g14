@@ -58,16 +58,14 @@ function CrearMapaInvitado() {
         VERSION: '1.1.0'
     });
 
-    /*
-    var layerAll = L.tileLayer.wms('http://localhost:8081/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
-        title: 'layerAll',
-        layers: 'Geo_lab2023_g14PersistenceUnit:ft01_ejes,ft_depto,servicioemergencia,ambulancia',
-        srs: 'EPSG:32721',
-        format: 'image/png',
-        transparent: true,
-        VERSION: '1.1.0'
-    });
-    */
+    // var layerAll = L.tileLayer.wms('http://localhost:8081/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
+    //     title: 'layerAll',
+    //     layers: 'Geo_lab2023_g14PersistenceUnit:ft01_ejes,ft_depto,servicioemergencia,ambulancia',
+    //     srs: 'EPSG:32721',
+    //     format: 'image/png',
+    //     transparent: true,
+    //     VERSION: '1.1.0'
+    // });
     ///////////////////////// FIN CAPAS WMS  /////////////////////////
 
 
@@ -75,7 +73,7 @@ function CrearMapaInvitado() {
     map = L.map('map', {
         center: [-34.88219465245854, -56.17280777776989],
         zoom: 13,
-        minZoom: 1,
+        minZoom: 3,
         maxZoom: 18,
         layers: [openst],
         zoomControl: true
@@ -148,9 +146,9 @@ function CrearMapaInvitado() {
     return map;
 }
 
-
+///////////////////////// GENERA COLOR 
 function generarColor(numero) {
-    console.log("idhospital: ");
+    console.log("generarColor ");
     // Calcula los componentes de color
     var rojo = (numero * 17) % 256;   // Rango de 0 a 255
     var verde = (numero * 13) % 256;  // Rango de 0 a 255
@@ -162,6 +160,8 @@ function generarColor(numero) {
         azul.toString(16).padStart(2, '0');
 }
 
+
+///////////////////////// INITLAYERS /////////////////////////
 function initLayers() {
     let url =
         'http://localhost:8081/geoserver/wfs?' +
@@ -177,14 +177,15 @@ function initLayers() {
         'typeName=Geo_lab2023_g14PersistenceUnit:ambulancia&' +
         'srsName=EPSG:32721&' +
         'outputFormat=application/json';
+
     initializeLayers(url, 'layerSE');
     initializeLayers(urlAmbulancia, 'layerAmulancia');
 }
 
+///////////////////////// INITIALIZELAYERS /////////////////////////
 let geojsonLayer;
 function initializeLayers(url, layerName) {
-    console.log("initializeLayers: ");
-    console.log("Layer: ");
+    console.log("initializeLayers");
     geojsonLayer = L.geoJSON(null, {
         pointToLayer: function (feature, latlng) {
             let idh = feature.properties.idhospital * 20;
@@ -199,7 +200,6 @@ function initializeLayers(url, layerName) {
             });
         }
     }).addTo(map); // Crear una capa de GeoJSON
-
     fetch(url)
         .then(function (response) {
             return response.json();
@@ -260,6 +260,6 @@ function BorrarMarcadorALtaSE() {
     this.map.removeLayer(this.markerSE);
 }
 
-function seba() {
+function removerLayer() {
     map.removeLayer(geojsonLayer);
 }

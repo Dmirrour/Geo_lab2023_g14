@@ -6,7 +6,7 @@ import jakarta.ws.rs.core.MediaType;
 import uy.edu.tsig.dto.AmbulanciaDTO;
 import uy.edu.tsig.dto.HospitalDTO;
 import uy.edu.tsig.dto.ServicioEmergenciaDTO;
-import uy.edu.tsig.entity.Ambulancia;
+// import uy.edu.tsig.entity.Ambulancia;
 import uy.edu.tsig.model.Ambulacias;
 import uy.edu.tsig.model.Hospitales;
 import uy.edu.tsig.model.ServiciosEmergencias;

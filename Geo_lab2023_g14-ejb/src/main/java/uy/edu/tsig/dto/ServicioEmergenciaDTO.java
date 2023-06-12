@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import uy.edu.tsig.entity.Hospital;
+// import uy.edu.tsig.entity.Hospital;
 
 import java.io.Serializable;
 
@@ -22,10 +22,10 @@ public class ServicioEmergenciaDTO implements Serializable {
 
     private HospitalDTO hospital;
 
-    public ServicioEmergenciaDTO(Long idServicio,String nombre, int totalCama, int camasLibres){
-        this.camasLibres=camasLibres;
-        this.totalCama=totalCama;
-        this.idServicio=idServicio;
-        this.nombre=nombre;
+    public ServicioEmergenciaDTO(Long idServicio, String nombre, int totalCama, int camasLibres) {
+        this.camasLibres = camasLibres;
+        this.totalCama = totalCama;
+        this.idServicio = idServicio;
+        this.nombre = nombre;
     }
 }
