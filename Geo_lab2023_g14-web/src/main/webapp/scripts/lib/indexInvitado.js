@@ -131,7 +131,7 @@ function CrearMapaInvitado() {
 
     let geojsonLayer = L.geoJSON(null, {
         pointToLayer: function (feature, latlng) {
-            let idh = feature.properties.idhospital*20;
+            let idh = feature.properties.idhospital * 20;
             let markerColor = generarColor(idh) || 'blue';
 
             return L.circleMarker(latlng, {
@@ -180,7 +180,6 @@ function CrearMapaInvitado() {
                         let popupOptions = {
                             className: 'custom-popup'
                         };
-
                         layer.closePopup(); // Cerrar el popup anterior si existe
                         layer.bindPopup(popupContent, popupOptions).openPopup();
                     })
@@ -192,9 +191,7 @@ function CrearMapaInvitado() {
             });
     }
     initializeLayers(url, 'layerSE');
-
     initializeLayers(urlAmbulancia, 'layerAmulancia');
-
 
     ///////////////////////// COORDENAS EVENTO CLICK /////////////////////////
     drawLayers.on('click', function (e) {
