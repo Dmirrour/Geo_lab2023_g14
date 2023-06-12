@@ -1,9 +1,83 @@
+function wfsAllLayers() {
+    var exi = true;
+    console.log("MOSTRAR TODO");
+    let hospitalesItems = [];
+    let defaultValue = null;
+
+    let geojsonLayer = L.geoJSON(null, {
+        pointToLayer: function (feature, latlng) {
+            let idh = feature.properties.idhospital;
+            let colors = [
+                'red', 'blue', 'green', 'yellow', 'orange', 'purple', 'cyan', 'magenta', 'lime', 'pink',
+                'teal', 'maroon', 'navy', 'olive', 'silver', 'aqua', 'fuchsia', 'gray', 'black', 'white'
+            ];
+            let markerColor = colors[idh - 1] || 'blue'
+
+            return L.circleMarker(latlng, {
+                radius: 8,
+                fillColor: markerColor,
+                color: '#000',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            });
+        }
+    }).addTo(this.map); // Crear una capa de GeoJSON
+
+
+    // Crear capa de grupo para las capas WFS
+    var wfsGroup = L.layerGroup().addTo(map);
+    let url =
+        'http://localhost:8081/geoserver/wfs?' +
+        'service=WFS&' +
+        'request=GetFeature&' +
+        'typeName=Geo_lab2023_g14PersistenceUnit:vista_se_h&' +
+        'srsName=EPSG:32721&' +
+        'outputFormat=application/json';
+    let url2 =
+        'http://localhost:8081/geoserver/wfs?' +
+        'service=WFS&' +
+        'request=GetFeature&' +
+        'typeName=Geo_lab2023_g14PersistenceUnit:ambulancia&' +
+        'srsName=EPSG:32721&' +
+        'outputFormat=application/json';
+
+    // Función para cargar y mostrar una capa WFS
+    function loadWFS(url, layerName) {
+        fetch(url)
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                var geojsonLayer = L.geoJSON(data, {
+                    onEachFeature: function (feature, layer) {
+                        // Personalizar la interacción con cada elemento de la capa
+                        layer.bindPopup('<pre>' + JSON.stringify(feature.properties, null, ' ') + '</pre>');
+                    }
+                });
+                wfsGroup.addLayer(geojsonLayer);
+            })
+            .catch(function (error) {
+                console.error('Error:', error);
+            });
+    }
+    // Cargar y mostrar las capas WFS
+    loadWFS(url, 'Capa 1');
+    loadWFS(url2, 'Capa 2');
+
+}
+
+
+
+
+
 
 /////////////////// SELECCIONAR HOSPITAL ////////////////////
 function wfsSelectHospitales() {
     console.log("entro al controladorUsuario");
     let hospitalesItems = [];
     let defaultValue = null;
+
     let urlHospi =
         'http://localhost:8081/geoserver/wfs?' +
         'service=WFS&' +
@@ -15,6 +89,7 @@ function wfsSelectHospitales() {
         .then(function (response) {
             return response.json();
         }).then(function (data) {
+
             var features = data.features;
             for (var i = 0; i < features.length; i++) {
                 var item = features[i].properties;
@@ -30,7 +105,7 @@ function wfsSelectHospitales() {
                 onSelect: function (newItemValue) {
                     // drawMarker(newItemValue);
                     wfsBuscarServicioEmergencia(newItemValue);
-                    wfsBuscarAmbulancia(newItemValue);
+                                     //  wfsBuscarAmbulancia(newItemValue);
                 },
             }).addTo(map);
         })
@@ -40,13 +115,25 @@ function wfsSelectHospitales() {
 }
 
 
+
+function euclideanDistance(point1, point2) {
+    var dx = point2.x - point1.x;
+    var dy = point2.y - point1.y;
+    return Math.sqrt(dx * dx + dy * dy);
+}
+
+// Ejemplo de uso
+var point1 = { x: 0, y: 0 };
+var point2 = { x: 3, y: 4 };
+var distance = euclideanDistance(point1, point2);
+console.log(distance);
+
+
+
+
 /////////////////// FILTRAR SERVICIO EMRGENCIA ///////////////////
 function wfsBuscarServicioEmergencia(newItemValue) {
-<<<<<<< HEAD
     console.log("--> " + newItemValue);
-=======
-    console.log("wfsBuscarServicioEmergencia: " + newItemValue.toString());
->>>>>>> origin/union
     var wfs = L.Geoserver.wfs("http://localhost:8081/geoserver/wfs?", {
         layers: `Geo_lab2023_g14PersistenceUnit:servicioemergencia`,
         onEachFeature: function (f, l) {
@@ -56,6 +143,8 @@ function wfsBuscarServicioEmergencia(newItemValue) {
     });
     wfs.addTo(map);
 }
+
+
 
 
 /////////////////// FILTRAR AMBULANCIA ///////////////////
@@ -69,30 +158,30 @@ function wfsBuscarAmbulancia(newItemValue) {
     wfs2.addTo(map);
 
     //// POINT AMBULANCIA ////
-    var iconAmbulancia = L.icon({
-        iconUrl: 'resources/marker-icons/ambulance.svg',
-        iconSize: [36, 36],
-    });
-    var fijarAmbulancia = {
-        type: 'FeatureCollection',
-        features: [{
-            type: 'Feature',
-            properties: {},
-            geometry: {
-                type: 'Point',
-                coordinates: [ambLat, ambLon]
-            }
-        },
-        ]
-    };
+    // var iconAmbulancia = L.icon({
+    //     iconUrl: 'resources/marker-icons/ambulance.svg',
+    //     iconSize: [36, 36],
+    // });
+    // var fijarAmbulancia = {
+    //     type: 'FeatureCollection',
+    //     features: [{
+    //         type: 'Feature',
+    //         properties: {},
+    //         geometry: {
+    //             type: 'Point',
+    //             coordinates: [ambLat, ambLon]
+    //         }
+    //     },
+    //     ]
+    // };
 
-    L.geoJSON(fijarAmbulancia, {
-        pointToLayer: function (Feature, latlng) {
-            return L.marker(latlng, {
-                icon: iconAmbulancia
-            });
-        }
-    }).addTo(map);
+    // L.geoJSON(fijarAmbulancia, {
+    //     pointToLayer: function (Feature, latlng) {
+    //         return L.marker(latlng, {
+    //             icon: iconAmbulancia
+    //         });
+    //     }
+    // }).addTo(map);
 }
 
 

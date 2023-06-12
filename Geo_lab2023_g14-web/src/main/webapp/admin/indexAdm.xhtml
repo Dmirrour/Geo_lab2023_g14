@@ -1,11 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html
-        xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:h="http://xmlns.jcp.org/jsf/html"
-        xmlns:p="http://primefaces.org/ui"
-        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-        xmlns:f="http://xmlns.jcp.org/jsf/core"
-        lang="es" xml:lang="es">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core" lang="es" xml:lang="es">
 
 <h:head>
    <!-- VERIFICAR SESION -->
@@ -34,7 +28,7 @@
    <script type="" src="lib/js/class.Configuracion.js"></script>
    <script type="" src="lib/js/class.ControladorMapa.js"></script>
    <script type="" src="../scripts/geolet.js"></script>
-
+   <script type="" src="lib/js/layerWFS.js"></script>
    <!-- JTS -->
    <script type="" src="https://cdn.jsdelivr.net/npm/elm-pep@1.0.6/dist/elm-pep.js"></script>
    <script type="" src="https://cdn.jsdelivr.net/npm/jsts@2.3.0/dist/jsts.min.js"></script>
@@ -95,19 +89,21 @@
 
    <!-- FORM'S  -->
    <p:outputPanel id="formPanel">
-      <ui:include src="lib/forms/altaAmbulancia.xhtml"/>
-      <ui:include src="lib/forms/altaHospital.xhtml"/>
-      <ui:include src="lib/forms/altaServicioEmergencia.xhtml"/>
-      <ui:include src="lib/forms/eliminarAmbulancia.xhtml"/>
-      <ui:include src="lib/forms/eliminarHospital.xhtml"/>
-      <ui:include src="lib/forms/eliminarSE.xhtml"/>
-      <ui:include src="lib/forms/modificarSE.xhtml"/>
+      <ui:include src="lib/forms/altaAmbulancia.xhtml" />
+      <ui:include src="lib/forms/altaHospital.xhtml" />
+      <ui:include src="lib/forms/altaServicioEmergencia.xhtml" />
+      <ui:include src="lib/forms/eliminarAmbulancia.xhtml" />
+      <ui:include src="lib/forms/eliminarHospital.xhtml" />
+      <ui:include src="lib/forms/eliminarSE.xhtml" />
+      <ui:include src="lib/forms/modificarSE.xhtml" />
    </p:outputPanel>
    <!-- END FORMS -->
 </h:body>
+<script type="text/javascript"> addLayers();</script>
 
 <script type="text/javascript">
-   function ocultarDlgs(){
+
+   function ocultarDlgs() {
       PF('dlg1').hide();
       PF('dlg2').hide();
       PF('dlg3').hide();
@@ -125,5 +121,3 @@
 </script>
 
 </html>
-
-

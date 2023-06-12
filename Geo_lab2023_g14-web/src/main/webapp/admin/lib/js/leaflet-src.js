@@ -2069,22 +2069,22 @@
 		},
 
 		// @method project(latlng: LatLng): Point
-		// Projects geographical coordinates into coordinates in units accepted for
+		// Proyecta coordenadas geográficas en coordenadas en unidades aceptadas para
 		// this CRS (e.g. meters for EPSG:3857, for passing it to WMS services).
 		project: function (latlng) {
 			return this.projection.project(latlng);
 		},
 
 		// @method unproject(point: Point): LatLng
-		// Given a projected coordinate returns the corresponding LatLng.
+		// Dada una coordenada proyectada, devuelve el LatLng correspondiente.
 		// The inverse of `project`.
 		unproject: function (point) {
 			return this.projection.unproject(point);
 		},
 
 		// @method scale(zoom: Number): Number
-		// Returns the scale used when transforming projected coordinates into
-		// pixel coordinates for a particular zoom. For example, it returns
+		//Devuelve la escala utilizada al transformar las coordenadas proyectadas en
+		// coordenadas de píxeles para un zoom particular. Por ejemplo, vuelve
 		// `256 * 2^zoom` for Mercator-based CRS.
 		scale: function (zoom) {
 			return 256 * Math.pow(2, zoom);
@@ -2172,10 +2172,10 @@
 	 * @namespace CRS
 	 * @crs L.CRS.Simple
 	 *
-	 * A simple CRS that maps longitude and latitude into `x` and `y` directly.
-	 * May be used for maps of flat surfaces (e.g. game maps). Note that the `y`
-	 * axis should still be inverted (going from bottom to top). `distance()` returns
-	 * simple euclidean distance.
+	* Un CRS simple que mapea la longitud y la latitud en `x` e `y` directamente.
+* Puede usarse para mapas de superficies planas (por ejemplo, mapas de juegos). Tenga en cuenta que la `y`
+* el eje aún debe estar invertido (yendo de abajo hacia arriba). `distancia()` devuelve
+* distancia euclidiana simple.
 	 */
 
 	L.CRS.Simple = L.extend({}, L.CRS, {
@@ -2273,7 +2273,7 @@
 	 */
 
 	L.CRS.EPSG4326 = L.extend({}, L.CRS.Earth, {
-		code: 'EPSG:4326',
+		code: 'EPSG:32721',
 		projection: L.Projection.LonLat,
 		transformation: new L.Transformation(1 / 180, 1, -1 / 180, 0.5)
 	});
@@ -10547,8 +10547,8 @@
 		},
 
 		// @function coordsToLatLng(coords: Array): LatLng
-		// Creates a `LatLng` object from an array of 2 numbers (longitude, latitude)
-		// or 3 numbers (longitude, latitude, altitude) used in GeoJSON for points.
+		// Crea un objeto `LatLng` a partir de una matriz de 2 números (longitud, latitud)
+		// o 3 números (longitud, latitud, altitud) usados en GeoJSON para puntos.
 		coordsToLatLng: function (coords) {
 			return new L.LatLng(coords[1], coords[0], coords[2]);
 		},

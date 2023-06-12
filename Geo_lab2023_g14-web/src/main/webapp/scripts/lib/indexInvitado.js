@@ -1,7 +1,7 @@
 function CrearMapaInvitado() {
     var map;
     ///////////////////////// MAPAS /////////////////////////
-    var openst = L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+    var openst = L.tileLayer('https://{s}.tile.sopenstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
         attribution: '© Grupo 14'
     });
 
@@ -73,8 +73,8 @@ function CrearMapaInvitado() {
     ///////////////////////// OPCIONES DE MAPA /////////////////////////
     map = L.map('map', {
         center: [-34.88219465245854, -56.17280777776989],
-        zoom: 15,
-        minZoom: 11,
+        zoom: 13,
+        minZoom: 1,
         maxZoom: 18,
         layers: [openst],
         zoomControl: true
@@ -109,7 +109,7 @@ function CrearMapaInvitado() {
         }
     });
     map.addLayer(drawLayers);
-    map.addControl(drawControl);
+    // map.addControl(drawControl);
 
     map.on(L.Draw.Event.CREATED, function (e) {
         drawLayers.addLayer(e.layer);
@@ -121,7 +121,7 @@ function CrearMapaInvitado() {
         // Calcula los componentes de color
         var rojo = (numero * 17) % 256;   // Rango de 0 a 255
         var verde = (numero * 13) % 256;  // Rango de 0 a 255
-        var azul = (numero * 19) % 256;   // Rango de 0 a 255
+        var azul = (numero * 21) % 256;   // Rango de 0 a 255
 
         // Retorna el color hexadecimal en el formato "#RRGGBB"
         return "#" + rojo.toString(16).padStart(2, '0') +
@@ -131,8 +131,7 @@ function CrearMapaInvitado() {
 
     let geojsonLayer = L.geoJSON(null, {
         pointToLayer: function (feature, latlng) {
-            let idh = feature.properties.idhospital;
-
+            let idh = feature.properties.idhospital*20;
             let markerColor = generarColor(idh) || 'blue';
 
             return L.circleMarker(latlng, {
@@ -149,44 +148,54 @@ function CrearMapaInvitado() {
     let url =
         'http://localhost:8081/geoserver/wfs?' +
         'service=WFS&' +
-        // 'version=1.1.0&' +
         'request=GetFeature&' +
         'typeName=Geo_lab2023_g14PersistenceUnit:vista_se_h&' +
         'srsName=EPSG:32721&' +
         'outputFormat=application/json';
+    let urlAmbulancia =
+        'http://localhost:8081/geoserver/wfs?' +
+        'service=WFS&' +
+        'request=GetFeature&' +
+        'typeName=Geo_lab2023_g14PersistenceUnit:ambulancia&' +
+        'srsName=EPSG:32721&' +
+        'outputFormat=application/json';
+    function initializeLayers(url, layerName) {
+        fetch(url)
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                geojsonLayer.addData(data);      // Agregar los datos a la capa de GeoJSON
+                // Configurar el evento de clic en los marcadores
+                geojsonLayer.eachLayer(function (layer) {
+                    layer.on('click', function (e) {
+                        let properties = e.target.feature.properties;
+                        let popupContent =
+                            '<div class="popup-content">' +
+                            '<h5><b>' + properties.nombre + '</b></h5>' +
+                            '<em>Camas libres: </em><b>' + properties.camaslibres + '</b></br>' +
+                            '<em>Total de camas: </em><b>' + properties.totalcama + '</b></br>' +
+                            '<em>Hospital Nombre: </em><b>' + properties.nombrehospital + '</b></br>' +
+                            '<em>Hospital Tipo: </em><b>' + properties.tipohospital + '</b></br>' + '</div>';
+                        let popupOptions = {
+                            className: 'custom-popup'
+                        };
 
-    fetch(url)
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (data) {
-            geojsonLayer.addData(data);      // Agregar los datos a la capa de GeoJSON
-            // Configurar el evento de clic en los marcadores
-            geojsonLayer.eachLayer(function (layer) {
-                layer.on('click', function (e) {
-                    let properties = e.target.feature.properties;
-                    let popupContent =
-                        '<div class="popup-content">' +
-                        '<h4>S. E.: <em>' + properties.nombre + '</em></h4>' +
-                        '<p><em>Camas libres: </em><b>' + properties.camaslibres + '</b></p>' +
-                        '<p><em>Total de camas: </em><b>' + properties.totalcama + '</b></p>' +
-                        '<p><em>Hospital Nombre: </em><b>' + properties.nombrehospital + '</b></p>' +
-                        '<p><em>Hospital Tipo: </em><b>' + properties.tipohospital + '</b></p>' +
-                        '</div>';
-
-                    let popupOptions = {
-                        className: 'custom-popup'
-                    };
-
-                    layer.closePopup(); // Cerrar el popup anterior si existe
-                    layer.bindPopup(popupContent, popupOptions).openPopup();
-                })
+                        layer.closePopup(); // Cerrar el popup anterior si existe
+                        layer.bindPopup(popupContent, popupOptions).openPopup();
+                    })
+                });
+                geojsonLayer.options.layerName = layerName;
+            })
+            .catch(function (error) {
+                console.error('Error:', error);
             });
-        })
-        .catch(function (error) {
-            console.error('Error:', error);
-        });
-    
+    }
+    initializeLayers(url, 'layerSE');
+
+    initializeLayers(urlAmbulancia, 'layerAmulancia');
+
+
     ///////////////////////// COORDENAS EVENTO CLICK /////////////////////////
     drawLayers.on('click', function (e) {
         let latitud = e.latlng.lat;
@@ -195,17 +204,32 @@ function CrearMapaInvitado() {
         console.log("Click en coordenadas: ")
         console.log("Latitud:", latitud) // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
         console.log("Longitud:", longitud)
-        //  console.log(e.layer);
     });
-    
+
     map.on('click', function (e) {
         let latitud = e.latlng.lat;
         let longitud = e.latlng.lng;
+        let userLat = -56.185222811229534;
+        let userLon = -34.8503303549236;
         // alert("Click en coordenadas: " + "\n" + "[" + latitud + "] [" + longitud + "]")
         console.log("Click en coordenadas: ")
         console.log("Latitud:", latitud)//.toFixed(5)) // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
         console.log("Longitud:", longitud)//.toFixed(5))
+        //  console.log("distancia: " + L.extend.distance({ latitud, longitud }, { userLat, userLon }))
+        // console.log("distancia: " + L.extend.distance(latitud, userLon))
+        // var latse = [latitud, longitud];
+
+        function addObjLatLng(latitud, longitud) {
+            let addObjLatLng = L.GeoJSON.coordsToLatLng([latitud, longitud]);
+            return addObjLatLng
+        }
+        let latlng1 = addObjLatLng(userLat, userLon);
+        let latlng2 = addObjLatLng(latitud, longitud);
+        console.log("late1: " + latlng1)
+        console.log("late2: " + latlng2)
+        console.log("distance: " + L.CRS.Simple.distance(latlng1, latlng2))
     });
+
     ///////////////////////// FIN COORDENAS EVENTO CLICK /////////////////////////
     return map;
 }

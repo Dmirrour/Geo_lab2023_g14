@@ -1,4 +1,4 @@
-function inicializarMapAnonimo() {
+/*function inicializarMapAnonimo() {
 
     ///////////////////////// MAPAS /////////////////////////
     var openst = L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
@@ -109,10 +109,10 @@ function inicializarMapAnonimo() {
     // L.geolet({
     //     position: 'bottomleft',
     // }).addTo(map);
-
+*/
 
     ///////////////////////// COORDENAS EVENTO CLICK /////////////////////////
-    drawLayers.on('click', function (e) {
+  /*  drawLayers.on('click', function (e) {
         let latitud = e.latlng.lat;
         let longitud = e.latlng.lng;
         alert("Click en coordenadas: " + "\n" + "[" + latitud + "] [" + longitud + "]")
@@ -130,4 +130,4 @@ function inicializarMapAnonimo() {
         console.log("Longitud:", longitud)//.toFixed(5))
     });
 
-}
+}*/
