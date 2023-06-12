@@ -111,23 +111,28 @@
     // }).addTo(map);
 */
 
-    ///////////////////////// COORDENAS EVENTO CLICK /////////////////////////
-  /*  drawLayers.on('click', function (e) {
-        let latitud = e.latlng.lat;
-        let longitud = e.latlng.lng;
-        alert("Click en coordenadas: " + "\n" + "[" + latitud + "] [" + longitud + "]")
-        console.log("Click en coordenadas: ")
-        console.log("Latitud:", latitud) // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
-        console.log("Longitud:", longitud)
-    });
+///////////////////////// COORDENAS EVENTO CLICK /////////////////////////
+/*  drawLayers.on('click', function (e) {
+      let latitud = e.latlng.lat;
+      let longitud = e.latlng.lng;
+      alert("Click en coordenadas: " + "\n" + "[" + latitud + "] [" + longitud + "]")
+      console.log("Click en coordenadas: ")
+      console.log("Latitud:", latitud) // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
+      console.log("Longitud:", longitud)
+  });
 
-    map.on('click', function (e) {
-        let latitud = e.latlng.lat;
-        let longitud = e.latlng.lng;
-        // alert("Click en coordenadas: " + "\n" + "[" + latitud + "] [" + longitud + "]")
-        console.log("Click en coordenadas: ")
-        console.log("Latitud:", latitud)//.toFixed(5)) // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
-        console.log("Longitud:", longitud)//.toFixed(5))
-    });
+  map.on('click', function (e) {
+      let latitud = e.latlng.lat;
+      let longitud = e.latlng.lng;
+      // alert("Click en coordenadas: " + "\n" + "[" + latitud + "] [" + longitud + "]")
+      console.log("Click en coordenadas: ")
+      console.log("Latitud:", latitud)//.toFixed(5)) // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
+      console.log("Longitud:", longitud)//.toFixed(5))
+  });
 
 }*/
+
+
+// function seba() {
+//     console.log("SEBA");
+// }

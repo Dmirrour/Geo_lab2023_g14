@@ -1,3 +1,4 @@
+
 function wfsAllLayers() {
     var exi = true;
     console.log("MOSTRAR TODO");
@@ -71,7 +72,6 @@ function wfsAllLayers() {
 
 
 
-
 /////////////////// SELECCIONAR HOSPITAL ////////////////////
 function wfsSelectHospitales() {
     console.log("entro al controladorUsuario");
@@ -103,9 +103,11 @@ function wfsSelectHospitales() {
                 selectedDefault: defaultValue,
                 items: hospitalesItems,
                 onSelect: function (newItemValue) {
-                    // drawMarker(newItemValue);
+                          seba();
+                    // console.log("idhospital: " + geojsonLayer);
+                    //  drawMarker(newItemValue);
                     wfsBuscarServicioEmergencia(newItemValue);
-                                     //  wfsBuscarAmbulancia(newItemValue);
+                    //  wfsBuscarAmbulancia(newItemValue);
                 },
             }).addTo(map);
         })
@@ -115,34 +117,46 @@ function wfsSelectHospitales() {
 }
 
 
-
-
 /////////////////// FILTRAR SERVICIO EMRGENCIA ///////////////////
+let exi = false;
+let wfs;
 function wfsBuscarServicioEmergencia(newItemValue) {
-    console.log("--> " + newItemValue);
-    var wfs = L.Geoserver.wfs("http://localhost:8081/geoserver/wfs?", {
-        layers: `Geo_lab2023_g14PersistenceUnit:servicioemergencia`,
-        onEachFeature: function (f, l) {
-            l.bindPopup('<pre>' + JSON.stringify(f.properties.nombre, null, ' ').replace(/[\{\}"]/, '') + '</pre>');
-        },
-        CQL_FILTER: "hospital_idhospital='" + newItemValue + "'",
+    // console.log("--> " + newItemValue);
+    if (exi) {
+        exi = false;
+        map.removeLayer(wfs);
+    }
+    // L.Geoserver.  
+    wfs = L.Geoserver.wfs("http://localhost:8081/geoserver/wfs?", {
+        layers: `Geo_lab2023_g14PersistenceUnit:vista_se_h`,
+        // onEachFeature: function (f, l) {
+        //     l.bindPopup('<pre>' + JSON.stringify(f.properties.nombre, null, ' ').replace(/[\{\}"]/, '') + '</pre>');
+        // },
+        CQL_FILTER: "idhospital='" + newItemValue + "'",
     });
     wfs.addTo(map);
+    exi = true;
 }
 
 
 
 
 /////////////////// FILTRAR AMBULANCIA ///////////////////
-function wfsBuscarAmbulancia(newItemValue) {
-    var wfs2 = L.Geoserver.wfs("http://localhost:8081/geoserver/wfs?", {
-        layers: `Geo_lab2023_g14PersistenceUnit:ambulancia`,
-        // onEachFeature: function (f, l) {
-        //     l.bindPopup('<pre>' + JSON.stringify(f.properties.nombre, null, ' ').replace(/[\{\}"]/, '') + '</pre>');},
-        CQL_FILTER: "hospital_idhospital='" + newItemValue + "'",
-    });
-    wfs2.addTo(map);
 
+function wfsBuscarAmbulancia(newItemValue) {
+    if (exis) {
+        map.removeLayer(L.Geoserver);
+        exis = false;
+    } else {
+        var wfs2 = L.Geoserver.wfs("http://localhost:8081/geoserver/wfs?", {
+            layers: `Geo_lab2023_g14PersistenceUnit:ambulancia`,
+            // onEachFeature: function (f, l) {
+            //     l.bindPopup('<pre>' + JSON.stringify(f.properties.nombre, null, ' ').replace(/[\{\}"]/, '') + '</pre>');},
+            CQL_FILTER: "hospital_idhospital='" + newItemValue + "'",
+        });
+        wfs2.addTo(map);
+        exis = true;
+    }
     //// POINT AMBULANCIA ////
     // var iconAmbulancia = L.icon({
     //     iconUrl: 'resources/marker-icons/ambulance.svg',

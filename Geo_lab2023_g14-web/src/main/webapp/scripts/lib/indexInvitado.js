@@ -70,6 +70,7 @@ function CrearMapaInvitado() {
     */
     ///////////////////////// FIN CAPAS WMS  /////////////////////////
 
+
     ///////////////////////// OPCIONES DE MAPA /////////////////////////
     map = L.map('map', {
         center: [-34.88219465245854, -56.17280777776989],
@@ -114,84 +115,8 @@ function CrearMapaInvitado() {
     map.on(L.Draw.Event.CREATED, function (e) {
         drawLayers.addLayer(e.layer);
     });
-
-
     ///////////////////////// FIN OPCIONES DE MAPA /////////////////////////
-    function generarColor(numero) {
-        // Calcula los componentes de color
-        var rojo = (numero * 17) % 256;   // Rango de 0 a 255
-        var verde = (numero * 13) % 256;  // Rango de 0 a 255
-        var azul = (numero * 21) % 256;   // Rango de 0 a 255
 
-        // Retorna el color hexadecimal en el formato "#RRGGBB"
-        return "#" + rojo.toString(16).padStart(2, '0') +
-            verde.toString(16).padStart(2, '0') +
-            azul.toString(16).padStart(2, '0');
-    }
-
-    let geojsonLayer = L.geoJSON(null, {
-        pointToLayer: function (feature, latlng) {
-            let idh = feature.properties.idhospital * 20;
-            let markerColor = generarColor(idh) || 'blue';
-
-            return L.circleMarker(latlng, {
-                radius: 8,
-                fillColor: markerColor,
-                color: '#000',
-                weight: 1,
-                opacity: 1,
-                fillOpacity: 0.8
-            });
-        }
-    }).addTo(map); // Crear una capa de GeoJSON
-
-    let url =
-        'http://localhost:8081/geoserver/wfs?' +
-        'service=WFS&' +
-        'request=GetFeature&' +
-        'typeName=Geo_lab2023_g14PersistenceUnit:vista_se_h&' +
-        'srsName=EPSG:32721&' +
-        'outputFormat=application/json';
-    let urlAmbulancia =
-        'http://localhost:8081/geoserver/wfs?' +
-        'service=WFS&' +
-        'request=GetFeature&' +
-        'typeName=Geo_lab2023_g14PersistenceUnit:ambulancia&' +
-        'srsName=EPSG:32721&' +
-        'outputFormat=application/json';
-    function initializeLayers(url, layerName) {
-        fetch(url)
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (data) {
-                geojsonLayer.addData(data);      // Agregar los datos a la capa de GeoJSON
-                // Configurar el evento de clic en los marcadores
-                geojsonLayer.eachLayer(function (layer) {
-                    layer.on('click', function (e) {
-                        let properties = e.target.feature.properties;
-                        let popupContent =
-                            '<div class="popup-content">' +
-                            '<h5><b>' + properties.nombre + '</b></h5>' +
-                            '<em>Camas libres: </em><b>' + properties.camaslibres + '</b></br>' +
-                            '<em>Total de camas: </em><b>' + properties.totalcama + '</b></br>' +
-                            '<em>Hospital Nombre: </em><b>' + properties.nombrehospital + '</b></br>' +
-                            '<em>Hospital Tipo: </em><b>' + properties.tipohospital + '</b></br>' + '</div>';
-                        let popupOptions = {
-                            className: 'custom-popup'
-                        };
-                        layer.closePopup(); // Cerrar el popup anterior si existe
-                        layer.bindPopup(popupContent, popupOptions).openPopup();
-                    })
-                });
-                geojsonLayer.options.layerName = layerName;
-            })
-            .catch(function (error) {
-                console.error('Error:', error);
-            });
-    }
-    initializeLayers(url, 'layerSE');
-    initializeLayers(urlAmbulancia, 'layerAmulancia');
 
     ///////////////////////// COORDENAS EVENTO CLICK /////////////////////////
     drawLayers.on('click', function (e) {
@@ -209,42 +134,132 @@ function CrearMapaInvitado() {
         let userLat = -56.185222811229534;
         let userLon = -34.8503303549236;
         // alert("Click en coordenadas: " + "\n" + "[" + latitud + "] [" + longitud + "]")
-        console.log("Click en coordenadas: ")
-        console.log("Latitud:", latitud)//.toFixed(5)) // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
-        console.log("Longitud:", longitud)//.toFixed(5))
-
-        function addObjLatLng(latitud, longitud) {
-            let addObjLatLng = L.GeoJSON.coordsToLatLng([latitud, longitud]);
-            return addObjLatLng
-        }
-        let latlng1 = addObjLatLng(userLat, userLon);
-        let latlng2 = addObjLatLng(longitud, latitud);
-        console.log("late1: " + latlng1)
-        console.log("late2: " + latlng2)
-        console.log("distance: " + L.CRS.Simple.distance(latlng1, latlng2))
+        // console.log("Latitud:", latitud)//.toFixed(5)) // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
+        console.log("Evento Click" + "\n" + "Coordenadas: " + "[" + latitud + "], [" + longitud + "]")
 
         // Distancia entre puntos
-        var punto1 = { x: userLat, y: userLon };
-        var punto2 = { x: longitud, y: latitud };
-        console.log("Distancia: " + euclideanDistancia(punto1, punto2));
-        console.log("Distancia metros: " + euclideanDistanciaMetros(punto1, punto2));
+        let punto1 = { x: userLat, y: userLon };
+        let punto2 = { x: longitud, y: latitud };
+        console.log("Distancia euclidiana: " + euclideanDistancia(punto1, punto2));
+        console.log("Distancia en metros: " + euclideanDistanciaMetros(punto1, punto2));
+        // console.log(addObjLatLng(longitud, latitud));
     });
 
-    ///////////////////////// DISTANCIA /////////////////////////
-    function euclideanDistancia(punto1, punto2) { // Distancia euclidiana entre dos puntos 
-        var dx = punto2.x - punto1.x;
-        var dy = punto2.y - punto1.y;
-        return Math.sqrt(dx * dx + dy * dy);
-    }
-
-    function euclideanDistanciaMetros(punto1, punto2) { // Distancia euclidiana a metros 
-        var latlng1 = L.latLng(punto1.y, punto1.x);
-        var latlng2 = L.latLng(punto2.y, punto2.x);
-        var distanciaEnMetros = latlng1.distanceTo(latlng2);
-        return distanciaEnMetros;
-    }
-
-
-
     return map;
+}
+
+
+function generarColor(numero) {
+    console.log("idhospital: ");
+    // Calcula los componentes de color
+    var rojo = (numero * 17) % 256;   // Rango de 0 a 255
+    var verde = (numero * 13) % 256;  // Rango de 0 a 255
+    var azul = (numero * 21) % 256;   // Rango de 0 a 255
+
+    // Retorna el color hexadecimal en el formato "#RRGGBB"
+    return "#" + rojo.toString(16).padStart(2, '0') +
+        verde.toString(16).padStart(2, '0') +
+        azul.toString(16).padStart(2, '0');
+}
+
+function initLayers() {
+    let url =
+        'http://localhost:8081/geoserver/wfs?' +
+        'service=WFS&' +
+        'request=GetFeature&' +
+        'typeName=Geo_lab2023_g14PersistenceUnit:vista_se_h&' +
+        'srsName=EPSG:32721&' +
+        'outputFormat=application/json';
+    let urlAmbulancia =
+        'http://localhost:8081/geoserver/wfs?' +
+        'service=WFS&' +
+        'request=GetFeature&' +
+        'typeName=Geo_lab2023_g14PersistenceUnit:ambulancia&' +
+        'srsName=EPSG:32721&' +
+        'outputFormat=application/json';
+    initializeLayers(url, 'layerSE');
+    initializeLayers(urlAmbulancia, 'layerAmulancia');
+}
+
+let geojsonLayer;
+function initializeLayers(url, layerName) {
+    console.log("initializeLayers: ");
+    console.log("Layer: ");
+    geojsonLayer = L.geoJSON(null, {
+        pointToLayer: function (feature, latlng) {
+            let idh = feature.properties.idhospital * 20;
+            let markerColor = generarColor(idh) || 'blue';
+            return L.circleMarker(latlng, {
+                radius: 8,
+                fillColor: markerColor,
+                color: '#000',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            });
+        }
+    }).addTo(map); // Crear una capa de GeoJSON
+
+    fetch(url)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            geojsonLayer.addData(data);      // Agregar los datos a la capa de GeoJSON
+            // Configurar el evento de clic en los marcadores
+            geojsonLayer.eachLayer(function (layer) {
+                layer.on('click', function (e) {
+                    let properties = e.target.feature.properties;
+                    let popupContent =
+                        '<div class="popup-content">' +
+                        '<h5><b>' + properties.nombre + '</b></h5>' +
+                        '<em>Camas libres: </em><b>' + properties.camaslibres + '</b></br>' +
+                        '<em>Total de camas: </em><b>' + properties.totalcama + '</b></br>' +
+                        '<em>Hospital Nombre: </em><b>' + properties.nombrehospital + '</b></br>' +
+                        '<em>Hospital Tipo: </em><b>' + properties.tipohospital + '</b></br>' + '</div>';
+                    let popupOptions = {
+                        className: 'custom-popup'
+                    };
+                    layer.closePopup(); // Cerrar el popup anterior si existe
+                    layer.bindPopup(popupContent, popupOptions).openPopup();
+                })
+            });
+            geojsonLayer.options.layerName = layerName;
+        })
+        .catch(function (error) {
+            console.error('Error:', error);
+        });
+}
+
+
+///////////////////////// DISTANCIA /////////////////////////
+function euclideanDistancia(punto1, punto2) { // Distancia euclidiana entre dos puntos 
+    let dx = punto2.x - punto1.x;
+    let dy = punto2.y - punto1.y;
+    return Math.sqrt(dx * dx + dy * dy);
+} // L.CRS.Simple.distance(latlng1, latlng2) --> Distancia euclidiana entre dos puntos 
+
+function euclideanDistanciaMetros(punto1, punto2) { // Distancia euclidiana a metros (a partir de dos punto(x,y))
+    let latlng1 = L.latLng(punto1.y, punto1.x);
+    let latlng2 = L.latLng(punto2.y, punto2.x);
+    let distanciaEnMetros = latlng1.distanceTo(latlng2);
+    return distanciaEnMetros;
+}
+
+function addObjLatLng(latitud, longitud) { // Crea objeto latlng
+    let addObjLatLng = L.GeoJSON.coordsToLatLng([latitud, longitud]);
+    return addObjLatLng
+}
+
+function euclideanDistanciaMetrosObj(latlng1, latlng2) { // Distancia euclidiana a metros (a partir de dos obj latlng)
+    return latlng1.distanceTo(latlng2);
+}
+// Elimina el marcador del mapa
+function BorrarMarcadorALtaSE() {
+    console.log("borrando marcador");
+    this.map.removeLayer(this.markerSE);
+}
+
+function seba() {
+    map.removeLayer(geojsonLayer);
 }

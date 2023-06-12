@@ -97,7 +97,7 @@ L.Geoserver = L.FeatureGroup.extend({
         }
 
         if (that.options.fitLayer) {
-    //   that._map.fitBounds(that.getBounds());
+   //  that._map.fitBounds(that.getBounds());
         }
       },
     }).fail(function (jqXHR, textStatus, error) {
