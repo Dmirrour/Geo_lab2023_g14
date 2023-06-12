@@ -47,11 +47,10 @@ INSERT INTO servicioemergencia("idservicio","camaslibres","nombre","totalcama","
 INSERT INTO servicioemergencia("idservicio","camaslibres","nombre","totalcama","hospital_idhospital","point")VALUES(3,20,'Medica Uruguaya Paso Cerro',80,2,null);
 INSERT INTO servicioemergencia("idservicio","camaslibres","nombre","totalcama","hospital_idhospital","point")VALUES(4,87,'Hospital Maciel',203,4,null);
 
-
 --*-*-*-*-*-*-*-*-*- UPDATE SERVICIO EMERGENCIA -*-*-*-*-*-*-*-*-*--
 UPDATE servicioemergencia SET point=(ST_SetSRID(st_makepoint(-56.15112304, -34.8921377450), 32721)) WHERE "idservicio"=1;
 UPDATE servicioemergencia SET point=(ST_SetSRID(st_makepoint(-56.2615234, -34.8521477450), 32721)) WHERE "idservicio"=2;
-UPDATE servicioemergencia SET point=(ST_SetSRID(st_makepoint(-56.23247723007203, -34.863756264959946), 32721)) WHERE "idservicio"=3;
+UPDATE servicioemergencia SET point=(ST_SetSRID(st_makepoint(-56.23947723007203, -34.863766265959946), 32721)) WHERE "idservicio"=3;
 UPDATE servicioemergencia SET point=(ST_SetSRID(st_makepoint(-56.19952350, -34.8521477950), 32721)) WHERE "idservicio"=4;
 
 
@@ -115,24 +114,11 @@ SELECT * FROM ft_00_vias;
         END AS tipohospital
     FROM servicioemergencia seJOIN hospital h ON se.hospital_idhospital = h.idhospital;
 
-
 -- DROP VIEW vista_a_rec;
-<<<<<<< HEAD
 CREATE OR REPLACE VIEW public.vista_a_rec AS
 SELECT a.idambulancia,a.distanciamaxdesvio,a.idcodigo,a.polyline,h.idhospital,h.nombrehospital
-FROM ambulancia a JOIN hospital h ON a.hospital_idhospital = h.idhospital;
-=======
-    CREATE OR REPLACE VIEW public.vista_a_rec
-       AS
-    SELECT a.idambulancia,
-           a.distanciamaxdesvio,
-           a.idcodigo,
-           a.polyline,
-           h.idhospital,
-           h.nombrehospital
-    FROM ambulancia a
-             JOIN hospital h ON a.hospital_idhospital = h.idhospital;
->>>>>>> origin/union
+FROM ambulancia a 
+JOIN hospital h ON a.hospital_idhospital = h.idhospital;
 
 
 DROP TABLE ambulancia CASCADE;
