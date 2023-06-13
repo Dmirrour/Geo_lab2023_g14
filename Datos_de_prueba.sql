@@ -37,9 +37,9 @@ UPDATE ambulancia SET polyline='LINESTRING(-56.197106838226325 -34.8409335109964
 
 
 --*-*-*-*-*-*-*-*-*- HOSPITAL_AMBULANCIA -*-*-*-*-*-*-*-*-*--
-INSERT INTO hospital_ambulancia(idambulancia,hospital_idhospital)VALUES(1,1);
-INSERT INTO hospital_ambulancia(hospital_idhospital, ambulancia_idambulancia)VALUES (2, 1);
-
+INSERT INTO hospital_ambulancia(hospital_idhospital,ambulancia_idambulancia)VALUES(1,1);
+INSERT INTO hospital_ambulancia(hospital_idhospital, ambulancia_idambulancia)VALUES (1, 2);
+INSERT INTO hospital_ambulancia(hospital_idhospital, ambulancia_idambulancia)VALUES (2, 3);
 
 --*-*-*-*-*-*-*-*-*- INSERT SERVICIO EMERGENCIA -*-*-*-*-*-*-*-*-*--
 INSERT INTO servicioemergencia("idservicio","camaslibres","nombre","totalcama","hospital_idhospital","point")VALUES(1,50,'Hospital de Clinicas',290,1,(ST_SetSRID(st_makepoint(-81, -36), 32721)));

@@ -84,18 +84,66 @@ function wfsBuscarServicioEmergencia(newItemValue) {
     existeLayer = true;
 }
 
-
 /////////////////// FILTRAR AMBULANCIA ///////////////////
-var wfs2;
-let existeLayer2 = false;
 function wfsBuscarAmbulancia(newItemValue) {
+    let filtro = "hospital_idhospital='" + newItemValue + "'";
+    let url =
+        'http://localhost:8081/geoserver/wfs?' +
+        'service=WFS&' +
+        'request=GetFeature&' +
+        'typeName=Geo_lab2023_g14PersistenceUnit:ambulancia&' +
+        'srsName=EPSG:32721&' +
+        'CQL_FILTER=' + filtro + '&' +
+        'outputFormat=application/json';
+    geojsonLayer = L.geoJSON(null, {
+        pointToLayer: function (feature, latlng) {
+            let idh = feature.properties.idhospital * 20;
+            let markerColor = generarColor(idh) || 'blue';
+            return L.circleMarker(latlng, {
+                radius: 8,
+                fillColor: markerColor,
+                color: '#000',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            });
+        }
+    }).addTo(map);
+    fetch(url)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            geojsonLayer.addData(data);
+            geojsonLayer.options.layerName = layerName;
+        })
+        .catch(function (error) {
+            console.error('Error:', error);
+        });
+}
+
+
+
+
+
+
+
+
+/////////////////////////////   ARRIBA TODO OK
+
+
+
+// let existeLayer2 = false;
+// let wfs2;
+function wfsBuscarAmbulancia2(newItemValue) {
+
     if (existeLayer2) {
         existeLayer2 = false;
         map.removeLayer(wfs2);
     }
     wfs2 = L.Geoserver.wfs("http://localhost:8081/geoserver/wfs?", {
-        layers: `Geo_lab2023_g14PersistenceUnit:vista_a_rec`,
-        CQL_FILTER: "idhospital='" + newItemValue + "'",
+        layers: `Geo_lab2023_g14PersistenceUnit:ambulancia`,
+        CQL_FILTER: "hospital_idhospital='" + newItemValue + "'",
         //  onEachFeature: function (f, l) {
         //  let popupContent =
         //   '<div class="popup-content">' +
@@ -124,16 +172,6 @@ function wfsBuscarAmbulancia(newItemValue) {
     wfs2.addTo(map);
     existeLayer2 = true;
 }
-
-
-
-
-
-
-
-
-
-/////////////////////////////   ARRIBA TODO OK
 
 
 //// POINT AMBULANCIA ////

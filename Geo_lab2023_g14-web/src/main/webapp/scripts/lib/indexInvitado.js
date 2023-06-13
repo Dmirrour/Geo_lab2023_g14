@@ -221,7 +221,7 @@ function initializeLayers(url, layerName) {
                         className: 'custom-popup'
                     };
                     layer.closePopup(); // Cerrar el popup anterior si existe
-                    layer.bindPopup(popupContent, popupOptions).openPopup();
+                  //  layer.bindPopup(popupContent, popupOptions).openPopup();
                 })
             });
             geojsonLayer.options.layerName = layerName;
