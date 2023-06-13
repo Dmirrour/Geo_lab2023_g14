@@ -1,4 +1,6 @@
 /////////////////// SELECCIONAR HOSPITAL ////////////////////
+let existeLayer = false;
+let wfs;
 function wfsSelectHospitales() {
     console.log("wfsSelectHospitales");
     let hospitalesItems = [];
@@ -16,8 +18,11 @@ function wfsSelectHospitales() {
             var features = data.features;
             for (var i = 0; i < features.length; i++) {
                 var item = features[i].properties;
+                console.log("s" + item.nombrehospital);
                 var idH = i + 1;
                 hospitalesItems.push({ label: item.nombrehospital, value: idH });
+
+
             }
             let t = hospitalesItems.length + 1;
             hospitalesItems.push({ label: "↪ Mostrar Todo", value: t });
@@ -42,12 +47,12 @@ function wfsSelectHospitales() {
         .catch(function (error) {
             console.error('Error:', error);
         });
+
 }
 
 
 /////////////////// FILTRAR SERVICIO EMERGENCIA ///////////////////
-let existeLayer = false;
-let wfs;
+
 function wfsBuscarServicioEmergencia(newItemValue) {
     if (existeLayer) {
         existeLayer = false;
@@ -83,7 +88,8 @@ function wfsBuscarServicioEmergencia(newItemValue) {
     wfs.addTo(map);
     existeLayer = true;
 }
-
+var latAmb;
+var lonAmb;
 /////////////////// FILTRAR AMBULANCIA ///////////////////
 function wfsBuscarAmbulancia(newItemValue) {
     let filtro = "hospital_idhospital='" + newItemValue + "'";
@@ -115,16 +121,52 @@ function wfsBuscarAmbulancia(newItemValue) {
         })
         .then(function (data) {
             geojsonLayer.addData(data);
+
+            latAmb = data.features[1].geometry.coordinates[0][0];
+            lonAmb = data.features[0].geometry.coordinates[0][1];
+            console.log(latAmb + ' ' + lonAmb);
+
             geojsonLayer.options.layerName = layerName;
+
+            //   });
+            //    function getCenterPoint(coordinates) {
+            // Calcular el punto central de una LineString
+            // let totalPoints = coordinates.length;
+            // let middleIndex = Math.floor(totalPoints / 2);
+            // return coordinates[middleIndex];
+            //   }
+            //   let heatLayer = L.heatLayer(points).addTo(map);
+
         })
         .catch(function (error) {
             console.error('Error:', error);
         });
+    //// POINT AMBULANCIA ////
+    var iconAmbulancia = L.icon({
+        iconUrl: 'resources/marker-icons/ambulance.svg',
+        iconSize: [36, 36],
+    });
+    var fijarAmbulancia = {
+        type: 'FeatureCollection',
+        features: [{
+            type: 'Feature',
+            properties: {},
+            geometry: {
+                type: 'Point',
+                coordinates: [latAmb, lonAmb]
+            }
+        },
+        ]
+    };
+
+    L.geoJSON(fijarAmbulancia, {
+        pointToLayer: function (Feature, latlng) {
+            return L.marker(latlng, {
+                icon: iconAmbulancia
+            });
+        }
+    }).addTo(map);
 }
-
-
-
-
 
 
 

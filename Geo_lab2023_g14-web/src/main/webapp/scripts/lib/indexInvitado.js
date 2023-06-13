@@ -5,7 +5,7 @@ function CrearMapaInvitado() {
         attribution: '© Grupo 14'
     });
 
-    var google = L.tileLayer('https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}', {
+    var google = L.tileLayer('https://mt1.googles.com/vt/lyrs=r&x={x}&y={y}&z={z}', {
         attribution: '© Grupo 14'
     });
     ///////////////////////// FIN MAPAS /////////////////////////
@@ -107,6 +107,8 @@ function CrearMapaInvitado() {
             edit: true
         }
     });
+
+
     map.addLayer(drawLayers);
     // map.addControl(drawControl);
 
@@ -200,6 +202,7 @@ function initializeLayers(url, layerName) {
             });
         }
     }).addTo(map); // Crear una capa de GeoJSON
+
     fetch(url)
         .then(function (response) {
             return response.json();
@@ -209,6 +212,10 @@ function initializeLayers(url, layerName) {
             // Configurar el evento de clic en los marcadores
             geojsonLayer.eachLayer(function (layer) {
                 layer.on('click', function (e) {
+
+                    
+         
+
                     let properties = e.target.feature.properties;
                     let popupContent =
                         '<div class="popup-content">' +
@@ -221,7 +228,7 @@ function initializeLayers(url, layerName) {
                         className: 'custom-popup'
                     };
                     layer.closePopup(); // Cerrar el popup anterior si existe
-                  //  layer.bindPopup(popupContent, popupOptions).openPopup();
+                    //  layer.bindPopup(popupContent, popupOptions).openPopup();
                 })
             });
             geojsonLayer.options.layerName = layerName;
@@ -229,6 +236,12 @@ function initializeLayers(url, layerName) {
         .catch(function (error) {
             console.error('Error:', error);
         });
+
+
+
+
+
+
 }
 
 
@@ -254,6 +267,8 @@ function addObjLatLng(latitud, longitud) { // Crea objeto latlng
 function euclideanDistanciaMetrosObj(latlng1, latlng2) { // Distancia euclidiana a metros (a partir de dos obj latlng)
     return latlng1.distanceTo(latlng2);
 }
+
+
 // Elimina el marcador del mapa
 function BorrarMarcadorALtaSE() {
     console.log("borrando marcador");

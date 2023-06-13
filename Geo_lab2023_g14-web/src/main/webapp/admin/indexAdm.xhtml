@@ -28,7 +28,7 @@
    <script type="" src="lib/js/class.Configuracion.js"></script>
    <script type="" src="lib/js/class.ControladorMapa.js"></script>
    <script type="" src="../scripts/geolet.js"></script>
-   <script type="" src="lib/js/layerWFS.js"></script>
+
    <!-- JTS -->
    <script type="" src="https://cdn.jsdelivr.net/npm/elm-pep@1.0.6/dist/elm-pep.js"></script>
    <script type="" src="https://cdn.jsdelivr.net/npm/jsts@2.3.0/dist/jsts.min.js"></script>
@@ -41,6 +41,15 @@
    <!-- ICONOS -->
    <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
    <link rel="stylesheet" href="https://unpkg.com/primeflex@^3/primeflex.css" />
+
+   <!-- MAPA CALOR -->
+   <link rel="canonical" href="//ursudio.github.io/webgl-heatmap-leaflet/" />
+   <!-- <link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48 64x64" /> -->
+
+   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans|Fjalla+One" type="text/css" />
+   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
+   <link rel="stylesheet" href="./lib/css/styleh.css" type="text/css" />
+
 
    #{sesion.init()}
    #{adminBean.initH()}
@@ -87,6 +96,7 @@
    </div>
    <div id="map"></div>
 
+
    <!-- FORM'S  -->
    <p:outputPanel id="formPanel">
       <ui:include src="lib/forms/altaAmbulancia.xhtml" />
@@ -98,8 +108,14 @@
       <ui:include src="lib/forms/modificarSE.xhtml" />
    </p:outputPanel>
    <!-- END FORMS -->
+
+   <a href="#options" id="options"></a>
+
 </h:body>
-<script type="text/javascript"> addLayers();</script>
+
+<script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
+<script type="" src="./lib/dist/webgl-heatmap.js"></script>
+<script type="" src="./lib/dist/webgl-heatmap-leaflet.min.js"></script>
 
 <script type="text/javascript">
 
