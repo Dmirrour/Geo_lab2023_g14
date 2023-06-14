@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Rutas</title>
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" />
+        <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+            }
+            #mapid { 
+                height: 100vh;
+                width: 100vw;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="mapid"></div>
+    </body>
+</html>
+
+<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+<script>
+    var map = L.map('mapid').setView([-34.88438198851206, -56.07215881347656], 13);
+    var tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'willy',
+        maxZoom: 18,
+    }).addTo(map);
+    var marker = L.marker([-34.88438198851206, -56.07215881347656]).addTo(map);
+
+    var puntoInicio = {
+        lat: -34.87966454502086, // Latitud del punto de inicio
+        lon: -56.18897438049317  // Longitud del punto de inicio
+    };
+
+    var puntoFin = {
+        lat: -34.880720712610824, // Latitud del punto de fin
+        lon: -56.14906311035157  // Longitud del punto de fin
+    };
+        
+    L.Routing.control({
+        waypoints: [
+            L.latLng(puntoInicio.lat, puntoInicio.lon),
+            L.latLng(puntoFin.lat, puntoFin.lon)
+        ]
+    }).addTo(map);
+</script>

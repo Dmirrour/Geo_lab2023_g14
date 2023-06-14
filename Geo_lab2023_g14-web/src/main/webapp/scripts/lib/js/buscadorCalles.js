@@ -176,7 +176,55 @@ function actualizarMapa(Lat = null, Lng = null) {
     circulo.bindPopup("Circulo")
     frmBuscar.style.display = 'none';
     btnMostrarBuscador.style.backgroundColor = '#f4f4f4';
-    map.setView([seleccionEsq.lat, seleccionEsq.lng], 13);
+
+    ///////////////// USUARIO
+    var Usuario = {
+        lat: seleccionEsq.lat,
+        lon: seleccionEsq.lng
+    };
+    var Hospital = {
+        lat: -34.87966454502086, // Latitud del punto de inicio
+        lon: -56.18897438049317  // Longitud del punto de inicio
+    };
+    var SerEme = {
+        lat: -34.880720712610824, // Latitud del punto de fin
+        lon: -56.14906311035157  // Longitud del punto de fin
+    };
+    var ambulanciaMarcador = L.icon({
+        iconUrl: './resources/marker-icons/ambulance.svg',
+        iconSize: [32, 32], // especifica el tamaño del icono en píxeles
+        iconAnchor: [16, 32], // especifica el punto de anclaje del icono relativo a su posición
+        popupAnchor: [0, -32] // especifica el punto de anclaje del popup relativo al icono
+    });
+    var hospitalMarcador = L.icon({
+        iconUrl: './resources/marker-icons/hospital_marker_gps.svg',
+        iconSize: [32, 32], // especifica el tamaño del icono en píxeles
+        iconAnchor: [16, 32], // especifica el punto de anclaje del icono relativo a su posición
+        popupAnchor: [0, -32] // especifica el punto de anclaje del popup relativo al icono
+    });
+    var markerAmbulancia = L.marker([SerEme.lat, SerEme.lon], { icon: ambulanciaMarcador }).addTo(map);
+    crearRecorrido(Hospital, SerEme, Usuario, markerAmbulancia);
+}
+function crearRecorrido(Hospital, SerEme, Usuario, markerAmbulancia) {
+    L.Routing.control({
+        waypoints: [
+            L.latLng(Hospital.lat, Hospital.lon),
+            L.latLng(Usuario.lat, Usuario.lon),
+            L.latLng(SerEme.lat, SerEme.lon)
+        ]
+    })
+    .on('routesfound', function (e) {
+        console.log(e);
+        var routes = e.routes;
+        var summary = routes[0].summary;
+        console.log('Tiempo: ' + summary.totalTime / 60 + ' minutos; Distancia: ' + summary.totalDistance / 1000 + ' km');
+        routes[0].coordinates.forEach(function (coord, index) {
+            setTimeout(() => {
+                markerAmbulancia.setLatLng(coord);
+            }, 500 * index);
+        });
+    })
+    .addTo(map);
 }
 function buscarCalleNumero() {
     let portal = document.getElementById('numeroCalle').value;

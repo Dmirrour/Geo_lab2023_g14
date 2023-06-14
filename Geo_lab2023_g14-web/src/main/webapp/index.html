@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="scripts/lib/ol-ext-v3.2.23/ol-ext.css">
     <script src="scripts/lib/ol-ext-v3.2.23/ol-ext.js"></script>
     <link rel="stylesheet" href="scripts/lib/ol-ext-v3.2.23/font-awesome.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -44,6 +45,7 @@
     <link rel="stylesheet" href="userAnonimo/css/demo.css" /> <!-- new -->
     <link rel="stylesheet" href="scripts/lib/css/style.css" />
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Turf.js/0.0.124/turf.min.js" integrity="sha512-jpnZ8xGKbS7L9S6d5fk/zDVgF6OoVKLMoEliLxf24BRX+orWhxqJuUcoM+vGmOaozS9dD9ABjQZKAgjjcwTndA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 </head>
 
@@ -168,42 +170,85 @@
             </form>
         </div>
 
+        <button id="crearRecorridoBtn">R</button>
+
         <div id="map-container">
             <div id="map"></div>
         </div>
     </div>
-
-    <script>
-        var collapseEsquina = new bootstrap.Collapse(document.getElementById("collapseEsquina"));
-        var collapseNumero = new bootstrap.Collapse(document.getElementById("collapseNumero"));
-
-        // Escuchar el evento de mostrar el acordeón de Esquina
-        document.getElementById("acordeonEsquina").addEventListener("show.bs.collapse", function () {
-            collapseNumero.hide(); // Ocultar el acordeón de Número
-        });
-
-        // Escuchar el evento de mostrar el acordeón de Número
-        document.getElementById("acordeonNumero").addEventListener("show.bs.collapse", function () {
-            collapseEsquina.hide(); // Ocultar el acordeón de Esquina
-        });
-    </script>
-
-    <script src="scripts/lib/js/buscadorCalles.js"></script>
-
-    <script>
-        initLayers();
-
-        wfsSelectHospitales(); // Seleccionar Hospital (control-button)
-        CrearMapaInvitado();
-
-
-        // hardcodedDataPoint();
-        // wfsAllLayers();
-        // wfsServicioEmergencia();
-        // wfsAmbulancia()
-        // wfsBuscarServicioEmergencia(); // se llama desde wfs wfsSelectHospitales
-        // wfsBuscarAmbulancia();
-    </script>
 </body>
-
 </html>
+<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+<script>
+    var collapseEsquina = new bootstrap.Collapse(document.getElementById("collapseEsquina"));
+    var collapseNumero = new bootstrap.Collapse(document.getElementById("collapseNumero"));
+
+    // Escuchar el evento de mostrar el acordeón de Esquina
+    document.getElementById("acordeonEsquina").addEventListener("show.bs.collapse", function () {
+        collapseNumero.hide(); // Ocultar el acordeón de Número
+    });
+
+    // Escuchar el evento de mostrar el acordeón de Número
+    document.getElementById("acordeonNumero").addEventListener("show.bs.collapse", function () {
+        collapseEsquina.hide(); // Ocultar el acordeón de Esquina
+    });
+
+    // Obtén una referencia al botón
+    var crearRecorridoBtn = document.getElementById("crearRecorridoBtn");
+
+    // Agrega un evento de clic al botón
+    crearRecorridoBtn.addEventListener("click", function() {
+    // Realiza la solicitud al servidor Geoserver para obtener los puntos de inicio y fin
+    obtenerPuntosInicioFin();
+    });
+
+</script>
+
+<script src="scripts/lib/js/buscadorCalles.js"></script>
+
+<script>
+    initLayers();
+
+    wfsSelectHospitales(); // Seleccionar Hospital (control-button)
+    CrearMapaInvitado();
+
+    function obtenerPuntosInicioFin() {
+        // Realiza la solicitud al servidor Geoserver para obtener los puntos de inicio y fin
+        var url = 'http://localhost:8081/geoserver/wfs?' +
+                    'service=WFS&' +
+                    'request=GetFeature&' +
+                    'typeName=Geo_lab2023_g14PersistenceUnit:vista_se_h&' +
+                    'srsName=EPSG:32721&' +
+                    'outputFormat=application/json';
+
+        axios.get(url, {
+            headers: {
+                "Content-Type": "text/xml"
+                }
+            })
+            .then(function(response) {
+                // Manejar la respuesta del servidor
+                var features = response.data.features;
+                let cantidad = features.length;
+                let mensaje = "Se encontraron # " + cantidad + " servicios en su área.";
+                                +
+                features.forEach(function(feature) {
+                    var puntoInicioCoords = feature.geometry.coordinates;
+                    mensaje += "\n\t- "+ feature.properties.nombre + " (" + feature.properties.nombrehospital + ") - [" + puntoInicioCoords + "]";
+                    
+                });
+                alert(mensaje);
+            })
+            .catch(function(error) {
+                console.error("Error al obtener los puntos de inicio y fin:", error);
+            });
+        }
+
+
+    // hardcodedDataPoint();
+    // wfsAllLayers();
+    // wfsServicioEmergencia();
+    // wfsAmbulancia()
+    // wfsBuscarServicioEmergencia(); // se llama desde wfs wfsSelectHospitales
+    // wfsBuscarAmbulancia();
+</script>
