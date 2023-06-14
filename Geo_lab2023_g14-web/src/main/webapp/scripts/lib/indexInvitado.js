@@ -107,8 +107,6 @@ function CrearMapaInvitado() {
             edit: true
         }
     });
-
-
     map.addLayer(drawLayers);
     // map.addControl(drawControl);
 
@@ -165,7 +163,7 @@ function generarColor(numero) {
 
 ///////////////////////// INITLAYERS /////////////////////////
 function initLayers() {
-    let url =
+    let urlvista_se_h =
         'http://localhost:8081/geoserver/wfs?' +
         'service=WFS&' +
         'request=GetFeature&' +
@@ -180,14 +178,19 @@ function initLayers() {
         'srsName=EPSG:32721&' +
         'outputFormat=application/json';
 
-    initializeLayers(url, 'layerSE');
+    initializeLayers(urlvista_se_h, 'layerSE');
     initializeLayers(urlAmbulancia, 'layerAmulancia');
 }
 
 ///////////////////////// INITIALIZELAYERS /////////////////////////
 let geojsonLayer;
+let geojsonLayerss;
+var primerPunto;
+let valorx;
+let valory;
 function initializeLayers(url, layerName) {
     console.log("initializeLayers");
+
     geojsonLayer = L.geoJSON(null, {
         pointToLayer: function (feature, latlng) {
             let idh = feature.properties.idhospital * 20;
@@ -202,20 +205,14 @@ function initializeLayers(url, layerName) {
             });
         }
     }).addTo(map); // Crear una capa de GeoJSON
-
     fetch(url)
         .then(function (response) {
             return response.json();
         })
         .then(function (data) {
             geojsonLayer.addData(data);      // Agregar los datos a la capa de GeoJSON
-            // Configurar el evento de clic en los marcadores
             geojsonLayer.eachLayer(function (layer) {
                 layer.on('click', function (e) {
-
-                    
-         
-
                     let properties = e.target.feature.properties;
                     let popupContent =
                         '<div class="popup-content">' +
@@ -228,20 +225,50 @@ function initializeLayers(url, layerName) {
                         className: 'custom-popup'
                     };
                     layer.closePopup(); // Cerrar el popup anterior si existe
-                    //  layer.bindPopup(popupContent, popupOptions).openPopup();
+                    layer.bindPopup(popupContent, popupOptions).openPopup();
                 })
             });
             geojsonLayer.options.layerName = layerName;
+
+            var iconAmbulancia = L.icon({
+                iconUrl: './resources/marker-icons/mapbox-marker-icon-blue.svg',
+                iconSize: [40, 40],
+            });
+
+            //// POINT AMBULANCIA 
+             for (var i = 0; i <= 2; i++) {
+            valorx = data.features[i].geometry.coordinates[0][0];
+            valory = data.features[i].geometry.coordinates[0][1];
+            let latlnga = addObjLatLng(valorx, valory);
+            primerPunto = {
+                x: valorx,
+                y: valory
+            };
+            var fijar = {
+                type: 'FeatureCollection',
+                features: [{
+                    type: 'Feature',
+                    properties: {},
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [valorx, valory]
+                    }
+                },
+                ]
+            };
+            //   L.geoJSON(fijarAmbulancias, {
+            geojsonLayers = L.geoJSON(fijar, {
+                marker: function (Feature, latlng) {
+                    return L.marker(latlng, {
+                        icon: iconAmbulancia
+                    });
+                }
+            }).addTo(map);
+      }
         })
         .catch(function (error) {
             console.error('Error:', error);
         });
-
-
-
-
-
-
 }
 
 
@@ -277,4 +304,7 @@ function BorrarMarcadorALtaSE() {
 
 function removerLayer() {
     map.removeLayer(geojsonLayer);
+    map.removeLayer(geojsonLayers);
+
+
 }

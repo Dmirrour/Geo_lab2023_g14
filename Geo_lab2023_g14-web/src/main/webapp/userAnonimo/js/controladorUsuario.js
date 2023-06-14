@@ -21,8 +21,6 @@ function wfsSelectHospitales() {
                 console.log("s" + item.nombrehospital);
                 var idH = i + 1;
                 hospitalesItems.push({ label: item.nombrehospital, value: idH });
-
-
             }
             let t = hospitalesItems.length + 1;
             hospitalesItems.push({ label: "↪ Mostrar Todo", value: t });
@@ -47,16 +45,15 @@ function wfsSelectHospitales() {
         .catch(function (error) {
             console.error('Error:', error);
         });
-
 }
 
 
 /////////////////// FILTRAR SERVICIO EMERGENCIA ///////////////////
-
 function wfsBuscarServicioEmergencia(newItemValue) {
     if (existeLayer) {
         existeLayer = false;
         map.removeLayer(wfs);
+        //   map.removeLayer(geojsonLayers);
     }
     wfs = L.Geoserver.wfs("http://localhost:8081/geoserver/wfs?", {
         layers: `Geo_lab2023_g14PersistenceUnit:vista_se_h`,
@@ -86,12 +83,63 @@ function wfsBuscarServicioEmergencia(newItemValue) {
         }
     })
     wfs.addTo(map);
+
+
     existeLayer = true;
 }
-var latAmb;
-var lonAmb;
-/////////////////// FILTRAR AMBULANCIA ///////////////////
+
 function wfsBuscarAmbulancia(newItemValue) {
+    if (existeL) {
+        existeL = false;
+        map.removeLayer(wfs3);
+        //   map.removeLayer(geojsonLayers);
+    }
+    // let filtro = "hospital_idhospital='" + newItemValue + "'";
+    wfs3 = L.Geoserver.wfs("http://localhost:8081/geoserver/wfs?", {
+        layers: `Geo_lab2023_g14PersistenceUnit:ambulancia`,
+        CQL_FILTER: "hospital_idhospital='" + newItemValue + "'",
+        onEachFeature: function (f, l) {
+            let popupContent =
+                '<div class="popup-content">' +
+                '<h5><b>' + f.properties.nombre + '</b></h5>' +
+                '<em>Camas libres: </em><b>' + f.properties.camaslibres + '</b></br>' +
+                '<em>Total de camas: </em><b>' + f.properties.totalcama + '</b></br>' +
+                '<em>Hospital Nombre: </em><b>' + f.properties.nombrehospital + '</b></br>' +
+                '<em>Hospital Tipo: </em><b>' + f.properties.tipohospital + '</b></br>' + '</div>';
+            l.closePopup();
+
+            l.bindPopup(popupContent, null).openPopup();
+        },
+        pointToLayer: function (feature, latlng) {
+            let idh = feature.properties.idhospital * 20;
+            var valory = data.features[0].geometry.coordinates[0][1];
+            console.log("Mostrar todo" + valory);
+            let markerColor = generarColor(idh) || 'blue';
+            return L.circleMarker(latlng, {
+                radius: 8,
+                fillColor: markerColor,
+                color: '#000',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            });
+        }
+    })
+    wfs3.addTo(map);
+
+
+    existeL = true;
+}
+
+/////////////////// FILTRAR AMBULANCIA ///////////////////
+var geojsonLayers;
+var primerPunto;
+function wfsBuscarAmbulancia3(newItemValue) {
+    if (existeLayer) {
+        //   map.removeLayer(geojsonLayer);
+        // map.removeLayer(geojsonLayers);
+        existeLayer = false;
+    }
     let filtro = "hospital_idhospital='" + newItemValue + "'";
     let url =
         'http://localhost:8081/geoserver/wfs?' +
@@ -104,6 +152,8 @@ function wfsBuscarAmbulancia(newItemValue) {
     geojsonLayer = L.geoJSON(null, {
         pointToLayer: function (feature, latlng) {
             let idh = feature.properties.idhospital * 20;
+            var valory = data.features[0].geometry.coordinates[0][1];
+            console.log("Mostrar todo" + valory);
             let markerColor = generarColor(idh) || 'blue';
             return L.circleMarker(latlng, {
                 radius: 8,
@@ -115,57 +165,58 @@ function wfsBuscarAmbulancia(newItemValue) {
             });
         }
     }).addTo(map);
+
     fetch(url)
         .then(function (response) {
             return response.json();
         })
         .then(function (data) {
+            existeLayer = true;
+
+
+
+
             geojsonLayer.addData(data);
+            //   geojsonLayer.options.layerName = layerName;
+            // var iconAmbulancia = L.icon({
+            //     iconUrl: '../../resources/marker-icons/mapbox-marker-icon-blue.svg',
+            //     iconSize: [40, 40],
+            // });
+            // primerPunto = {
+            //     x: valorx,
+            //     y: valory
+            // };
+            //    for (var i = 0; i < data.features.length; i++) {
+            var valorx = data.features[0].geometry.coordinates[0][0];
+            var valory = data.features[0].geometry.coordinates[0][1];
 
-            latAmb = data.features[1].geometry.coordinates[0][0];
-            lonAmb = data.features[0].geometry.coordinates[0][1];
-            console.log(latAmb + ' ' + lonAmb);
+            var fijarAmbulancia = {
+                type: 'FeatureCollection',
+                features: [{
+                    type: 'Feature',
+                    properties: {},
+                    geometry: {
+                        type: 'Point',
+                        coordinates: [valorx, valory]
+                    }
+                },
+                ]
+            };
 
-            geojsonLayer.options.layerName = layerName;
-
-            //   });
-            //    function getCenterPoint(coordinates) {
-            // Calcular el punto central de una LineString
-            // let totalPoints = coordinates.length;
-            // let middleIndex = Math.floor(totalPoints / 2);
-            // return coordinates[middleIndex];
-            //   }
-            //   let heatLayer = L.heatLayer(points).addTo(map);
-
+            geojsonLayers = L.geoJSON(fijarAmbulancia, {
+                pointToLayer: function (Feature, latlng) {
+                    return L.circleMarker(latlng, {
+                        icon: iconAmbulancia
+                    });
+                }
+            }).addTo(map);
+            existeLayer = true;
+            //    }
         })
         .catch(function (error) {
             console.error('Error:', error);
         });
-    //// POINT AMBULANCIA ////
-    var iconAmbulancia = L.icon({
-        iconUrl: 'resources/marker-icons/ambulance.svg',
-        iconSize: [36, 36],
-    });
-    var fijarAmbulancia = {
-        type: 'FeatureCollection',
-        features: [{
-            type: 'Feature',
-            properties: {},
-            geometry: {
-                type: 'Point',
-                coordinates: [latAmb, lonAmb]
-            }
-        },
-        ]
-    };
 
-    L.geoJSON(fijarAmbulancia, {
-        pointToLayer: function (Feature, latlng) {
-            return L.marker(latlng, {
-                icon: iconAmbulancia
-            });
-        }
-    }).addTo(map);
 }
 
 
