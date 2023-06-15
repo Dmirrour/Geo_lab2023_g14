@@ -5,93 +5,90 @@
 <h:head>
 <link rel="stylesheet" href="https://unpkg.com/primeflex@^3/primeflex.css"/>
 </h:head>
+<h:form id="frmMODSE" prependId="false">
     <p:dialog id="dialogMODSE" header="Mofiicar servicio de emergencia" widgetVar="dlg4" width="600px" minWidth="400" minHeight="400" draggable="false" styleClass="my-dialog-style" showEffect="fade" onHide="mapaAdmin.BorrarMarcadorALtaSE()">
-    <f:view>
-        <div class="flex justify-content-center">
-            <h:form id="frmMODSE" prependId="false">
-                <p:growl id="msg" />
-                <p:dataTable id="mods"
+        <f:view>
+            <p:card styleClass="flex justify-content-center">
+                <p:growl id="msg" >
+                    <p:autoUpdate />
+                </p:growl>
+                <p:messages autoUpdate="true" />
+                <p:dataTable value="#{servicioEBean.servicioEmergenciaDTOS}"
+                             id="mods"
                              var="serv"
-                             value="#{servicioEBean.servicioEmergenciaDTOS}"
-                             editable="true">
-                <p:ajax event="rowEdit" listener="#{servicioEBean.modServ}" update=":frmMODSE:msg :frmMODSE:mods"/>
-                <p:ajax event="rowEditCancel" listener="#{servicioEBean.cancelar}" update=":frmMODSE:msg :frmMODSE:mods"/>
+                             editable="true"
+                             scrollable="true"
+                             scrollHeight="400px">
+                    <p:ajax event="rowEdit" listener="#{servicioEBean.modServ}" update=":frmMODSE:msg :frmMODSE:mods"/>
+                    <p:ajax event="rowEditCancel" listener="#{servicioEBean.cancelar}" update=":frmMODSE:msg :frmMODSE:mods"/>
 
-                <p:column headerText="Nro" sortBy="#{serv.idServicio}" filterBy="#{serv.idServicio}" filterMatchMode="contains">
-                    <h:outputText value="#{serv.idServicio}" />
-                </p:column>
+                    <p:column headerText="Nro" sortBy="#{serv.idServicio}" filterBy="#{serv.idServicio}" filterMatchMode="contains">
+                        <h:outputText value="#{serv.idServicio}" />
+                    </p:column>
 
-                <p:column headerText="Nombre" sortBy="#{serv.nombre}" filterBy="#{serv.nombre}" filterMatchMode="contains">
+                    <p:column headerText="Nom" sortBy="#{serv.nombre}" filterBy="#{serv.nombre}" filterMatchMode="contains">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{serv.nombre}" />
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:inputText value="#{servicioEBean.nombreS}" />
+                            </f:facet>
+                        </p:cellEditor>
+
+                    </p:column>
+
+                    <p:column headerText="T. Camas" sortBy="#{serv.totalCama}">
                     <p:cellEditor>
                         <f:facet name="output">
-                            <h:outputText value="#{serv.nombre}" />
+                            <h:outputText value="#{serv.totalCama}" />
                         </f:facet>
                         <f:facet name="input">
-                            <p:inputText value="#{servicioEBean.nombreS}" />
+                            <p:inputText value="#{servicioEBean.totalCama}" />
                         </f:facet>
                     </p:cellEditor>
 
-                </p:column>
-
-                <p:column headerText="Total Camas" sortBy="#{serv.totalCama}">
-                <p:cellEditor>
-                    <f:facet name="output">
-                        <h:outputText value="#{serv.totalCama}" />
-                    </f:facet>
-                    <f:facet name="input">
-                        <p:inputText value="#{servicioEBean.totalCama}" />
-                    </f:facet>
-                </p:cellEditor>
-
-                </p:column>
-                <p:column headerText="Camas Libres" sortBy="#{serv.camasLibres}">
-                    <p:cellEditor>
-                        <f:facet name="output">
-                            <h:outputText value="#{serv.camasLibres}" />
-                        </f:facet>
-                        <f:facet name="input">
-                            <p:inputText value="#{servicioEBean.camasLibre}" />
-                        </f:facet>
-                    </p:cellEditor>
-                </p:column>
-<!--                <p:column styleClass="invisible-column">
-                    <p:cellEditor>
-                        <f:facet name="output">
-                            <h:outputText value="#{servicioEBean.latitud}" />
-                        </f:facet>
-                        <f:facet name="input">
-                            <p:inputText id="latitud" name="latitud" value="#{servicioEBean.latitud}" class="col-md-6 col-sm-12" required="true" style="display: none;" requiredMessage="La latitud es requerida" />
-                        </f:facet>
-                    </p:cellEditor>
-
-                </p:column>
-                <p:column styleClass="invisible-column">
-                    <p:cellEditor>
-                        <f:facet name="output">
-                            <h:outputText value="#{servicioEBean.longitud}" />
-                        </f:facet>
-                        <f:facet name="input">
-                            <p:inputText id="longitud" name="longitud" value="#{servicioEBean.longitud}" class="col-md-6 col-sm-12" required="true" style="display: none;" requiredMessage="La longitud es requerida" />
-                        </f:facet>
-                    </p:cellEditor>
-
-                </p:column>
--->
-
-
-
-                <p:column>
-                    <p:rowEditor styleClass="rounded-button ui-button-success" icon="pi pi-pencil" />
-                </p:column>
+                    </p:column>
+                    <p:column headerText="C. Libres" sortBy="#{serv.camasLibres}">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{serv.camasLibres}" />
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:inputText value="#{servicioEBean.camasLibre}" />
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                     <p:column styleClass="invisible-column">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{servicioEBean.latitud}" />
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:inputText id="frmMODSElongitud" name="latitud" value="#{servicioEBean.latitud}" class="col-md-6 col-sm-12" required="true" style="display: block;" requiredMessage="La latitud es requerida" />
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column styleClass="invisible-column">
+                        <p:cellEditor>
+                            <f:facet name="output">
+                                <h:outputText value="#{servicioEBean.longitud}" />
+                            </f:facet>
+                            <f:facet name="input">
+                                <p:inputText id="longitud" name="longitud" value="#{servicioEBean.longitud}" class="col-md-6 col-sm-12" required="true" style="display: block;" requiredMessage="La longitud es requerida" />
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column>
+                        <p:rowEditor styleClass="rounded-button ui-button-success" icon="pi pi-pencil" onclick="cargarMapaModSE(this)" />
+                    </p:column>
                 </p:dataTable>
-                <p:inputText id="longitud" name="longitud" value="#{servicioEBean.longitud}" class="col-md-6 col-sm-12" required="true" style="display: none;" requiredMessage="La longitud es requerida" />
-                <p:inputText id="latitud" name="latitud" value="#{servicioEBean.latitud}" class="col-md-6 col-sm-12" required="true" style="display: none;" requiredMessage="La latitud es requerida" />
-
-
-            </h:form>
-        </div>
-    </f:view>
-</p:dialog>
+               <!-- <p:inputText id="frmMODSElongitud" name="frmMODSElongitud" value="#{servicioEBean.longitud}" class="col-md-6 col-sm-12" required="true" style="display: block;" requiredMessage="La longitud es requerida" />
+                <p:inputText id="frmMODSElatitud" name="frmMODSElatitud" value="#{servicioEBean.latitud}" class="col-md-6 col-sm-12" required="true" style="display: block;" requiredMessage="La latitud es requerida" />-->
+            </p:card>
+        </f:view>
+    </p:dialog>
+</h:form>
 <!--<script>
     function tuFuncionJS() {
         // Aquí puedes realizar las acciones que deseas ejecutar en JavaScript
