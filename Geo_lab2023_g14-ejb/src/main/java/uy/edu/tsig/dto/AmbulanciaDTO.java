@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 // import uy.edu.tsig.entity.Hospital;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 @Data
 @Builder
@@ -20,10 +21,12 @@ public class AmbulanciaDTO implements Serializable {
     private HospitalDTO hospital;
     private int distanciaMaxDesvio;
 
-    public AmbulanciaDTO(Long idAmbulancia, int idCodigo, int distanciaMaxDesvio) {
-        this.idAmbulancia = idAmbulancia;
-        this.idCodigo = idCodigo;
-        this.distanciaMaxDesvio = distanciaMaxDesvio;
+    ArrayList<ServicioEmergenciaDTO> ServEdelRecorridoDTO;
+
+    public AmbulanciaDTO(Long idAmbulancia, int idCodigo, int distanciaMaxDesvio){
+        this.idAmbulancia =idAmbulancia;
+        this.idCodigo=idCodigo;
+        this.distanciaMaxDesvio=distanciaMaxDesvio;
     }
 
 }

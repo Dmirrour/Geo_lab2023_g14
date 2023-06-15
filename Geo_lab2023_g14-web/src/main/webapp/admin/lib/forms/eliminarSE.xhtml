@@ -6,7 +6,10 @@
         <p:dialog id="tablase" header="Eliminar S. Emergencia" widgetVar="dlg6" minHeight="600" width="850" showEffect="fade" modal="true">
             <f:view>
                 <p:card styleClass="flex justify-content-center">
-                    <p:dataTable value="#{servicioEBean.servicioEmergenciaDTOS}" var="SE" scrollable="true" scrollHeight="400px">
+                    <p:dataTable value="#{servicioEBean.servicioEmergenciaDTOS}"
+                                 var="SE"
+                                 scrollable="true"
+                                 scrollHeight="400px">
                         <p:column headerText="idServicio">
                             <h:outputText value="#{SE.idServicio}" />
                         </p:column>
@@ -19,11 +22,8 @@
                         <p:column headerText="Camas Libres">
                             <h:outputText value="#{SE.camasLibres}" />
                         </p:column>
-                        <p:column headerText="Hospital Name">
-                            <h:outputText value="#{SE.hospital.nombreHospital}" />
-                        </p:column>
                         <p:column headerText="false">
-                            <p:commandButton styleClass="rounded-button ui-button-danger" icon="pi pi-trash" process="@this" action="#{servicioEBean.eliminarS(SE.idServicio)}" />
+                            <p:commandButton styleClass="rounded-button ui-button-danger" icon="pi pi-trash" process="@this" action="#{servicioEBean.eliminarS(SE)}" />
                         </p:column>
                     </p:dataTable>
                 </p:card>

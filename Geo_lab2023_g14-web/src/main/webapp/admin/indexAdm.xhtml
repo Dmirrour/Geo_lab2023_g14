@@ -59,6 +59,7 @@
 </h:head>
 
 <h:body>
+
    <p:growl id="messages" showDetail="true" />
    <div id="top">
       <div class="navbar navbar-expand-sm">
@@ -72,12 +73,13 @@
                   </p:submenu>
                   <p:submenu label="Modificar">
                      <p:menuitem value="Modificar Ambulancia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg5').show()" />
-                     <p:menuitem value="Modificar S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg4').show()" />
+                     <p:menuitem value="Modificar S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg4').show(); /*mostrarMarker2();*/" />
                   </p:submenu>
                   <p:submenu label="Alta">
                      <p:menuitem value="Alta Hospital" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg1').show()" />
                      <p:menuitem value="Alta Ambulancia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg2').show()" />
                      <p:menuitem value="Alta S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg3').show(); mostrarMarker();" />
+                     <p:menuitem value="Alta S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg9').show();" />
                   </p:submenu>
                </p:menubar>
             </div>
@@ -99,13 +101,14 @@
 
    <!-- FORM'S  -->
    <p:outputPanel id="formPanel">
-      <ui:include src="lib/forms/altaAmbulancia.xhtml" />
-      <ui:include src="lib/forms/altaHospital.xhtml" />
-      <ui:include src="lib/forms/altaServicioEmergencia.xhtml" />
-      <ui:include src="lib/forms/eliminarAmbulancia.xhtml" />
-      <ui:include src="lib/forms/eliminarHospital.xhtml" />
-      <ui:include src="lib/forms/eliminarSE.xhtml" />
-      <ui:include src="lib/forms/modificarSE.xhtml" />
+      <ui:include src="lib/forms/altaAmbulancia.xhtml"/>
+      <ui:include src="lib/forms/altaHospital.xhtml"/>
+      <ui:include src="lib/forms/altaServicioEmergencia.xhtml"/>
+      <ui:include src="lib/forms/eliminarAmbulancia.xhtml"/>
+      <ui:include src="lib/forms/eliminarHospital.xhtml"/>
+      <ui:include src="lib/forms/eliminarSE.xhtml"/>
+      <ui:include src="lib/forms/modificarSE.xhtml"/>
+      <ui:include src="lib/forms/AmbulaciaFueraService.xhtml"/>
    </p:outputPanel>
    <!-- END FORMS -->
 
@@ -126,14 +129,31 @@
    }
    let mapaAdmin = new ControladorMapa();
    mapaAdmin.crearMapaAdmin();
+    mapaAdmin.addLayerWFSbuf();
    mapaAdmin.addLayersWFS();
    mapaAdmin.addLayerWFSLine();
+
 
    function mostrarMarker() {
       mapaAdmin.cargarMapaAltaSE();
    }
+   function mostrarMarker2() {
+      mapaAdmin.cargarMapaModSE();
+   }
 
    mapaAdmin.cargarMapaAltaAmbulancia();
 </script>
+<script type="text/javascript">
+   $(document).ready(function() {
+      var showDialogs = '#{param.showDialogs}';
+      console.log('entre al script');
+
+      if (showDialogs === 'true') {
+         PF('dlg9').show();
+         console.log('Diálogos mostrados');
+      }
+   });
+</script>
+
 
 </html>
