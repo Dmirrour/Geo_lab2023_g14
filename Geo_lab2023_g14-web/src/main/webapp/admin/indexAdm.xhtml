@@ -56,6 +56,7 @@
 </h:head>
 
 <h:body>
+
    <p:growl id="messages" showDetail="true" />
    <div id="top">
       <div class="navbar navbar-expand-sm">
@@ -75,6 +76,7 @@
                      <p:menuitem value="Alta Hospital" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg1').show()" />
                      <p:menuitem value="Alta Ambulancia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg2').show()" />
                      <p:menuitem value="Alta S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg3').show(); mostrarMarker();" />
+                     <p:menuitem value="Alta S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg9').show();" />
                   </p:submenu>
                </p:menubar>
             </div>
@@ -102,6 +104,7 @@
       <ui:include src="lib/forms/eliminarHospital.xhtml"/>
       <ui:include src="lib/forms/eliminarSE.xhtml"/>
       <ui:include src="lib/forms/modificarSE.xhtml"/>
+      <ui:include src="lib/forms/AmbulaciaFueraService.xhtml"/>
    </p:outputPanel>
    <!-- END FORMS -->
 </h:body>
@@ -114,9 +117,10 @@
    }
    let mapaAdmin = new ControladorMapa();
    mapaAdmin.crearMapaAdmin();
+ //  mapaAdmin.addLayerWFSbuf();
    mapaAdmin.addLayersWFS();
    mapaAdmin.addLayerWFSLine();
-   mapaAdmin.addLayerWFSbuf();
+
 
    function mostrarMarker() {
       mapaAdmin.cargarMapaAltaSE();
@@ -127,6 +131,18 @@
 
    mapaAdmin.cargarMapaAltaAmbulancia();
 </script>
+<script type="text/javascript">
+   $(document).ready(function() {
+      var showDialogs = '#{param.showDialogs}';
+      console.log('entre al script');
+
+      if (showDialogs === 'true') {
+         PF('dlg9').show();
+         console.log('Diálogos mostrados');
+      }
+   });
+</script>
+
 
 </html>
 

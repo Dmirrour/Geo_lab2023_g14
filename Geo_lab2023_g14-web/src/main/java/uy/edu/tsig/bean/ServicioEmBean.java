@@ -9,8 +9,11 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.event.AjaxBehaviorEvent;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
+import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
+import uy.edu.tsig.dto.AmbulanciaDTO;
 import uy.edu.tsig.dto.ServicioEmergenciaDTO;
+import uy.edu.tsig.entity.Ambulancia;
 import uy.edu.tsig.entity.ServicioEmergencia;
 import uy.edu.tsig.model.ServiciosEmergencias;
 import uy.edu.tsig.service.IHospitalService;
@@ -20,9 +23,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.sql.*;
 import java.util.ArrayList;
-
-
-
+import java.util.List;
 
 
 @Named("servicioEBean")
@@ -50,6 +51,7 @@ public class ServicioEmBean implements Serializable {
     //---------atributos necesarios extras----------//
     private Long idHospital;
     private ServicioEmergenciaDTO selectedEmergencyService;
+    private List<AmbulanciaDTO> ambuPerjudicadas= new ArrayList<>();
 
 
     public void initS() {
@@ -92,8 +94,13 @@ public class ServicioEmBean implements Serializable {
     }
 
 
-    public void modServ(RowEditEvent event){
-        ServicioEmergenciaDTO a = (ServicioEmergenciaDTO) event.getObject();
+    public void modServ(RowEditEvent event) throws IOException {
+        FacesContext fC = FacesContext.getCurrentInstance();
+        ExternalContext eC = fC.getExternalContext();
+        eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true&showDialogs=true");
+        /*PrimeFaces.current().executeScript("tuFuncionJS();");*/
+
+       /*         ServicioEmergenciaDTO a = (ServicioEmergenciaDTO) event.getObject();
         if(totalCama==0)
             totalCama=a.getTotalCama();
         if(camasLibre==0 && a.getCamasLibres()>totalCama) {
@@ -118,11 +125,7 @@ public class ServicioEmBean implements Serializable {
 
 
         if(longitud!=0.0 && latitud!=0.0){
-            //**********************************************////////*********************************************************///
-            // FALTA CONTROLAR QUE AL MOVER ESTE PUNTO NINGUNA AMBULACCIOA DE SU HOSPITAL QUEDE SIN SERVICIO
 
-            a.getHospital().getAmbulanciaDTOS();
-            //**********************************************////////*********************************************************///
 
             Connection conn;
             try {
@@ -136,7 +139,7 @@ public class ServicioEmBean implements Serializable {
                 // e.printStackTrace();
                 System.out.println("No conecta."+e.getMessage());
             }
-        }
+        }*/
     }
     public void cancelar(RowEditEvent event) {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cancelado", ""));
@@ -150,45 +153,66 @@ public class ServicioEmBean implements Serializable {
         System.out.println(nombreS+totalCama+camasLibre+idServE );
     }
 
-    public void eliminarS(Long idSE) {
-        boolean r = iServicioEmergenciaService.borrarSE(idSE);
+    public void eliminarS(ServicioEmergenciaDTO se) {
+        try {
+            Connection conn = DriverManager.getConnection(url, usuario, contraseña);
+            Statement stmt = conn.createStatement();
+            long ids=se.getIdServicio();
+            long idh=se.getHospital().getIdHospital();
+            String sql="SELECT a.* " +
+                    "FROM ambulancia a " +
+                    "JOIN servicioemergencia se ON a.hospital_idhospital = se.hospital_idhospital " +
+                    "WHERE se.idservicio = "+ids +
+                    " AND a.hospital_idhospital ="+idh+
+                    " AND ST_Intersects(ST_Buffer(a.polyline,((a.distanciamaxdesvio*9.41090001733132E-4) / 100) ), se.point) " +
+                    " AND NOT EXISTS ( " +
+                    "    SELECT 1 " +
+                    "    FROM servicioemergencia se2 " +
+                    "    JOIN ambulancia a2 ON a2.hospital_idhospital = se.hospital_idhospital " +
+                    "    WHERE se2.idservicio <>  "+ ids +
+                    "    AND a2.idambulancia = a.idambulancia " +
+                    "    AND ST_Intersects(ST_Buffer(a2.polyline, ((a.distanciamaxdesvio*9.41090001733132E-4) / 100)), se2.point));";
+            System.out.println(idh+"  "+ids+"\n"+sql);
+            ResultSet rs = stmt.executeQuery(sql);
+
+            if (rs.next()) {
+                System.out.println("el resultado no es null");
+                do {
+
+                    AmbulanciaDTO ambulanciaDTO= AmbulanciaDTO.builder()
+                            .idAmbulancia(rs.getLong("idambulancia"))
+                            .idCodigo(rs.getInt("idcodigo"))
+                            .distanciaMaxDesvio(rs.getInt("distanciamaxdesvio"))
+                            .build();
+                    ambuPerjudicadas.add(ambulanciaDTO);
+                } while (rs.next());
+                System.out.println(ambuPerjudicadas);
+                FacesContext fC = FacesContext.getCurrentInstance();
+                ExternalContext eC = fC.getExternalContext();
+                eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true&showDialogs=true");
+            }else{
+                borrardefinitivo(ids);
+            }
+
+        } catch (SQLException | IOException e) {
+            // e.printStackTrace();
+            System.out.println("No conecta.BorrarServ"+e.getMessage());
+        }
+    }
+    private void borrardefinitivo(long ids){
+        boolean r = iServicioEmergenciaService.borrarSE(ids);
 
         if (r) {
             initS();
-            String msj = String.format("Se Borro el Servicio con id %s.", idSE);
+            String msj = String.format("Se Borro el Servicio con id %s.", ids);
             addMensaje("Servicio", msj);
         } else {
-            String msj = String.format("No se puedo Borrar el Servicio con id %s", idSE);
+            String msj = String.format("No se puedo Borrar el Servicio con id %s", ids);
             addMensaje("Servicio", msj);
         }
     }
 
 
-   /* public void actualizarServicio() {
-        try {
-            // Establecer la conexión a la base de datos
-            String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
-            String usuario = "postgres";
-            //String pass = "lapass";//Seba
-            String pass = "123456d";//Damian
-            Connection conn = DriverManager.getConnection(url, usuario, pass);
-
-            // Crear y ejecutar la consulta SQL
-            // String sql = "UPDATE servicioemergencia SET geom=(ST_SetSRID(ST_MakePoint(" + "ubicacion"
-            // + "), 32721)) WHERE idservicio=?";
-            String sql = "UPDATE servicioemergencia SET geom='LINESTRING(11.5 -0.1, 21.52 -0.25, 51.53 -2.12)' WHERE idservicio=?";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, idServicio);
-            stmt.executeUpdate();
-
-            // Cerrar la conexión
-            conn.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }*/
-
-    //-----------atributos de control-----------------------//
     private void addMensaje(String summary, String detail) {
         FacesMessage mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
         FacesContext.getCurrentInstance().addMessage(null, mensaje);
@@ -270,4 +294,12 @@ public class ServicioEmBean implements Serializable {
     public void setSelectedEmergencyService(ServicioEmergenciaDTO selectedEmergencyService) {
         this.selectedEmergencyService = selectedEmergencyService;
     }
+    public List<AmbulanciaDTO> getAmbuPejudicadas() {
+        return ambuPerjudicadas;
+    }
+
+    public void setAmbuPejudicadas(List<AmbulanciaDTO> ambuPejudicadas) {
+        this.ambuPerjudicadas = ambuPejudicadas;
+    }
+
 }

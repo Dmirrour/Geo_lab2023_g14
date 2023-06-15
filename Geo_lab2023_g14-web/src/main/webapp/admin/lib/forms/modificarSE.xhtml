@@ -53,9 +53,8 @@
                             <p:inputText value="#{servicioEBean.camasLibre}" />
                         </f:facet>
                     </p:cellEditor>
-
                 </p:column>
-                <p:column styleClass="invisible-column">
+<!--                <p:column styleClass="invisible-column">
                     <p:cellEditor>
                         <f:facet name="output">
                             <h:outputText value="#{servicioEBean.latitud}" />
@@ -77,6 +76,7 @@
                     </p:cellEditor>
 
                 </p:column>
+-->
 
 
 
@@ -84,9 +84,21 @@
                     <p:rowEditor styleClass="rounded-button ui-button-success" icon="pi pi-pencil" />
                 </p:column>
                 </p:dataTable>
+                <p:inputText id="longitud" name="longitud" value="#{servicioEBean.longitud}" class="col-md-6 col-sm-12" required="true" style="display: none;" requiredMessage="La longitud es requerida" />
+                <p:inputText id="latitud" name="latitud" value="#{servicioEBean.latitud}" class="col-md-6 col-sm-12" required="true" style="display: none;" requiredMessage="La latitud es requerida" />
+
 
             </h:form>
         </div>
     </f:view>
 </p:dialog>
+<!--<script>
+    function tuFuncionJS() {
+        // Aquí puedes realizar las acciones que deseas ejecutar en JavaScript
+        PF('dlg4').hide();
+        PF('dlg8').show();
+        console.log('Función JS ejecutada desde el Managed Bean');
+    }
+</script>-->
+
 </html>

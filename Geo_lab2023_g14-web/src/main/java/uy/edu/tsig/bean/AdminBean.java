@@ -140,7 +140,7 @@ public class AdminBean implements Serializable {
                 eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true"); // Reemplaza con la URL de la página de confirmación
             }else {
                 String msj = String.format("No hay servicios en su Zona.");
-                addMensaje("Ambulancias", msj);
+                addMensaje("Ambulancias", msj);//creo que ninguno de los mensajes se captan en menu creo que es porque se recarga la paguina y no se ve
                 System.out.println("el resultado es null");
                 eliminarA(aDTO.getIdAmbulancia());
                 eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true");

@@ -290,7 +290,7 @@ class ControladorMapa extends Configuracion {
     addLayerWFSbuf() {
         let geojsonLayer = L.geoJSON(null, {
             style: {
-                color: 'red',
+                color: 'blue',
                 weight: 3,
                 opacity: 1
             },
@@ -303,8 +303,8 @@ class ControladorMapa extends Configuracion {
                     className: 'custom-popup'
                 };
 
-                layer.bindPopup(popupContent, popupOptions);
-            }
+                layer.bindPopup(popupContent, null);*/
+          //  }
         }).addTo(this.map);
 
 
