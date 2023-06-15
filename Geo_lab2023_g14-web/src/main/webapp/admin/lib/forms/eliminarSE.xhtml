@@ -19,9 +19,6 @@
                         <p:column headerText="Camas Libres">
                             <h:outputText value="#{SE.camasLibres}" />
                         </p:column>
-                        <p:column headerText="Hospital Name">
-                            <h:outputText value="#{SE.hospital.nombreHospital}" />
-                        </p:column>
                         <p:column headerText="false">
                             <p:commandButton styleClass="rounded-button ui-button-danger" icon="pi pi-trash" process="@this" action="#{servicioEBean.eliminarS(SE)}" />
                         </p:column>

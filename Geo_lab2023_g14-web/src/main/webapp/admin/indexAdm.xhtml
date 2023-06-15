@@ -70,7 +70,7 @@
                   </p:submenu>
                   <p:submenu label="Modificar">
                      <p:menuitem value="Modificar Ambulancia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg5').show()" />
-                     <p:menuitem value="Modificar S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg4').show(); mostrarMarker2();" />
+                     <p:menuitem value="Modificar S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg4').show(); /*mostrarMarker2();*/" />
                   </p:submenu>
                   <p:submenu label="Alta">
                      <p:menuitem value="Alta Hospital" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg1').show()" />
@@ -117,7 +117,7 @@
    }
    let mapaAdmin = new ControladorMapa();
    mapaAdmin.crearMapaAdmin();
- //  mapaAdmin.addLayerWFSbuf();
+    mapaAdmin.addLayerWFSbuf();
    mapaAdmin.addLayersWFS();
    mapaAdmin.addLayerWFSLine();
 

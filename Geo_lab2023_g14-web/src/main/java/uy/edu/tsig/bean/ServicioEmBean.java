@@ -52,6 +52,7 @@ public class ServicioEmBean implements Serializable {
     private Long idHospital;
     private ServicioEmergenciaDTO selectedEmergencyService;
     private List<AmbulanciaDTO> ambuPerjudicadas= new ArrayList<>();
+    private ServicioEmergenciaDTO sA;
 
 
     public void initS() {
@@ -95,6 +96,7 @@ public class ServicioEmBean implements Serializable {
 
 
     public void modServ(RowEditEvent event) throws IOException {
+        System.out.println(latitud+"  "+longitud);
         FacesContext fC = FacesContext.getCurrentInstance();
         ExternalContext eC = fC.getExternalContext();
         eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true&showDialogs=true");
@@ -176,6 +178,7 @@ public class ServicioEmBean implements Serializable {
             ResultSet rs = stmt.executeQuery(sql);
 
             if (rs.next()) {
+                ambuPerjudicadas=null;
                 System.out.println("el resultado no es null");
                 do {
 
@@ -187,9 +190,11 @@ public class ServicioEmBean implements Serializable {
                     ambuPerjudicadas.add(ambulanciaDTO);
                 } while (rs.next());
                 System.out.println(ambuPerjudicadas);
+                sA=se;
                 FacesContext fC = FacesContext.getCurrentInstance();
                 ExternalContext eC = fC.getExternalContext();
                 eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true&showDialogs=true");
+
             }else{
                 borrardefinitivo(ids);
             }
@@ -302,4 +307,11 @@ public class ServicioEmBean implements Serializable {
         this.ambuPerjudicadas = ambuPejudicadas;
     }
 
+    public ServicioEmergenciaDTO getsA() {
+        return sA;
+    }
+
+    public void setsA(ServicioEmergenciaDTO sA) {
+        this.sA = sA;
+    }
 }
