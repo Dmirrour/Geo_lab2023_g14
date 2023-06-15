@@ -69,8 +69,8 @@ class ControladorMapa extends Configuracion {
                 +'/geoserver/'
                 +this.baseDatos
                 +'/wms?', {
-                title: 'servicioemergencia',
-                layers: this.baseDatos+':servicioemergencia',
+                title: 'vista buffer',
+                layers: this.baseDatos+':vista_buf',
                 srs: this.srid,
                 format: 'image/png',
                 transparent: true,
