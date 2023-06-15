@@ -294,20 +294,7 @@ class ControladorMapa extends Configuracion {
                 weight: 3,
                 opacity: 1
             },
-            onEachFeature: function (feature, layer) {
-                let properties = feature.properties;
-                let popupContent =
-                    '<div class="popup-content">' +
-                    '</div>';
-                let popupOptions = {
-                    className: 'custom-popup'
-                };
-
-                layer.bindPopup(popupContent, null);*/
-          //  }
         }).addTo(this.map);
-
-
 
         let url =
             'http://localhost:' +
@@ -327,16 +314,6 @@ class ControladorMapa extends Configuracion {
             })
             .then(function (data) {
                 geojsonLayer.addData(data);
-                // Crear un buffer alrededor de las líneas
-                /*
-                let bufferedLayer = L.geoJSON(turf.buffer(data, 100, { units: 'meters' }), {
-                    style: {
-                        color: 'blue',
-                        weight: 2,
-                        opacity: 0.7
-                    }
-                }).addTo(this.map);
-                */
             })
             .catch(function (error) {
                 console.error('Error:', error);

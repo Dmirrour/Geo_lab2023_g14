@@ -178,7 +178,7 @@ public class ServicioEmBean implements Serializable {
             ResultSet rs = stmt.executeQuery(sql);
 
             if (rs.next()) {
-                ambuPerjudicadas=null;
+                ambuPerjudicadas.clear();
                 System.out.println("el resultado no es null");
                 do {
 
