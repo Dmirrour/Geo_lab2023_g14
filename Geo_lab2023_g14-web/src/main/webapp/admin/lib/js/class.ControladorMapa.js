@@ -17,53 +17,11 @@ class ControladorMapa extends Configuracion {
 
     constructor() {
         super();
-        ///////////////////////// MAPAS /////////////////////////
         // Agregar capa base de OpenStreetMap
         this.openst = L.tileLayer(this.urlOpenStreet, { attribution: '© Grupo 14' });
-        // Agregar capa base de Google
-        this.google = L.tileLayer(this.urlGoogle, { attribution: '© Grupo 14' });
-        ///////////////////////// FIN MAPAS /////////////////////////
 
-        ///////////////////////// CAPAS WMS /////////////////////////
-        this.layerRuta = L.tileLayer.wms('http://localhost:'
-            + this.puertoGeoServer
-            + '/geoserver/'
-            + this.baseDatos
-            + '/wms?', {
-            title: this.rutas,
-            layers: this.baseDatos + ':' + this.rutas,
-            srs: this.srid,
-            format: 'image/png',
-            transparent: true,
-            VERSION: '1.1.0'
-        });
 
-        this.layerEjes = L.tileLayer.wms('http://localhost:'
-            + this.puertoGeoServer
-            + '/geoserver/'
-            + this.baseDatos
-            + '/wms?', {
-            title: this.ejes,
-            layers: this.baseDatos + ':' + this.ejes,
-            srs: this.srid,
-            format: 'image/png',
-            transparent: true,
-            VERSION: '1.1.0'
-        });
-
-        this.layerDepartamento = L.tileLayer.wms('http://localhost:'
-            + this.puertoGeoServer
-            + '/geoserver/'
-            + this.baseDatos
-            + '/wms?', {
-            title: this.deptos,
-            layers: +this.baseDatos + ':' + this.deptos,
-            srs: this.srid,
-            format: 'image/png',
-            transparent: true,
-            VERSION: '1.1.0'
-        });
-
+        ///////////////////////// CAPAS WMS ///////////////////////////////
         this.servicioEH = L.tileLayer.wms('http://localhost:'
             + this.puertoGeoServer
             + '/geoserver/'
@@ -89,17 +47,6 @@ class ControladorMapa extends Configuracion {
     }
     crearMapaAdmin() {
 
-        let baselayers = {
-            "Open Street Map": this.openst,
-            "Google Maps": this.google
-        };
-
-        let overlayers = {
-            "Departamentos": this.layerDepartamento,
-            "Ejes": this.layerEjes,
-            "Rutas": this.layerRuta
-        };
-
         this.drawLayers = new L.FeatureGroup(); // Agrupa elementos graficos
         let drawControl = new L.Control.DrawPlus({
             position: 'topright',
@@ -115,16 +62,7 @@ class ControladorMapa extends Configuracion {
         this.map.addLayer(this.drawLayers);
         this.map.addControl(drawControl);
 
-        L.control.layers(
-            baselayers,
-            overlayers, {
-                collapsed: true
-            }).addTo(this.map);
-
         this.map.fitBounds([[-35, -56], [-34, -56]]); // btn Ubicacion
-        L.geolet({
-            position: 'bottomleft'
-        }).addTo(this.map);
 
         this.map.on(L.Draw.Event.CREATED, function (e) {
             this.drawLayers.addLayer(e.layer);

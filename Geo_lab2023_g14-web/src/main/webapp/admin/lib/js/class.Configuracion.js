@@ -22,27 +22,5 @@ class Configuracion {
         this.deptos = 'ft_00departamento';
         this.vista_SEH = 'vista_se_h';
         this.vista_LineString = 'vista_a_rec';
-        this.colors = [
-            'red',
-            'blue',
-            'green',
-            'yellow',
-            'orange',
-            'purple',
-            'cyan',
-            'magenta',
-            'lime',
-            'pink',
-            'teal',
-            'maroon',
-            'navy',
-            'olive',
-            'silver',
-            'aqua',
-            'fuchsia',
-            'gray',
-            'black',
-            'white'
-        ];
     }
 }

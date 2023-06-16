@@ -1,5 +1,11 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core" lang="es" xml:lang="es">
+<html
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:p="http://primefaces.org/ui"
+        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+        xmlns:f="http://xmlns.jcp.org/jsf/core"
+        lang="es" xml:lang="es">
 
 <h:head>
    <!-- VERIFICAR SESION -->
@@ -42,14 +48,15 @@
    <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
    <link rel="stylesheet" href="https://unpkg.com/primeflex@^3/primeflex.css" />
 
-   <!-- MAPA CALOR -->
+   <!-- MAPA CALOR
    <link rel="canonical" href="//ursudio.github.io/webgl-heatmap-leaflet/" />
-   <!-- <link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48 64x64" /> -->
+   -->
+   <!-- <link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48 64x64" />
 
    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans|Fjalla+One" type="text/css" />
    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
    <link rel="stylesheet" href="./lib/css/styleh.css" type="text/css" />
-
+   -->
 
    #{sesion.init()}
    #{adminBean.initH()}
@@ -63,9 +70,10 @@
    <p:growl id="messages" showDetail="true" />
    <div id="top">
       <div class="navbar navbar-expand-sm">
-         <div class="container-fluid">
+         <div class="container">
             <div id="contenedorNavbar">
-               <p:menubar>
+               <button id="toggleMenu" class="toggle-button btn-azul" onclick="toggleNavbar()">Menú</button>
+               <p:menubar id="menuBar">
                   <p:submenu label="Eliminar">
                      <p:menuitem value="Eliminar Hospital" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg8').show()" />
                      <p:menuitem value="Eliminar Ambulancia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg7').show()" />
@@ -96,8 +104,8 @@
          </div>
       </div>
    </div>
-   <div id="map"></div>
 
+   <div id="map"></div>
 
    <!-- FORM'S  -->
    <p:outputPanel id="formPanel">
@@ -112,46 +120,58 @@
    </p:outputPanel>
    <!-- END FORMS -->
 
-   <a href="#options" id="options"></a>
+   <!-- a href="#options" id="options"></a -->
 
-</h:body>
-
-<script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
+   <!-- script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
 <script type="" src="./lib/dist/webgl-heatmap.js"></script>
-<script type="" src="./lib/dist/webgl-heatmap-leaflet.min.js"></script>
+<script type="" src="./lib/dist/webgl-heatmap-leaflet.min.js"></script -->
 
-<script type="text/javascript">
-
-   function ocultarDlgs() {
-      PF('dlg1').hide();
-      PF('dlg2').hide();
-      PF('dlg3').hide();
-   }
-   let mapaAdmin = new ControladorMapa();
-   mapaAdmin.crearMapaAdmin();
-   mapaAdmin.addLayersWFS();
-   mapaAdmin.addLayerWFSLine();
-   mapaAdmin.addLayerWFSbuf();
-
-
-   function mostrarMarker() {
-      mapaAdmin.cargarMapaAltaSE();
-   }
-   function mostrarMarker2() {
-      mapaAdmin.cargarMapaModSE();
-   }
-
-   mapaAdmin.cargarMapaAltaAmbulancia();
-</script>
-<script type="text/javascript">
-   $(document).ready(function() {
-      var showDialogs = '#{param.showDialogs}';
-      console.log('entre al script');
-
-      if (showDialogs === 'true') {
-         PF('dlg9').show();
-         console.log('Diálogos mostrados');
+   <script type="text/javascript">
+      function ocultarDlgs() {
+         PF('dlg1').hide();
+         PF('dlg2').hide();
+         PF('dlg3').hide();
+         PF('dlg4').hide();
+         PF('dlg5').hide();
+         PF('dlg6').hide();
+         PF('dlg7').hide();
+         PF('dlg8').hide();
+         PF('dlg9').hide();
       }
-   });
-</script>
+
+      let mapaAdmin = new ControladorMapa();
+      mapaAdmin.crearMapaAdmin();
+      mapaAdmin.addLayersWFS();
+      mapaAdmin.addLayerWFSLine();
+      mapaAdmin.addLayerWFSbuf();
+
+      function mostrarMarker() {
+         mapaAdmin.cargarMapaAltaSE();
+      }
+      function mostrarMarker2() {
+         mapaAdmin.cargarMapaModSE();
+      }
+
+      mapaAdmin.cargarMapaAltaAmbulancia();
+
+      $(document).ready(function() {
+         var showDialogs = '#{param.showDialogs}';
+         console.log('entre al script');
+         if (showDialogs === 'true') {
+            PF('dlg9').show();
+            console.log('Diálogos mostrados');
+         }
+      });
+
+      function toggleNavbar() {
+         var menuBar = document.getElementById("menuBar");
+
+         if (menuBar.style.display === "none") {
+            menuBar.style.display = "block";
+         } else {
+            menuBar.style.display = "none";
+         }
+      }
+   </script>
+</h:body>
 </html>
