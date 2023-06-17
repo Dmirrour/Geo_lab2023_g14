@@ -4,12 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-// import uy.edu.tsig.entity.ServicioEmergencia;
+import uy.edu.tsig.entity.ServicioEmergencia;
 import uy.edu.tsig.entity.TipoHospital;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-// import java.util.List;
+import java.util.List;
 
 @Data
 @Builder
@@ -25,12 +25,12 @@ public class HospitalDTO implements Serializable {
     ArrayList<ServicioEmergenciaDTO> servicioEmergencia;
 
     @Builder.Default
-    ArrayList<AmbulanciaDTO> ambulanciaDTOS = new ArrayList<>();
+    ArrayList<AmbulanciaDTO> ambulanciaDTOS =new ArrayList<>();
 
-    public HospitalDTO(Long idHospital, String nombreHospital, TipoHospital tipoHospital) {
-        this.nombreHospital = nombreHospital;
-        this.tipoHospital = tipoHospital;
-        this.idHospital = idHospital;
+    public HospitalDTO (Long idHospital, String nombreHospital, TipoHospital tipoHospital){
+        this.nombreHospital=nombreHospital;
+        this.tipoHospital=tipoHospital;
+        this.idHospital=idHospital;
     }
 
 }

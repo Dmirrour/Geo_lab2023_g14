@@ -176,7 +176,57 @@ function actualizarMapa(Lat = null, Lng = null) {
     circulo.bindPopup("Circulo")
     frmBuscar.style.display = 'none';
     btnMostrarBuscador.style.backgroundColor = '#f4f4f4';
-    map.setView([seleccionEsq.lat, seleccionEsq.lng], 13);
+
+    ///////////////// USUARIO
+    var Usuario = {
+        lat: seleccionEsq.lat,
+        lon: seleccionEsq.lng
+    };
+
+    //  [-34.87325916579713], [-56.11936569213868]
+    var Hospital = {
+        lat: -34.87966454502086, // Latitud del punto de inicio
+        lon: -56.18936569213868  // Longitud del punto de inicio
+    };
+    var SerEme = {
+        lat: -34.87325916579713, // Latitud del punto de fin
+        lon: -56.11936569213868  // Longitud del punto de fin
+    };
+    var ambulanciaMarcador = L.icon({
+        iconUrl: './resources/marker-icons/ambulance.svg',
+        iconSize: [32, 32],    // especifica el tamaño del icono en píxeles
+        iconAnchor: [16, 32],  // especifica el punto de anclaje del icono relativo a su posición
+        popupAnchor: [0, -32]  // especifica el punto de anclaje del popup relativo al icono
+    });
+    var hospitalMarcador = L.icon({
+        iconUrl: './resources/marker-icons/hospital_marker_gps.svg',
+        iconSize: [32, 32], // especifica el tamaño del icono en píxeles
+        iconAnchor: [16, 32], // especifica el punto de anclaje del icono relativo a su posición
+        popupAnchor: [0, -32] // especifica el punto de anclaje del popup relativo al icono
+    });
+    var markerAmbulancia = L.marker([SerEme.lat, SerEme.lon], { icon: ambulanciaMarcador }).addTo(map);
+    crearRecorrido(Hospital, SerEme, Usuario, markerAmbulancia);
+}
+function crearRecorrido(Hospital, SerEme, Usuario, markerAmbulancia) {
+    L.Routing.control({
+        waypoints: [
+            L.latLng(Hospital.lat, Hospital.lon),
+            L.latLng(Usuario.lat, Usuario.lon),
+            L.latLng(SerEme.lat, SerEme.lon)
+        ]
+    })
+        .on('routesfound', function (e) {
+            console.log(e);
+            var routes = e.routes;
+            var summary = routes[0].summary;
+            console.log('Tiempo: ' + summary.totalTime / 60 + ' minutos; Distancia: ' + summary.totalDistance / 1000 + ' km');
+            routes[0].coordinates.forEach(function (coord, index) {
+                setTimeout(() => {
+                    markerAmbulancia.setLatLng(coord);
+                }, 500 * index);
+            });
+        })
+        .addTo(map);
 }
 function buscarCalleNumero() {
     let portal = document.getElementById('numeroCalle').value;
@@ -199,17 +249,19 @@ var buscarUbicacionBtn = document.getElementById('buscarUbicacion');
 
 // Manejar evento de clic en el botón "buscarUbicacion"
 buscarUbicacionBtn.addEventListener('click', function () {
-    // Verificar si el navegador es compatible con la geolocalización
-    if (navigator.geolocation) {
-        // Obtener la ubicación del usuario
-        navigator.geolocation.getCurrentPosition(function (position) {
-            var lat = position.coords.latitude;
-            var lng = position.coords.longitude;
-            actualizarMapa(lat, lng);
+    obtenerCoordenadas()
+        .then(function (coor) {
+            console.log('Latitud GPS: ', coor.latitud);
+            console.log('Longitud GPS: ', coor.longitud);
+            actualizarMapa(coor.latitud, coor.longitud);
+        })
+        .catch(function (error) {
+            console.error('Error al obtener las coordenadas:', error);
         });
-    } else {
-        alert('Tu navegador no es compatible con la geolocalización.');
-    }
+    //  console.log("NUEVOOO: " + obtenerCoordenadas());
+    // } else {
+    //     console.log("ERROR: ");
+    // }
 });
 document.getElementById('mostrarBuscador').addEventListener('click', function () {
     if (frmBuscar.style.display === 'none') {
@@ -220,3 +272,26 @@ document.getElementById('mostrarBuscador').addEventListener('click', function ()
         btnMostrarBuscador.style.backgroundColor = '#f4f4f4';
     }
 });
+/// Para obtener coordenadas GSP 
+function obtenerCoordenadas() { //SYA
+    return new Promise((resolve, reject) => {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                let latitud = position.coords.latitude;
+                let longitud = position.coords.longitude;
+                let coor = {
+                    latitud,
+                    longitud
+                };
+                resolve(coor);
+            }, function (error) {
+                reject(error);
+            });
+        } else {
+            reject('Tu navegador no es compatible con la geolocalización.');
+        }
+    });
+}
+
+
+

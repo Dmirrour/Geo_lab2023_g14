@@ -25,6 +25,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
+
+
 
 @Named("adminBean")
 @SessionScoped
@@ -54,6 +57,11 @@ public class AdminBean implements Serializable {
     private ServiciosEmergencias s;
     private ArrayList<ServicioEmergenciaDTO> servicioEmergenciaDTOS;
 
+
+    private String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
+    private String usuario = "postgres";
+    private String contraseña = "lapass";
+
     public void initH() {
         h = iHospitalService.obtenerHospitales();
         hospitalDTOS = h.getListHospitales();
@@ -65,45 +73,83 @@ public class AdminBean implements Serializable {
     }
 
     public void addAmbulancia() throws IOException {
-        Ambulancia a = Ambulancia.builder()
-                .idCodigo(codigo)
-                .distanciaMaxDesvio(desvio)
-                .build();
-        AmbulanciaDTO aDTO = iAmbulaciasService.altaAmbulacia(a, idHospital);
 
-        System.out.println(rec);
-        System.out.println("ATENCION: si no guarda linestring en la vista, verificar el archivo AdminBEan.java, metodo addAmbulancia(); poner la contraseña correcta para su equipo.");
-
-        String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
-        String usuario = "postgres";
-        // String contraseña = "admin";     // ?
-        String contraseña = "lapass";    // SEBA
-     //   String contraseña = "1234";         // WILL
-
+        //double  des= (desvio*100)/(6378137*0.9996); no erra casi nada presisa entre mas grande el buffer mas margen tenia ya que habria que hacerlo atraves de operacciones con longitud
+        double grados=9.41090001733132E-4;//Probado hasta que encontrara saque una equivalencia en grados este numero equivale a esto+-5m
+        double des=(desvio*grados)/100;//regla de 3
         Connection conn;
         try {
             conn = DriverManager.getConnection(url, usuario, contraseña);
+            List<ServicioEmergencia> servasocioados= new ArrayList<>();
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(
-                "UPDATE ambulancia SET polyline = ST_SetSRID(ST_GeomFromText('"+ rec +"'), 32721)" +
-                    "WHERE idambulancia=" + aDTO.getIdAmbulancia() + ";");
-            System.out.println("Recorrido insertado correctamente.");
-        } catch (SQLException e) {
-            // e.printStackTrace();
+
+
+
+            //alta logicaa
+            Ambulancia a = Ambulancia.builder()
+                    .idCodigo(codigo)
+                    .distanciaMaxDesvio(desvio)
+                    //.ServEdelRecorrido(servasocioados)
+                    .build();
+            AmbulanciaDTO aDTO = iAmbulaciasService.altaAmbulacia(a, idHospital);
+
+            System.out.println(aDTO);
+            System.out.println("ATENCION: si no guarda linestring en la vista, verificar el archivo AdminBEan.java, metodo addAmbulancia(); poner la contraseña correcta para su equipo.");
+            System.out.println(des);
+
+            ResultSet resultSet = stmt.executeQuery("SELECT se.* FROM servicioemergencia se " +
+                    "JOIN (SELECT ST_Buffer(ST_SetSRID(ST_GeomFromText('"+ rec +"'), 32721)," + des +") AS buffer_geom " +
+                    "FROM ambulancia a WHERE a.idambulancia = "+ aDTO.getIdAmbulancia() +") AS buffer " +
+                    "ON ST_Within(se.point, buffer.buffer_geom) " +
+                    "WHERE se.hospital_idhospital = "+ idHospital +";");
+            System.out.println("Pase la query");
+            FacesContext fC = FacesContext.getCurrentInstance();
+            ExternalContext eC = fC.getExternalContext();
+
+            if (resultSet.next()) {
+                System.out.println("el resultado no es null");
+                do {
+
+                    ServicioEmergencia servicioEmergencia = new ServicioEmergencia();
+                    servicioEmergencia.setIdServicio(resultSet.getLong("idservicio"));
+                    servicioEmergencia.setNombre(resultSet.getString("nombre"));
+                    servasocioados.add(servicioEmergencia);
+
+
+                } while (resultSet.next());
+
+                System.out.println(servasocioados);
+                System.out.println("pase el wild");
+
+                //alta recorrido
+                int rowsAffected  = stmt.executeUpdate(
+                        "UPDATE ambulancia SET polyline = ST_SetSRID(ST_GeomFromText('"+ rec +"'), 32721)" +
+                                "WHERE idambulancia=" + aDTO.getIdAmbulancia() + ";");
+                System.out.println("Recorrido insertado correctamente.");
+
+
+                String msj = String.format("Se agregó la ambulancia %s.", codigo);
+                addMensaje("Ambulancias", msj);
+
+                codigo = 0;
+                desvio = 0;
+                idHospital = 0;
+                rec = "";
+                System.out.println("guardado recA, redireccion....");
+
+                eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true"); // Reemplaza con la URL de la página de confirmación
+            }else {
+                String msj = String.format("No hay servicios en su Zona.");
+                addMensaje("Ambulancias", msj);
+                System.out.println("el resultado es null");
+                eliminarA(aDTO.getIdAmbulancia());
+                eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true");
+                return;
+            }
+        }catch (SQLException e){
             System.out.println("No conecta."+e.getMessage());
         }
 
-        String msj = String.format("Se agregó la ambulancia %s.", codigo);
-        addMensaje("Ambulancias", msj);
-
-        codigo = 0;
-        desvio = 0;
-        idHospital = 0;
-        rec = "";
-        System.out.println("guardado recA, redireccion....");
-        FacesContext fC = FacesContext.getCurrentInstance();
-        ExternalContext eC = fC.getExternalContext();
-        eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true"); // Reemplaza con la URL de la página de confirmación
     }
 
 

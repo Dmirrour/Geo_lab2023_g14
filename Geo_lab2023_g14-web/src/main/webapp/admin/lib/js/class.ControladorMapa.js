@@ -12,7 +12,7 @@ class ControladorMapa extends Configuracion {
 
     map;
     drawLayers;
-    heatmap;
+    // heatmap;
     markerSE;
 
     constructor() {
@@ -117,45 +117,45 @@ class ControladorMapa extends Configuracion {
 
         };
 
-        
-        this.heatmap = L.webGLHeatmap({
-            size: 50,
-            units: 'px',
-            alphaRange: 0.4
-        });
 
-        var dataPoints = [
-            [50.880509986, -114.081560859],
-            [50.880509986, -114.081560859],
-            [50.880509986, -114.081560859],
-            [44.53666687, -64.243164062],
-            [44.639999389, -63.613998413],
-            [44.676998138, -63.612499237],
-            [44.679332733, -63.610500335],
-            [50.970165252, -114.06916809],
-            [34.104833333, -118.323],
-            [50.579812463, -113.872800754],
-            [51.055080414, -114.056716919],
-            [44.648111204, -63.577139396],
-            [44.642322778, -63.579243422],
-            [44.643284609, -63.568868637],
-            [44.718542104, -63.683588477],
-            [44.718418471, -63.683593422],
-            [44.718461344, -63.683637427],
-            [44.718412771, -63.683782686],
-            [44.718390978, -63.683674224],
-            [44.718426894, -63.683400638],
-            [44.718389102, -63.683563615],
-            [44.643199507, -63.568366686],
-            [-34.849593, -56.148720],
-            [-34.881988, -56.175156],
-            [-34.859172, -56.137047],
-            [-34.871003, -56.126404],
-            [44.718385449, -63.683592853]
-        ];
-        this.heatmap.setData(dataPoints);
-        this.heatmap.multiply(2);
-        this.map.addLayer(this.heatmap);
+        // this.heatmap = L.webGLHeatmap({
+        //     size: 50,
+        //     units: 'px',
+        //     alphaRange: 0.4
+        // });
+
+        // var dataPoints = [
+        //     [50.880509986, -114.081560859],
+        //     [50.880509986, -114.081560859],
+        //     [50.880509986, -114.081560859],
+        //     [44.53666687, -64.243164062],
+        //     [44.639999389, -63.613998413],
+        //     [44.676998138, -63.612499237],
+        //     [44.679332733, -63.610500335],
+        //     [50.970165252, -114.06916809],
+        //     [34.104833333, -118.323],
+        //     [50.579812463, -113.872800754],
+        //     [51.055080414, -114.056716919],
+        //     [44.648111204, -63.577139396],
+        //     [44.642322778, -63.579243422],
+        //     [44.643284609, -63.568868637],
+        //     [44.718542104, -63.683588477],
+        //     [44.718418471, -63.683593422],
+        //     [44.718461344, -63.683637427],
+        //     [44.718412771, -63.683782686],
+        //     [44.718390978, -63.683674224],
+        //     [44.718426894, -63.683400638],
+        //     [44.718389102, -63.683563615],
+        //     [44.643199507, -63.568366686],
+        //     [-34.849593, -56.148720],
+        //     [-34.881988, -56.175156],
+        //     [-34.859172, -56.137047],
+        //     [-34.871003, -56.126404],
+        //     [44.718385449, -63.683592853]
+        // ];
+        // this.heatmap.setData(dataPoints);
+        // this.heatmap.multiply(2);
+        // this.map.addLayer(this.heatmap);
 
         this.drawLayers = new L.FeatureGroup(); // Agrupa elementos graficos
         let drawControl = new L.Control.DrawPlus({
@@ -182,11 +182,6 @@ class ControladorMapa extends Configuracion {
         //L.geolet({
         //    position: 'bottomleft'
         //}).addTo(this.map);
-
-
-
-
-
 
         this.map.on(L.Draw.Event.CREATED, function (e) {
             this.drawLayers.addLayer(e.layer);
@@ -371,24 +366,24 @@ class ControladorMapa extends Configuracion {
      document.getElementById("j_idt61:rec").value = data;;
  });
  *//*
-                                                                                                                                                                                // Configuración del mapa Leaflet
-                                                                                                                                                                                var map = L.map('map').setView([51.505, -0.09], 13);
-                                                                                                                                                                        
-                                                                                                                                                                                // Crear una capa de dibujo
-                                                                                                                                                                                var drawnItems = new L.FeatureGroup().addTo(this.map);
-                                                                                                                                                                        
-                                                                                                                                                                                // Configurar la herramienta de dibujo
-                                                                                                                                                                                var drawControl = new L.Control.Draw({
-                                                                                                                                                                                    draw: {
-                                                                                                                                                                                        polyline: true,
-                                                                                                                                                                                        // Otras opciones de dibujo
-                                                                                                                                                                                    },
-                                                                                                                                                                                    edit: {
-                                                                                                                                                                                        featureGroup: drawnItems,
-                                                                                                                                                                                        // Opciones de edición
-                                                                                                                                                                                    }
-                                                                                                                                                                                }).addTo(this.map);
-                                                                                                                                                                                */
+                                                                                                                                                                                              // Configuración del mapa Leaflet
+                                                                                                                                                                                              var map = L.map('map').setView([51.505, -0.09], 13);
+                                                                                                                                                                                      
+                                                                                                                                                                                              // Crear una capa de dibujo
+                                                                                                                                                                                              var drawnItems = new L.FeatureGroup().addTo(this.map);
+                                                                                                                                                                                      
+                                                                                                                                                                                              // Configurar la herramienta de dibujo
+                                                                                                                                                                                              var drawControl = new L.Control.Draw({
+                                                                                                                                                                                                  draw: {
+                                                                                                                                                                                                      polyline: true,
+                                                                                                                                                                                                      // Otras opciones de dibujo
+                                                                                                                                                                                                  },
+                                                                                                                                                                                                  edit: {
+                                                                                                                                                                                                      featureGroup: drawnItems,
+                                                                                                                                                                                                      // Opciones de edición
+                                                                                                                                                                                                  }
+                                                                                                                                                                                              }).addTo(this.map);
+                                                                                                                                                                                              */
         // Evento para capturar la polilínea dibujada
         this.map.on('draw:created', function (e) {
             var layer = e.layer;

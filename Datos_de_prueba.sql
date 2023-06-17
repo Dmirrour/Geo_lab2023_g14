@@ -120,6 +120,39 @@ SELECT a.idambulancia,a.distanciamaxdesvio,a.idcodigo,a.polyline,h.idhospital,h.
 FROM ambulancia a 
 JOIN hospital h ON a.hospital_idhospital = h.idhospital;
 
+CREATE OR REPLACE VIEW public.vista_buf AS
+        SELECT a.idambulancia
+            ST_Buffer(ST_SetSRID(a.polyline, 32721), ((a.distanciamaxdesvio*9.41090001733132E-4) / 100))
+                AS buffer_geom
+        FROM
+            ambulancia a
+        GROUP BY
+            a.distanciamaxdesvio,a.polyline;
+
+SELECT ST_PointN(polyline, 1) AS punto
+FROM ambulancia;
+
+
+CREATE OR REPLACE VIEW public.vista_selects AS
+SELECT Distinct a.idambulancia, ST_Buffer(a.polyline,(a.distanciamaxdesvio*9.41090001733132E-4) / 100), ST_PointN(a.polyline, 1)
+FROM servicioemergencia g, ambulancia a 
+WHERE a.hospital_idhospital=g.hospital_idhospital;
+
+CREATE OR REPLACE VIEW public.vista_selectp AS
+SELECT a.idambulancia, ST_PointN(a.polyline, 1)
+FROM ambulancia a;
+
+-- ------------------ 11/06/2023
+SELECT *
+FROM tu_capa_wfs
+WHERE ST_Within(ST_SetSRID(ST_MakePoint(longitud, latitud), tu_srid), ST_Buffer(tu_geom_buffer, tu_radio_buffer))
+
+
+SELECT Distinct a.idambulancia,ST_Buffer(a.polyline,(a.distanciamaxdesvio*9.41090001733132E-4) / 100)
+FROM servicioemergencia g, ambulancia a 
+WHERE (a.hospital_idhospital=g.hospital_idhospital) AND 
+ST_Intersects(ST_SetSRID(st_makepoint(-56.241073608398445,-34.856779910488136), 32721),(ST_Buffer(a.polyline,(a.distanciamaxdesvio*9.41090001733132E-4) / 100)));
+------------------
 
 DROP TABLE ambulancia CASCADE;
 DROP TABLE hospital CASCADE;
@@ -154,6 +187,7 @@ SELECT st_astext(st_linemerge(st_union(geom))) FROM ft_01_ejes WHERE nom_calle='
 --*-*-*-*-*-*-*-*-*- BUFFER OK -*-*-*-*-*-*-*-*-*--
 SELECT g.idservicio,ST_Buffer(a.polyline,0.05),g.point FROM servicioemergencia g, ambulancia a 
 WHERE ST_Intersects(g.point,(ST_Buffer(a.polyline,0.05)));
+
 
 SELECT a.nombre FROM ft_00departamento a, servicioemergencia g WHERE ST_OVERLAPS(a.geom,ST_BUFFER(g.point,0.001)) and a.nombre='MONTEVIDEO';
 DWITHIN(polyline, POINT(-34.20049069242444 -56.1905006852794), 50, meters)

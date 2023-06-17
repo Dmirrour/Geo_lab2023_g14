@@ -4,10 +4,13 @@ import jakarta.ejb.EJB;
 import jakarta.ejb.Stateless;
 
 import uy.edu.tsig.dto.HospitalDTO;
+import uy.edu.tsig.dto.ServicioEmergenciaDTO;
 import uy.edu.tsig.entity.Hospital;
 import uy.edu.tsig.model.Hospitales;
 import uy.edu.tsig.persistence.IHospitalDAO;
 import uy.edu.tsig.service.IHospitalService;
+
+import java.util.ArrayList;
 
 @Stateless
 public class HospitalService implements IHospitalService{
@@ -37,5 +40,10 @@ public class HospitalService implements IHospitalService{
         r.setNombreHospital(h.getNombreHospital());
 
         iHospitalDAO.modificar(r);
+    }
+
+    @Override
+    public ArrayList<ServicioEmergenciaDTO> serviciosAsignadosL(Long id) {
+        return iHospitalDAO.buscarHospital(id).getServicioEmergenciaDTO();
     }
 }
