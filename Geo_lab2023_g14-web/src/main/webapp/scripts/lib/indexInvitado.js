@@ -149,7 +149,7 @@ function CrearMapaInvitado() {
 }
 
 
-///////////////////////// GENERA COLOR 
+///////////////////////// GENERA COLOR /////////////////////////
 function generarColor(numero) {
     // Calcula los componentes de color
     var rojo = (numero * 17) % 256;   // Rango de 0 a 255
@@ -165,6 +165,7 @@ function generarColor(numero) {
 ///////////////////////// INITLAYERS /////////////////////////
 function initLayers(itemValue) {
     console.log("function init Layer Servicio Em: " + itemValue);
+
     let filter = "idhospital='" + itemValue + "'";
     let urlSe =
         'http://localhost:8081/geoserver/wfs?' +
@@ -199,12 +200,11 @@ let laSe;
 let loSe;
 let geojsonLayer; // variable global
 function initLayerServicioEm(urlSe, layerName) {
-    //  console.log("function initLayerServicioEm");
+    // console.log("function initLayerServicioEm");
     geojsonLayer = L.geoJSON(null, {
         pointToLayer: function (feature, latlng) {
             let idh = feature.properties.idhospital * 20;
             let markerColor = generarColor(idh) || 'blue';
-
             return L.circleMarker(latlng, {
                 radius: 8,
                 fillColor: markerColor,
@@ -221,20 +221,8 @@ function initLayerServicioEm(urlSe, layerName) {
             return response.json();
         })
         .then(function (data) {
-            geojsonLayer.addData(data);      // Agregar los datos a la capa de GeoJSON
+            geojsonLayer.addData(data);
 
-            //     let puntosArray = [];
-            //    for (let i = 0; i < data.features.length; i++) {
-            //         laSe = data.features.geometry.coordinates[0];
-            //         loSe = data.featurs.geometry.coordinates[1];
-            //         console.log(laSe + " s*e " + loSe);
-            //         puntosArray.push({
-            //             laSe,
-            //             loSe
-            //         });
-            //   }
-
-            // Configurar el evento de clic en los marcadores
             geojsonLayer.eachLayer(function (layer) {
                 layer.on('click', function (e) {
                     let properties = e.target.feature.properties;

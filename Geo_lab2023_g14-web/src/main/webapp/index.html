@@ -165,12 +165,12 @@
                             </div>
                         </div>
                     </div>
-                    <!--------------------------------------------termina form-->
+                    <!-- termina form -->
                 </div>
             </form>
         </div>
 
-        <button id="crearRecorridoBtn">R</button>
+        <button id="crearRecorridoBtn">✓</button>
 
         <div id="map-container">
             <div id="map"></div>
@@ -191,7 +191,6 @@
 
     // Escuchar el evento de mostrar el acordeón de Número
     document.getElementById("acordeonNumero").addEventListener("show.bs.collapse", function () {
-
         collapseEsquina.hide(); // Ocultar el acordeón de Esquina
     });
 
@@ -200,9 +199,7 @@
     //  console.log("crearRecorridoBtn" + crearRecorridoBtn.getElementById());
     // Agrega un evento de clic al botón
     crearRecorridoBtn.addEventListener("click", function () {
-        //  Realiza la solicitud al servidor Geoserver para obtener los puntos de inicio y fin
-        obtenerPuntosInicioFin();
-        // addLayerWFSbuf();
+        obtenerPuntosInicioFin(); //  Realiza la solicitud al servidor Geoserver para obtener los puntos de inicio y fin
     });
 
 </script>
@@ -210,12 +207,13 @@
 <script src="scripts/lib/js/buscadorCalles.js"></script>
 
 <script>
-    let puntoInicioCoords;
+    obtenerPuntosInicioFin(); // falta interaccion btnsolicitar+btnubicacion+seleccionarhospital
     wfsSelectHospitales(); // controladorUsuario.js // Seleccionar Hospital (control-button)
     initLayers(0); // indexInvitado.js
     //  addLayerWFSbuf();
     //  CrearMapaInvitado();
 
+    let puntoInicioCoords;
     function obtenerPuntosInicioFin() {
         // Realiza la solicitud al servidor Geoserver para obtener los puntos de inicio y fin
         var url = 'http://localhost:8081/geoserver/wfs?' +
@@ -237,19 +235,12 @@
                 features.forEach(function (feature) {
                     puntoInicioCoords = feature.geometry.coordinates;
                     mensaje += "\n\t- " + feature.properties.nombre + " \n(" + feature.properties.nombrehospital + ") - [" + puntoInicioCoords + "]";
-
                 });
-                alert(mensaje);
+                // alert(mensaje);
             })
             .catch(function (error) {
                 console.error("Error al obtener los puntos de inicio y fin:", error);
             });
     }
 
-    // hardcodedDataPoint();
-    // wfsAllLayers();
-    // wfsServicioEmergencia();
-    // wfsAmbulancia()
-    // wfsBuscarServicioEmergencia(); // se llama desde wfs wfsSelectHospitales
-    // wfsBuscarAmbulancia();
 </script>
