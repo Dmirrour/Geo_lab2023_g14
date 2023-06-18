@@ -63,7 +63,7 @@ function hardcodedDataPoint() {
     });
     var iconAmbulancia = L.icon({
         iconUrl: 'resources/marker-icons/ambulance.svg',
-        iconSize: [64, 64],
+        iconSize: [56, 56],
     });
 
     //////////////////// MARKER ////////////////////

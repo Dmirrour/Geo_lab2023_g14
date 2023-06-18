@@ -32,7 +32,7 @@ UPDATE ambulancia SET polyline='LINESTRING(-56.19890928268433 -34.87205101405393
 UPDATE ambulancia SET polyline='LINESTRING(-56.24213576316834 -34.87111126177625,-56.22702956199647 -34.8587365053499,-56.2242615222931 -34.86014068248701, -56.22278630733491 -34.858529618291136)' WHERE idambulancia=2;
 UPDATE ambulancia SET polyline='LINESTRING(-56.16814613290445 -34.863877701507064,-56.1479886937741 -34.87931822276983,-56.15241050720215 -34.881974972559426, -56.15324199199677 -34.881147655057795)' WHERE idambulancia=3;
 UPDATE ambulancia SET polyline='LINESTRING(-56.198608875274665 -34.90644748064126,-56.193619966506965 -34.90606914064883,-56.192906498909 -34.912747025259556, -56.19525611400605 -34.91206518447018)' WHERE idambulancia=4;
-UPDATE ambulancia SET polyline='LINESTRING(-56.164666414206295 -34.89814433959129,-56.16328418254853 -34.91090384260483,-56.171126961708076 -34.90824237220117)' WHERE idambulancia=5;
+UPDATE ambulancia SET polyline='LINESTRING(-56.164666414206295 -34.89814433959129,-56.16328418254853 -34.91090384260483,-56.171126961708076 -34.90824237220117)' WHERE idambulancia=4;
 UPDATE ambulancia SET polyline='LINESTRING(-56.197106838226325 -34.84093351099642,-56.19352877140046 -34.837367166344926,-56.170676350593574 -34.81493528019694)' WHERE idambulancia=6;
 
 
@@ -45,13 +45,15 @@ INSERT INTO hospital_ambulancia(hospital_idhospital, ambulancia_idambulancia)VAL
 INSERT INTO servicioemergencia("idservicio","camaslibres","nombre","totalcama","hospital_idhospital","point")VALUES(1,50,'Hospital de Clinicas',290,1,(ST_SetSRID(st_makepoint(-81, -36), 32721)));
 INSERT INTO servicioemergencia("idservicio","camaslibres","nombre","totalcama","hospital_idhospital","point")VALUES(2,120,'Medica Uruguaya La Paz',150,2,null);
 INSERT INTO servicioemergencia("idservicio","camaslibres","nombre","totalcama","hospital_idhospital","point")VALUES(3,20,'Medica Uruguaya Paso Cerro',80,2,null);
-INSERT INTO servicioemergencia("idservicio","camaslibres","nombre","totalcama","hospital_idhospital","point")VALUES(4,87,'Hospital Maciel',203,4,null);
+INSERT INTO servicioemergencia("idservicio","camaslibres","nombre","totalcama","hospital_idhospital","point")VALUES(4,87,'Hospital Maciel',203,3,null);
+INSERT INTO servicioemergencia("idservicio","camaslibres","nombre","totalcama","hospital_idhospital","point")VALUES(5,80,'Hospital Maciel',1500,2,null);
 
 --*-*-*-*-*-*-*-*-*- UPDATE SERVICIO EMERGENCIA -*-*-*-*-*-*-*-*-*--
 UPDATE servicioemergencia SET point=(ST_SetSRID(st_makepoint(-56.15112304, -34.8921377450), 32721)) WHERE "idservicio"=1;
-UPDATE servicioemergencia SET point=(ST_SetSRID(st_makepoint(-56.2615234, -34.8521477450), 32721)) WHERE "idservicio"=2;
+UPDATE servicioemergencia SET point=(ST_SetSRID(st_makepoint( -56.15584373474122,-34.876285765111696), 32721)) WHERE "idservicio"=2;
 UPDATE servicioemergencia SET point=(ST_SetSRID(st_makepoint(-56.23947723007203, -34.863766265959946), 32721)) WHERE "idservicio"=3;
 UPDATE servicioemergencia SET point=(ST_SetSRID(st_makepoint(-56.19952350, -34.8521477950), 32721)) WHERE "idservicio"=4;
+UPDATE servicioemergencia SET point=(ST_SetSRID(st_makepoint(-56.19013718227507, -34.87408198196712), 32721)) WHERE "idservicio"=4;
 
 
 --*-*-*-*-*-*-*-*- INSERT HOSPITAL SERVICIO EMERGENCIA -*-*-*-*-*-*-*-*--
@@ -63,6 +65,39 @@ INSERT INTO hospital_servicioemergencia(hospital_idhospital,  servicioemergencia
 --*-*-*-*-*-*-*-*-*- COLUMNA GEOMETRY -*-*-*-*-*-*-*-*-*--
 ALTER TABLE servicioemergencia ADD COLUMN point GEOMETRY(Point, 32721);
 ALTER TABLE ambulancia ADD COLUMN polyline GEOMETRY(LineString, 32721);
+
+
+--*-*-*-*-*-*-*-*-*-*-*- VISTA -*-*-*-*-*-*-*-*-*-*-*--
+
+-- public.vista_selects;
+CREATE OR REPLACE VIEW public.vista_selects
+ AS
+ SELECT DISTINCT a.idambulancia, g.hospital_idhospital,
+    st_buffer(a.polyline, (a.distanciamaxdesvio::numeric * 0.000941090001733132 / 100::numeric)::double precision) AS st_buffer,
+    st_pointn(a.polyline, 1) AS st_pointn
+   FROM servicioemergencia g,
+    ambulancia a
+  WHERE a.hospital_idhospital = g.hospital_idhospital;
+
+
+  -- View: public.vista_se_h
+  CREATE OR REPLACE VIEW public.vista_se_h AS
+  SELECT se.idservicio, se.camaslibres, se.nombre, se.totalcama, se.point, h.idhospital,h.nombrehospital,
+    CASE h.tipohospital
+        WHEN 0 THEN 'MUTUALISTA'
+        WHEN 1 THEN 'SEGURO PRIVADO'
+        WHEN 2 THEN 'SERVICIO ESTATAL'
+        ELSE 'Desconocido'
+        END AS tipohospital
+    FROM servicioemergencia se 
+    JOIN hospital h ON se.hospital_idhospital = h.idhospital;
+
+
+-- AMBULANCIA / HOSPITAL - vista_a_rec;
+CREATE OR REPLACE VIEW public.vista_a_rec AS
+SELECT a.idambulancia, a.distanciamaxdesvio, a.idcodigo, a.polyline, h.idhospital, h.nombrehospital
+FROM ambulancia a 
+JOIN hospital h ON a.hospital_idhospital = h.idhospital;
 
 
 --*-*-*-*-*-*-*-*-*- SELECT -*-*-*-*-*-*-*-*-*--
@@ -103,52 +138,54 @@ SELECT * FROM ft_00_departamento;
 SELECT * FROM ft_00_loc_pg;
 SELECT * FROM ft_00_vias;
 
-  -- View: public.vista_se_h
-  CREATE OR REPLACE VIEW public.vista_se_h AS
-  SELECT se.idservicio,se.camaslibres,se.nombre,se.totalcama,se.point,h.idhospital,h.nombrehospital,
-    CASE h.tipohospital
-        WHEN 0 THEN 'MUTUALISTA'
-        WHEN 1 THEN 'SEGURO PRIVADO'
-        WHEN 2 THEN 'SERVICIO ESTATAL'
-        ELSE 'Desconocido'
-        END AS tipohospital
-    FROM servicioemergencia seJOIN hospital h ON se.hospital_idhospital = h.idhospital;
 
--- DROP VIEW vista_a_rec;
-CREATE OR REPLACE VIEW public.vista_a_rec AS
-SELECT a.idambulancia,a.distanciamaxdesvio,a.idcodigo,a.polyline,h.idhospital,h.nombrehospital
-FROM ambulancia a 
-JOIN hospital h ON a.hospital_idhospital = h.idhospital;
 
+
+-- BUFFER / HOSPITAL - vista_buf;
 CREATE OR REPLACE VIEW public.vista_buf AS
-        SELECT a.idambulancia
-            ST_Buffer(ST_SetSRID(a.polyline, 32721), ((a.distanciamaxdesvio*9.41090001733132E-4) / 100))
-                AS buffer_geom
-        FROM
-            ambulancia a
-        GROUP BY
-            a.distanciamaxdesvio,a.polyline;
+        SELECT a.idambulancia, ST_Buffer(ST_SetSRID(a.polyline, 32721), ((a.distanciamaxdesvio*9.41090001733132E-4) / 100)) AS buffer_geom
+        FROM ambulancia a
+        GROUP BY a.idambulancia;
+
+
+
+
+
+-- id ambulancia - punto servicio e - de linestring buffer - Primer punto en linestring
+
+CREATE OR REPLACE VIEW public.vista_buff_cobertura AS
+ SELECT DISTINCT a.idambulancia, g.hospital_idhospital,
+    st_buffer(a.polyline, (a.distanciamaxdesvio * 0.000941090001733132 / 100)) AS buffer_zona_cobertura,
+    st_pointn(a.polyline, 1) AS first_point_recorrido
+   FROM servicioemergencia g, ambulancia a
+  WHERE a.hospital_idhospital = g.hospital_idhospital;
+
+
+ SELECT DISTINCT a.idambulancia, a.hospital_idhospital,
+    st_buffer(a.polyline, (a.distanciamaxdesvio::numeric * 0.000941090001733132 / 100::numeric)::double precision) AS st_buffer
+   FROM servicioemergencia g,
+    ambulancia a
+  WHERE a.hospital_idhospital = g.hospital_idhospital;
+
+
+
+-- Primer punto en linestring(polyline) ambulancia
+CREATE OR REPLACE VIEW public.vista_selectp AS
+SELECT a.idambulancia, ST_PointN(a.polyline, 1)
+FROM ambulancia a;
+
 
 SELECT ST_PointN(polyline, 1) AS punto
 FROM ambulancia;
 
 
-CREATE OR REPLACE VIEW public.vista_selects AS
-SELECT Distinct a.idambulancia, ST_Buffer(a.polyline,(a.distanciamaxdesvio*9.41090001733132E-4) / 100), ST_PointN(a.polyline, 1)
-FROM servicioemergencia g, ambulancia a 
-WHERE a.hospital_idhospital=g.hospital_idhospital;
-
-CREATE OR REPLACE VIEW public.vista_selectp AS
-SELECT a.idambulancia, ST_PointN(a.polyline, 1)
-FROM ambulancia a;
 
 -- ------------------ 11/06/2023
-SELECT *
-FROM tu_capa_wfs
+SELECT * FROM tu_capa_wfs
 WHERE ST_Within(ST_SetSRID(ST_MakePoint(longitud, latitud), tu_srid), ST_Buffer(tu_geom_buffer, tu_radio_buffer))
 
 
-SELECT Distinct a.idambulancia,ST_Buffer(a.polyline,(a.distanciamaxdesvio*9.41090001733132E-4) / 100)
+SELECT Distinct a.idambulancia, ST_Buffer(a.polyline,(a.distanciamaxdesvio*9.41090001733132E-4) / 100)
 FROM servicioemergencia g, ambulancia a 
 WHERE (a.hospital_idhospital=g.hospital_idhospital) AND 
 ST_Intersects(ST_SetSRID(st_makepoint(-56.241073608398445,-34.856779910488136), 32721),(ST_Buffer(a.polyline,(a.distanciamaxdesvio*9.41090001733132E-4) / 100)));

@@ -191,16 +191,18 @@
 
     // Escuchar el evento de mostrar el acordeón de Número
     document.getElementById("acordeonNumero").addEventListener("show.bs.collapse", function () {
+
         collapseEsquina.hide(); // Ocultar el acordeón de Esquina
     });
 
     // Obtén una referencia al botón
     var crearRecorridoBtn = document.getElementById("crearRecorridoBtn");
-    // console.log("crearRecorridoBtn" + crearRecorridoBtn.getElementById());
+    //  console.log("crearRecorridoBtn" + crearRecorridoBtn.getElementById());
     // Agrega un evento de clic al botón
     crearRecorridoBtn.addEventListener("click", function () {
-        // Realiza la solicitud al servidor Geoserver para obtener los puntos de inicio y fin
+        //  Realiza la solicitud al servidor Geoserver para obtener los puntos de inicio y fin
         obtenerPuntosInicioFin();
+        // addLayerWFSbuf();
     });
 
 </script>
@@ -208,11 +210,12 @@
 <script src="scripts/lib/js/buscadorCalles.js"></script>
 
 <script>
-    wfsSelectHospitales(); // Seleccionar Hospital (control-button)
-    initLayers(); // index invitado
-    // addLayerWFSbuf();
+    let puntoInicioCoords;
+    wfsSelectHospitales(); // controladorUsuario.js // Seleccionar Hospital (control-button)
+    initLayers(0); // indexInvitado.js
+    //  addLayerWFSbuf();
+    //  CrearMapaInvitado();
 
-    CrearMapaInvitado();
     function obtenerPuntosInicioFin() {
         // Realiza la solicitud al servidor Geoserver para obtener los puntos de inicio y fin
         var url = 'http://localhost:8081/geoserver/wfs?' +
@@ -230,13 +233,12 @@
                 // Manejar la respuesta del servidor
                 var features = response.data.features;
                 let cantidad = features.length;
-                let mensaje = "Se encontraron # " + cantidad + " servicios en su área.";
-                +
-                    features.forEach(function (feature) {
-                        var puntoInicioCoords = feature.geometry.coordinates;
-                        mensaje += "\n\t- " + feature.properties.nombre + " (" + feature.properties.nombrehospital + ") - [" + puntoInicioCoords + "]";
+                let mensaje = "Sse encontraron # " + cantidad + " servicios en su área.";
+                features.forEach(function (feature) {
+                    puntoInicioCoords = feature.geometry.coordinates;
+                    mensaje += "\n\t- " + feature.properties.nombre + " \n(" + feature.properties.nombrehospital + ") - [" + puntoInicioCoords + "]";
 
-                    });
+                });
                 alert(mensaje);
             })
             .catch(function (error) {

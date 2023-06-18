@@ -83,7 +83,7 @@ async function sugerencia(text) {
 async function buscarEsquinas() {
     var options = "";
     var urlEsq = urlBase + "/cruces?calle=" + seleccion.nomVia + "&departamento=" + seleccion.departamento + "&localidad=" + seleccion.localidad;
-    //var item;
+
     datoEsq.pop();
     try {
         const response = await fetch(urlEsq)
@@ -148,12 +148,13 @@ function elegirEsquina() {
     document.getElementById('direccion').value = seleccion.address;
     actualizarMapa();
 }
+// function actualizarMapa(Lat = null, Lng = null) {
 function actualizarMapa(Lat = null, Lng = null) {
-    var iconoPersonalizado = L.icon({
-        iconUrl: './resources/iconos/regroup.png',
-        iconSize: [32, 32], // especifica el tamaño del icono en píxeles
-        iconAnchor: [16, 32], // especifica el punto de anclaje del icono relativo a su posición
-        popupAnchor: [0, -32] // especifica el punto de anclaje del popup relativo al icono
+    let iconoPersonalizado = L.icon({
+        iconUrl: './resources/marker-icons/hospital_marker_gps.svg',
+        iconSize: [0, 0] // especifica el tamaño del icono en píxeles
+        // iconAnchor: [16, 30], // especifica el punto de anclaje del icono relativo a su posición
+        // popupAnchor: [0, -32] // especifica el punto de anclaje del popup relativo al icono
     });
     if (Lat != null && Lng != null) {
         seleccionEsq.lat = Lat;
@@ -166,14 +167,16 @@ function actualizarMapa(Lat = null, Lng = null) {
     if (circulo != null) {
         map.removeLayer(circulo);
     }
-    marcador = L.marker([seleccionEsq.lat, seleccionEsq.lng], { icon: iconoPersonalizado }).addTo(map);
+    marcador = L.marker([seleccionEsq.lat, seleccionEsq.lng], { icon: iconoPersonalizado, draggable: false }).addTo(map);
     marcador.bindPopup("<h4>Mi ubicación</h4><br>" + seleccionEsq.address + "<br>" + seleccionEsq.lat + " , " + seleccionEsq.lng);
-    marcador.display;
+    // marcador.display;
     circulo = L.circle([seleccionEsq.lat, seleccionEsq.lng], { // Circulo verde zona
-        radius: 150,
-        color: "green"
+        radius: 190,
+        color: 'green',
+        weight: 1.3,
+        opacity: 1
     }).addTo(map)
-    circulo.bindPopup("Circulo")
+    // circulo.bindPopup("Circulo")
     frmBuscar.style.display = 'none';
     btnMostrarBuscador.style.backgroundColor = '#f4f4f4';
 
@@ -184,27 +187,39 @@ function actualizarMapa(Lat = null, Lng = null) {
     };
 
     //  [-34.87325916579713], [-56.11936569213868]
+
     var Hospital = {
-        lat: -34.87966454502086, // Latitud del punto de inicio
-        lon: -56.18936569213868  // Longitud del punto de inicio
+        lat: loAmb, // Latitud del punto de inicio
+        lon: laAmb // Longitud del punto de inicio
     };
+
+    let at = puntoInicioCoords[0];
+    let oot = puntoInicioCoords[1];
+    console.log(oot);
+
     var SerEme = {
-        lat: -34.87325916579713, // Latitud del punto de fin
-        lon: -56.11936569213868  // Longitud del punto de fin
+        lat: oot, // Latitud del punto de fin
+        lon: at // Longitud del punto de fin
     };
+
+    // var SerEme = {
+    //     lat: -34.87325916579713, // Latitud del punto de fin
+    //     lon: -56.11936569213868  // Longitud del punto de fin
+    // };
     var ambulanciaMarcador = L.icon({
         iconUrl: './resources/marker-icons/ambulance.svg',
-        iconSize: [32, 32],    // especifica el tamaño del icono en píxeles
-        iconAnchor: [16, 32],  // especifica el punto de anclaje del icono relativo a su posición
-        popupAnchor: [0, -32]  // especifica el punto de anclaje del popup relativo al icono
+        iconSize: [32, 32],   // especifica el tamaño del icono en píxeles
+        // iconAnchor: [16, 30],  // especifica el punto de anclaje del icono relativo a su posición
+        //popupAnchor: [0, -32]  // especifica el punto de anclaje del popup relativo al icono
     });
     var hospitalMarcador = L.icon({
         iconUrl: './resources/marker-icons/hospital_marker_gps.svg',
-        iconSize: [32, 32], // especifica el tamaño del icono en píxeles
-        iconAnchor: [16, 32], // especifica el punto de anclaje del icono relativo a su posición
-        popupAnchor: [0, -32] // especifica el punto de anclaje del popup relativo al icono
+        iconSize: [0, 0] // especifica el tamaño del icono en píxeles
+        //   iconAnchor: [16, 32], // especifica el punto de anclaje del icono relativo a su posición
+        //  popupAnchor: [0, -32] // especifica el punto de anclaje del popup relativo al icono
     });
-    var markerAmbulancia = L.marker([SerEme.lat, SerEme.lon], { icon: ambulanciaMarcador }).addTo(map);
+    var markerAmbulancia = L.marker([SerEme.lat, SerEme.lon], { icon: ambulanciaMarcador, draggable: false }).addTo(map);
+
     crearRecorrido(Hospital, SerEme, Usuario, markerAmbulancia);
 }
 function crearRecorrido(Hospital, SerEme, Usuario, markerAmbulancia) {
@@ -219,11 +234,11 @@ function crearRecorrido(Hospital, SerEme, Usuario, markerAmbulancia) {
             console.log(e);
             var routes = e.routes;
             var summary = routes[0].summary;
-            console.log('Tiempo: ' + summary.totalTime / 60 + ' minutos; Distancia: ' + summary.totalDistance / 1000 + ' km');
+            console.log('Tiempo: ' + summary.totalTime / 40 + ' minutos; Distancia: ' + summary.totalDistance / 1000 + ' km');
             routes[0].coordinates.forEach(function (coord, index) {
                 setTimeout(() => {
                     markerAmbulancia.setLatLng(coord);
-                }, 500 * index);
+                }, 150 * index);
             });
         })
         .addTo(map);
@@ -263,6 +278,7 @@ buscarUbicacionBtn.addEventListener('click', function () {
     //     console.log("ERROR: ");
     // }
 });
+
 document.getElementById('mostrarBuscador').addEventListener('click', function () {
     if (frmBuscar.style.display === 'none') {
         btnMostrarBuscador.style.backgroundColor = 'rgba(38,71,191,1)';
@@ -272,6 +288,8 @@ document.getElementById('mostrarBuscador').addEventListener('click', function ()
         btnMostrarBuscador.style.backgroundColor = '#f4f4f4';
     }
 });
+
+
 /// Para obtener coordenadas GSP 
 function obtenerCoordenadas() { //SYA
     return new Promise((resolve, reject) => {

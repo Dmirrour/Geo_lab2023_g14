@@ -33,11 +33,11 @@ function CrearMapaInvitado() {
 
     var layerRuta = L.tileLayer.wms('http://localhost:8081/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
         title: 'Rutas',
-        layers: 'Geo_lab2023_g14PersistenceUnit:ft_00cam_dig',
-        srs: 'EPSG:32721',
+        layers: `Geo_lab2023_g14PersistenceUnit:vista_select`,
+        srs: 'EPSG:4326',
         format: 'image/png',
         transparent: true,
-        VERSION: '1.1.0'
+        version: '1.0.0'
     });
 
     var layerServicio = L.tileLayer.wms('http://localhost:8081/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
@@ -109,7 +109,6 @@ function CrearMapaInvitado() {
         }
     });
 
-
     map.addLayer(drawLayers);
     // map.addControl(drawControl);
 
@@ -123,7 +122,7 @@ function CrearMapaInvitado() {
     drawLayers.on('click', function (e) {
         let latitud = e.latlng.lat;
         let longitud = e.latlng.lng;
-        alert("Click en coordenadas: " + "\n" + "[" + latitud + "] [" + longitud + "]")
+        //   alert("Click en coordenadas: " + "\n" + "[" + latitud + "] [" + longitud + "]")
         console.log("Click en coordenadas: ")
         console.log("Latitud:", latitud) // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
         console.log("Longitud:", longitud)
@@ -136,8 +135,8 @@ function CrearMapaInvitado() {
         let userLon = -34.8503303549236;
         // alert("Click en coordenadas: " + "\n" + "[" + latitud + "] [" + longitud + "]")
         // console.log("Latitud:", latitud)//.toFixed(5)) // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
-        console.log("Evento Click" + "\n" + "Coordenadas: " + "[" + latitud + "], [" + longitud + "]")
-        console.log("sssuse" + L.Routing.waypoints.coordsToLatLng);
+        console.log("Clic coordenadas: " + "\n" + "[" + latitud + "], [" + longitud + "]")
+        //  console.log("sssuse" + L.Routing.waypoints.coordsToLatLng);
         // Distancia entre puntos
         let punto1 = { x: userLat, y: userLon };
         let punto2 = { x: longitud, y: latitud };
@@ -149,14 +148,13 @@ function CrearMapaInvitado() {
     return map;
 }
 
+
 ///////////////////////// GENERA COLOR 
 function generarColor(numero) {
-    console.log("generarColor ");
     // Calcula los componentes de color
     var rojo = (numero * 17) % 256;   // Rango de 0 a 255
     var verde = (numero * 13) % 256;  // Rango de 0 a 255
     var azul = (numero * 21) % 256;   // Rango de 0 a 255
-
     // Retorna el color hexadecimal en el formato "#RRGGBB"
     return "#" + rojo.toString(16).padStart(2, '0') +
         verde.toString(16).padStart(2, '0') +
@@ -165,15 +163,19 @@ function generarColor(numero) {
 
 
 ///////////////////////// INITLAYERS /////////////////////////
-function initLayers() {
-    let url =
+function initLayers(itemValue) {
+    console.log("function init Layer Servicio Em: " + itemValue);
+    let filter = "idhospital='" + itemValue + "'";
+    let urlSe =
         'http://localhost:8081/geoserver/wfs?' +
         'service=WFS&' +
         'request=GetFeature&' +
         'typeName=Geo_lab2023_g14PersistenceUnit:vista_se_h&' +
         'srsName=EPSG:32721&' +
         'outputFormat=application/json';
-    let urlAmbulancia =
+
+    let filter2 = "hospital_idhospital='" + itemValue + "'";
+    let urlAmbu =
         'http://localhost:8081/geoserver/wfs?' +
         'service=WFS&' +
         'request=GetFeature&' +
@@ -181,19 +183,28 @@ function initLayers() {
         'srsName=EPSG:32721&' +
         'outputFormat=application/json';
 
-    initializeLayers(url, 'layerSE'); // punto se
-    initializePolyline(urlAmbulancia, 'layerAmulancia'); // polyline
-    initializePointAmb(urlAmbulancia, 'pointAmulancia'); // punto Ambu
+    if (itemValue > 0) {
+        urlSe += '&CQL_FILTER=' + filter;
+        urlAmbu += '&CQL_FILTER=' + filter2;
+    }
+
+    initLayerServicioEm(urlSe, 'layerSE'); // punto se
+    initLayerLineAmbu(urlAmbu, 'layerAmulancia'); // polyline
+    initLayerPointAmbu(urlAmbu, 'pointAmulancia'); // punto Ambu
 }
 
-///////////////////////// INITIALIZELAYERS /////////////////////////
+
+///////////////////////// INITIALIZE LAYERS /////////////////////////
+let laSe;
+let loSe;
 let geojsonLayer; // variable global
-function initializeLayers(url, layerNames) {
-    console.log("initializeLayers");
+function initLayerServicioEm(urlSe, layerName) {
+    //  console.log("function initLayerServicioEm");
     geojsonLayer = L.geoJSON(null, {
         pointToLayer: function (feature, latlng) {
             let idh = feature.properties.idhospital * 20;
             let markerColor = generarColor(idh) || 'blue';
+
             return L.circleMarker(latlng, {
                 radius: 8,
                 fillColor: markerColor,
@@ -204,12 +215,25 @@ function initializeLayers(url, layerNames) {
             });
         }
     }).addTo(map); // Crear una capa de GeoJSON, agrega los puntos de SERVICIO EMERGENCIA 
-    fetch(url)
+
+    fetch(urlSe)
         .then(function (response) {
             return response.json();
         })
         .then(function (data) {
             geojsonLayer.addData(data);      // Agregar los datos a la capa de GeoJSON
+
+            //     let puntosArray = [];
+            //    for (let i = 0; i < data.features.length; i++) {
+            //         laSe = data.features.geometry.coordinates[0];
+            //         loSe = data.featurs.geometry.coordinates[1];
+            //         console.log(laSe + " s*e " + loSe);
+            //         puntosArray.push({
+            //             laSe,
+            //             loSe
+            //         });
+            //   }
+
             // Configurar el evento de clic en los marcadores
             geojsonLayer.eachLayer(function (layer) {
                 layer.on('click', function (e) {
@@ -228,7 +252,7 @@ function initializeLayers(url, layerNames) {
                     layer.bindPopup(popupContent, popupOptions).openPopup();
                 })
             });
-            geojsonLayer.options.layerName = layerNames;
+            geojsonLayer.options.layerName = layerName;
         })
         .catch(function (error) {
             console.error('Error:', error);
@@ -236,8 +260,8 @@ function initializeLayers(url, layerNames) {
 }
 
 let geojsonLayere;
-function initializePolyline(urlAmbulancia, layerName) {
-    fetch(urlAmbulancia)
+function initLayerLineAmbu(urlAmbu, layerName) {
+    fetch(urlAmbu)
         .then(function (response) {
             return response.json();
         })
@@ -256,15 +280,13 @@ function initializePolyline(urlAmbulancia, layerName) {
             });
         }
     }).addTo(map);
-
 }
 
-
-let geojsonLayeres;
 let loAmb;
 let laAmb;
-function initializePointAmb(urlAmbulancia, layerName) {
-    fetch(urlAmbulancia)
+let geojsonLayeres;
+function initLayerPointAmbu(urlAmbu, layerNames) {
+    fetch(urlAmbu)
         .then(function (response) {
             return response.json();
         })
@@ -277,29 +299,26 @@ function initializePointAmb(urlAmbulancia, layerName) {
                 }
             });
             geojsonLayeres.addData(data);// Agregar los datos a la capa de GeoJSON
-            //        let puntos = [];
             let puntosArray = [];
+
             for (let i = 0; i < data.features.length; i++) {
                 laAmb = data.features[i].geometry.coordinates[0][0];
                 loAmb = data.features[i].geometry.coordinates[0][1];
-                console.log(laAmb + "*" + loAmb);
+                console.log(laAmb + " * " + loAmb);
                 puntosArray.push({
                     laAmb,
                     loAmb
                 });
             }
+            geojsonLayeres.options.layerName = layerNames;
 
-
-            geojsonLayeres.options.layerName = layerName;
-            // /// POINT AMBULANCIA ////
+            //// POINT AMBULANCIA 
             let puntos = {
                 type: 'FeatureCollection',
                 features: []
             };
-            console.log(laAmb + ' | ' + loAmb);
 
-            console.log(laAmb + ' - ' + loAmb);
-            console.log(puntosArray);
+            // console.log(puntosArray);
             puntosArray.forEach(function (coordinates) {
                 let feature = {
                     type: 'Feature',
@@ -325,12 +344,55 @@ function initializePointAmb(urlAmbulancia, layerName) {
         .catch(function (error) {
             console.error('Error:', error);
         });
-
 }
+
 var iconA = L.icon({
     iconUrl: 'resources/marker-icons/ambulance.svg',
     iconSize: [30, 30],
 });
+
+
+///////////////////////// DISTANCIA /////////////////////////
+function euclideanDistancia(punto1, punto2) { // Distancia euclidiana entre dos puntos 
+    let dx = punto2.x - punto1.x;
+    let dy = punto2.y - punto1.y;
+    return Math.sqrt(dx * dx + dy * dy);
+} // L.CRS.Simple.distance(latlng1, latlng2) --> Distancia euclidiana entre dos puntos 
+
+function euclideanDistanciaMetros(punto1, punto2) { // Distancia euclidiana a metros (a partir de dos punto(x,y))
+    let latlng1 = L.latLng(punto1.y, punto1.x);
+    let latlng2 = L.latLng(punto2.y, punto2.x);
+    let distanciaEnMetros = latlng1.distanceTo(latlng2);
+    return distanciaEnMetros;
+}
+
+function addObjLatLng(latitud, longitud) { // Crea objeto latlng
+    let addObjLatLng = L.GeoJSON.coordsToLatLng([latitud, longitud]);
+    return addObjLatLng
+}
+
+function euclideanDistanciaMetrosObj(latlng1, latlng2) { // Distancia euclidiana a metros (a partir de dos obj latlng)
+    return latlng1.distanceTo(latlng2);
+}
+
+function removerLayer() {
+    map.removeLayer(geojsonLayer);
+}
+
+// Elimina el marcador del mapa
+function BorrarMarcadorALtaSE() {
+    console.log("borrando marcador");
+    this.map.removeLayer(this.markerSE);
+}
+
+
+
+
+
+
+
+
+
 
 
 
@@ -376,41 +438,3 @@ var iconA = L.icon({
 //         });
 //     }
 // }).addTo(map);
-
-
-///////////////////////// DISTANCIA /////////////////////////
-function euclideanDistancia(punto1, punto2) { // Distancia euclidiana entre dos puntos 
-    let dx = punto2.x - punto1.x;
-    let dy = punto2.y - punto1.y;
-    return Math.sqrt(dx * dx + dy * dy);
-} // L.CRS.Simple.distance(latlng1, latlng2) --> Distancia euclidiana entre dos puntos 
-
-function euclideanDistanciaMetros(punto1, punto2) { // Distancia euclidiana a metros (a partir de dos punto(x,y))
-    let latlng1 = L.latLng(punto1.y, punto1.x);
-    let latlng2 = L.latLng(punto2.y, punto2.x);
-    let distanciaEnMetros = latlng1.distanceTo(latlng2);
-    return distanciaEnMetros;
-}
-
-function addObjLatLng(latitud, longitud) { // Crea objeto latlng
-    let addObjLatLng = L.GeoJSON.coordsToLatLng([latitud, longitud]);
-    return addObjLatLng
-}
-
-function euclideanDistanciaMetrosObj(latlng1, latlng2) { // Distancia euclidiana a metros (a partir de dos obj latlng)
-    return latlng1.distanceTo(latlng2);
-}
-
-
-// Elimina el marcador del mapa
-function BorrarMarcadorALtaSE() {
-    console.log("borrando marcador");
-    this.map.removeLayer(this.markerSE);
-}
-
-function removerLayer() {
-    map.removeLayer(geojsonLayer);
-    map.removeLayer(geojsonLayeres);
-    map.removeLayer(geojsonLayere);
-
-}
