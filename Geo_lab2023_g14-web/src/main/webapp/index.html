@@ -210,10 +210,10 @@
     obtenerPuntosInicioFin();
     wfsSelectHospitales(); // controladorUsuario.js // Seleccionar Hospital (control-button)
     initLayers(0); // indexInvitado.js
-    addLayerWFSbuf();
+    //  addLayerWFSbuf();
     //  CrearMapaInvitado();
 
-    let puntoInicioCoords = [];
+    let puntoInicioCoords;
     function obtenerPuntosInicioFin() {
         let alaAmb;
         let aloAmb;
@@ -233,19 +233,17 @@
                 // Manejar la respuesta del servidor
                 let features = response.data.features;
                 let cantidad = features.length;
-                // let mensaje = "Se encontraron # " + cantidad + " servicios en su área.";
+                let mensaje = "Se encontraron # " + cantidad + " servicios en su área.";
 
                 features.forEach(function (feature) {
-
                     //  for (let i = 0; i < cantidad; i++) {
-
                     // let alaAmb = features[i].geometry.coordinates[0];
                     // let aloAmb = features[i].geometry.coordinates[1];
-                    puntoInicioCoords = feature.geometry.coordinates;
                     // puntoInicioCoords.push({
                     //     alaAmb,
                     //     aloAmb
                     // });
+                    puntoInicioCoords = feature.geometry.coordinates;
                     mensaje += puntoInicioCoords;
                     //   console.log("InicioFinc: " + puntoInicioCoords[0] + " " + " " + puntoInicioCoords.aloAmb);
                     //   mensaje += "\n\t- " + feature.properties.nombre + " \n(" + feature.properties.nombrehospital + ") - [" + puntoInicioCoords + "]";

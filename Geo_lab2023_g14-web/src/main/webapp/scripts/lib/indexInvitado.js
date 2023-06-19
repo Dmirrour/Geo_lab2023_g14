@@ -164,7 +164,7 @@ function generarColor(numero) {
 
 ///////////////////////// INITLAYERS /////////////////////////
 function initLayers(itemValue) {
-    console.log("function init Layer Servicio Em: " + itemValue);
+    // console.log("function init Layer Servicio Em: " + itemValue);
 
     let filter = "idhospital='" + itemValue + "'";
     let urlSe =
@@ -292,7 +292,7 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
             for (let i = 0; i < data.features.length; i++) {
                 laAmb = data.features[i].geometry.coordinates[0][0];
                 loAmb = data.features[i].geometry.coordinates[0][1];
-            //    console.log(laAmb + " * " + loAmb);
+                //    console.log(laAmb + " * " + loAmb);
                 puntosArray.push({
                     laAmb,
                     loAmb
