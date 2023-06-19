@@ -5,9 +5,9 @@
 <h:head>
 <link rel="stylesheet" href="https://unpkg.com/primeflex@^3/primeflex.css"/>
 </h:head>
-<h:form id="frmMODSE" prependId="false">
-    <p:dialog id="dialogMODSE" header="Mofiicar servicio de emergencia" widgetVar="dlg4" width="600px" minWidth="400" minHeight="400" draggable="false" styleClass="my-dialog-style" showEffect="fade" onHide="mapaAdmin.BorrarMarcadorALtaSE()">
-        <f:view>
+<p:dialog id="dialogMODSE" header="Mofiicar servicio de emergencia" widgetVar="dlg4" width="600px" minWidth="400" minHeight="400" draggable="false" styleClass="my-dialog-style" showEffect="fade" onHide="mapaAdmin.BorrarMarcadorALtaSE()">
+    <f:view>
+        <h:form id="frmMODSE" prependId="false">
             <p:card styleClass="flex justify-content-center">
                 <p:growl id="msg" >
                     <p:autoUpdate />
@@ -86,9 +86,9 @@
                <!-- <p:inputText id="frmMODSElongitud" name="frmMODSElongitud" value="#{servicioEBean.longitud}" class="col-md-6 col-sm-12" required="true" style="display: block;" requiredMessage="La longitud es requerida" />
                 <p:inputText id="frmMODSElatitud" name="frmMODSElatitud" value="#{servicioEBean.latitud}" class="col-md-6 col-sm-12" required="true" style="display: block;" requiredMessage="La latitud es requerida" />-->
             </p:card>
-        </f:view>
-    </p:dialog>
-</h:form>
+        </h:form>
+    </f:view>
+</p:dialog>
 <!--<script>
     function tuFuncionJS() {
         // Aquí puedes realizar las acciones que deseas ejecutar en JavaScript

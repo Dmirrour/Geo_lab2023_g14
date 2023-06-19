@@ -2,9 +2,10 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui">
-    <h:form id="formEA" class="frmFlotante">
-        <p:dialog styleClass="ancho80" header="Eliminar Ambulancia" widgetVar="dlg7" showEffect="fade" modal="true">
-            <f:view>
+
+    <p:dialog styleClass="ancho80" header="Eliminar Ambulancia" widgetVar="dlg7" showEffect="fade" modal="true">
+        <f:view>
+            <h:form id="formEA" class="frmFlotante">
                 <p:card styleClass="flex justify-content-center">
                     <p:dataTable id="tableA" value="#{adminBean.ambulanciaDTOS}" var="ambu" scrollable="true" scrollHeight="400px">
                         <p:column headerText="Id" styleClass="d-none d-md-table-cell">
@@ -25,7 +26,7 @@
                         </p:column>
                     </p:dataTable>
                 </p:card>
-            </f:view>
-        </p:dialog>
-    </h:form>
+            </h:form>
+        </f:view>
+    </p:dialog>
 </html>

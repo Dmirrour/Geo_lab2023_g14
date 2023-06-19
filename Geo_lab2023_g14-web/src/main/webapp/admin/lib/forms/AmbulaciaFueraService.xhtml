@@ -5,9 +5,9 @@
 <h:head>
    <link rel="stylesheet" href="https://unpkg.com/primeflex@^3/primeflex.css"/>
 </h:head>
-<h:form id="formPA" name="formPA">
-    <p:dialog id="ambuOut" header="Ambulancias Fuera de rango" widgetVar="dlg9" width="600px" minWidth="400" minHeight="400" draggable="false" styleClass="my-dialog-style" showEffect="fade">
-       <f:view>
+<p:dialog id="ambuOut" header="Ambulancias Fuera de rango" widgetVar="dlg9" width="600px" minWidth="400" minHeight="400" draggable="false" styleClass="my-dialog-style" showEffect="fade">
+   <f:view>
+       <h:form id="formPA" name="formPA">
            <p:card styleClass="flex justify-content-center">
                <h:outputText value="Las siguientes ambulancias se quedarán sin servicio, aumente el buffer de éstas o elimínelas" />
                <p:dataTable value="#{servicioEBean.ambuPejudicadas}"
@@ -40,7 +40,7 @@
                    <p:commandButton value="Crear" action="#{adminBean.modBuffer()}" update="messages" styleClass="ui-button-raised ui-button-success ui-button-flat" class="col-md-6" onclick="PF('dlg9').hide()" />
                </div>
            </p:card>
-       </f:view>
-    </p:dialog>
-</h:form>
+       </h:form>
+   </f:view>
+</p:dialog>
 </html>

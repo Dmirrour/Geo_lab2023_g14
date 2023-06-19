@@ -85,9 +85,6 @@ public class AdminBean implements Serializable {
             conn = DriverManager.getConnection(url, usuario, contraseña);
             List<ServicioEmergencia> servasocioados= new ArrayList<>();
             Statement stmt = conn.createStatement();
-
-
-
             //alta logicaa
             Ambulancia a = Ambulancia.builder()
                     .idCodigo(codigo)
@@ -99,6 +96,7 @@ public class AdminBean implements Serializable {
             System.out.println(aDTO);
             System.out.println("ATENCION: si no guarda linestring en la vista, verificar el archivo AdminBEan.java, metodo addAmbulancia(); poner la contraseña correcta para su equipo.");
             System.out.println(des);
+            System.out.println("verificar reco antes de enviar query: "+rec);
 
             ResultSet resultSet = stmt.executeQuery("SELECT se.* FROM servicioemergencia se " +
                     "JOIN (SELECT ST_Buffer(ST_SetSRID(ST_GeomFromText('"+ rec +"'), 32721)," + des +") AS buffer_geom " +

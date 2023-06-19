@@ -3,9 +3,10 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui">
 
-    <h:form id="formEH" class="frmFlotante">
-        <p:dialog styleClass="ancho80" header="Eliminar Hospital" widgetVar="dlg8" showEffect="fade" modal="true">
-            <f:view>
+
+    <p:dialog styleClass="ancho80" header="Eliminar Hospital" widgetVar="dlg8" showEffect="fade" modal="true">
+        <f:view>
+            <h:form id="formEH" class="frmFlotante">
                 <p:card styleClass="flex justify-content-center">
                     <div class="row m-auto">
                     <div class="col-12">
@@ -62,7 +63,7 @@
                     </div>
                     </div>
                 </p:card>
-            </f:view>
-        </p:dialog>
-    </h:form>
+            </h:form>
+        </f:view>
+    </p:dialog>
 </html>
