@@ -207,14 +207,16 @@
 <script src="scripts/lib/js/buscadorCalles.js"></script>
 
 <script>
-    obtenerPuntosInicioFin(); // falta interaccion btnsolicitar+btnubicacion+seleccionarhospital
+    obtenerPuntosInicioFin();
     wfsSelectHospitales(); // controladorUsuario.js // Seleccionar Hospital (control-button)
     initLayers(0); // indexInvitado.js
-    //  addLayerWFSbuf();
+    addLayerWFSbuf();
     //  CrearMapaInvitado();
 
-    let puntoInicioCoords;
+    let puntoInicioCoords = [];
     function obtenerPuntosInicioFin() {
+        let alaAmb;
+        let aloAmb;
         // Realiza la solicitud al servidor Geoserver para obtener los puntos de inicio y fin
         var url = 'http://localhost:8081/geoserver/wfs?' +
             'service=WFS&' +
@@ -229,18 +231,32 @@
         })
             .then(function (response) {
                 // Manejar la respuesta del servidor
-                var features = response.data.features;
+                let features = response.data.features;
                 let cantidad = features.length;
-                let mensaje = "Sse encontraron # " + cantidad + " servicios en su área.";
+                // let mensaje = "Se encontraron # " + cantidad + " servicios en su área.";
+
                 features.forEach(function (feature) {
+
+                    //  for (let i = 0; i < cantidad; i++) {
+
+                    // let alaAmb = features[i].geometry.coordinates[0];
+                    // let aloAmb = features[i].geometry.coordinates[1];
                     puntoInicioCoords = feature.geometry.coordinates;
-                    mensaje += "\n\t- " + feature.properties.nombre + " \n(" + feature.properties.nombrehospital + ") - [" + puntoInicioCoords + "]";
+                    // puntoInicioCoords.push({
+                    //     alaAmb,
+                    //     aloAmb
+                    // });
+                    mensaje += puntoInicioCoords;
+                    //   console.log("InicioFinc: " + puntoInicioCoords[0] + " " + " " + puntoInicioCoords.aloAmb);
+                    //   mensaje += "\n\t- " + feature.properties.nombre + " \n(" + feature.properties.nombrehospital + ") - [" + puntoInicioCoords + "]";
+                    // }
                 });
-                // alert(mensaje);
+                //  alert(mensaje);
             })
             .catch(function (error) {
                 console.error("Error al obtener los puntos de inicio y fin:", error);
             });
     }
 
+   // obtenerPuntosInicioFin(); // falta interaccion btnsolicitar+btnubicacion+seleccionarhospital
 </script>

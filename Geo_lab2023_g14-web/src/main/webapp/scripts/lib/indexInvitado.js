@@ -256,7 +256,7 @@ function initLayerLineAmbu(urlAmbu, layerName) {
         .then(function (data) {
             geojsonLayere.addData(data);// Agregar los datos a la capa de GeoJSON
             geojsonLayere.options.layerName = layerName;
-            console.log(laAmb + ' ' + loAmb);
+            //      console.log(laAmb + ' ' + loAmb);
         })
         .catch(function (error) {
             console.error('Error:', error);
@@ -282,7 +282,7 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
             geojsonLayeres = L.geoJSON(data, {
                 pointToLayer: function (feature, latlng) {
                     return L.marker(latlng, {
-                        icon: iconA
+                        // icon: iconA
                     });
                 }
             });
@@ -292,7 +292,7 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
             for (let i = 0; i < data.features.length; i++) {
                 laAmb = data.features[i].geometry.coordinates[0][0];
                 loAmb = data.features[i].geometry.coordinates[0][1];
-                console.log(laAmb + " * " + loAmb);
+            //    console.log(laAmb + " * " + loAmb);
                 puntosArray.push({
                     laAmb,
                     loAmb
@@ -335,10 +335,9 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
 }
 
 var iconA = L.icon({
-    iconUrl: 'resources/marker-icons/ambulance.svg',
-    iconSize: [30, 30],
+    iconUrl: './resources/marker-icons/ambulance.png',
+    iconSize: [22, 22]
 });
-
 
 ///////////////////////// DISTANCIA /////////////////////////
 function euclideanDistancia(punto1, punto2) { // Distancia euclidiana entre dos puntos 

@@ -5,7 +5,7 @@ let wfs;
 let wfse;
 let urlHospi;
 function wfsSelectHospitales() {
-    console.log("wfs Select Hospitales");
+    //  console.log("wfs Select Hospitales");
     let hospitalesItems = [];
     let urlHospi =
         'http://localhost:8081/geoserver/wfs?' +
@@ -22,7 +22,7 @@ function wfsSelectHospitales() {
             for (var i = 0; i < features.length; i++) {
                 var item = features[i].properties;
                 var idH = i + 1;
-              //  console.log(idH + " - " + item.nombrehospital);
+                //  console.log(idH + " - " + item.nombrehospital);
                 hospitalesItems.push({ label: item.nombrehospital, value: idH });
             }
             let t = hospitalesItems.length + 1;
@@ -48,9 +48,9 @@ function wfsSelectHospitales() {
 
                         obtenerCoordenadas()
                             .then(function (coor) {
-                                // console.log('Longitud obtenerCoordenadas: ', coor.longitud);
-                                // console.log('Latitud obtenerCoordenadas: ', coor.latitud);
                                 intersectpoint(coor.latitud, coor.longitud, newItemValue);
+                                console.log('Long obtener Coordenadas: ', coor.longitud);
+                                console.log('Lat obtener Coordenadas: ', coor.latitud);
                             })
                             .catch(function (error) {
                                 console.error('Error al obtener las coordenadas:', error);
@@ -67,7 +67,8 @@ function wfsSelectHospitales() {
 
 /////////////////// Intersect POINT ///////////////////
 function intersectpoint(la, lo, newItemValue) {
-    // console.log("Intersect point:  ", lo, "  ", la, "  ", newItemValue);
+    console.log("Intersect point:  ", lo, "  ", la, "  ", newItemValue);
+
     let geojsonLayer = L.geoJSON(null, {
         style: {
             color: 'red',
@@ -75,23 +76,24 @@ function intersectpoint(la, lo, newItemValue) {
             opacity: 1
         },
     }).addTo(map);
+
     let urlIntersect = 'http://localhost:8081/geoserver/wfs?' +
         'service=WFS&' +
         'request=GetFeature&' +
         'typeName=Geo_lab2023_g14PersistenceUnit:vista_buff_cobertura&' +
         'outputFormat=application/json&' +
-        'CQL_FILTER=INTERSECTS(buffer_zona_cobertura,POINT(' + lo + ' ' + la + '))';
+        'CQL_FILTER=INTERSECTS(buffer_zona_cobertura,POINT(' + lo + ' ' + la + ')';
+
     fetch(urlIntersect)
         .then(function (response) {
             return response.json();
         })
         .then(function (data) {
             geojsonLayer.addData(data);
-
             data.features.forEach(function (feature) {
                 idhos = feature.properties.hospital_idhospital;
-                console.log("newItemValue: ", newItemValue);
-                console.log("idhos", idhos);
+                //       console.log("newItemValue: ", newItemValue);
+                // console.log("idhos", idhos);
             });
         })
         .catch(function (error) {
@@ -102,39 +104,51 @@ function intersectpoint(la, lo, newItemValue) {
 
 
 /////////////////// addLayerWFSbuf ///////////////////
-// function addLayerWFSbuf() {
-//     let geojsonLayer = L.geoJSON(null, {
-//         style: {
-//             color: 'gray',
-//             weight: 1.4,
-//             opacity: 1
-//         },
-//     }).addTo(this.map);
-//     let url =
-//         'http://localhost:8081/geoserver/wfs?' +
-//         'service=WFS&' +
-//         'request=GetFeature&' +
-//         //  'typeName=Geo_lab2023_g14PersistenceUnit:vista_buff_cobertura&' +
-//         'srsName=EPSG:32721&' +
-//         'outputFormat=application/json';
-//     fetch(url)
-//         .then(function (response) {
-//             return response.json();
-//         })
-//         .then(function (data) {
-//             geojsonLayer.addData(data);
-//             // Crear un buffer alrededor de las líneas
-//             /*
-//             let bufferedLayer = L.geoJSON(turf.buffer(data, 100, { units: 'meters' }), {
-//                 style: {
-//                     color: 'blue',
-//                     weight: 2,
-//                     opacity: 0.7
-//                 }
-//             }).addTo(this.map);
-//             */
-//         })
-//         .catch(function (error) {
-//             console.error('Error:', error);
-//         });
-// }
+function addLayerWFSbuf() {
+    let geojsonLayer = L.geoJSON(null, {
+        style: {
+            color: 'gray',
+            weight: 1.4,
+            opacity: 1
+        },
+    }).addTo(this.map);
+    let url =
+        'http://localhost:8081/geoserver/wfs?' +
+        'service=WFS&' +
+        'request=GetFeature&' +
+        'typeName=Geo_lab2023_g14PersistenceUnit:vista_buff_cobertura&' +
+        'srsName=EPSG:32721&' +
+        'outputFormat=application/json';
+    fetch(url)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            geojsonLayer.addData(data);
+            // Crear un buffer alrededor de las líneas
+            /*
+            let bufferedLayer = L.geoJSON(turf.buffer(data, 100, { units: 'meters' }), {
+                style: {
+                    color: 'blue',
+                    weight: 2,
+                    opacity: 0.7
+                }
+            }).addTo(this.map);
+            */
+        })
+        .catch(function (error) {
+            console.error('Error:', error);
+        });
+}
+
+
+
+    //  let filter = "idambulancia='" + newItemValue + "'";
+   // let urlIntersect =
+    //     'http://localhost:8081/geoserver/wfs?' +
+    //     'service=WFS&' +
+    //     'request=GetFeature&' +
+    //     'typeName=Geo_lab2023_g14PersistenceUnit:vista_buff_cobertura&' +
+    //     'srsName=EPSG:32721&' +
+    //     'outputFormat=application/json';
+    // urlIntersect += '&CQL_FILTER=' + filter;

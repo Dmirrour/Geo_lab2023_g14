@@ -6293,7 +6293,7 @@
 
 		options: {
 			iconUrl: '../images/marker-icon.png',
-			iconRetinaUrl: '../images/marker-icon-2x.png',
+			iconRetinaUrl: '../images/marker-icon.png',
 			shadowUrl: '../images/marker-shadow.png',
 			iconSize: [25, 41],
 			iconAnchor: [12, 41],
@@ -6612,14 +6612,15 @@
 			if (L.Handler.MarkerDrag) {
 				var draggable = this.options.draggable;
 				if (this.dragging) {
-					draggable = this.dragging.enabled();
-					this.dragging.disable();
+					//	draggable = this.dragging.disable();
+					//	this.dragging.disable();
 				}
 
-				this.dragging = new L.Handler.MarkerDrag(this);
+				//	this.dragging = new L.Handler.MarkerDrag(this);  // se deshabilita para no que no permita modificar recorrido
 
 				if (draggable) {
-					this.dragging.enable();
+					// se deshabilita dragging en los maker del recorrido 
+					this.dragging.disable();  // SGL
 				}
 			}
 		},
@@ -8352,7 +8353,7 @@
 			// className: '',
 
 			// Option inherited from "Interactive layer" abstract class
-			interactive: true
+			interactive: false
 		},
 
 		beforeAdd: function (map) {
