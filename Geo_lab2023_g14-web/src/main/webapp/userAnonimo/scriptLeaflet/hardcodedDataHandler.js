@@ -1,44 +1,55 @@
 function hardcodedDataPoint() {
 
     ///////////////////////// ADD GEOMETRY /////////////////////////
-    var puntos = {
+    var lineStr = {
         "type": "FeatureCollection",
-        "features": [{
-            "type": "Feature",
-            "geometry": {
-                "type": "LineString",
-                "coordinates": [
-                    [-56.0, 0.0],
-                    [-57.0, 1.0],
-                    [-58.0, 0.0],
-                    [-61.0, 1.0]
-                ]
-            },
-            "properties": {
-                "prop0": "value0",
-                "prop1": 0.0
-            }
-        }, {
-            "type": "Feature",
-            "geometry": {
-                "type": "Polygon",
-                "coordinates": [
-                    [[-66.0, -20.0],
-                    [-67.0, -20.0],
-                    [-67.0, -21.0],
-                    [-66.0, -21.0],
-                    [-66.0, -20.0]]
-                ]
-            },
-            "properties": {
-                "prop0": "value0",
-                "prop1": {
-                    "this": "that"
+        "features": [
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "LineString",
+                    "coordinates": [
+                        [-56.0, 0.0],
+                        [-57.0, 1.0],
+                        [-58.0, 0.0],
+                        [-61.0, 1.0]
+                    ]
+                },
+                "properties": {
+                    "prop0": "value0",
+                    "prop1": 0.0
+                }
+            }]
+    }
+    L.geoJSON(lineStr).addTo(map);
+
+
+    /// POLIGONO
+    var polygon = {
+        "type": "FeatureCollection",
+        "features": [
+            {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": [
+                        [[-66.0, -20.0],
+                        [-67.0, -20.0],
+                        [-67.0, -21.0],
+                        [-66.0, -21.0],
+                        [-66.0, -20.0]]
+                    ]
+                },
+                "properties": {
+                    "prop0": "value0",
+                    "prop1": {
+                        "this": "that"
+                    }
                 }
             }
-        }]
+        ]
     }
-    //  L.geoJSON(puntos).addTo(map);
+    L.geoJSON(polygon).addTo(map);
 
     ///////////////////////// ADD POINT 2 /////////////////////////
     var puntos2 = {
@@ -79,7 +90,7 @@ function hardcodedDataPoint() {
     // marcador = L.marker([-34.8797018070320851, -56.262557241497211], {
     marcador = L.marker([-34.8503303549236, -56.185222811229534], {
         icon: iconAnonimo
-    }).addTo(map)
+    })//.addTo(map)
     marcador.bindPopup("Usuario Anonimo")
 
 
@@ -87,7 +98,7 @@ function hardcodedDataPoint() {
     circulo = L.circle([-34.8503303549236, -56.185222811229534], { // Circulo zona personalizado
         radius: 1300,
         color: "green"
-    }).addTo(map)
+    })//.addTo(map)
     //circulo.bindPopup("Circulo")
 }
 

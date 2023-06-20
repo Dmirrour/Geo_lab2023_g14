@@ -147,10 +147,12 @@ L.Control.Select = L.Control.extend({
 
       case "GROUP_OPEN":
         newState.open = data.item.value;
+        console.log("x");
         break;
 
       case "GROUP_CLOSE":
         newState.open = data.item.parent;
+        console.log("x");
         break;
 
       case "MENU_OPEN":

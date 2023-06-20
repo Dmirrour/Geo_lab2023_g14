@@ -133,19 +133,22 @@ L.Control.Select = L.Control.extend({
         break;
 
       case "GROUP_OPEN":
-        //   console.log("Seleccionado:");
+        //  console.log("Seleccionado:");
         newState.open = data.item.value;
         break;
 
       case "GROUP_CLOSE":
+
         newState.open = data.item.parent;
         break;
 
       case "MENU_OPEN":
+        console.log("Seleccionado:");
         newState.open = "top";
         break;
 
       case "MENU_CLOSE":
+        console.log("s:");
         newState.open = false;
         break;
     }

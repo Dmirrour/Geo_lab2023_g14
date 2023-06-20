@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Inicio</title>
+    <title>AAAS</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="scripts/lib/ol-v6.13.0/ol.css">
@@ -16,12 +16,13 @@
     <link rel="stylesheet" href="scripts/lib/ol-ext-v3.2.23/font-awesome.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script src="admin/lib/js/leaflet-src.js"></script>
     <script src="admin/lib/js/leaflet.draw-src.js"></script>
     <script src="admin/lib/js/leaflet.draw-shapefile.js"></script>
-
 
     <script src="userAnonimo/scriptLeaflet/leaflet.control.select.js"></script>
     <script src="userAnonimo/scriptLeaflet/leaflet.control.select.src.js"></script>
@@ -46,7 +47,6 @@
     <link rel="stylesheet" href="scripts/lib/css/style.css" />
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Turf.js/0.0.124/turf.min.js" integrity="sha512-jpnZ8xGKbS7L9S6d5fk/zDVgF6OoVKLMoEliLxf24BRX+orWhxqJuUcoM+vGmOaozS9dD9ABjQZKAgjjcwTndA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
 </head>
 
 <body>
@@ -169,9 +169,8 @@
                 </div>
             </form>
         </div>
-
-        <button id="crearRecorridoBtn">✓</button>
-
+        <!-- <button id="crearRecorridoBtn">R</button> -->
+        <!-- <button id="bufferBtn2">B</button> -->
         <div id="map-container">
             <div id="map"></div>
         </div>
@@ -196,19 +195,27 @@
 
     // Obtén una referencia al botón
     var crearRecorridoBtn = document.getElementById("crearRecorridoBtn");
-    //  console.log("crearRecorridoBtn" + crearRecorridoBtn.getElementById());
-    // Agrega un evento de clic al botón
     crearRecorridoBtn.addEventListener("click", function () {
         obtenerPuntosInicioFin(); //  Realiza la solicitud al servidor Geoserver para obtener los puntos de inicio y fin
+    });
+
+    //////// BUFFER
+    var bufferBtn2 = document.getElementById("bufferBtn2");
+    bufferBtn2.addEventListener("click", function () {
+        intersectpoint();
+        limpiarMapa();
+        //addLayerWFSbuf();
+        //intersectpoint();
     });
 </script>
 
 <script src="scripts/lib/js/buscadorCalles.js"></script>
 
 <script>
-    // obtenerPuntosInicioFin();
-    wfsSelectHospitales(); // controladorUsuario.js // Seleccionar Hospital (control-button)
-    // selectControl();
+    // hardcodedDataPoint();
+    //obtenerPuntosInicioFin();
+    //  wfsSelectHospitales(); // controladorUsuario.js // Seleccionar Hospital (control-button)
+    selectCtrlInicio();
     initLayers(0); // indexInvitado.js
     // CrearMapaInvitado();
     // addLayerWFSbuf();
@@ -231,29 +238,37 @@
         })
             .then(function (response) { // Manejar la respuesta del servidor
                 let features = response.data.features;
-                let cantidad = features.length;
+                let cantidad = features.lenght;
                 let mensaje = "Se encontraron # " + cantidad + " servicios en su área.";
-
                 features.forEach(function (feature) {
-                    //  for (let i = 0; i < cantidad; i++) {
-                    // let alaAmb = features[i].geometry.coordinates[0];
-                    // let aloAmb = features[i].geometry.coordinates[1];
-                    // puntoInicioCoords.push({
-                    //     alaAmb,
-                    //     aloAmb
-                    // });
                     puntoInicioCoords = feature.geometry.coordinates;
+                    console.log("puntoInicioCoords " + puntoInicioCoords);
                     mensaje += puntoInicioCoords;
-                    //   console.log("InicioFinc: " + puntoInicioCoords[0] + " " + " " + puntoInicioCoords.aloAmb);
-                    //   mensaje += "\n\t- " + feature.properties.nombre + " \n(" + feature.properties.nombrehospital + ") - [" + puntoInicioCoords + "]";
-                    // }
                 });
                 //  alert(mensaje);
             })
             .catch(function (error) {
                 console.error("Error al obtener los puntos de inicio y fin:", error);
             });
+
+        //     features.forEach(function (feature) {
+        //         //   for (let i = 0; i < cantidad; i++) {
+        //         let alaAmb = features.geometry.coordinates[0];
+        //         let aloAmb = features.geometry.coordinates[1];
+        //         puntoInicioCoords.push({alaAmb,aloAmb});
+        //         console.log("puntoInicioCoords " + puntoInicioCoords);
+        //         puntoInicioCoords = feature.geometry.coordinates;
+        //         mensaje = puntoInicioCoords;
+        //         //   console.log("InicioFinc: " + puntoInicioCoords[0] + " " + " " + puntoInicioCoords.aloAmb);
+        //         // mensaje += "\n\t- " + feature.properties.nombre + " \n(" + feature.properties.nombrehospital + ") - [" + puntoInicioCoords + "]";
+        //         //   }
+        //     });
+        //     //  alert(mensaje);
+        // })
+        // .catch(function (error) {
+        //     console.error("Error al obtener los puntos de inicio y fin:", error);
+        // });
     }
 
-   // obtenerPuntosInicioFin();
+   //obtenerPuntosInicioFin();
 </script>

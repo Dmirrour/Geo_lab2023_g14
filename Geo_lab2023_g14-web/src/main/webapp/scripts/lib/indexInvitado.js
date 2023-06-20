@@ -9,9 +9,7 @@ function CrearMapaInvitado() {
     var google = L.tileLayer('https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}', {
         attribution: '© Grupo 14'
     });
-    ///////////////////////// FIN MAPAS /////////////////////////
-
-
+   
     ///////////////////////// CAPAS WMS /////////////////////////
     var layerEjes = L.tileLayer.wms('http://localhost:8081/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
         title: 'ft_01_ejes',
@@ -34,7 +32,7 @@ function CrearMapaInvitado() {
     var layerRuta = L.tileLayer.wms('http://localhost:8081/Geo_lab2023_g14PersistenceUnit/geoserver/wms?', {
         title: 'vista_a_rec',
         layers: 'Geo_lab2023_g14PersistenceUnit:vista_a_rec',
-        srs: 'EPSG:4326',
+        srs: 'EPSG:32721',
         format: 'image/png',
         transparent: true,
         version: '1.1.0'
@@ -58,16 +56,6 @@ function CrearMapaInvitado() {
         transparent: true,
         VERSION: '1.1.0'
     });
-
-    // var layerAll = L.tileLayer.wms('http://localhost:8081/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
-    //     title: 'layerAll',
-    //     layers: 'Geo_lab2023_g14PersistenceUnit:ft01_ejes,ft_depto,servicioemergencia,ambulancia',
-    //     srs: 'EPSG:32721',
-    //     format: 'image/png',
-    //     transparent: true,
-    //     VERSION: '1.1.0'
-    // });
-    ///////////////////////// FIN CAPAS WMS  /////////////////////////
 
 
     ///////////////////////// OPCIONES DE MAPA /////////////////////////
@@ -161,7 +149,7 @@ function generarColor(numero) {
 }
 
 
-///////////////////////// INITLAYERS /////////////////////////
+///////////////////////// INITIALIZE LAYERS /////////////////////////
 function initLayers(itemValue) {
     // console.log("function init Layer Servicio Em: " + itemValue);
     let filter = "idhospital='" + itemValue + "'";
@@ -192,7 +180,6 @@ function initLayers(itemValue) {
     initLayerPointAmbu(urlAmbu, 'pointAmulancia'); // point Ambu
 }
 
-///////////////////////// INITIALIZE LAYERS /////////////////////////
 
 //////////////////////// SERVICIO EMERGENCIA ///////////////////////
 let laSe;
@@ -200,7 +187,7 @@ let loSe;
 let geojsonLayer;
 function initLayerServicioEm(urlSe, layerName) {
     // console.log("function initLayerServicioEm");
-    geojsonLayer = L.geoJSON(null, {
+     geojsonLayer = L.geoJSON(null, {
         pointToLayer: function (feature, latlng) {
             let idh = feature.properties.idhospital * 20;
             let markerColor = generarColor(idh) || 'blue';

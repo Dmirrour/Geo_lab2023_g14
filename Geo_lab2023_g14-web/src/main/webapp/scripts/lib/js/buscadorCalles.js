@@ -149,7 +149,7 @@ function elegirEsquina() {
     actualizarMapa();
 }
 // function actualizarMapa(Lat = null, Lng = null) {
-function actualizarMapa(Lat = null, Lng = null) {
+function actualizarMapa(Lat, Lng) {
     let iconoPersonalizado = L.icon({
         iconUrl: 'resources/marker-icons/marker-iconnaranjaf.png',
         iconSize: [22, 36], // especifica el tamaño del icono en píxeles
@@ -186,17 +186,16 @@ function actualizarMapa(Lat = null, Lng = null) {
         lat: seleccionEsq.lat,
         lon: seleccionEsq.lng
     };
-
+    // let alaAmb = -34.8588634;
+    // let aloAmb = -56.2194844;
     // var Usuario = {
-    //     lat: -34.86860943844723,
-    //     lon: -56.19680643081666
-    // };
-    //  -34.86860943844723], [-56.19680643081666]
+    //     lat: -34.8588634,
+    //     lon: -56.2194844
+    // }; //-34.86860943844723], [-56.19680643081666]
 
-    var Hospital = {
+    var Ambulancia = {
         lat: loAmb, // Latitud del punto de inicio
         lon: laAmb // Longitud del punto de inicio
-
     };
 
     let at = puntoInicioCoords[0];
@@ -206,7 +205,7 @@ function actualizarMapa(Lat = null, Lng = null) {
         lon: at // Longitud del punto de fin
     };
 
-    console.log(SerEme.lat + " :-: " + SerEme.lot);
+    console.log(SerEme.lat + " :-: " + SerEme.lon);
 
     // var SerEme = {
     //     lat: -34.87325916579713, // Latitud del punto de fin
@@ -219,21 +218,24 @@ function actualizarMapa(Lat = null, Lng = null) {
         //popupAnchor: [0, -32]  // especifica el punto de anclaje del popup relativo al icono
     });
 
-    var hospitalMarcador = L.icon({
-        //  iconUrl: 'resources/marker-icons/marken-icon.png',
-        //  iconSize: [30, 30], // especifica el tamaño del icono en píxeles
-        iconAnchor: [12, 35], // especifica el punto de anclaje del icono relativo a su posición
-        popupAnchor: [0, -32] // especifica el punto de anclaje del popup relativo al icono
-    });
+    // var AmbulanciaMarcador = L.icon({
+    //     //  iconUrl: 'resources/marker-icons/marken-icon.png',
+    //     //  iconSize: [30, 30], // especifica el tamaño del icono en píxeles
+    //     iconAnchor: [12, 35], // especifica el punto de anclaje del icono relativo a su posición
+    //     popupAnchor: [0, -32] // especifica el punto de anclaje del popup relativo al icono
+    // });
 
     var markerAmbulancia = L.marker([SerEme.lat, SerEme.lon], { icon: ambulanciaMarcador }).addTo(map);
 
-    crearRecorrido(Hospital, SerEme, Usuario, markerAmbulancia);
+    crearRecorrido(Ambulancia, SerEme, Usuario, markerAmbulancia);
 }
-function crearRecorrido(Hospital, SerEme, Usuario, markerAmbulancia) {
+function crearRecorrido(Ambulancia, SerEme, Usuario, markerAmbulancia) {
+    console.log("s" + Ambulancia.lat, Ambulancia.lon);
+    console.log(Usuario.lat, Usuario.lon);
+    console.log(SerEme.lat, SerEme.lon);
     L.Routing.control({
         waypoints: [
-            L.latLng(Hospital.lat, Hospital.lon),
+            L.latLng(Ambulancia.lat, Ambulancia.lon),
             L.latLng(Usuario.lat, Usuario.lon),
             L.latLng(SerEme.lat, SerEme.lon)
         ]
@@ -250,6 +252,7 @@ function crearRecorrido(Hospital, SerEme, Usuario, markerAmbulancia) {
             });
         }).addTo(map);
 }
+
 function buscarCalleNumero() {
     let portal = document.getElementById('numeroCalle').value;
     // verificar que ya se haya llenado campo calle
@@ -265,6 +268,8 @@ function buscarCalleNumero() {
         alert('Debe seleccionar una calle');
     }
 }
+
+
 // Obtener referencia a los botones
 var mostrarBuscadorBtn = document.getElementById('mostrarBuscador');
 var buscarUbicacionBtn = document.getElementById('buscarUbicacion');
@@ -278,7 +283,7 @@ buscarUbicacionBtn.addEventListener('click', function () {
             actualizarMapa(coor.latitud, coor.longitud);
         })
         .catch(function (error) {
-            console.error('Error al obtener las coordenadas:', error);
+            //  console.error('Error al obtener las coordenadas:', error);
         });
     //  console.log("NUEVOOO: " + obtenerCoordenadas());
     // } else {

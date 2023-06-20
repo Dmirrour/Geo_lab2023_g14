@@ -268,3 +268,4 @@ GeoMap.prototype.CrearBarraBusquedaGeoJson = function (vectorLayerGeoJson) {
     }
 
 }
+
