@@ -5,6 +5,7 @@ import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import uy.edu.tsig.dto.AmbulanciaDTO;
 import uy.edu.tsig.dto.HospitalDTO;
@@ -61,6 +62,9 @@ public class AdminBean implements Serializable {
     private String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
     private String usuario = "postgres";
     private String contraseña = "lapass";
+    // private String contraseña = "1234";
+    @Inject
+    private ServicioEmBean servicioEmBean;
 
     public void initH() {
         h = iHospitalService.obtenerHospitales();
@@ -82,9 +86,6 @@ public class AdminBean implements Serializable {
             conn = DriverManager.getConnection(url, usuario, contraseña);
             List<ServicioEmergencia> servasocioados= new ArrayList<>();
             Statement stmt = conn.createStatement();
-
-
-
             //alta logicaa
             Ambulancia a = Ambulancia.builder()
                     .idCodigo(codigo)
@@ -96,6 +97,7 @@ public class AdminBean implements Serializable {
             System.out.println(aDTO);
             System.out.println("ATENCION: si no guarda linestring en la vista, verificar el archivo AdminBEan.java, metodo addAmbulancia(); poner la contraseña correcta para su equipo.");
             System.out.println(des);
+            System.out.println("verificar reco antes de enviar query: "+rec);
 
             ResultSet resultSet = stmt.executeQuery("SELECT se.* FROM servicioemergencia se " +
                     "JOIN (SELECT ST_Buffer(ST_SetSRID(ST_GeomFromText('"+ rec +"'), 32721)," + des +") AS buffer_geom " +
@@ -140,11 +142,10 @@ public class AdminBean implements Serializable {
                 eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true"); // Reemplaza con la URL de la página de confirmación
             }else {
                 String msj = String.format("No hay servicios en su Zona.");
-                addMensaje("Ambulancias", msj);
+                addMensaje("Ambulancias", msj);//creo que ninguno de los mensajes se captan en menu creo que es porque se recarga la paguina y no se ve
                 System.out.println("el resultado es null");
                 eliminarA(aDTO.getIdAmbulancia());
                 eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true");
-                return;
             }
         }catch (SQLException e){
             System.out.println("No conecta."+e.getMessage());
@@ -156,6 +157,17 @@ public class AdminBean implements Serializable {
     private void addMensaje(String summary, String detail) {
         FacesMessage mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
         FacesContext.getCurrentInstance().addMessage(null, mensaje);
+    }
+
+    public void modBuffer(){
+        List<AmbulanciaDTO> a= servicioEmBean.getAmbuPejudicadas();
+        System.out.println();
+        for (AmbulanciaDTO ambulanciaDTO : a) {
+            ambulanciaDTO.setDistanciaMaxDesvio(ambulanciaDTO.getDistanciaMaxDesvio()+desvio);
+            System.out.println("AdminBean::distancia maxima: " + ambulanciaDTO.getDistanciaMaxDesvio());
+            iAmbulaciasService.modificar(ambulanciaDTO);
+        }
+        servicioEmBean.eliminarS(servicioEmBean.getsA());
     }
 
     public void addHospital() {

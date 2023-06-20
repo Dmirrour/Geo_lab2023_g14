@@ -13,12 +13,12 @@
                             <h:inputText id="codigo" type="number" value="#{adminBean.codigo}" class="col-12 col-md-6" required="true" requiredMessage="La razon social es requerida" />
                         </div>
                         <div class="col-12 py-2">
-                            <h:outputLabel for="desvio" class="col-12 col-md-6">Maximo desvio:</h:outputLabel>
+                            <h:outputLabel for="desvio" class="col-12 col-md-6">Maximo desvio [KM]:</h:outputLabel>
                             <h:inputText id="desvio" type="number" value="#{adminBean.desvio}" class="col-12 col-md-6" required="true" requiredMessage="La razon social es requerida" />
                         </div>
                         <hr />
                         <div class="col-12 py-2">
-                            <h:outputLabel for="rubro" class="col-12 col-md-6">Hospital</h:outputLabel>
+                            <h:outputLabel for="rubro" class="col-12 col-md-6">Hospital:</h:outputLabel>
                             <p:selectOneMenu id="rubro" value="#{adminBean.idHospital}" filter="true" filterMatchMode="contains">
                                 <f:selectItems value="#{adminBean.hospitalDTOS}" var="ab" itemLabel="[ #{ab.idHospital} ] - #{ab.nombreHospital}" itemValue="#{ab.idHospital}" class="col-md-12" required="true" requiredMessage="El Rubro es requerida" />
                             </p:selectOneMenu>

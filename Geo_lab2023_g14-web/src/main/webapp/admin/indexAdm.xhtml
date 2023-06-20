@@ -19,7 +19,7 @@
    <!-- BOOTSTRAP -->
    <link rel="stylesheet" href="lib/css/style.css" />
    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous" />
-   <script type="javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
 
    <!-- MAPA JS -->
    <script type="" src="lib/js/leaflet-src.js"></script>
@@ -37,18 +37,21 @@
    <!-- CONSULTAS query -->
    <script type="" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
    <script type="" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+   <script type="" src="../scripts/lib/buscador/axios.min.js"></script>
+   <link rel="stylesheet" href="../scripts/lib/buscador/fontawesome6.all.min.css" />
+   <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
 
    <!-- ICONOS -->
    <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
    <link rel="stylesheet" href="https://unpkg.com/primeflex@^3/primeflex.css" />
 
-   <!-- MAPA CALOR -->
-   <link rel="canonical" href="//ursudio.github.io/webgl-heatmap-leaflet/" />
-   <!-- <link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48 64x64" /> -->
+   <!-- MAPA CALOR
+   <link rel="canonical" href="//ursudio.github.io/webgl-heatmap-leaflet/" />   -->
+   <!-- <link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48 64x64" />
 
    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans|Fjalla+One" type="text/css" />
    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
-   <link rel="stylesheet" href="./lib/css/styleh.css" type="text/css" />
+   <link rel="stylesheet" href="./lib/css/styleh.css" type="text/css" />   -->
 
    #{sesion.init()}
    #{adminBean.initH()}
@@ -58,12 +61,14 @@
 </h:head>
 
 <h:body>
+
    <p:growl id="messages" showDetail="true" />
    <div id="top">
       <div class="navbar navbar-expand-sm">
-         <div class="container-fluid">
+         <div class="container">
             <div id="contenedorNavbar">
-               <p:menubar>
+               <button id="toggleMenu" class="toggle-button btn-azul" onclick="toggleNavbar()">Menú</button>
+               <p:menubar id="menuBar">
                   <p:submenu label="Eliminar">
                      <p:menuitem value="Eliminar Hospital" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg8').show()" />
                      <p:menuitem value="Eliminar Ambulancia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg7').show()" />
@@ -71,12 +76,13 @@
                   </p:submenu>
                   <p:submenu label="Modificar">
                      <p:menuitem value="Modificar Ambulancia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg5').show()" />
-                     <p:menuitem value="Modificar S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg4').show()" />
+                     <p:menuitem value="Modificar S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg4').show(); /*mostrarMarker2();*/" />
                   </p:submenu>
                   <p:submenu label="Alta">
                      <p:menuitem value="Alta Hospital" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg1').show()" />
                      <p:menuitem value="Alta Ambulancia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg2').show()" />
                      <p:menuitem value="Alta S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg3').show(); mostrarMarker();" />
+                     <p:menuitem value="Alta S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg9').show();" />
                   </p:submenu>
                </p:menubar>
             </div>
@@ -93,8 +99,8 @@
          </div>
       </div>
    </div>
-   <div id="map"></div>
 
+   <div id="map"></div>
 
    <!-- FORM'S  -->
    <p:outputPanel id="formPanel">
@@ -105,36 +111,176 @@
       <ui:include src="lib/forms/eliminarHospital.xhtml" />
       <ui:include src="lib/forms/eliminarSE.xhtml" />
       <ui:include src="lib/forms/modificarSE.xhtml" />
+      <ui:include src="lib/forms/AmbulaciaFueraService.xhtml" />
    </p:outputPanel>
    <!-- END FORMS -->
 
-   <a href="#options" id="options"></a>
+   <div id="contenedorFrmBuscar" style="display: none;">
+      <form id="frmBuscador" action="#" method="post">
+         <div id="ubicacion">
+            <div class="card card-header-actions border-success mb-4">
+               <div class="card-header ">
+                  <div class="input-group">
+                     <span class="input-group-text" id="basic-addon3">Calle</span>
+                     <input type="text" placeholder="Escriba el nombre de la calle..." class="form-control buscador-fluid" id="buscador" name="buscador" onkeyup="mapaAdmin.sugerencia(this.value)" aria-describedby="basic-addon3 basic-addon4" />
+                  </div>
+                  <div class="dropdown-notifications">
+                     <div class="dropdown-menu dropdown-menu-right border-0 shadow" id="" aria-labelledby="navbarDropdownAlerts">
+                     </div>
+                  </div>
+               </div>
+               <div class="card-body">
+                  <div class="row justify-content-center">
+                     <!-- notificaciones -->
+                     <div class="dropdown-notifications">
+                        <div class="dropdown-menu dropdown-menu-right border-0 shadow" id="visorDeListado" aria-labelledby="navbarDropdownAlerts">
+                        </div>
+                     </div>
+                     <div class="row">
+                        <div class="col-md-12">
+                           <div class="row">
+                              <!-- departamento -->
+                              <div class="col-md-6">
+                                 <label for="departamento" class="form-label">Departamento</label>
+                                 <input type="text" class="form-control" id="departamento" name="departamento" disabled="disabled" />
+                              </div>
+                              <!-- localidad -->
+                              <div class="col-md-6">
+                                 <label for="barrio" class="form-label">Localidad</label>
+                                 <input type="text" class="form-control" id="barrio" name="barrio" disabled="disabled" />
+                              </div>
+                              <!-- calle -->
+                              <div class="col-md-12 pb-4">
+                                 <label for="calle" class="form-label">Calle</label>
+                                 <input type="text" class="form-control" id="calle" name="calle" disabled="disabled" />
+                              </div>
+                              <!-- Acordeón 1: Selector de esquina -->
+                              <div class="col-md-12">
+                                 <div class="accordion" id="acordeonEsquina">
+                                    <div class="accordion-item">
+                                       <h2 class="accordion-header" id="headingEsquina">
+                                          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEsquina" aria-expanded="true" aria-controls="collapseEsquina">
+                                             Esquina
+                                          </button>
+                                       </h2>
+                                       <div id="collapseEsquina" class="accordion-collapse collapse show" aria-labelledby="headingEsquina" data-bs-parent="#acordeonEsquina">
+                                          <div class="accordion-body">
+                                             <div class="col-md-12" id="esquinaDiv">
+                                                <input type="text" class="form-control" id="idSelectEsquina" name="idSelectEsquina" value="" disabled="disabled" />
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                              <!-- Acordeón 2: Número de calle y botón de búsqueda -->
+                              <div class="col-md-12">
+                                 <div class="accordion" id="acordeonNumero">
+                                    <div class="accordion-item">
+                                       <h2 class="accordion-header" id="headingNumero">
+                                          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNumero" aria-expanded="false" aria-controls="collapseNumero">
+                                             Número de calle y búsqueda
+                                          </button>
+                                       </h2>
+                                       <div id="collapseNumero" class="accordion-collapse collapse" aria-labelledby="headingNumero" data-bs-parent="#acordeonNumero">
+                                          <div class="accordion-body">
+                                             <div class="row">
+                                                <div class="col-md-6">
+                                                   <input type="number" placeholder="Numero" class="form-control" id="numeroCalle" name="numeroCalle" />
+                                                </div>
+                                                <div class="col-md-6">
+                                                   <button type="button" class="btn btn-primary" onclick="mapaAdmin.buscarCalleNumero(this);">Buscar</button>
+                                                </div>
+                                             </div>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </div>
+                              </div>
+                              <input type="text" style="visibility: hidden;" id="direccion" name="Direccion" value="" disabled="disabled" />
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </form>
+      <script type="">
+         var collapseEsquina = new bootstrap.Collapse(document.getElementById("collapseEsquina"));
+         var collapseNumero = new bootstrap.Collapse(document.getElementById("collapseNumero"));
 
+         // Escuchar el evento de mostrar el acordeón de Esquina
+         document.getElementById("acordeonEsquina").addEventListener("show.bs.collapse", function () {
+            collapseNumero.hide(); // Ocultar el acordeón de Número
+         });
+
+         // Escuchar el evento de mostrar el acordeón de Número
+         document.getElementById("acordeonNumero").addEventListener("show.bs.collapse", function () {
+            collapseEsquina.hide(); // Ocultar el acordeón de Esquina
+         });
+
+         // Obtén una referencia al botón
+         //var crearRecorridoBtn = document.getElementById("crearRecorridoBtn");
+
+         // Agrega un evento de clic al botón
+         //crearRecorridoBtn.addEventListener("click", function() {
+            // Realiza la solicitud al servidor Geoserver para obtener los puntos de inicio y fin
+            //obtenerPuntosInicioFin();
+         //});
+      </script>
+   </div>
+   <!-- script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
+   <script type="" src="./lib/dist/webgl-heatmap.js"></script>
+   <script type="" src="./lib/dist/webgl-heatmap-leaflet.min.js"></script -->
+   <script type="" src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+   <script type="text/javascript">
+      function ocultarDlgs() {
+         PF('dlg1').hide();
+         PF('dlg2').hide();
+         PF('dlg3').hide();
+         PF('dlg4').hide();
+         PF('dlg6').hide();
+         PF('dlg7').hide();
+         PF('dlg8').hide();
+         PF('dlg9').hide();
+      }
+
+      let mapaAdmin = new ControladorMapa();
+      mapaAdmin.crearMapaAdmin();
+      mapaAdmin.addLayersWFS();
+      mapaAdmin.addLayerWFSLine();
+      mapaAdmin.addLayerWFSbuf();
+
+      function mostrarMarker() {
+         mapaAdmin.cargarMapaAltaSE();
+      }
+      function mostrarMarker2() {
+         mapaAdmin.cargarMapaModSE();
+      }
+
+      mapaAdmin.cargarMapaAltaAmbulancia();
+   </script>
+   <script type="text/javascript">
+      $(document).ready(function () {
+         var showDialogs = '#{param.showDialogs}';
+         console.log('entre al script');
+         if (showDialogs === 'true') {
+            PF('dlg9').show();
+            console.log('Diálogos mostrados');
+         }
+      });
+
+      function toggleNavbar() {
+         var menuBar = document.getElementById("menuBar");
+
+         if (menuBar.style.display === "none") {
+            menuBar.style.display = "block";
+         } else {
+            menuBar.style.display = "none";
+         }
+      }
+   </script>
 </h:body>
-
-<!--
-<script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
-<script type="" src="./lib/dist/webgl-heatmap.js"></script>
-<script type="" src="./lib/dist/webgl-heatmap-leaflet.min.js"></script>
- -->
-
-<script type="text/javascript">
-
-   function ocultarDlgs() {
-      PF('dlg1').hide();
-      PF('dlg2').hide();
-      PF('dlg3').hide();
-   }
-   let mapaAdmin = new ControladorMapa();
-   mapaAdmin.crearMapaAdmin();
-   mapaAdmin.addLayersWFS();
-   mapaAdmin.addLayerWFSLine();
-
-   function mostrarMarker() {
-      mapaAdmin.cargarMapaAltaSE();
-   }
-
-   mapaAdmin.cargarMapaAltaAmbulancia();
-</script>
 
 </html>

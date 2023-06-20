@@ -91,8 +91,8 @@ function selectCtrlInicio() {
                     selectCtrlInicio.remove();
                     wfsSelectHospitales();
                     obtenerPuntosInicioFin();
-                    var buscarUbicacionBtn = document.getElementById('buscarUbicacion');
-                    buscarUbicacionBtn();
+               
+               //     buscarUbicacionBtn();
                     break;
                 case 22:
                     mostrarBuscador.remove();
