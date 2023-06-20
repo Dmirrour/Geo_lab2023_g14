@@ -164,7 +164,7 @@ L.Control.Select = L.Control.extend({
       this.options.onGroupOpen(newState.open);
     }
 
-    if (this.options.onOpen && newState.open === "top") {
+    if (this.options.onOpen && newState.open === "  ") {
       this.options.onOpen();
     }
 
@@ -286,3 +286,4 @@ L.Control.Select = L.Control.extend({
 L.control.select = function (options) {
   return new L.Control.Select(options);
 };
+

@@ -5,8 +5,7 @@ let wfs;
 let wfse;
 let urlHospi;
 function wfsSelectHospitales() {
-    //  console.log("wfs Select Hospitales");
-    let hospitalesItems = [];
+    let listaSelect = [];
     let urlHospi =
         'http://localhost:8081/geoserver/wfs?' +
         'service=WFS&' +
@@ -23,18 +22,17 @@ function wfsSelectHospitales() {
                 var item = features[i].properties;
                 var idH = i + 1;
                 //  console.log(idH + " - " + item.nombrehospital);
-                hospitalesItems.push({ label: item.nombrehospital, value: idH });
+                listaSelect.push({ label: item.nombrehospital, value: idH });
             }
-            let t = hospitalesItems.length + 1;
-            hospitalesItems.push({ label: "↪ Mostrar Todo", value: t });
-            defaultValue = hospitalesItems[0];
-            var defaultValue = hospitalesItems[0].label;
+            let t = listaSelect.length + 1;
+            listaSelect.push({ label: "↪ Mostrar Todo", value: t });
+            defaultValue = listaSelect[0];
+            var defaultValue = listaSelect[0].label;
             L.control.select({
                 position: "topleft",
                 selectedDefault: defaultValue,
-                items: hospitalesItems,
+                items: listaSelect,
                 onSelect: function (newItemValue) {
-
                     if (newItemValue == t) {
                         map.removeLayer(geojsonLayere);
                         map.removeLayer(geojsonLayeres);
@@ -65,6 +63,50 @@ function wfsSelectHospitales() {
 }
 
 
+/////////////////// SELECT CONTROL ///////////////////
+function selectControl() {
+    let listaSelect;
+    /* listaSelect.push({label: "Solicitar ambulancia", value: 2}).push({label: "Ambulancia", value: 1});
+   /* items: [ {label: "Bifurcación", value: "2a"},  {label: "Completa", value: "2b"},],*/
+    listaSelect = [
+        { label: "Cobertura en mi ubicacion", value: 1 },
+        {
+            label: "Solicitar ambulancia", value: 2,
+            items: [
+                { label: "Hospital", value: 21 },
+                { label: "Dirección", value: 22 },
+            ],
+        },
+        { label: "Graficar busqueda", value: 3 },
+    ];
+
+    var selectControl = L.control.select({
+        position: "topleft",
+        selectedDefault: 21,
+        items: listaSelect,
+        onSelect: function (newItemValue) {
+            switch (newItemValue) {
+                case 1:
+                    crearRecorridoBtn.remove();
+                    break;
+                case 21:
+
+                    break;
+                case 22:
+                    break;
+                case 3:
+                    crearRecorridoBtn.addTo(map);
+                    break;
+            }
+        },
+        onGroupOpen: function (groupOpened) {
+            console.log(groupOpened)
+        },
+    }).addTo(map);
+
+}
+
+
 /////////////////// Intersect POINT ///////////////////
 function intersectpoint(la, lo, newItemValue) {
     console.log("Intersect point:  ", lo, "  ", la, "  ", newItemValue);
@@ -76,14 +118,12 @@ function intersectpoint(la, lo, newItemValue) {
             opacity: 1
         },
     }).addTo(map);
-
     let urlIntersect = 'http://localhost:8081/geoserver/wfs?' +
         'service=WFS&' +
         'request=GetFeature&' +
         'typeName=Geo_lab2023_g14PersistenceUnit:vista_buff_cobertura&' +
         'outputFormat=application/json&' +
         'CQL_FILTER=INTERSECTS(buffer_zona_cobertura,POINT(' + lo + ' ' + la + ')';
-
     fetch(urlIntersect)
         .then(function (response) {
             return response.json();
@@ -92,15 +132,14 @@ function intersectpoint(la, lo, newItemValue) {
             geojsonLayer.addData(data);
             data.features.forEach(function (feature) {
                 idhos = feature.properties.hospital_idhospital;
-                //       console.log("newItemValue: ", newItemValue);
-                // console.log("idhos", idhos);
+                // console.log("newItemValue: ", newItemValue);
             });
         })
+
         .catch(function (error) {
             console.error('Error:', error);
         });
 }
-
 
 
 /////////////////// addLayerWFSbuf ///////////////////
@@ -126,21 +165,18 @@ function addLayerWFSbuf() {
         .then(function (data) {
             geojsonLayer.addData(data);
             // Crear un buffer alrededor de las líneas
-            /*
-            let bufferedLayer = L.geoJSON(turf.buffer(data, 100, { units: 'meters' }), {
-                style: {
-                    color: 'blue',
-                    weight: 2,
-                    opacity: 0.7
-                }
-            }).addTo(this.map);
-            */
+            // let bufferedLayer = L.geoJSON(turf.buffer(data, 100, { units: 'meters' }), {
+            //     style: {
+            //         color: 'blue',
+            //         weight: 2,
+            //         opacity: 0.7
+            //     }
+            // }).addTo(this.map);
         })
         .catch(function (error) {
             console.error('Error:', error);
         });
 }
-
 
 
     //  let filter = "idambulancia='" + newItemValue + "'";

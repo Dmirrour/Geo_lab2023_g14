@@ -168,10 +168,7 @@ function actualizarMapa(Lat = null, Lng = null) {
         map.removeLayer(circulo);
     }
 
-    // seleccionEsq.lat = -34.87217736242233;
-    // seleccionEsq.lng = -56.20035716478015;
-
-    marcador = L.marker([seleccionEsq.lat, seleccionEsq.lng], { icon: iconoPersonalizado, draggable: false }).addTo(map);
+    marcador = L.marker([seleccionEsq.lat, seleccionEsq.lng], { icon: iconoPersonalizado }).addTo(map);
     marcador.bindPopup("<h4>Mi ubicación</h4><br>" + seleccionEsq.address + "<br>" + seleccionEsq.lat + " , " + seleccionEsq.lng);
     marcador.display;
     circulo = L.circle([seleccionEsq.lat, seleccionEsq.lng], { // Circulo verde zona
@@ -199,11 +196,11 @@ function actualizarMapa(Lat = null, Lng = null) {
     var Hospital = {
         lat: loAmb, // Latitud del punto de inicio
         lon: laAmb // Longitud del punto de inicio
+
     };
 
     let at = puntoInicioCoords[0];
     let oot = puntoInicioCoords[1];
-
     var SerEme = {
         lat: oot, // Latitud del punto de fin
         lon: at // Longitud del punto de fin
@@ -211,14 +208,13 @@ function actualizarMapa(Lat = null, Lng = null) {
 
     console.log(SerEme.lat + " :-: " + SerEme.lot);
 
-
     // var SerEme = {
     //     lat: -34.87325916579713, // Latitud del punto de fin
     //     lon: -56.11936569213868  // Longitud del punto de fin
     // };
     var ambulanciaMarcador = L.icon({
         iconUrl: 'resources/marker-icons/ambulance_color.png',
-        iconSize: [32, 32]   // especifica el tamaño del icono en píxeles
+        iconSize: [28, 28]   // especifica el tamaño del icono en píxeles
         // iconAnchor: [16, 30],  // especifica el punto de anclaje del icono relativo a su posición
         //popupAnchor: [0, -32]  // especifica el punto de anclaje del popup relativo al icono
     });

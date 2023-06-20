@@ -6293,7 +6293,7 @@
 
 		options: {
 			iconUrl: '../images/marker-icon.png',
-			iconRetinaUrl: '../images/marker-icon.png',
+			iconRetinaUrl: '../images/marker-icon-2x.png',
 			shadowUrl: '../images/marker-shadow.png',
 			iconSize: [25, 41],
 			iconAnchor: [12, 41],
@@ -6601,6 +6601,29 @@
 			this._setPos(pos);
 		},
 
+		// _initInteraction: function () {
+
+		// 	if (!this.options.interactive) { return; }
+
+		// 	L.DomUtil.addClass(this._icon, 'leaflet-interactive');
+
+		// 	this.addInteractiveTarget(this._icon);
+
+		// 	if (L.Handler.MarkerDrag) {
+		// 		var draggable = this.options.draggable;
+		// 		if (this.dragging) {
+		// 			draggable = this.dragging.enabled();
+		// 			this.dragging.disable();
+		// 		}
+
+		// 		this.dragging = new L.Handler.MarkerDrag(this);
+
+		// 		if (draggable) {
+		// 			this.dragging.enable();
+		// 		}
+		// 	}
+		// },
+
 		_initInteraction: function () {
 
 			if (!this.options.interactive) { return; }
@@ -6612,11 +6635,11 @@
 			if (L.Handler.MarkerDrag) {
 				var draggable = this.options.draggable;
 				if (this.dragging) {
-					//	draggable = this.dragging.disable();
-					//	this.dragging.disable();
+					draggable = this.dragging.disable();
+					this.dragging.disable();
 				}
 
-				//	this.dragging = new L.Handler.MarkerDrag(this);  // se deshabilita para no que no permita modificar recorrido
+				//		this.dragging = new L.Handler.MarkerDrag(this);  // se deshabilita para no que no permita modificar recorrido
 
 				if (draggable) {
 					// se deshabilita dragging en los maker del recorrido 
@@ -6624,7 +6647,6 @@
 				}
 			}
 		},
-
 		// @method setOpacity(opacity: Number): this
 		// Changes the opacity of the marker.
 		setOpacity: function (opacity) {
@@ -8353,7 +8375,7 @@
 			// className: '',
 
 			// Option inherited from "Interactive layer" abstract class
-			interactive: false
+			interactive: true
 		},
 
 		beforeAdd: function (map) {

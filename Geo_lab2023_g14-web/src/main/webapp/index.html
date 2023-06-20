@@ -201,17 +201,17 @@
     crearRecorridoBtn.addEventListener("click", function () {
         obtenerPuntosInicioFin(); //  Realiza la solicitud al servidor Geoserver para obtener los puntos de inicio y fin
     });
-
 </script>
 
 <script src="scripts/lib/js/buscadorCalles.js"></script>
 
 <script>
-    obtenerPuntosInicioFin();
+    // obtenerPuntosInicioFin();
     wfsSelectHospitales(); // controladorUsuario.js // Seleccionar Hospital (control-button)
+    // selectControl();
     initLayers(0); // indexInvitado.js
-    //  addLayerWFSbuf();
-    //  CrearMapaInvitado();
+    // CrearMapaInvitado();
+    // addLayerWFSbuf();
 
     let puntoInicioCoords;
     function obtenerPuntosInicioFin() {
@@ -229,8 +229,7 @@
                 "Content-Type": "text/xml"
             }
         })
-            .then(function (response) {
-                // Manejar la respuesta del servidor
+            .then(function (response) { // Manejar la respuesta del servidor
                 let features = response.data.features;
                 let cantidad = features.length;
                 let mensaje = "Se encontraron # " + cantidad + " servicios en su área.";
@@ -256,5 +255,5 @@
             });
     }
 
-   // obtenerPuntosInicioFin(); // falta interaccion btnsolicitar+btnubicacion+seleccionarhospital
+   // obtenerPuntosInicioFin();
 </script>

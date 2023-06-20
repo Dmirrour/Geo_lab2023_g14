@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import uy.edu.tsig.entity.Hospital;
+// import uy.edu.tsig.entity.Hospital;
 
 import java.io.Serializable;
 import java.util.ArrayList;
