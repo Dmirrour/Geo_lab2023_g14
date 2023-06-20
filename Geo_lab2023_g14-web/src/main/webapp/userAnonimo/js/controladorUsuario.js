@@ -131,18 +131,15 @@ function intersectpoint() {
         style: {
             color: 'red',
             weight: 1,
-            opacity: 1
+            opacity: 0.8
         },
-    })//.addTo(map);
+    }).addTo(map);
     let urlIntersect = 'http://localhost:8081/geoserver/wfs?' +
         'service=WFS&' +
         'request=GetFeature&' +
-       
-'viewparams=p1:v1;p2:v2;'
-
-        'typeName=Geo_lab2023_g14PersistenceUnit:pru&' +
-        'outputFormat=application/json';
-    // 'CQL_FILTER=INTERSECTS(buffer_zona_cobertura,POINT(' + coorUserlon + ' ' + coorUserlat + '))';
+        'typeName=Geo_lab2023_g14PersistenceUnit:vista_buff_cobertura_user&' +
+        'outputFormat=application/json&' +
+        'CQL_FILTER=INTERSECTS(buffer_zona_cobertura,POINT(' + coorUserlon + ' ' + coorUserlat + '))';
     fetch(urlIntersect)
         .then(function (response) {
             return response.json();
@@ -231,7 +228,7 @@ function addLayerWFSbuf() {
         'http://localhost:8081/geoserver/wfs?' +
         'service=WFS&' +
         'request=GetFeature&' +
-        'typeName=Geo_lab2023_g14PersistenceUnit:vista_buff_cobertura_user&' +
+        'typeName=Geo_lab2023_g14PersistenceUnit:vista_buff_cobertura&' +
         'srsName=EPSG:32721&' +
         'outputFormat=application/json';
     fetch(url)
