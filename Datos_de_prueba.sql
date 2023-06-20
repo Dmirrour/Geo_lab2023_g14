@@ -72,13 +72,11 @@ ALTER TABLE ambulancia ADD COLUMN polyline GEOMETRY(LineString, 32721);
 --*-*-*-*-*-*-*-*-*-*-*- VISTA -*-*-*-*-*-*-*-*-*-*-*--
 
 -- public.vista_selects;
-CREATE OR REPLACE VIEW public.vista_selects
- AS
+CREATE OR REPLACE VIEW public.vista_selects AS
  SELECT DISTINCT a.idambulancia, g.hospital_idhospital,
     st_buffer(a.polyline, (a.distanciamaxdesvio::numeric * 0.000941090001733132 / 100::numeric)::double precision) AS st_buffer,
     st_pointn(a.polyline, 1) AS st_pointn
-   FROM servicioemergencia g,
-    ambulancia a
+   FROM servicioemergencia g,    ambulancia a
   WHERE a.hospital_idhospital = g.hospital_idhospital;
 
 
@@ -140,10 +138,10 @@ SELECT * FROM ft_00_departamento;
 SELECT * FROM ft_00_loc_pg;
 SELECT * FROM ft_00_vias;
 
-*
- * Para crear la vista de los servicios de emergencias con la informacion del hosptial al que pertences
- * Hay que crear una vista en Postgres con el siguiente codigo sql
- *
+-- *
+--  * Para crear la vista de los servicios de emergencias con la informacion del hosptial al que pertences
+--  * Hay que crear una vista en Postgres con el siguiente codigo sql
+--  *
      /*--vista de prueba de buffers se actualiza sola cada ves que agregas un recorrido o modificas el buffer ojo con modificar el buffer manual mente porque puede quedar fuera del servicio
      Vieja vista
      CREATE OR REPLACE VIEW public.vista_buf AS
@@ -198,6 +196,14 @@ CREATE OR REPLACE VIEW public.vista_buf AS
 
 
 -- id ambulancia - punto servicio e - de linestring buffer - Primer punto en linestring
+
+CREATE OR REPLACE VIEW public.vista_buff_cobertura_user AS
+ SELECT DISTINCT a.idambulancia,
+    g.hospital_idhospital,
+    st_buffer(a.polyline, (a.distanciamaxdesvio::numeric * 0.000941090001733132 / 100::numeric)::double precision) AS buffer_zona_cobertura,
+    st_pointn(a.polyline, 1) AS first_point_recorrido, g.point AS point_se
+   FROM servicioemergencia g, ambulancia a WHERE a.hospital_idhospital = g.hospital_idhospital;
+
 
 CREATE OR REPLACE VIEW public.vista_buff_cobertura AS
  SELECT DISTINCT a.idambulancia, g.hospital_idhospital,

@@ -9,7 +9,7 @@ function CrearMapaInvitado() {
     var google = L.tileLayer('https://mt1.google.com/vt/lyrs=r&x={x}&y={y}&z={z}', {
         attribution: '© Grupo 14'
     });
-   
+
     ///////////////////////// CAPAS WMS /////////////////////////
     var layerEjes = L.tileLayer.wms('http://localhost:8081/geoserver/Geo_lab2023_g14PersistenceUnit/wms?', {
         title: 'ft_01_ejes',
@@ -187,7 +187,7 @@ let loSe;
 let geojsonLayer;
 function initLayerServicioEm(urlSe, layerName) {
     // console.log("function initLayerServicioEm");
-     geojsonLayer = L.geoJSON(null, {
+    geojsonLayer = L.geoJSON(null, {
         pointToLayer: function (feature, latlng) {
             let idh = feature.properties.idhospital * 20;
             let markerColor = generarColor(idh) || 'blue';
@@ -398,7 +398,7 @@ function BorrarMarcadorALtaSE() {
 
 
 
-   // for (let i = 0; i < data.features.length; i++) {   
+   // for (let i = 0; i < data.features.length; i++) {
 // L.geoJSON(iconA, {
 //     pointToLayer: function (Feature, latlng) {
 //         return L.marker(latlng, {

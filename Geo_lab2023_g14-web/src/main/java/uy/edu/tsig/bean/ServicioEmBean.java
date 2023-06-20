@@ -45,11 +45,10 @@ public class ServicioEmBean implements Serializable {
     private String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
     private String usuario = "postgres";
     private String contraseña = "lapass";
-    // private String contraseña = "1234";
 
     private ServicioEmergenciaDTO servselect;
 
-    // ---------atributos necesarios extras----------//
+    //---------atributos necesarios extras----------//
     private Long idHospital;
     private ServicioEmergenciaDTO selectedEmergencyService;
     private List<AmbulanciaDTO> ambuPerjudicadas= new ArrayList<>();
@@ -60,7 +59,6 @@ public class ServicioEmBean implements Serializable {
         s = iServicioEmergenciaService.listarServiciosEmergensias();
         servicioEmergenciaDTOS = s.getListServiciosEmergencias();
     }
-
     public void addServicioE() throws IOException {
         ServicioEmergencia se = ServicioEmergencia.builder()
                 .totalCama(totalCama)
@@ -80,7 +78,8 @@ public class ServicioEmBean implements Serializable {
             System.out.println("Punto insertado correctamente.");
         } catch (SQLException e) {
             // e.printStackTrace();
-            System.out.println("No conecta." + e.getMessage());
+            System.out.println("ATENCION: si no guarda, verificar el archivo ServicioEmBEan.java, cambiar pass en las propiedades de la calse.");
+            System.out.println("No conecta."+e.getMessage());
         }
 
         String msj = String.format("Se agregó el servicio de emergencia con %s camas.", totalCama);
@@ -93,26 +92,9 @@ public class ServicioEmBean implements Serializable {
         System.out.println("guardado SE, redireccion....");
         FacesContext fC = FacesContext.getCurrentInstance();
         ExternalContext eC = fC.getExternalContext();
-        eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true"); // Reemplaza con la URL
-                                                                                               // de la página de
-                                                                                               // confirmación
+        eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true"); // Reemplaza con la URL de la página de confirmación
     }
 
-    public void modServ(RowEditEvent event) {
-        ServicioEmergenciaDTO a = (ServicioEmergenciaDTO) event.getObject();
-        if (totalCama == 0)
-            totalCama = a.getTotalCama();
-        if (camasLibre == 0 && a.getCamasLibres() > totalCama) {
-            camasLibre = a.getTotalCama() - (a.getTotalCama() - a.getCamasLibres());// si se sacaron camas pero el
-                                                                                    // servicio de emergencia tenia mas
-                                                                                    // agarro la nuevas cantidad de
-                                                                                    // camas y le resto las que estaban
-                                                                                    // ocupadas
-            if (camasLibre < 0) {
-                FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Tienes menos camas quelas ocupadas", ""));
-                return;
-            }
 
     public void modServ(RowEditEvent event) throws IOException {
         System.out.println(latitud+"  "+longitud);
@@ -158,7 +140,8 @@ public class ServicioEmBean implements Serializable {
                 System.out.println("Punto modificado correctamente.");
             } catch (SQLException e) {
                 // e.printStackTrace();
-                System.out.println("No conecta." + e.getMessage());
+                System.out.println("ATENCION: si no guarda, verificar el archivo ServicioEmBEan.java, cambiar pass en las propiedades de la calse.");
+                System.out.println("No conecta."+e.getMessage());
             }
         }*/
     }
@@ -236,35 +219,6 @@ public class ServicioEmBean implements Serializable {
         }
     }
 
-    /*
-     * public void actualizarServicio() {
-     * try {
-     * // Establecer la conexión a la base de datos
-     * String url =
-     * "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
-     * String usuario = "postgres";
-     * //String pass = "lapass";//Seba
-     * String pass = "123456d";//Damian
-     * Connection conn = DriverManager.getConnection(url, usuario, pass);
-     * 
-     * // Crear y ejecutar la consulta SQL
-     * // String sql =
-     * "UPDATE servicioemergencia SET geom=(ST_SetSRID(ST_MakePoint(" + "ubicacion"
-     * // + "), 32721)) WHERE idservicio=?";
-     * String sql =
-     * "UPDATE servicioemergencia SET geom='LINESTRING(11.5 -0.1, 21.52 -0.25, 51.53 -2.12)' WHERE idservicio=?"
-     * ;
-     * PreparedStatement stmt = conn.prepareStatement(sql);
-     * stmt.setInt(1, idServicio);
-     * stmt.executeUpdate();
-     * 
-     * // Cerrar la conexión
-     * conn.close();
-     * } catch (Exception e) {
-     * e.printStackTrace();
-     * }
-     * }
-     */
 
     private void addMensaje(String summary, String detail) {
         FacesMessage mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
@@ -282,7 +236,6 @@ public class ServicioEmBean implements Serializable {
     public void setServicioEmergenciaDTOS(ArrayList<ServicioEmergenciaDTO> servicioEmergenciaDTOS) {
         this.servicioEmergenciaDTOS = servicioEmergenciaDTOS;
     }
-
     public ArrayList<ServicioEmergenciaDTO> getServicioEmergenciaDTOS() {
         return servicioEmergenciaDTOS;
     }
@@ -338,7 +291,6 @@ public class ServicioEmBean implements Serializable {
     public ServicioEmergenciaDTO getServselect() {
         return servselect;
     }
-
     public void setServselect(ServicioEmergenciaDTO servselect) {
         this.servselect = servselect;
     }

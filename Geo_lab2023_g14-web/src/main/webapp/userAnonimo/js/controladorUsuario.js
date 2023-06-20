@@ -90,12 +90,11 @@ function selectCtrlInicio() {
                 case 21:
                     selectCtrlInicio.remove();
                     wfsSelectHospitales();
-                    obtenerPuntosInicioFin();
-               
-               //     buscarUbicacionBtn();
+                    // obtenerPuntosInicioFin();
+                    // buscarUbicacionBtn();
                     break;
                 case 22:
-                    mostrarBuscador.remove();
+                    //  mostrarBuscador.remove();
                     break;
                 case 3:
                     //    mostrarBuscador.hide();
@@ -134,20 +133,23 @@ function intersectpoint() {
             weight: 1,
             opacity: 1
         },
-    }).addTo(map);
+    })//.addTo(map);
     let urlIntersect = 'http://localhost:8081/geoserver/wfs?' +
         'service=WFS&' +
         'request=GetFeature&' +
-        'typeName=Geo_lab2023_g14PersistenceUnit:vista_buff_cobertura_user&' +
-        'outputFormat=application/json&' +
-        'CQL_FILTER=INTERSECTS(buffer_zona_cobertura,POINT(' + coorUserlon + ' ' + coorUserlat + '))';
+       
+'viewparams=p1:v1;p2:v2;'
+
+        'typeName=Geo_lab2023_g14PersistenceUnit:pru&' +
+        'outputFormat=application/json';
+    // 'CQL_FILTER=INTERSECTS(buffer_zona_cobertura,POINT(' + coorUserlon + ' ' + coorUserlat + '))';
     fetch(urlIntersect)
         .then(function (response) {
             return response.json();
         })
         .then(function (data) {
             geojsonLayer.addData(data);
-            console.log("1 ", data);
+            console.log("DATOS: ", data);
             data.features.forEach(function (feature) {
                 idhos = data.features[0].properties.first_point_recorrido;
                 a = idhos.coordinates[0];
@@ -229,7 +231,7 @@ function addLayerWFSbuf() {
         'http://localhost:8081/geoserver/wfs?' +
         'service=WFS&' +
         'request=GetFeature&' +
-        'typeName=Geo_lab2023_g14PersistenceUnit:vista_buff_cobertura&' +
+        'typeName=Geo_lab2023_g14PersistenceUnit:vista_buff_cobertura_user&' +
         'srsName=EPSG:32721&' +
         'outputFormat=application/json';
     fetch(url)
@@ -238,6 +240,8 @@ function addLayerWFSbuf() {
         })
         .then(function (data) {
             geojsonLayer.addData(data);
+            var s = data.features.properties;
+            console.log("VISTADATA:  " + s);
             // Crear un buffer alrededor de las líneas
             // let bufferedLayer = L.geoJSON(turf.buffer(data, 100, { units: 'meters' }), {
             //     style: {

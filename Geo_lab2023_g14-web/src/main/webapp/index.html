@@ -167,8 +167,8 @@
                 </div>
             </form>
         </div>
-        <!-- <button id="crearRecorridoBtn">R</button> -->
-        <!-- <button id="bufferBtn2">B</button> -->
+        <button id="crearRecorridoBtn">R</button>
+
         <div id="map-container">
             <div id="map"></div>
         </div>
@@ -202,29 +202,56 @@
     crearRecorridoBtn.addEventListener("click", function () {
         obtenerPuntosInicioFin(); //  Realiza la solicitud al servidor Geoserver para obtener los puntos de inicio y fin
     });
-
-    //////// BUFFER
-    var bufferBtn2 = document.getElementById("bufferBtn2");
-    bufferBtn2.addEventListener("click", function () {
-        intersectpoint();
-        limpiarMapa();
-        //addLayerWFSbuf();
-        //intersectpoint();
-    });
 </script>
 
 <script src="scripts/lib/js/buscadorCalles.js"></script>
 
+
 <script>
-    // hardcodedDataPoint();
-    //obtenerPuntosInicioFin();
-    //  wfsSelectHospitales(); // controladorUsuario.js // Seleccionar Hospital (control-button)
     selectCtrlInicio();
     initLayers(0); // indexInvitado.js
-    // CrearMapaInvitado();
-    // addLayerWFSbuf();
+    addLayerWFSbuf();
+    // wfsSelectHospitales(); // controladorUsuario.js // Seleccionar Hospital (control-button)
+    // CrearMapaInvitado(); // linea 13 buscadorCalles
+    var puntoInicioCoords;
+    function obtenerPuntosInicioFin() {
+        // Realiza la solicitud al servidor Geoserver para obtener los puntos de inicio y fin
+        var url = 'http://localhost:8081/geoserver/wfs?' +
+            'service=WFS&' +
+            'request=GetFeature&' +
+            'typeName=Geo_lab2023_g14PersistenceUnit:vista_se_h&' +
+            'srsName=EPSG:32721&' +
+            'outputFormat=application/json';
+        axios.get(url, {
+            headers: {
+                "Content-Type": "text/xml"
+            }
+        })
+            .then(function (response) {
+                // Manejar la respuesta del servidor
+                var features = response.data.features;
+                let cantidad = features.length;
+                //  let mensaje = "Se encontraron # " + cantidad + " servicios en su área.";
+                //   +
+                features.forEach(function (feature) {
+                    puntoInicioCoords = feature.geometry.coordinates;
+                    mensaje += puntoInicioCoords;
+                    //   mensaje += "\n\t- " + feature.properties.nombre + " (" + feature.properties.nombrehospital + ") - [" + puntoInicioCoords + "]";
+                });
+                // alert(mensaje);
+            })
+            .catch(function (error) {
+                console.error("Error al obtener los puntos de inicio y fin:", error);
+            });
+    }
 
-    let puntoInicioCoords;
+</script>
+<!-- 
+<script>
+    selectCtrlInicio();
+    initLayers(0); // indexInvitado.js
+    // wfsSelectHospitales(); // controladorUsuario.js // Seleccionar Hospital (control-button)
+    // CrearMapaInvitado(); // linea 13 buscadorCalles
     function obtenerPuntosInicioFin() {
         let alaAmb;
         let aloAmb;
@@ -241,11 +268,11 @@
             }
         })
             .then(function (response) { // Manejar la respuesta del servidor
-                let features = response.data.features;
+                var features = response.data.features;
                 let cantidad = features.lenght;
                 let mensaje = "Se encontraron # " + cantidad + " servicios en su área.";
                 features.forEach(function (feature) {
-                    puntoInicioCoords = feature.geometry.coordinates;
+                    var puntoInicioCoords = feature.geometry.coordinates;
                     console.log("puntoInicioCoords " + puntoInicioCoords);
                     mensaje += puntoInicioCoords;
                 });
@@ -254,25 +281,32 @@
             .catch(function (error) {
                 console.error("Error al obtener los puntos de inicio y fin:", error);
             });
+    } -->
 
-        //     features.forEach(function (feature) {
-        //         //   for (let i = 0; i < cantidad; i++) {
-        //         let alaAmb = features.geometry.coordinates[0];
-        //         let aloAmb = features.geometry.coordinates[1];
-        //         puntoInicioCoords.push({alaAmb,aloAmb});
-        //         console.log("puntoInicioCoords " + puntoInicioCoords);
-        //         puntoInicioCoords = feature.geometry.coordinates;
-        //         mensaje = puntoInicioCoords;
-        //         //   console.log("InicioFinc: " + puntoInicioCoords[0] + " " + " " + puntoInicioCoords.aloAmb);
-        //         // mensaje += "\n\t- " + feature.properties.nombre + " \n(" + feature.properties.nombrehospital + ") - [" + puntoInicioCoords + "]";
-        //         //   }
-        //     });
-        //     //  alert(mensaje);
-        // })
-        // .catch(function (error) {
-        //     console.error("Error al obtener los puntos de inicio y fin:", error);
-        // });
-    }
-
-   //obtenerPuntosInicioFin();
 </script>
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
+ hardcodedDataPoint();    addLayerWFSbuf();
+// hardcodedDataPoint();
+// wfsAllLayers();
+// wfsServicioEmergencia();
+// wfsAmbulancia()
+// wfsBuscarServicioEmergencia(); // se llama desde wfs wfsSelectHospitales
+// wfsBuscarAmbulancia();
+ <button id="bufferBtn2">B</button> 
+ Cobertura en mi ubicación // esta en btn selec
+ var bufferBtn2 = document.getElementById("bufferBtn2");
+ bufferBtn2.addEventListener("click", function () {
+ intersectpoint();
+ limpiarMapa();
+ }); --->
