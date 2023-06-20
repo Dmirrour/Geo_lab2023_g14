@@ -65,12 +65,12 @@
             </button>
         </nav>
 
-        <button id="buscarUbicacion"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-geo" viewBox="0 0 16 16">
+        <!-- <button id="buscarUbicacion"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-geo" viewBox="0 0 16 16">
                 <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm0-15a7 7 0 1 1 0 14A7 7 0 0 1 8 1zm0 4a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm0 1a2 2 0 1 1 0 4 2 2 0 0 1 0-4z" />
             </svg></button>
         <button id="mostrarBuscador"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-signpost-2" viewBox="0 0 16 16">
                 <path d="M7 1.414V2H2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h5v1H2.5a1 1 0 0 0-.8.4L.725 8.7a.5.5 0 0 0 0 .6l.975 1.3a1 1 0 0 0 .8.4H7v5h2v-5h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H9V6h4.5a1 1 0 0 0 .8-.4l.975-1.3a.5.5 0 0 0 0-.6L14.3 2.4a1 1 0 0 0-.8-.4H9v-.586a1 1 0 0 0-2 0zM13.5 3l.75 1-.75 1H2V3h11.5zm.5 5v2H2.5l-.75-1 .75-1H14z" />
-            </svg></button>
+            </svg></button> -->
         <div id="contenedorFrmBuscar" style="display: none;">
             <form id="frmBuscador" action="#" method="post">
                 <div id="ubicacion">
@@ -167,7 +167,10 @@
                 </div>
             </form>
         </div>
-        <button id="crearRecorridoBtn">R</button>
+
+        <!-- <button id="crearRecorridoBtn">R</button> -->
+        <!-- <button id="mostrarBuscador">M</button>-->
+        <button id="contenedorFrmBuscar">M</button>
 
         <div id="map-container">
             <div id="map"></div>
@@ -176,13 +179,28 @@
 </body>
 
 </html>
-<script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
-<script>
-    var collapseEsquina = new bootstrap.Collapse(document.getElementById("collapseEsquina"));
-    var collapseNumero = new bootstrap.Collapse(document.getElementById("collapseNumero"));
 
-</script>
+<!-- <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+<script>    var collapseEsquina = new bootstrap.Collapse(document.getElementById("collapseEsquina"));
+    var collapseNumero = new bootstrap.Collapse(document.getElementById("collapseNumero"));</script> -->
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+
+<script>
+    const mostrarOcultarBtn = document.getElementById('mostrarOcultarBtn');
+    const contenedorFrmBuscar = document.getElementById('contenedorFrmBuscar');
+    function openFrm() {
+        // contenedorFrmBuscar.style.display = 'block';
+        if (contenedorFrmBuscar.style.display === 'none') {
+            contenedorFrmBuscar.style.display = 'block';
+        } else {
+            contenedorFrmBuscar.style.display = 'none';
+        }
+    }
+    // mostrarOcultarBtn.addEventListener('click', function () {
+  //  });
+</script>
+
+
 <script>
     var collapseEsquina = new bootstrap.Collapse(document.getElementById("collapseEsquina"));
     var collapseNumero = new bootstrap.Collapse(document.getElementById("collapseNumero"));
@@ -206,44 +224,44 @@
 
 <script src="scripts/lib/js/buscadorCalles.js"></script>
 
-
 <script>
-    selectCtrlInicio();
+    //selectCtrlInicio();
+    intersectpoint();
     initLayers(0); // indexInvitado.js
-    addLayerWFSbuf();
+    // addLayerWFSbuf();
     // wfsSelectHospitales(); // controladorUsuario.js // Seleccionar Hospital (control-button)
-    // CrearMapaInvitado(); // linea 13 buscadorCalles
+    //  CrearMapaInvitado(); // linea 13 buscadorCalles
     var puntoInicioCoords;
-    function obtenerPuntosInicioFin() {
-        // Realiza la solicitud al servidor Geoserver para obtener los puntos de inicio y fin
-        var url = 'http://localhost:8081/geoserver/wfs?' +
-            'service=WFS&' +
-            'request=GetFeature&' +
-            'typeName=Geo_lab2023_g14PersistenceUnit:vista_se_h&' +
-            'srsName=EPSG:32721&' +
-            'outputFormat=application/json';
-        axios.get(url, {
-            headers: {
-                "Content-Type": "text/xml"
-            }
-        })
-            .then(function (response) {
-                // Manejar la respuesta del servidor
-                var features = response.data.features;
-                let cantidad = features.length;
-                //  let mensaje = "Se encontraron # " + cantidad + " servicios en su área.";
-                //   +
-                features.forEach(function (feature) {
-                    puntoInicioCoords = feature.geometry.coordinates;
-                    mensaje += puntoInicioCoords;
-                    //   mensaje += "\n\t- " + feature.properties.nombre + " (" + feature.properties.nombrehospital + ") - [" + puntoInicioCoords + "]";
-                });
-                // alert(mensaje);
-            })
-            .catch(function (error) {
-                console.error("Error al obtener los puntos de inicio y fin:", error);
-            });
-    }
+    // function obtenerPuntosInicioFin() {
+    //     // Realiza la solicitud al servidor Geoserver para obtener los puntos de inicio y fin
+    //     var url = 'http://localhost:8081/geoserver/wfs?' +
+    //         'service=WFS&' +
+    //         'request=GetFeature&' +
+    //         'typeName=Geo_lab2023_g14PersistenceUnit:vista_se_h&' +
+    //         'srsName=EPSG:32721&' +
+    //         'outputFormat=application/json';
+    //     axios.get(url, {
+    //         headers: {
+    //             "Content-Type": "text/xml"
+    //         }
+    //     })
+    //         .then(function (response) {
+    //             // Manejar la respuesta del servidor
+    //             var features = response.data.features;
+    //             let cantidad = features.length;
+    //             //  let mensaje = "Se encontraron # " + cantidad + " servicios en su área.";
+    //             //   +
+    //             features.forEach(function (feature) {
+    //                 puntoInicioCoords = feature.geometry.coordinates;
+    //                 mensaje += puntoInicioCoords;
+    //                 //   mensaje += "\n\t- " + feature.properties.nombre + " (" + feature.properties.nombrehospital + ") - [" + puntoInicioCoords + "]";
+    //             });
+    //             // alert(mensaje);
+    //         })
+    //         .catch(function (error) {
+    //             console.error("Error al obtener los puntos de inicio y fin:", error);
+    //         });
+    // }
 
 </script>
 <!-- 

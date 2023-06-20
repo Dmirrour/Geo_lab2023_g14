@@ -4,6 +4,7 @@ let exisateLayer = false;
 let wfs;
 let wfse;
 let urlHospi;
+var selectCtrlHospital;
 function wfsSelectHospitales() {
     let listaSelect = [];
     let urlHospi =
@@ -28,7 +29,8 @@ function wfsSelectHospitales() {
             listaSelect.push({ label: "↪ Mostrar Todo", value: t });
             defaultValue = listaSelect[0];
             var defaultValue = listaSelect[0].label;
-            var selectCtrlHospital = L.control.select({
+
+            this.selectCtrlHospital = L.control.select({
                 position: "topleft",
                 selectedDefault: defaultValue,
                 iconMain: "✚",
@@ -37,18 +39,18 @@ function wfsSelectHospitales() {
                     if (newItemValue == t) {
                         map.removeLayer(geojsonLayere);
                         map.removeLayer(geojsonLayeres);
-                        map.removeLayer(geojsonLayer);
+                        //       map.removeLayer(geojsonLayer);
                         removerLayer();
                         initLayers(0);
-                        selectCtrlHospital.remove();
-                        selectCtrlInicio();
+                        // selectCtrlHospital.remove();
+                        //  selectCtrlInicio();
                     } else {
                         map.removeLayer(geojsonLayere);
                         map.removeLayer(geojsonLayeres);
                         removerLayer();
                         initLayers(newItemValue);
-                        selectCtrlHospital.remove();
-                        selectCtrlInicio();
+                        // selectCtrlHospital.remove();
+                        // selectCtrlInicio();
                     }
                 },
             }).addTo(map);
@@ -61,7 +63,10 @@ function wfsSelectHospitales() {
 
 /////////////////// SELECT CONTROL ///////////////////
 function selectCtrlInicio() {
-
+    // buscarUbicacion.remove();
+    // mostrarBuscador.remove();
+    //  wfsSelectHospitales.remove();
+    var selCtrlInicio;
     let listaSelect;
     /* listaSelect.push({label: "Solicitar ambulancia", value: 2}).push({label: "Ambulancia", value: 1});
    /* items: [ {label: "Bifurcación", value: "2a"},  {label: "Completa", value: "2b"},],*/
@@ -74,41 +79,56 @@ function selectCtrlInicio() {
                 { label: "Ingresar dirección", value: 22 },
             ],
         },
-        { label: "Graficar busqueda", value: 3 },
+        { label: "Graficar busqueda", value: 3 }
     ];
-
-    var selectCtrlInicio = L.control.select({
+    // var newState;
+    selCtrlInicio = L.control.select({
         position: "topleft",
-        selectedDefault: true,
+        selectedDefault: false,
+        //  active: true,
         items: listaSelect,
+        //  state: false,
         onSelect: function (newItemValue) {
             switch (newItemValue) {
                 case 1:
+                    // console.log("Cobertura en mi ubicación");
                     intersectpoint();
-                    limpiarMapa();
+                    // limpiarMapa();
+                    // limpiarButton();
                     break;
                 case 21:
-                    selectCtrlInicio.remove();
+                    console.log("Seleccionar hospital");
                     wfsSelectHospitales();
-                    // obtenerPuntosInicioFin();
-                    // buscarUbicacionBtn();
+
+
                     break;
                 case 22:
-                    //  mostrarBuscador.remove();
+                    console.log("Ingresar dirección");
+                    limpiarButton();
+                    openFrm();
                     break;
                 case 3:
+                    console.log("Graficar");
+                    limpiarButton();
+                    //  btnMostrarBuscador.remove();
+                    // mostrarOcultarBtn;
                     //    mostrarBuscador.hide();
-
+                    //  selectCtrlInicio.remove();
                     break;
             }
         },
         onGroupOpen: function (groupOpened) {
             console.log(groupOpened)
+
         },
     }).addTo(map);
 
 }
 
+function limpiarButton() {
+    selCtrlInicio.remove();
+
+}
 
 ////////// Ver Ambulancias y ServiciosEmergencia con cobertura en mi zona //////////
 let coorUserlon;
@@ -130,8 +150,8 @@ function intersectpoint() {
     let geojsonLayer = L.geoJSON(null, {
         style: {
             color: 'red',
-            weight: 1,
-            opacity: 0.8
+            weight: 0.8,
+            opacity: 0.5
         },
     }).addTo(map);
     let urlIntersect = 'http://localhost:8081/geoserver/wfs?' +
@@ -154,7 +174,7 @@ function intersectpoint() {
                 puntose = data.features[0].properties.point_se;
                 c = puntose.coordinates[0];
                 d = puntose.coordinates[1];
-                console.log("2: ", c, " ", d);
+                //    console.log("2: ", c, " ", d);
             });
             geojsonLayeres.options.layerName = layerNames;
         })
@@ -220,7 +240,7 @@ function addLayerWFSbuf() {
     let geojsonLayer = L.geoJSON(null, {
         style: {
             color: 'gray',
-            weight: 1.4,
+            weight: 1.2,
             opacity: 1
         },
     }).addTo(this.map);

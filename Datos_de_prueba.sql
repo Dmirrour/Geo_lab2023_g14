@@ -32,8 +32,8 @@ UPDATE ambulancia SET polyline='LINESTRING(-56.19890928268433 -34.87205101405393
 UPDATE ambulancia SET polyline='LINESTRING(-56.24213576316834 -34.87111126177625,-56.22702956199647 -34.8587365053499,-56.2242615222931 -34.86014068248701, -56.22278630733491 -34.858529618291136)' WHERE idambulancia=2;
 UPDATE ambulancia SET polyline='LINESTRING(-56.16814613290445 -34.863877701507064,-56.1479886937741 -34.87931822276983,-56.15241050720215 -34.881974972559426, -56.15324199199677 -34.881147655057795)' WHERE idambulancia=3;
 UPDATE ambulancia SET polyline='LINESTRING(-56.198608875274665 -34.90644748064126,-56.193619966506965 -34.90606914064883,-56.192906498909 -34.912747025259556, -56.19525611400605 -34.91206518447018)' WHERE idambulancia=4;
-UPDATE ambulancia SET polyline='LINESTRING(-56.164666414206295 -34.89814433959129,-56.16328418254853 -34.91090384260483,-56.171126961708076 -34.90824237220117)' WHERE idambulancia=4;
-UPDATE ambulancia SET polyline='LINESTRING(-56.197106838226325 -34.84093351099642,-56.19352877140046 -34.837367166344926,-56.170676350593574 -34.81493528019694)' WHERE idambulancia=6;
+UPDATE ambulancia SET polyline='LINESTRING(-56.164666414206295 -34.89814433959129,-56.16328418254853 -34.71090384260483,-56.171126961708076 -34.70824237220117)' WHERE idambulancia=5;
+UPDATE ambulancia SET polyline='LINESTRING(-56.897106838226325 -34.84093351099642,-56.19352877140046 -34.837367166344926,-56.170676350593574 -34.81493528019694)' WHERE idambulancia=6;
 
 
 --*-*-*-*-*-*-*-*-*- HOSPITAL_AMBULANCIA -*-*-*-*-*-*-*-*-*--
@@ -307,8 +307,6 @@ SELECT st_endpoint(polyline) from ambulancia
 
 
 
-
-
   SELECT DISTINCT a.idambulancia, g.hospital_idhospital,
     st_buffer(g.point, (a.distanciamaxdesvio * 0.000941090001733132 / 100)) AS buffer_zona_cobertura,
     st_pointn(a.polyline, 1) AS first_point_recorrido
@@ -324,12 +322,8 @@ SELECT st_endpoint(polyline) from ambulancia
 
 
 
-  CREATE OR REPLACE VIEW public.vista_buff_cobertura_user
- AS
- SELECT DISTINCT a.idambulancia,
-    g.hospital_idhospital,
-    st_buffer(a.polyline, (a.distanciamaxdesvio::numeric * 0.000941090001733132 / 100::numeric)::double precision) AS buffer_zona_cobertura,
-    st_pointn(a.polyline, 1) AS first_point_recorrido, g.point as point_se
-   FROM servicioemergencia g,
-    ambulancia a
-  WHERE a.hospital_idhospital = g.hospital_idhospital;
+CREATE OR REPLACE VIEW public.vista_buff_cobertura_user
+ AS SELECT DISTINCT a.idambulancia, g.hospital_idhospital,
+   st_buffer(a.polyline, (a.distanciamaxdesvio::numeric * 0.000941090001733132 / 100::numeric)::double precision) AS buffer_zona_cobertura,
+   st_pointn(a.polyline, 1) AS first_point_recorrido, g.point as point_se
+   FROM servicioemergencia g, ambulancia a  WHERE a.hospital_idhospital = g.hospital_idhospital;
