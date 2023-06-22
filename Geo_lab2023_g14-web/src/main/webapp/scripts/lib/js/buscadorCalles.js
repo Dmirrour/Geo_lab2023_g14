@@ -142,97 +142,102 @@ function elegirCalle(selectedValue) {
     document.getElementById("visorDeListado").style.display = "none";
     buscarEsquinas();
 }
+let diasa;
 function elegirEsquina() {
     var selectedValue = document.getElementById('idSelectEsquina').options[document.getElementById('idSelectEsquina').selectedIndex].value;
+   
     seleccionEsq = datoEsq.find(item => item.idCalleEsq == selectedValue);
-    document.getElementById('direccion').value = seleccion.address;
-    actualizarMapa();
+       document.getElementById('direccion').value = seleccion.address;
+    // console.log("aca " + seleccionEsq.lat + seleccionEsq.lng);
+   //actualizarMapa();
+   masCercana(seleccionEsq);
+   actualizarMapa(seleccionEsq.lat, seleccionEsq.lng);
+   
 }
-// function actualizarMapa(Lat = null, Lng = null) {
+
+//function actualizarMapa(Lat = null, Lng = null) {
 function actualizarMapa(Lat, Lng) {
+  
     let iconoPersonalizado = L.icon({
         iconUrl: 'resources/marker-icons/marker-iconnaranjaf.png',
         iconSize: [22, 36], // especifica el tamaño del icono en píxeles
         iconAnchor: [12, 35], // especifica el punto de anclaje del icono relativo a su posición
         popupAnchor: [0, -32] // especifica el punto de anclaje del popup relativo al icono
     });
+
     if (Lat != null && Lng != null) {
         seleccionEsq.lat = Lat;
         seleccionEsq.lng = Lng;
         seleccionEsq.address = "Ubicacion del usuario";
     }
+
     if (marcador != null) {
         map.removeLayer(marcador);
     }
     if (circulo != null) {
         map.removeLayer(circulo);
     }
+    // if (ambulanciaMarcador != null) {
+    //     map.removeLayer(ambulanciaMarcador);
+    // }
 
     marcador = L.marker([seleccionEsq.lat, seleccionEsq.lng], { icon: iconoPersonalizado }).addTo(map);
     marcador.bindPopup("<h4>Mi ubicación</h4><br>" + seleccionEsq.address + "<br>" + seleccionEsq.lat + " , " + seleccionEsq.lng);
     marcador.display;
     circulo = L.circle([seleccionEsq.lat, seleccionEsq.lng], { // Circulo verde zona
-        radius: 700,
-        color: 'black',
-        weight: 0.9,
-        opacity: 0.5
+        radius: 150,
+        color: "green"
     }).addTo(map)
-    // circulo.bindPopup("Circulo")
-    frmBuscar.style.display = 'none';
-    btnMostrarBuscador.style.backgroundColor = '#f4f4f4';
+    //circulo.bindPopup("Circulo")
+    //frmBuscar.style.display = 'none';
+    //btnMostrarBuscador.style.backgroundColor = '#f4f4f4';
+    //map.setView([seleccionEsq.lat, seleccionEsq.lng], 13);
+  
 
     ///////////////// USUARIO
     var Usuario = {
         lat: seleccionEsq.lat,
         lon: seleccionEsq.lng
     };
-    // let alaAmb = -34.8588634;
-    // let aloAmb = -56.2194844;
-    // var Usuario = {
-    //     lat: -34.8588634,
-    //     lon: -56.2194844
-    // }; //-34.86860943844723], [-56.19680643081666]
 
     var Ambulancia = {
-        lat: loAmb, // Latitud del punto de inicio
-        lon: laAmb // Longitud del punto de inicio
+        lat: loAmb,
+        lon: laAmb
     };
 
-    let at = puntoInicioCoords[0];
-    let oot = puntoInicioCoords[1];
+    // let diasa;
+    // diasa = masCercana(seleccionEsq).lat;
+    // diasaa = masCercana(seleccionEsq).lng;
+    // // loAmb2 = diasa.Lng;
+    // // laAmb2 = diasa.Lat;
+    // console.log("Ser " + diasa, diasa);
     var SerEme = {
-        lat: oot, // Latitud del punto de fin
-        lon: at // Longitud del punto de fin
+        lat: laAmb2,
+        lon: loAmb2
     };
+    // var Usuario = {
+    //     lat: -56.2194844,
+    //     lon: -34.8588634
+    // }; //-34.86860943844723], [-56.19680643081666]
+    // let loAmb = -56.2194844;
+    // let laAmb = -34.8588634;
 
-    console.log(SerEme.lat + " :-: " + SerEme.lon);
-
-    // var SerEme = {
-    //     lat: -34.87325916579713, // Latitud del punto de fin
-    //     lon: -56.11936569213868  // Longitud del punto de fin
-    // };
     var ambulanciaMarcador = L.icon({
         iconUrl: 'resources/marker-icons/ambulance_color.png',
-        iconSize: [28, 28]   // especifica el tamaño del icono en píxeles
-        // iconAnchor: [16, 30],  // especifica el punto de anclaje del icono relativo a su posición
-        //popupAnchor: [0, -32]  // especifica el punto de anclaje del popup relativo al icono
+        iconSize: [28, 28],   // especifica el tamaño del icono en píxeles
+        iconAnchor: [12, 35],  // especifica el punto de anclaje del icono relativo a su posición
+        popupAnchor: [0, -32]  // especifica el punto de anclaje del popup relativo al icono
     });
 
-    // var AmbulanciaMarcador = L.icon({
-    //     //  iconUrl: 'resources/marker-icons/marken-icon.png',
-    //     //  iconSize: [30, 30], // especifica el tamaño del icono en píxeles
-    //     iconAnchor: [12, 35], // especifica el punto de anclaje del icono relativo a su posición
-    //     popupAnchor: [0, -32] // especifica el punto de anclaje del popup relativo al icono
-    // });
-
     var markerAmbulancia = L.marker([SerEme.lat, SerEme.lon], { icon: ambulanciaMarcador }).addTo(map);
-
     crearRecorrido(Ambulancia, SerEme, Usuario, markerAmbulancia);
 }
+
+
 function crearRecorrido(Ambulancia, SerEme, Usuario, markerAmbulancia) {
-    console.log("s" + Ambulancia.lat, Ambulancia.lon);
-    console.log(Usuario.lat, Usuario.lon);
-    console.log(SerEme.lat, SerEme.lon);
+    console.log("A " + Ambulancia.lat, Ambulancia.lon);
+    console.log("U " + Usuario.lon, Usuario.lat);
+    console.log("S " + SerEme.lat, SerEme.lon);
     L.Routing.control({
         waypoints: [
             L.latLng(Ambulancia.lat, Ambulancia.lon),
@@ -269,7 +274,6 @@ function buscarCalleNumero() {
     }
 }
 
-
 // Obtener referencia a los botones
 var mostrarBuscadorBtn = document.getElementById('mostrarBuscador');
 var buscarUbicacionBtn = document.getElementById('buscarUbicacion');
@@ -278,17 +282,14 @@ var buscarUbicacionBtn = document.getElementById('buscarUbicacion');
 buscarUbicacionBtn.addEventListener('click', function () {
     obtenerCoordenadas()
         .then(function (coor) {
-            console.log('Latitud GPS: ', coor.latitud);
-            console.log('Longitud GPS: ', coor.longitud);
+            console.log('---------- GPS ------------');
+            console.log('Latitud: ', coor.latitud);
+            console.log('Longitud: ', coor.longitud);
             actualizarMapa(coor.latitud, coor.longitud);
         })
         .catch(function (error) {
-            //  console.error('Error al obtener las coordenadas:', error);
+            //      console.error('Error al obtener las coordenadas:', error);
         });
-    //  console.log("NUEVOOO: " + obtenerCoordenadas());
-    // } else {
-    //     console.log("ERROR: ");
-    // }
 });
 
 document.getElementById('mostrarBuscador').addEventListener('click', function () {

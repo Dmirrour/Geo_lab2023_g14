@@ -12,9 +12,9 @@ L.Control.Select = L.Control.extend({
     iconChecked: "◉",
     // "☑"
     iconUnchecked: "ⵔ",
-    //"❒",
+    //"❒",✓✕
     iconGroupChecked: "▶",
-    iconGroupUnchecked: "⊳",
+    iconGroupUnchecked: "▷",
     multi: false,
     items: [],
     // {value: 'String', 'label': 'String', items?: [items]}
@@ -115,41 +115,45 @@ L.Control.Select = L.Control.extend({
       case "ITEM_SELECT":
         if (this.options.multi) {
           newState.selected = this.state.selected.slice();
-          // console.log("Seleccionado:" + data.DomEvent);
+          //  console.log("Seleccionado:" + data.DomEvent);
           if (this.state.selected.includes(data.item.value)) {
             newState.selected = newState.selected.filter(function (s) {
               return s !== data.item.value;
             });
           } else {
-            //   console.log("Seleccionado:");
+            //  console.log("Seleccionado:");
             newState.selected.push(data.item.value);
           }
         } else {
           newState.selected = data.item.value;
-          //  console.log("Seleccionado: ");
+          //   console.log("Seleccionado: ");
         }
 
         newState.open = data.item.parent;
         break;
 
       case "GROUP_OPEN":
-        //  console.log("Seleccionado:");
+        // console.log("Seleccionado:");
         newState.open = data.item.value;
         break;
 
       case "GROUP_CLOSE":
-
+        console.log("close:");
         newState.open = data.item.parent;
         break;
 
       case "MENU_OPEN":
-        console.log("Seleccionado:");
+        // console.log("open:" + newState._clearMenus);
+        // newState.open = _hideMenu;
         newState.open = "top";
+
         break;
 
       case "MENU_CLOSE":
-        console.log("s:");
+        //  newState.open = _hideMenu;
         newState.open = false;
+        // selectCtrlInicio.remove();
+        //  console.log("s:");
         break;
     }
 

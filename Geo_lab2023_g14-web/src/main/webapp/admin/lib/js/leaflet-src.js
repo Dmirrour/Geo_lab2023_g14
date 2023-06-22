@@ -6293,7 +6293,7 @@
 
 		options: {
 			iconUrl: '../images/marker-icon.png',
-			iconRetinaUrl: '../images/marker-icon-2x.png',
+			iconRetinaUrl: '../images/marker-icon.png',
 			shadowUrl: '../images/marker-shadow.png',
 			iconSize: [25, 41],
 			iconAnchor: [12, 41],
@@ -6301,6 +6301,7 @@
 			tooltipAnchor: [16, -28],
 			shadowSize: [41, 41]
 		},
+		////sgl
 
 		_getIconUrl: function (name) {
 			if (!L.Icon.Default.imagePath) {	// Deprecated, backwards-compatibility only
@@ -6311,7 +6312,7 @@
 			// `L.Icon.Default` will try to auto-detect the absolute location of the
 			// blue icon images. If you are placing these images in a non-standard
 			// way, set this option to point to the right absolute path.
-			return (this.options.imagePath || L.Icon.Default.imagePath) + L.Icon.prototype._getIconUrl.call(this, name);
+			return (this.options.imagePath || L.Icon.Default.imagePath) + L.Icon.prototype._getIconUrl.call(this, name); //SGL
 		},
 
 		_detectIconPath: function () {
@@ -6348,7 +6349,7 @@
 		options: {
 			// @option icon: Icon = *
 			// Icon class to use for rendering the marker. See [Icon documentation](#L.Icon) for details on how to customize the marker icon. If not specified, a new `L.Icon.Default` is used.
-			icon: new L.Icon.Default(),
+			icon:null,// new L.Icon.Default(),  // SGL
 
 			// Option inherited from "Interactive layer" abstract class
 			interactive: true,
@@ -12476,7 +12477,7 @@
 		// @section
 		// @aka Control.Zoom options
 		options: {
-			position: 'topleft',
+			position: 'topright',
 
 			// @option zoomInText: String = '+'
 			// The text set on the 'zoom in' button.
