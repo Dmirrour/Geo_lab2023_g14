@@ -61,7 +61,7 @@ public class AdminBean implements Serializable {
 
     private String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
     private String usuario = "postgres";
-    private String contraseña = "lapass";
+    private String contraseña = "admin";
     // private String contraseña = "1234";
     @Inject
     private ServicioEmBean servicioEmBean;
@@ -159,7 +159,7 @@ public class AdminBean implements Serializable {
         FacesContext.getCurrentInstance().addMessage(null, mensaje);
     }
 
-    public void modBuffer(){
+    public void modBuffer(String red){
         List<AmbulanciaDTO> a= servicioEmBean.getAmbuPejudicadas();
         System.out.println();
         for (AmbulanciaDTO ambulanciaDTO : a) {
@@ -167,7 +167,15 @@ public class AdminBean implements Serializable {
             System.out.println("AdminBean::distancia maxima: " + ambulanciaDTO.getDistanciaMaxDesvio());
             iAmbulaciasService.modificar(ambulanciaDTO);
         }
-        servicioEmBean.eliminarS(servicioEmBean.getsA());
+        switch (red){
+            case "Mod":
+                servicioEmBean.modServ();
+                break;
+            case "Eliminar":
+                servicioEmBean.eliminarS(servicioEmBean.getsA());
+                break;
+        }
+
     }
 
     public void addHospital() {

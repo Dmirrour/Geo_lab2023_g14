@@ -349,24 +349,28 @@ class ControladorMapa extends Configuracion {
                 this.markerSE = markerSE;
             }, this);
         }
-    cargarMapaModSE(data) {
+    cargarMapaModSE(date) {
         // Crea un marcador y guarda la posición en los campos de latitud y longitud
         let markerSE = L.marker([0, 0]).addTo(this.map);
         this.map.on('click', function (e) {
-            let prefijo = "mods";
+            /*let prefijo = "dialogMODSE";
+            let pref2 = "mod";*/
             let latitud = e.latlng.lat;
             let longitud = e.latlng.lng;
 
-            let row = data.closest('tr');
-            let id = row.getAttibute('data-ri');
+            //let row = data.closest('tr');
+            //let id = row.getAttibute('data-ri');
+/*
             console.log("Lat antes de act: " + document.getElementById(prefijo + ":" + id + ":frmMODSElatitud").value);
+*/
+            console.log('Número recibido:', date);
 
             markerSE.setLatLng(e.latlng);
             markerSE.bindPopup("Modificar Servicio de Emergencia en:<br>Latitud: " + latitud.toFixed(6) + "<br>Longitud: " + longitud.toFixed(6)).openPopup();
 
-            document.getElementById(prefijo + ":" + id + ":frmMODSElatitud").value = latitud;
-            document.getElementById(prefijo + ":" + id + ":frmMODSElongitud").value = longitud;
-            console.log("Lat despues de act: " + document.getElementById(prefijo + ":" + id + ":frmMODSElatitud").value);
+            document.getElementById("mods:" + date + ":frmMODSElatitud").value = latitud;
+            document.getElementById("mods:" + date + ":frmMODSElongitud").value = longitud;
+            /*console.log("Lat despues de act: " + document.getElementById(prefijo + ":" + id + ":frmMODSElatitud").value);*/
 
             this.markerSE = markerSE;
         }, this);
