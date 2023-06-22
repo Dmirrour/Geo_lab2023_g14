@@ -70,114 +70,115 @@
             </svg></button> -->
         <!-- <button id="mostrarBuscador"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-signpost-2" viewBox="0 0 16 16">
                 <path d="M7 1.414V2H2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h5v1H2.5a1 1 0 0 0-.8.4L.725 8.7a.5.5 0 0 0 0 .6l.975 1.3a1 1 0 0 0 .8.4H7v5h2v-5h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H9V6h4.5a1 1 0 0 0 .8-.4l.975-1.3a.5.5 0 0 0 0-.6L14.3 2.4a1 1 0 0 0-.8-.4H9v-.586a1 1 0 0 0-2 0zM13.5 3l.75 1-.75 1H2V3h11.5zm.5 5v2H2.5l-.75-1 .75-1H14z" />
-            </svg></button> -->
+            </svg></button>  -->
         <div id="contenedorFrmBuscar" style="display: none;">
             <form id="frmBuscador" action="#" method="post">
                 <div id="ubicacion">
                     <div class="card card-header-actions border-success mb-5" style=" position: relative; top: -30px; left: 35px;">
                         <div class=" card-header ">
                             <div class=" input-group">
-                        <span class="input-group-text" id="basic-addon3">Calle</span>
-                        <input type="text" placeholder="Escriba el nombre de la calle..." class="form-control buscador-fluid" id="buscador" name="buscador" onkeyup="sugerencia(this.value)" aria-describedby="basic-addon3 basic-addon4">
-                    </div>
-                    <div class="dropdown-notifications">
-                        <div class="dropdown-menu dropdown-menu-right border-0 shadow" id="" aria-labelledby="navbarDropdownAlerts">
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <!---------------------------------------------------------------------------
-                                                UBICACION
-                            ------------------------------------------------------------------------------>
-                    <div class="row justify-content-center">
-                        <!-- notificaciones -->
-                        <div class="dropdown-notifications">
-                            <div class="dropdown-menu dropdown-menu-right border-0 shadow" id="visorDeListado" aria-labelledby="navbarDropdownAlerts">
+                                <span class="input-group-text" id="basic-addon3">Calle</span>
+                                <input type="text" placeholder="Escriba el nombre de la calle..." class="form-control buscador-fluid" id="buscador" name="buscador" onkeyup="sugerencia(this.value)" aria-describedby="basic-addon3 basic-addon4">
+                            </div>
+                            <div class="dropdown-notifications">
+                                <div class="dropdown-menu dropdown-menu-right border-0 shadow" id="" aria-labelledby="navbarDropdownAlerts">
+                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
+                        <div class="card-body">
+                            <!---------------------------------------------------------------------------
+                                                UBICACION
+                            ------------------------------------------------------------------------------>
+                            <div class="row justify-content-center">
+                                <!-- notificaciones -->
+                                <div class="dropdown-notifications">
+                                    <div class="dropdown-menu dropdown-menu-right border-0 shadow" id="visorDeListado" aria-labelledby="navbarDropdownAlerts">
+                                    </div>
+                                </div>
                                 <div class="row">
-                                    <!-- departamento -->
-                                    <div class="col-md-6">
-                                        <label for="departamento" class="form-label">Departamento</label>
-                                        <input type="text" class="form-control" id="departamento" name="departamento" disabled>
-                                    </div>
-                                    <!-- localidad -->
-                                    <div class="col-md-6">
-                                        <label for="barrio" class="form-label">Localidad</label>
-                                        <input type="text" class="form-control" id="barrio" name="barrio" disabled>
-                                    </div>
-                                    <!-- calle -->
-                                    <div class="col-md-12 pb-4">
-                                        <label for="calle" class="form-label">Calle</label>
-                                        <input type="text" class="form-control" id="calle" name="calle" disabled>
-                                    </div>
-                                    <!-- Acordeón 1: Selector de esquina -->
                                     <div class="col-md-12">
-                                        <div class="accordion" id="acordeonEsquina">
-                                            <div class="accordion-item">
-                                                <h2 class="accordion-header" id="headingEsquina">
-                                                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEsquina" aria-expanded="true" aria-controls="collapseEsquina">
-                                                        Esquina
-                                                    </button>
-                                                </h2>
-                                                <div id="collapseEsquina" class="accordion-collapse collapse show" aria-labelledby="headingEsquina" data-bs-parent="#acordeonEsquina">
-                                                    <div class="accordion-body">
-                                                        <div class="col-md-12" id="esquinaDiv">
-                                                            <input type="text" class="form-control" id="idSelectEsquina" name="idSelectEsquina" value="" disabled>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                        <div class="row">
+                                            <!-- departamento -->
+                                            <div class="col-md-6">
+                                                <label for="departamento" class="form-label">Departamento</label>
+                                                <input type="text" class="form-control" id="departamento" name="departamento" disabled>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <!-- Acordeón 2: Número de calle y botón de búsqueda -->
-                                    <div class="col-md-12">
-                                        <div class="accordion" id="acordeonNumero">
-                                            <div class="accordion-item">
-                                                <h2 class="accordion-header" id="headingNumero">
-                                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNumero" aria-expanded="false" aria-controls="collapseNumero">
-                                                        Número de calle y búsqueda
-                                                    </button>
-                                                </h2>
-                                                <div id="collapseNumero" class="accordion-collapse collapse" aria-labelledby="headingNumero" data-bs-parent="#acordeonNumero">
-                                                    <div class="accordion-body">
-                                                        <div class="row">
-                                                            <div class="col-md-6">
-                                                                <input type="number" placeholder="Numero" class="form-control" id="numeroCalle" name="numeroCalle">
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <button type="button" class="btn btn-primary" onclick="buscarCalleNumero(this);">Buscar</button>
+                                            <!-- localidad -->
+                                            <div class="col-md-6">
+                                                <label for="barrio" class="form-label">Localidad</label>
+                                                <input type="text" class="form-control" id="barrio" name="barrio" disabled>
+                                            </div>
+                                            <!-- calle -->
+                                            <div class="col-md-12 pb-4">
+                                                <label for="calle" class="form-label">Calle</label>
+                                                <input type="text" class="form-control" id="calle" name="calle" disabled>
+                                            </div>
+                                            <!-- Acordeón 1: Selector de esquina -->
+                                            <div class="col-md-12">
+                                                <div class="accordion" id="acordeonEsquina">
+                                                    <div class="accordion-item">
+                                                        <h2 class="accordion-header" id="headingEsquina">
+                                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEsquina" aria-expanded="true" aria-controls="collapseEsquina">
+                                                                Esquina
+                                                            </button>
+                                                        </h2>
+                                                        <div id="collapseEsquina" class="accordion-collapse collapse show" aria-labelledby="headingEsquina" data-bs-parent="#acordeonEsquina">
+                                                            <div class="accordion-body">
+                                                                <div class="col-md-12" id="esquinaDiv">
+                                                                    <input type="text" class="form-control" id="idSelectEsquina" name="idSelectEsquina" value="" disabled>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
+                                            <!-- Acordeón 2: Número de calle y botón de búsqueda -->
+                                            <div class="col-md-12">
+                                                <div class="accordion" id="acordeonNumero">
+                                                    <div class="accordion-item">
+                                                        <h2 class="accordion-header" id="headingNumero">
+                                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNumero" aria-expanded="false" aria-controls="collapseNumero">
+                                                                Número de calle y búsqueda
+                                                            </button>
+                                                        </h2>
+                                                        <div id="collapseNumero" class="accordion-collapse collapse" aria-labelledby="headingNumero" data-bs-parent="#acordeonNumero">
+                                                            <div class="accordion-body">
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <input type="number" placeholder="Numero" class="form-control" id="numeroCalle" name="numeroCalle">
+                                                                    </div>
+                                                                    <div class="col-md-6">
+                                                                        <button type="button" class="btn btn-primary" onclick="buscarCalleNumero(this);">Buscar</button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <input type="text" style="visibility: hidden;" id="direccion" name="Direccion" value="" disabled>
                                         </div>
                                     </div>
-                                    <input type="text" style="visibility: hidden;" id="direccion" name="Direccion" value="" disabled>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <!-- termina form -->
                 </div>
+            </form>
         </div>
-        <!-- termina form -->
-    </div>
-    </form>
+
+        <button id="buscarUbicacion" title="Solicitar ambulancia">🝊</button>
+        <!-- <button id="crearRecorridoBtn">R</button>  -->
+        <!-- <button id="mostrarBuscador">M</button> -->
+        <!-- <button id="contenedorFrmBuscar">M</button> -->
+        <button id="bufferBtn2">BFR</button>
+
+        <div id="map-container">
+            <div id="map"></div>
+        </div>
     </div>
 
-    <!-- <button id="crearRecorridoBtn">R</button>  -->
-    <!-- <button id="mostrarBuscador">M</button> -->
-    <!-- <button id="contenedorFrmBuscar">M</button> -->
-
-    <div id="map-container">
-        <div id="map"></div>//
-    </div>
-    </div>
-
-    <button id="buscarUbicacion" title="Solicitar ambulancia">🝊</button>
 </body>
 
 </html>
@@ -185,17 +186,20 @@
 <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
 
 <script>
-
-     const mostrarOcultarBtn = document.getElementById('mostrarOcultarBtn');
+    const mostrarOcultarBtn = document.getElementById('contenedorFrmBuscar');
     const contenedorFrmBuscar = document.getElementById('contenedorFrmBuscar');
     function openFrm() {
-
         if (contenedorFrmBuscar.style.display === 'none') {
             contenedorFrmBuscar.style.display = 'block';
         } else {
             contenedorFrmBuscar.style.display = 'none';
         }
     }
+    function ocultarFrm() {
+        if (mostrarOcultarBtn.style.display === 'block') {
+            mostrarOcultarBtn.style.display = 'none';
+        }
+    } 
 </script>
 
 <script>
@@ -211,10 +215,31 @@
     document.getElementById("acordeonNumero").addEventListener("show.bs.collapse", function () {
         collapseEsquina.hide(); // Ocultar el acordeón de Esquina
     });
- //   var crearRecorridoBtn = document.getElementById("crearRecorridoBtn");
- //   crearRecorridoBtn.addEventListener("click", function () {
-        //    obtenerPuntosInicioFin(); //  Realiza la solicitud al servidor Geoserver para obtener los puntos de inicio y fin
-  //  });
+    //  var crearRecorridoBtn = document.getElementById("crearRecorridoBtn");
+    //   crearRecorridoBtn.addEventListener("click", function () {
+    //    obtenerPuntosInicioFin(); //  Realiza la solicitud al servidor Geoserver para obtener los puntos de inicio y fin
+    //  });
+
+
+    var bufferBtn2 = document.getElementById("bufferBtn2");
+
+    bufferBtn2.addEventListener("click", function () {
+        // if (contenedorFrmBuscar.style.display === 'none') {
+
+        // } else {
+        //     contenedorFrmBuscar.style.display = 'none';
+        // }
+        // removerLayer();
+        //  limpiarMapa();
+        // initLayers(0);
+        if (geojsonLayerBuff != null) {
+            geojsonLayerBuff.remove();
+            geojsonLayerBuff = null;
+        } else {
+            addLayerWFSbuf();
+        }
+    });
+
 </script>
 
 <script src="scripts/lib/js/buscadorCalles.js"></script>
@@ -222,10 +247,10 @@
 <script>
     menuInicio();
     initLayers(0); // indexInvitado.js
-    //addLayerWFSbuf();
+  //  addLayerWFSbuf();
 
     // wfsSelectHospitales(); // controladorUsuario.js // Seleccionar Hospital (control-button)
-    // CrearMapaInvitado(); // linea 13 buscadorCalles
+   // CrearMapaInvitado(); // linea 13 buscadorCalles
 </script>
 
 

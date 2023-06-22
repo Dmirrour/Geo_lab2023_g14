@@ -32,7 +32,7 @@ public class Hospital implements Serializable {
     @Builder.Default
     @OneToMany
     List<ServicioEmergencia> ServicioEmergencia= new ArrayList<>();
-
+ 
     @Builder.Default
     @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true)
     List<Ambulancia> Ambulancia = new ArrayList<>();

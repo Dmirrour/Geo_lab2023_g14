@@ -29,6 +29,7 @@
    <script type="" src="lib/js/class.ControladorMapa.js"></script>
    <script type="" src="../scripts/geolet.js"></script>
 
+   <!-- //<script src="../scripts/lib/indexInvitado.js"></script> -->
    <!-- JTS -->
    <script type="" src="https://cdn.jsdelivr.net/npm/elm-pep@1.0.6/dist/elm-pep.js"></script>
    <script type="" src="https://cdn.jsdelivr.net/npm/jsts@2.3.0/dist/jsts.min.js"></script>
@@ -40,7 +41,6 @@
    <script type="" src="../scripts/lib/buscador/axios.min.js"></script>
    <link rel="stylesheet" href="../scripts/lib/buscador/fontawesome6.all.min.css" />
    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
-
    <!-- ICONOS -->
    <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
    <link rel="stylesheet" href="https://unpkg.com/primeflex@^3/primeflex.css" />
@@ -245,7 +245,6 @@
          PF('dlg8').hide();
          PF('dlg9').hide();
       }
-
       let mapaAdmin = new ControladorMapa();
       mapaAdmin.crearMapaAdmin();
       mapaAdmin.addLayersWFS();
@@ -260,6 +259,7 @@
       }
 
       mapaAdmin.cargarMapaAltaAmbulancia();
+
    </script>
    <script type="text/javascript">
       $(document).ready(function () {

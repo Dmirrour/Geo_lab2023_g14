@@ -76,14 +76,14 @@ class ControladorMapa extends Configuracion {
         this.agregarBotonZonasSinCobertura();
         this.agregarBotonFormualrioDireccion();
     }
-    agregarBotonFormualrioDireccion () {
+    agregarBotonFormualrioDireccion() {
         // Crear el botón
         let botonFormulario = L.control({ position: 'topright' });
 
         botonFormulario.onAdd = function (map) {
             let button = L.DomUtil.create('button', 'btn btn-primary');
             button.id = "mostrarBuscador";
-            button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-signpost-2" viewBox="0 0 16 16">'+
+            button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-signpost-2" viewBox="0 0 16 16">' +
                 '<path d="M7 1.414V2H2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h5v1H2.5a1 1 0 0 0-.8.4L.725 8.7a.5.5 0 0 0 0 .6l.975 1.3a1 1 0 0 0 .8.4H7v5h2v-5h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H9V6h4.5a1 1 0 0 0 .8-.4l.975-1.3a.5.5 0 0 0 0-.6L14.3 2.4a1 1 0 0 0-.8-.4H9v-.586a1 1 0 0 0-2 0zM13.5 3l.75 1-.75 1H2V3h11.5zm.5 5v2H2.5l-.75-1 .75-1H14z"/></svg>';
 
             // Agregar evento clic para mostrar el formulario
@@ -94,7 +94,7 @@ class ControladorMapa extends Configuracion {
                 if (formularioContainer.style.display == "none") {
                     formularioContainer.style.display = "block";
                     btnMostrarBuscador.style.backgroundColor = 'rgba(38,71,191,1)';
-                }else {
+                } else {
                     formularioContainer.style.display = 'none';
                     btnMostrarBuscador.style.backgroundColor = '#f4f4f4';
                 }
@@ -105,15 +105,15 @@ class ControladorMapa extends Configuracion {
 
         botonFormulario.addTo(this.map);
     }
-    agregarBotonZonasSinCobertura () {
+    agregarBotonZonasSinCobertura() {
         // Crear el botón
         let btnCobertura = L.control({ position: 'topright' });
 
         btnCobertura.onAdd = function (map) {
             let button = L.DomUtil.create('button', 'btn btn-primary');
             button.id = "btnCobertura";
-            button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">'+
-                '<path d="M7.5 19c-3.866 0-7-3.134-7-7V8c0-3.866 3.134-7 7-7s7 3.134 7 7v4c0 3.866-3.134 7-7 7zm0-16C4.462 3 2 5.462 2 8v4c0 2.538 2.462 5 5.5 5S13 14.538 13 12V8c0-2.538-2.462-5-5.5-5zm0 1c2.481 0 4.5 2.019 4.5 4.5v4c0 2.481-2.019 4.5-4.5 4.5S3 14.481 3 12V8c0-2.481 2.019-4.5 4.5-4.5zm2.5 4H5v2h5v-2z" fill="currentColor" />'+
+            button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">' +
+                '<path d="M7.5 19c-3.866 0-7-3.134-7-7V8c0-3.866 3.134-7 7-7s7 3.134 7 7v4c0 3.866-3.134 7-7 7zm0-16C4.462 3 2 5.462 2 8v4c0 2.538 2.462 5 5.5 5S13 14.538 13 12V8c0-2.538-2.462-5-5.5-5zm0 1c2.481 0 4.5 2.019 4.5 4.5v4c0 2.481-2.019 4.5-4.5 4.5S3 14.481 3 12V8c0-2.481 2.019-4.5 4.5-4.5zm2.5 4H5v2h5v-2z" fill="currentColor" />' +
                 '</svg>';
 
             // Agregar evento clic para mostrar el formulario
@@ -125,7 +125,7 @@ class ControladorMapa extends Configuracion {
 
         btnCobertura.addTo(this.map);
     }
-    agregarBotonFormularioGPS () {
+    agregarBotonFormularioGPS() {
         // Crear el botón
         let btnGPS = L.control({ position: 'topright' });
 
@@ -156,7 +156,7 @@ class ControladorMapa extends Configuracion {
 
         btnGPS.addTo(this.map);
     }
-    agregarBotonOcultarRecorrido () {
+    agregarBotonOcultarRecorrido() {
         // Crear el botón
         let btnGPS = L.control({ position: 'topright' });
 
@@ -171,7 +171,7 @@ class ControladorMapa extends Configuracion {
                 let btn = document.getElementById('ocultarRecorrido');
                 //div.item(0).style.display = 'none';
                 // btnGPS.removeFrom(this.map);
-                Array.from(divs).forEach(function(div) {
+                Array.from(divs).forEach(function (div) {
                     div.style.display = 'none';
                 });
                 btn.style.display = 'none';
@@ -182,7 +182,7 @@ class ControladorMapa extends Configuracion {
 
         btnGPS.addTo(this.map);
     }
-    addLayersWFS() {
+    addLayersWFS2() {
         let geojsonLayer = L.geoJSON(null, {
             pointToLayer: function (feature, latlng) {
                 let idh = feature.properties.idhospital;
@@ -198,18 +198,18 @@ class ControladorMapa extends Configuracion {
                 });
             }
         }).addTo(this.map); // Crear una capa de GeoJSON
+
         let url =
             'http://localhost:'
-            +this.puertoGeoServer
-            +'/geoserver/wfs?service=WFS&' +
+            + this.puertoGeoServer
+            + '/geoserver/wfs?service=WFS&' +
             // 'version=1.1.0&' +
             'request=GetFeature&typeName='
-            +this.baseDatos
-            +':'+this.vista_SEH+'&'+
-            'srsName='+this.srid+
+            + this.baseDatos
+            + ':' + this.vista_SEH + '&' +
+            'srsName=' + this.srid +
             '&outputFormat=application/json';
         console.log(url);
-
         fetch(url)
             .then(function (response) {
                 return response.json();
@@ -265,8 +265,6 @@ class ControladorMapa extends Configuracion {
             }
         }).addTo(this.map);
 
-
-
         let url =
             'http://localhost:' +
             this.puertoGeoServer +
@@ -317,7 +315,7 @@ class ControladorMapa extends Configuracion {
             'request=GetFeature&' +
             'typeName=' +
             this.baseDatos +
-            ':' +  'vista_buf &' +
+            ':' + 'vista_buf &' +
             'srsName=' + this.srid + '&' +
             'outputFormat=application/json';
 
@@ -333,22 +331,22 @@ class ControladorMapa extends Configuracion {
             });
     }
     cargarMapaAltaSE() {
-            // Crea un marcador y guarda la posición en los campos de latitud y longitud
-            let markerSE = L.marker([0, 0]).addTo(this.map);
-            this.map.on('click', function (e) {
-                let prefijo = "frmAltaSE";
-                let latitud = e.latlng.lat;
-                let longitud = e.latlng.lng;
+        // Crea un marcador y guarda la posición en los campos de latitud y longitud
+        let markerSE = L.marker([0, 0]).addTo(this.map);
+        this.map.on('click', function (e) {
+            let prefijo = "frmAltaSE";
+            let latitud = e.latlng.lat;
+            let longitud = e.latlng.lng;
 
-                markerSE.setLatLng(e.latlng);
-                markerSE.bindPopup("Agregar Servicio de Emergencia en:<br>Latitud: " + latitud.toFixed(6) + "<br>Longitud: " + longitud.toFixed(6)).openPopup();
+            markerSE.setLatLng(e.latlng);
+            markerSE.bindPopup("Agregar Servicio de Emergencia en:<br>Latitud: " + latitud.toFixed(6) + "<br>Longitud: " + longitud.toFixed(6)).openPopup();
 
-                document.getElementById(prefijo + ":latitud").value = e.latlng.lat;
-                document.getElementById(prefijo + ":longitud").value = e.latlng.lng;
+            document.getElementById(prefijo + ":latitud").value = e.latlng.lat;
+            document.getElementById(prefijo + ":longitud").value = e.latlng.lng;
 
-                this.markerSE = markerSE;
-            }, this);
-        }
+            this.markerSE = markerSE;
+        }, this);
+    }
     cargarMapaModSE(data) {
         // Crea un marcador y guarda la posición en los campos de latitud y longitud
         let markerSE = L.marker([0, 0]).addTo(this.map);
@@ -522,8 +520,8 @@ class ControladorMapa extends Configuracion {
                     }, this);
                     options += '</select>';
                     document.getElementById('visorDeListado').innerHTML = options;
-                }else{
-                    console.warn("Ocurrio un error en la respuesta axios:\n"+response.status);
+                } else {
+                    console.warn("Ocurrio un error en la respuesta axios:\n" + response.status);
                 }
             } catch (error) {
                 console.error(error);
@@ -690,6 +688,75 @@ class ControladorMapa extends Configuracion {
             }
         } else {
             alert('Debe seleccionar una calle');
+        }
+    }
+    addLayersWFS() {
+        let laSe;
+        let loSe;
+        let geojsonLayer;
+        var coorServicioEmer;
+        function initLayerServicioEm(urlSe, layerName) {
+            // console.log("function initLayerServicioEm");
+            geojsonLayer = L.geoJSON(null, {
+                pointToLayer: function (feature, latlng) {
+                    let idh = feature.properties.idhospital * 20;
+                    let markerColor = generarColor(idh) || 'blue';
+                    return L.circleMarker(latlng, {
+                        radius: 8,
+                        fillColor: markerColor,
+                        color: '#000',
+                        weight: 1,
+                        opacity: 1,
+                        fillOpacity: 0.8
+                    });
+                }
+            }).addTo(map); // Crear una capa de GeoJSON, agrega los puntos de SERVICIO EMERGENCIA 
+
+            fetch(urlSe)
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    geojsonLayer.addData(data);
+                    console.log(data);
+                    let puntosArray2 = [];
+                    for (let i = 0; i < data.features.length; i++) {
+                        laAmb2 = data.features[i].geometry.coordinates[1];
+                        loAmb2 = data.features[i].geometry.coordinates[0];
+                        console.log(loAmb2 + " 99 " + laAmb2);
+                        puntosArray2.push({
+                            laAmb2,
+                            loAmb2
+                        });
+                    }
+
+                    geojsonLayer.eachLayer(function (layer) {
+                        layer.on('click', function (e) {
+                            let properties = e.target.feature.properties;
+                            coorServicioEmer = e.target.feature.geometry.coordinates;
+                            //  let coordenadas = e.target.feature.geometry.coordinates;
+                            console.log(coorServicioEmer);
+                            let popupContent =
+                                '<div class="popup-content">' +
+                                '<h5><b>' + properties.nombre + '</b></h5>' +
+                                '<em>Camas libres: </em><b>' + properties.camaslibres + '</b></br>' +
+                                '<em>Total de camas: </em><b>' + properties.totalcama + '</b></br>' +
+                                '<em>Hospital Nombre: </em><b>' + properties.nombrehospital + '</b></br>' +
+                                '<em>Hospital Tipo: </em><b>' + properties.tipohospital + '</b></br>' +
+                                '<em>Coordenadas: </em><b>' + coorServicioEmer[0] + " , " + coorServicioEmer[1] + '</b></br>' +
+                                '</div>';
+                            let popupOptions = {
+                                className: 'custom-popup'
+                            };
+                            layer.closePopup(); // Cerrar el popup anterior si existe
+                            layer.bindPopup(popupContent, popupOptions).openPopup();
+                        })
+                    });
+                    geojsonLayer.options.layerName = layerName;
+                })
+                .catch(function (error) {
+                    console.error('Error:', error);
+                });
         }
     }
 }

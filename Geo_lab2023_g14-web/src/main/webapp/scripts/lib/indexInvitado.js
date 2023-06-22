@@ -208,12 +208,12 @@ function initLayerServicioEm(urlSe, layerName) {
         })
         .then(function (data) {
             geojsonLayer.addData(data);
-
+            //   console.log(data);
             let puntosArray2 = [];
             for (let i = 0; i < data.features.length; i++) {
                 laAmb2 = data.features[i].geometry.coordinates[1];
                 loAmb2 = data.features[i].geometry.coordinates[0];
-                // console.log(loAmb2+ " 99 " + laAmb2);
+                //   console.log(loAmb2+ " 99 " + laAmb2);
                 puntosArray2.push({
                     laAmb2,
                     loAmb2
@@ -225,7 +225,7 @@ function initLayerServicioEm(urlSe, layerName) {
                     let properties = e.target.feature.properties;
                     coorServicioEmer = e.target.feature.geometry.coordinates;
                     //  let coordenadas = e.target.feature.geometry.coordinates;
-                    console.log(coorServicioEmer);
+                    //  console.log(coorServicioEmer);
                     let popupContent =
                         '<div class="popup-content">' +
                         '<h5><b>' + properties.nombre + '</b></h5>' +
@@ -233,7 +233,7 @@ function initLayerServicioEm(urlSe, layerName) {
                         '<em>Total de camas: </em><b>' + properties.totalcama + '</b></br>' +
                         '<em>Hospital Nombre: </em><b>' + properties.nombrehospital + '</b></br>' +
                         '<em>Hospital Tipo: </em><b>' + properties.tipohospital + '</b></br>' +
-                        //  '<em>Coordenadas: </em><b>' + coorServicioEmer[0] + " , " + coorServicioEmer[1] + '</b></br>' +
+                        '<em>Coordenadas: </em><b>' + coorServicioEmer[0] + " , " + coorServicioEmer[1] + '</b></br>' +
                         '</div>';
                     let popupOptions = {
                         className: 'custom-popup'
@@ -329,7 +329,7 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
                 };
                 puntos.features.push(feature);
             });
-            console.log(puntosArray);
+            //   console.log(puntosArray);
 
             geojsonLayeres = L.geoJSON(puntos, {
                 pointToLayer: function (feature, latlng) {
@@ -344,8 +344,8 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
                 puntos.on('click', function (e) {
                     let properties = e.target.feature.properties;
                     let geo = e.target.feature.geometry.coordinates;
-                    console.log(geo);
-                    console.log(properties);
+                    // console.log(geo);
+                    //   console.log(properties);
                     let popupContent =
                         '<div class="popup-content">' +
                         '<h5><b>Codigo ' + properties.idcodigo + '</b></h5>' +
@@ -365,7 +365,7 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
         .catch(function (error) {
             console.error('Error:', error);
         });
-   }
+}
 
 var iconA = L.icon({
     iconUrl: './resources/marker-icons/ambulance.png',
@@ -387,7 +387,7 @@ function euclideanDistanciaMetros(punto1, punto2) { // Distancia euclidiana a me
     return distanciaEnMetros;
 }
 
-function addObjLatLng(latitud, longitud) { // Crea objeto latlng
+function addObjLaLng(latitud, longitud) { // Crea objeto latlng
     let addObjLatLng = L.GeoJSON.coordsToLatLng([latitud, longitud]);
     return addObjLatLng
 }
