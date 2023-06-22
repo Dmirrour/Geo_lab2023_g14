@@ -142,14 +142,22 @@ function elegirCalle(selectedValue) {
     document.getElementById("visorDeListado").style.display = "none";
     buscarEsquinas();
 }
+let diasa;
 function elegirEsquina() {
     var selectedValue = document.getElementById('idSelectEsquina').options[document.getElementById('idSelectEsquina').selectedIndex].value;
+   
     seleccionEsq = datoEsq.find(item => item.idCalleEsq == selectedValue);
-    document.getElementById('direccion').value = seleccion.address;
-    actualizarMapa();
+       document.getElementById('direccion').value = seleccion.address;
+    // console.log("aca " + seleccionEsq.lat + seleccionEsq.lng);
+   //actualizarMapa();
+   masCercana(seleccionEsq);
+   actualizarMapa(seleccionEsq.lat, seleccionEsq.lng);
+   
 }
-// function actualizarMapa(Lat = null, Lng = null) {
-function actualizarMapa(Lat , Lng ) {
+
+//function actualizarMapa(Lat = null, Lng = null) {
+function actualizarMapa(Lat, Lng) {
+  
     let iconoPersonalizado = L.icon({
         iconUrl: 'resources/marker-icons/marker-iconnaranjaf.png',
         iconSize: [22, 36], // especifica el tamaño del icono en píxeles
@@ -169,6 +177,9 @@ function actualizarMapa(Lat , Lng ) {
     if (circulo != null) {
         map.removeLayer(circulo);
     }
+    // if (ambulanciaMarcador != null) {
+    //     map.removeLayer(ambulanciaMarcador);
+    // }
 
     marcador = L.marker([seleccionEsq.lat, seleccionEsq.lng], { icon: iconoPersonalizado }).addTo(map);
     marcador.bindPopup("<h4>Mi ubicación</h4><br>" + seleccionEsq.address + "<br>" + seleccionEsq.lat + " , " + seleccionEsq.lng);
@@ -181,7 +192,7 @@ function actualizarMapa(Lat , Lng ) {
     //frmBuscar.style.display = 'none';
     //btnMostrarBuscador.style.backgroundColor = '#f4f4f4';
     //map.setView([seleccionEsq.lat, seleccionEsq.lng], 13);
-
+  
 
     ///////////////// USUARIO
     var Usuario = {
@@ -194,6 +205,12 @@ function actualizarMapa(Lat , Lng ) {
         lon: laAmb
     };
 
+    // let diasa;
+    // diasa = masCercana(seleccionEsq).lat;
+    // diasaa = masCercana(seleccionEsq).lng;
+    // // loAmb2 = diasa.Lng;
+    // // laAmb2 = diasa.Lat;
+    // console.log("Ser " + diasa, diasa);
     var SerEme = {
         lat: laAmb2,
         lon: loAmb2
@@ -284,6 +301,7 @@ document.getElementById('mostrarBuscador').addEventListener('click', function ()
         btnMostrarBuscador.style.backgroundColor = '#f4f4f4';
     }
 });
+
 
 /// Para obtener coordenadas GSP 
 function obtenerCoordenadas() { //SYA

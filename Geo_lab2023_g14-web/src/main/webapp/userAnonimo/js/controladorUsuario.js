@@ -8,7 +8,8 @@ let coorUserlon;
 let coorUserlat;
 let a, b, c, d;
 let puntose;
-
+let longitudeGPS
+let latitudGPS
 /////////////////// SELECT CONTROL ///////////////////
 function menuInicio() {
     let listaSelect;
@@ -39,22 +40,23 @@ function menuInicio() {
                 case 21:
                     console.log("Seleccionar hospital");
                     wfsSelectHospitales();
-                    //    selectCtrlHospital.remove(); // para no duplicar
-                    // obtenerPuntosInicioFin();
-                    //  solicitaAmbHospital();
+                    limpiarButton();
                     break;
                 case 22:
                     console.log("Ingresar dirección");
+                    // masCercana();
+                    // limpiarButton();
+                    //     initLayers(0);
+                    map.removeLayer(geojsonLayere);
+                    map.removeLayer(geojsonLayeres);
+                    removerLayer();
+                    masCercana(seleccionEsq);
+
                     openFrm();
-                    limpiarButton();
                     break;
                 case 3:
                     console.log("Graficar");
-                    // limpiarButton();
-                    //  btnMostrarBuscador.remove();
-                   mostrarOcultarBtn;
-                    //    mostrarBuscador.hide();
-                    //  selectCtrlInicio.remove();
+                    limpiarButton();
                     break;
             }
         },
@@ -112,10 +114,7 @@ function wfsSelectHospitales() {
                         removerLayer();
 
                         initLayers(newItemValue);
-                        //    openFrm();
-
-
-
+                        //  openFrm();
                         //  masCercana(newItemValue);
                         //  buscarUbicacion; // crear recorrido
                         // var buscarUbicacionBtn = document.getElementById('buscarUbicacion');
@@ -130,85 +129,235 @@ function wfsSelectHospitales() {
         });
 }
 
-
 function limpiarButton() {
-    selectCtrlHospital.remove();
-
+    if (selectCtrlHospital != null) {
+        selectCtrlHospital.remove();
+    }
+    ocultarFrm();
 }
 
 
 /////////////////// addLayer WFS BUFFER ///////////////////
-function masCercana(newItemValue) {
-
-    obtenerCoordenadas()
-        .then(function (coor) {
-            console.log('Latitusd: ', coor.latitud);
-            console.log('Longitsud: ', coor.longitud);
-            actualizarMapa(coor.latitud, coor.longitud);
-        })
-
-    // let geojsonLayer = L.geoJSON(null, {
-    //     style: {
-    //         color: 'gray',
-    //         weight: 1.2,
-    //         opacity: 1
-    //     },
-    // })//.addTo(this.map);
+let menorDistancia = Infinity;
+let geojsonLa;
+let loAmb2aux;
+let laAmb2aux;
+let prop;
+let idhos;
+function masCercana(seleccionEsq) {
     // obtenerCoordenadas()
     //     .then(function (coor) {
-    //         console.log('Long obtener Coordenadas: ', coor.longitud);
-    //         console.log('Lat obtener Coordenadas: ', coor.latitud);
-    //         coorUserlon = coor.longitud;
-    //         coorUserlat = coor.latitud;
+    //         console.log('Latitusd: ', coor.latitud);
+    //         console.log('Longitsud: ', coor.longitud);
+    //         //  actualizarMapa(coor.latitud, coor.longitud);
     //     })
-    //     .catch(function (error) {
-    //         console.error('Error al obtener las coordenadas:', error);
-    //     });
+    console.log("selectEsq: " + seleccionEsq.lat, seleccionEsq.lng);
+    openFrm();
 
-    // let url =
-    //     'http://localhost:8081/geoserver/wfs?' +
-    //     'service=WFS&' +
-    //     'request=GetFeature&' +
-    //     'typeName=Geo_lab2023_g14PersistenceUnit:servicioemergencia&' +
-    //     'srsName=EPSG:32721&' +
-    //     'outputFormat=application/json&' +
-    //     'CQL_FILTER=INTERSECTS(point,POINT(' + coorUserlon + ' ' + coorUserlat + '))';
-    // fetch(url)
-    //     .then(function (response) {
-    //         return response.json();
-    //     })
-    //     .then(function (data) {
-    //         geojsonLayer.addData(data);
-    //         console.log("VISTADATA:  " + data);
-    //         //   console.log("VISTADATA:  " + data);
-    //         // Crear un buffer alrededor de las líneas
-    //         // let bufferedLayer = L.geoJSON(turf.buffer(data, 100, { units: 'meters' }), {
-    //         //     style: {
-    //         //         color: 'blue',
-    //         //         weight: 2,
-    //         //         opacity: 0.7
-    //         //     }
-    //         // }).addTo(this.map);
-    //     })
-    //     .catch(function (error) {
-    //         console.error('Error:', error);
-    //     });
+    openFrm();
+    //console.log("openFrm: " + seleccionEsq.lat);
+
+    // 'CQL_FILTER=DWITHIN(point_se, POINT(' + seleccionEsq.lng + ' ' + seleccionEsq.lat + '), 50000, feet)&' +
+    //   'sortBy=point asc&' +
+    // 'maxFeatures=1&' +
+    //  'CQL_FILTER=DWITHIN(point, POINT(-56.18581498973073 -34.86255776861203), 5000000, meters)&' +
+    //  'CQL_FILTER=INTERSECTS(buffer_zona_cobertura,POINT(' + coorUserlon + ' ' + coorUserlat + '))';
+    //  var geojsonLayer = L.geoJSON().addTo(map);
+    //  geojsonLa = L.geoJSON(null, {
+    // style: {
+    //     color: 'red',
+    //     weight: 0.8,
+    //     opacity: 0.5
+    // },
+    //  }).addTo(map);
+    let urlss =
+        'http://localhost:8081/geoserver/wfs?' +
+        'service=WFS&' +
+        'request=GetFeature&' +
+        'typeName=Geo_lab2023_g14PersistenceUnit:vista_se_h&' +
+        'srsName=EPSG:32721&' +
+        'outputFormat=application/json';
+    // initLayerServicioEm(urlss, 'layerSE'); // point se
+    fetch(urlss)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            geojsonLayer.addData(data);
+            console.log(data);
+            let puntosArray3 = [];
+            //   let itemValue;
+            for (let i = 0; i < data.features.length; i++) {
+                closestFeature = data.features[i].geometry.coordinates;
+                // = data.features[i].properties.hospital_idhospital;
+                //  console.log("188" + seleccionEsq.lat);
+                //  let disaa = addObjLatLng(seleccionEsq.lng, seleccionEsq.lat);
+                //   console.log("c", closestFeature);
+                //  console.log("c", disaa);
+                disaa = addObjLaLng(seleccionEsq.lat, seleccionEsq.lng)
+                distancia = euclideanDistanciaMetrosObj(disaa, closestFeature);
+                //  Coordenadas: -56.23197147 , -34.86140257
+                // -56.15258217 , -34.86441034   juan pablo ii
+                if (distancia < menorDistancia) {
+                    menorDistancia = distancia;
+                    //  laAmb2 = data.features[i].geometry.coordinates[1];
+                    // loAmb2 = data.features[i].geometry.coordinates[0];
+                    //  entidadMasCercana = entidad;
+                    idhos = data.features[i].properties.idhospital;
+                    laAmb2 = data.features[i].geometry.coordinates[1];
+                    loAmb2 = data.features[i].geometry.coordinates[0];
+                    puntosArray3.push({
+                        laAmb2,
+                        loAmb2
+                        //   idhoss
+                    });
+
+                    console.log(laAmb2 + " :: " + loAmb2, "distancia: ", distancia, idhos);
+                }
+            }
+            console.log(laAmb2 + " 9a9 " + loAmb2, "distancia: ", menorDistancia, idhos);
+            console.log(idhos + " id ");
+            openFrm();
+            initLayers(idhos);
+            openFrm();
+            //  openFrm();
+        })
+        .catch(function (error) {
+            console.error('Error:', error);
+        });
+
+
+
+    /*  fetch(urlss)
+          .then(function (response) {
+              return response.json();
+          })
+          .then(function (data) {
+              geojsonLa.addData(data);
+              console.log("asdas");
+              //    if (data.features.length > 0) {
+              console.log("data ", data);
+              let puntosArray3 = [];
+              for (let i = 0; i < data.features.length; i++) {
+                  prop = data.features[i].properties;
+                  console.log("data ", prop);
+                  closestFeature = data.features[i].geometry.coordinates;
+  
+                  //  let closestFeature = data.feature.geometry.coordinates[0];
+                  let disa = addObjLatLng(seleccionEsq.lng, seleccionEsq.lat);
+                  let disb = addObjLatLng(closestFeature[0], closestFeature[1]);
+  
+                  let distancia = euclideanDistanciaMetrosObj(disa, disb);
+  
+                  if (distancia < menorDistancia) {
+                      menorDistancia = distancia;
+                      laAmb2 = data.features[i].geometry.coordinates[1];
+                      loAmb2 = data.features[i].geometry.coordinates[0];
+                      //  entidadMasCercana = entidad;
+                  }
+  
+                  console.log(distancia, " ", loAmb2, laAmb2);
+                  // console.log(seleccionEsq);
+                  // console.log(closestFeature);
+                  // puntosArray3.push({
+                  //     laAmb3,
+                  //     loAmb3
+                  // });
+              }
+              console.log(loAmb2 + " 99 " + laAmb2);
+  
+              //     console.log("menor: ", menorDistancia);
+              //    // var diasa = addObjLatLng(loAmb2, laAmb2);
+              //     console.log("menor: ", diasa.lat);
+              //     // return diasa;
+  
+              // if (data.features.length > 0) {
+              //     let feature = data.features[0];
+              //     // Hacer algo con el resultado obtenido
+              //     console.log('-34.881743689093234 , -56.25985917951554: RESULTADO: ', feature);
+              // } else {
+              //     console.log('No se encontraron resultados.');
+              // }
+              // let puntosArray2 = [];
+              // for (let i = 0; i < data.features.length; i++) {
+              //     laAmb2 = data.features[i].geometry.coordinates[1];
+              //     loAmb2 = data.features[i].geometry.coordinates[0];
+              //     // console.log(loAmb2+ " 99 " + laAmb2);
+              //     puntosArray2.push({
+              //         laAmb2,
+              //         loAmb2
+              //     });
+              // }
+              // console.log(laAmb2[0])
+              // geojsonLayer.eachLayer(function (layer) {  // Evento clic marcadores
+              //     layer.on('click', function (e) {
+              //         let properties = e.target.feature.properties;
+              //         let popupContent = '<div class="popup-content">' + properties.idcodigo + '</div>';
+              //         let popupOptions = {
+              //             className: 'custom-popup'
+              //         };
+              //         layer.closePopup();
+              //         layer.bindPopup(popupContent, popupOptions);
+              //         //    layer.bindPopup(popupContent, popupOptions).openPopup();
+              //     })
+              // })
+          })
+          .catch(function (error) {
+              console.error('Error:', error);
+          });*/
+
+    //// POINT AMBULANCIA ////
+    // var iconAmbulancia = L.icon({
+    //     iconUrl: 'resources/marker-icons/ambulance.svg',
+    //     iconSize: [36, 36],
+    // });
+    // var fijarAmbulancia = {
+    //     type: 'FeatureCollection',
+    //     features: [{
+    //         type: 'Feature',
+    //         properties: {},
+    //         geometry: {
+    //             type: 'Point',
+    //             coordinates: [ambLat, ambLon]
+    //         }
+    //     },
+    //     ]
+    // };
+    // L.geoJSON(fijarAmbulancia, {
+    //     pointToLayer: function (feature, latlng) {
+    //         return L.marker(latlng, {
+    //             icon: iconAmbulancia
+    //         });
+    //     }
+    // }).addTo(map);
+
 }
 
+function obtenerCoordenadasGPS(){
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            this.latitudeGPS = position.coords.latitude;
+            this.longitudeGPS = position.coords.longitude;
+
+            // Actualizar las coordenadas del marcador
+            marker.setLatLng([latitude, longitude]);
+
+            // Centrar el mapa en las nuevas coordenadas
+            map.setView([latitude, longitude], 13);
+        }, function(error) {
+            console.error("Error al obtener la ubicación: " + error.message);
+        });
+    } else {
+        console.error("Tu navegador no admite la geolocalización.");
+    }
+}
 
 ////////// Ver Ambulancias y ServiciosEmergencia con cobertura en mi zona //////////
 function intersectpoint() {
-    obtenerCoordenadas()
-        .then(function (coor) {
-            console.log('Long obtener Coordenadas: ', coor.longitud);
-            console.log('Lat obtener Coordenadas: ', coor.latitud);
-            coorUserlon = coor.longitud;
-            coorUserlat = coor.latitud;
-        })
-        .catch(function (error) {
-            console.error('Error al obtener las coordenadas:', error);
-        });
-
+    obtenerCoordenadasGPS();
+    let latiPrueba = this.latitudeGPS;
+    let lonPrueba = this.longitudeGPS;
+    console.log(latiPrueba + " " + lonPrueba + "Putito salio");
     let geojsonLayer = L.geoJSON(null, {
         style: {
             color: 'red',
@@ -216,13 +365,13 @@ function intersectpoint() {
             opacity: 0.5
         },
     }).addTo(map);
-    let urlIntersect = 'http://localhost:8081/geoserver/wfs?' +
+    let urlIntersect =
+        'http://localhost:8081/geoserver/wfs?' +
         'service=WFS&' +
         'request=GetFeature&' +
         'typeName=Geo_lab2023_g14PersistenceUnit:vista_buff_cobertura_user&' +
         'outputFormat=application/json&' +
-        'CQL_FILTER=INTERSECTS(buffer_zona_cobertura,POINT(' + coorUserlon + ' ' + coorUserlat + '))';
-
+        'CQL_FILTER=INTERSECTS(buffer_zona_cobertura,POINT(' + latiPrueba + ' ' + lonPrueba + '))';
 
     // // Realizar la solicitud HTTP para obtener los datos
     // fetch(url)
@@ -361,7 +510,6 @@ function limpiarMapa() {
 
 function solicitaAmbHospital() {
     //   console.log("function init Layer Servicio Em: " + itemValue);
-
     console.log('---------- aaGPSaa ------------');
     let consultaLat = coor.latitud;
     let consultaLon = coor.longitud;
