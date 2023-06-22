@@ -21,9 +21,9 @@ INSERT INTO hospital("idhospital","nombrehospital","tipohospital")VALUES(6,'Hosp
 
 
 --*-*-*-*-*-*-*-*-*- INSERT AMBULANCIA -*-*-*-*-*-*-*-*-*--
-INSERT INTO ambulancia("idambulancia","distanciamaxdesvio","idcodigo","hospital_idhospital","polyline")VALUES(1,100,10,1,null);
-INSERT INTO ambulancia("idambulancia","distanciamaxdesvio","idcodigo","hospital_idhospital","polyline")VALUES(2,155,15,1,null);
-INSERT INTO ambulancia("idambulancia","distanciamaxdesvio","idcodigo","hospital_idhospital","polyline")VALUES(3,200,20,2,null);
+INSERT INTO ambulancia("idambulancia","distanciamaxdesvio","idcodigo","hospital_idhospital","polyline")VALUES(1,1000,10,1,null);
+INSERT INTO ambulancia("idambulancia","distanciamaxdesvio","idcodigo","hospital_idhospital","polyline")VALUES(2,155,450,2,null);
+INSERT INTO ambulancia("idambulancia","distanciamaxdesvio","idcodigo","hospital_idhospital","polyline")VALUES(3,2000,25,4,null);
 INSERT INTO ambulancia("idambulancia","distanciamaxdesvio","idcodigo","hospital_idhospital","polyline")VALUES(4,120,25,2,null);
 INSERT INTO ambulancia("idambulancia","distanciamaxdesvio","idcodigo","hospital_idhospital","polyline")VALUES(5,300,30,2,null);
 INSERT INTO ambulancia("idambulancia","distanciamaxdesvio","idcodigo","hospital_idhospital","polyline")VALUES(6,250,35,3,null);
@@ -65,10 +65,7 @@ INSERT INTO hospital_servicioemergencia(hospital_idhospital,  servicioemergencia
 ALTER TABLE servicioemergencia ADD COLUMN point GEOMETRY(Point, 32721);
 ALTER TABLE ambulancia ADD COLUMN polyline GEOMETRY(LineString, 32721);
 
--- 400
--- 6350
--- 12100
--- 2050 
+
 --*-*-*-*-*-*-*-*-*-*-*- VISTA -*-*-*-*-*-*-*-*-*-*-*--
 
 -- public.vista_selects;
@@ -76,7 +73,7 @@ CREATE OR REPLACE VIEW public.vista_selects AS
  SELECT DISTINCT a.idambulancia, g.hospital_idhospital,
     st_buffer(a.polyline, (a.distanciamaxdesvio::numeric * 0.000941090001733132 / 100::numeric)::double precision) AS st_buffer,
     st_pointn(a.polyline, 1) AS st_pointn
-   FROM servicioemergencia g,    ambulancia a
+   FROM servicioemergencia g, ambulancia a
   WHERE a.hospital_idhospital = g.hospital_idhospital;
 
 
@@ -156,13 +153,9 @@ SELECT * FROM ft_00_vias;
 
      /*nueva vista*/
      CREATE OR REPLACE VIEW public.vista_buf AS
-        SELECT
-            ST_Buffer(ST_SetSRID(a.polyline, 32721), ((a.distanciamaxdesvio*9.41090001733132E-4) / 100))
-                AS buffer_geom
-        FROM
-            ambulancia a
-        GROUP BY
-            a.distanciamaxdesvio,a.polyline;
+            SELECT ST_Buffer(ST_SetSRID(a.polyline, 32721), ((a.distanciamaxdesvio*9.41090001733132E-4) / 100)) AS buffer_geom
+            FROM ambulancia a
+            GROUP BY a.distanciamaxdesvio,a.polyline;
 
   CREATE OR REPLACE VIEW public.vista_se_h
    AS
@@ -193,16 +186,24 @@ CREATE OR REPLACE VIEW public.vista_buf AS
 
 
 
+CREATE OR REPLACE VIEW vista_buff_cobertura_user AS
+SELECT DISTINCT a.idambulancia, g.hospital_idhospital, st_buffer(a.polyline, (a.distanciamaxdesvio * 0.000941090001733132 / 100)) AS buffer_zona_cobertura, st_pointn(a.polyline, 1) AS first_point_recorrido, g.point AS point_se FROM servicioemergencia g,ambulancia a WHERE a.hospital_idhospital = g.hospital_idhospital;
 
 
+----  resp
+CREATE OR REPLACE VIEW public.vista_buff_cobertura_user AS
+SELECT DISTINCT a.idambulancia, g.hospital_idhospital, st_buffer(a.polyline, (a.distanciamaxdesvio * 0.000941090001733132 / 100)) AS buffer_zona_cobertura, st_pointn(a.polyline, 1) AS first_point_recorrido, g.point AS point_se FROM servicioemergencia g,ambulancia a WHERE a.hospital_idhospital = g.hospital_idhospital;
+
+
+----
 -- id ambulancia - punto servicio e - de linestring buffer - Primer punto en linestring
 
-CREATE OR REPLACE VIEW public.vista_buff_cobertura_user AS
- SELECT DISTINCT a.idambulancia,
-    g.hospital_idhospital,
-    st_buffer(a.polyline, (a.distanciamaxdesvio::numeric * 0.000941090001733132 / 100::numeric)::double precision) AS buffer_zona_cobertura,
-    st_pointn(a.polyline, 1) AS first_point_recorrido, g.point AS point_se
+CREATE OR REPLACE VIEW vista_buff_cobertura_user AS SELECT DISTINCT a.idambulancia,g.hospital_idhospital,
+    st_buffer(a.polyline, (a.distanciamaxdesvio * 0.000941090001733132 / 100)) AS buffer_zona_cobertura,st_pointn(a.polyline, 1) AS first_point_recorrido, g.point AS point_se
    FROM servicioemergencia g, ambulancia a WHERE a.hospital_idhospital = g.hospital_idhospital;
+
+
+--------------------------------------------------------------
 
 
 CREATE OR REPLACE VIEW public.vista_buff_cobertura AS
@@ -227,8 +228,7 @@ SELECT a.idambulancia, ST_PointN(a.polyline, 1)
 FROM ambulancia a;
 
 
-SELECT ST_PointN(polyline, 1) AS punto
-FROM ambulancia;
+SELECT ST_PointN(polyline, 1) AS punto FROM ambulancia;
 
 
 
@@ -277,7 +277,6 @@ SELECT st_astext(st_linemerge(st_union(geom))) FROM ft_01_ejes WHERE nom_calle='
 SELECT g.idservicio,ST_Buffer(a.polyline,0.05),g.point FROM servicioemergencia g, ambulancia a 
 WHERE ST_Intersects(g.point,(ST_Buffer(a.polyline,0.05)));
 
-
 SELECT a.nombre FROM ft_00departamento a, servicioemergencia g WHERE ST_OVERLAPS(a.geom,ST_BUFFER(g.point,0.001)) and a.nombre='MONTEVIDEO';
 DWITHIN(polyline, POINT(-34.20049069242444 -56.1905006852794), 50, meters)
 
@@ -287,7 +286,8 @@ SELECT st_endpoint(polyline) FROM ambulancia
 
 SELECT st_endpoint(polyline) from ambulancia
 
-
+SELECT distinct g.idservicio,ST_Buffer(a.polyline,0.005),g.point FROM servicioemergencia g, ambulancia a 
+WHERE ST_Intersects(g.point,(ST_Buffer(a.polyline,0.005)));
 
 
  

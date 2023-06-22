@@ -151,7 +151,6 @@ function generarColor(numero) {
 
 ///////////////////////// INITIALIZE LAYERS /////////////////////////
 function initLayers(itemValue) {
-    // console.log("function init Layer Servicio Em: " + itemValue);
     let filter = "idhospital='" + itemValue + "'";
     let urlSe =
         'http://localhost:8081/geoserver/wfs?' +
@@ -185,6 +184,7 @@ function initLayers(itemValue) {
 let laSe;
 let loSe;
 let geojsonLayer;
+var coorServicioEmer;
 function initLayerServicioEm(urlSe, layerName) {
     // console.log("function initLayerServicioEm");
     geojsonLayer = L.geoJSON(null, {
@@ -209,16 +209,32 @@ function initLayerServicioEm(urlSe, layerName) {
         .then(function (data) {
             geojsonLayer.addData(data);
 
+            let puntosArray2 = [];
+            for (let i = 0; i < data.features.length; i++) {
+                laAmb2 = data.features[i].geometry.coordinates[1];
+                loAmb2 = data.features[i].geometry.coordinates[0];
+                // console.log(loAmb2+ " 99 " + laAmb2);
+                puntosArray2.push({
+                    laAmb2,
+                    loAmb2
+                });
+            }
+
             geojsonLayer.eachLayer(function (layer) {
                 layer.on('click', function (e) {
                     let properties = e.target.feature.properties;
+                    coorServicioEmer = e.target.feature.geometry.coordinates;
+                    //  let coordenadas = e.target.feature.geometry.coordinates;
+                    console.log(coorServicioEmer);
                     let popupContent =
                         '<div class="popup-content">' +
                         '<h5><b>' + properties.nombre + '</b></h5>' +
                         '<em>Camas libres: </em><b>' + properties.camaslibres + '</b></br>' +
                         '<em>Total de camas: </em><b>' + properties.totalcama + '</b></br>' +
                         '<em>Hospital Nombre: </em><b>' + properties.nombrehospital + '</b></br>' +
-                        '<em>Hospital Tipo: </em><b>' + properties.tipohospital + '</b></br>' + '</div>';
+                        '<em>Hospital Tipo: </em><b>' + properties.tipohospital + '</b></br>' +
+                        //  '<em>Coordenadas: </em><b>' + coorServicioEmer[0] + " , " + coorServicioEmer[1] + '</b></br>' +
+                        '</div>';
                     let popupOptions = {
                         className: 'custom-popup'
                     };
@@ -232,7 +248,6 @@ function initLayerServicioEm(urlSe, layerName) {
             console.error('Error:', error);
         });
 }
-
 
 //////////////////////// LINESTRING AMBULANCIA ///////////////////////
 let geojsonLayere;
@@ -270,7 +285,7 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
             geojsonLayeres = L.geoJSON(data, {
                 pointToLayer: function (feature, latlng) {
                     return L.marker(latlng, {
-                        icon: iconA
+                        //   icon: iconA
                     });
                 }
             })
@@ -283,7 +298,7 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
                 datosAmd = data.features[i].properties.idcodigo;
                 distancia = data.features[i].properties.distanciamaxdesvio;
                 idhospital = data.features[i].properties.hospital_idhospital;
-                // console.log(laAmb + " * " + loAmb);
+                //   console.log(laAmb + " 88 " + loAmb);
                 puntosArray.push({
                     laAmb,
                     loAmb,
@@ -328,12 +343,15 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
             geojsonLayeres.eachLayer(function (puntos) {
                 puntos.on('click', function (e) {
                     let properties = e.target.feature.properties;
+                    let geo = e.target.feature.geometry.coordinates;
+                    console.log(geo);
                     console.log(properties);
                     let popupContent =
                         '<div class="popup-content">' +
                         '<h5><b>Codigo ' + properties.idcodigo + '</b></h5>' +
                         '<em>Distancia max. desvio: </em><b>' + properties.distanciamaxdesvio + ' m</b></br>' +
                         '<em>Hospital: </em><b>' + properties.hospital_idhospital + '</b></br>' +
+                        //    '<em>Coordenadas: </em><b>' + geo[0] + " , " + geo[1] + '</b></br>' +
                         '</div>';
                     let popupOptions = {
                         className: 'custom-popup'
@@ -347,7 +365,7 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
         .catch(function (error) {
             console.error('Error:', error);
         });
-}
+   }
 
 var iconA = L.icon({
     iconUrl: './resources/marker-icons/ambulance.png',

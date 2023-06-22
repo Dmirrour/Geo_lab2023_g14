@@ -4,6 +4,68 @@ let exisateLayer = false;
 let wfs;
 let wfse;
 let urlHospi;
+let coorUserlon;
+let coorUserlat;
+let a, b, c, d;
+let puntose;
+
+/////////////////// SELECT CONTROL ///////////////////
+function menuInicio() {
+    let listaSelect;
+    listaSelect = [
+        { label: "Cobertura en mi ubicación", value: 1 },
+        {
+            label: "Solicitar ambulancia", value: 2,
+            items: [
+                { label: "Seleccionar hospital", value: 21 },
+                { label: "Ingresar dirección", value: 22 },
+            ],
+        },
+        { label: "Graficar busqueda", value: 3 }
+    ];
+
+    selectCtrlInicio = L.control.select({
+        position: "topleft",
+        selectedDefault: false,
+        items: listaSelect,
+        onSelect: function (newItemValue) {
+            switch (newItemValue) {
+                case 1:
+                    console.log("Cobertura en mi ubicación");
+                    intersectpoint();
+                    limpiarMapa();
+                    limpiarButton();
+                    break;
+                case 21:
+                    console.log("Seleccionar hospital");
+                    wfsSelectHospitales();
+                    //    selectCtrlHospital.remove(); // para no duplicar
+                    // obtenerPuntosInicioFin();
+                    //  solicitaAmbHospital();
+                    break;
+                case 22:
+                    console.log("Ingresar dirección");
+                    openFrm();
+                    limpiarButton();
+                    break;
+                case 3:
+                    console.log("Graficar");
+                    // limpiarButton();
+                    //  btnMostrarBuscador.remove();
+                   mostrarOcultarBtn;
+                    //    mostrarBuscador.hide();
+                    //  selectCtrlInicio.remove();
+                    break;
+            }
+        },
+        onGroupOpen: function (groupOpened) {
+            console.log(groupOpened)
+
+        },
+    }).addTo(map);
+
+}
+
 var selectCtrlHospital;
 function wfsSelectHospitales() {
     let listaSelect = [];
@@ -33,24 +95,32 @@ function wfsSelectHospitales() {
             this.selectCtrlHospital = L.control.select({
                 position: "topleft",
                 selectedDefault: defaultValue,
-                iconMain: "✚",
+                iconMain: "➥",
                 items: listaSelect,
                 onSelect: function (newItemValue) {
                     if (newItemValue == t) {
                         map.removeLayer(geojsonLayere);
                         map.removeLayer(geojsonLayeres);
-                        //       map.removeLayer(geojsonLayer);
+                        map.removeLayer(geojsonLayer);
                         removerLayer();
                         initLayers(0);
-                        // selectCtrlHospital.remove();
+                        //  selectCtrlHospital.remove();
                         //  selectCtrlInicio();
                     } else {
                         map.removeLayer(geojsonLayere);
                         map.removeLayer(geojsonLayeres);
                         removerLayer();
+
                         initLayers(newItemValue);
-                        // selectCtrlHospital.remove();
-                        // selectCtrlInicio();
+                        //    openFrm();
+
+
+
+                        //  masCercana(newItemValue);
+                        //  buscarUbicacion; // crear recorrido
+                        // var buscarUbicacionBtn = document.getElementById('buscarUbicacion');
+                        //    selectCtrlHospital.remove();
+                        //  selectCtrlInicio();
                     }
                 },
             }).addTo(map);
@@ -61,80 +131,72 @@ function wfsSelectHospitales() {
 }
 
 
-/////////////////// SELECT CONTROL ///////////////////
-function selectCtrlInicio() {
-    // buscarUbicacion.remove();
-    // mostrarBuscador.remove();
-    //  wfsSelectHospitales.remove();
-    var selCtrlInicio;
-    let listaSelect;
-    /* listaSelect.push({label: "Solicitar ambulancia", value: 2}).push({label: "Ambulancia", value: 1});
-   /* items: [ {label: "Bifurcación", value: "2a"},  {label: "Completa", value: "2b"},],*/
-    listaSelect = [
-        { label: "Cobertura en mi ubicación", value: 1 },
-        {
-            label: "Solicitar ambulancia", value: 2,
-            items: [
-                { label: "Seleccionar hospital", value: 21 },
-                { label: "Ingresar dirección", value: 22 },
-            ],
-        },
-        { label: "Graficar busqueda", value: 3 }
-    ];
-    // var newState;
-    selCtrlInicio = L.control.select({
-        position: "topleft",
-        selectedDefault: false,
-        //  active: true,
-        items: listaSelect,
-        //  state: false,
-        onSelect: function (newItemValue) {
-            switch (newItemValue) {
-                case 1:
-                    // console.log("Cobertura en mi ubicación");
-                    intersectpoint();
-                    // limpiarMapa();
-                    // limpiarButton();
-                    break;
-                case 21:
-                    console.log("Seleccionar hospital");
-                    wfsSelectHospitales();
-
-
-                    break;
-                case 22:
-                    console.log("Ingresar dirección");
-                    limpiarButton();
-                    openFrm();
-                    break;
-                case 3:
-                    console.log("Graficar");
-                    limpiarButton();
-                    //  btnMostrarBuscador.remove();
-                    // mostrarOcultarBtn;
-                    //    mostrarBuscador.hide();
-                    //  selectCtrlInicio.remove();
-                    break;
-            }
-        },
-        onGroupOpen: function (groupOpened) {
-            console.log(groupOpened)
-
-        },
-    }).addTo(map);
-
-}
-
 function limpiarButton() {
-    selCtrlInicio.remove();
+    selectCtrlHospital.remove();
 
 }
+
+
+/////////////////// addLayer WFS BUFFER ///////////////////
+function masCercana(newItemValue) {
+
+    obtenerCoordenadas()
+        .then(function (coor) {
+            console.log('Latitusd: ', coor.latitud);
+            console.log('Longitsud: ', coor.longitud);
+            actualizarMapa(coor.latitud, coor.longitud);
+        })
+
+    // let geojsonLayer = L.geoJSON(null, {
+    //     style: {
+    //         color: 'gray',
+    //         weight: 1.2,
+    //         opacity: 1
+    //     },
+    // })//.addTo(this.map);
+    // obtenerCoordenadas()
+    //     .then(function (coor) {
+    //         console.log('Long obtener Coordenadas: ', coor.longitud);
+    //         console.log('Lat obtener Coordenadas: ', coor.latitud);
+    //         coorUserlon = coor.longitud;
+    //         coorUserlat = coor.latitud;
+    //     })
+    //     .catch(function (error) {
+    //         console.error('Error al obtener las coordenadas:', error);
+    //     });
+
+    // let url =
+    //     'http://localhost:8081/geoserver/wfs?' +
+    //     'service=WFS&' +
+    //     'request=GetFeature&' +
+    //     'typeName=Geo_lab2023_g14PersistenceUnit:servicioemergencia&' +
+    //     'srsName=EPSG:32721&' +
+    //     'outputFormat=application/json&' +
+    //     'CQL_FILTER=INTERSECTS(point,POINT(' + coorUserlon + ' ' + coorUserlat + '))';
+    // fetch(url)
+    //     .then(function (response) {
+    //         return response.json();
+    //     })
+    //     .then(function (data) {
+    //         geojsonLayer.addData(data);
+    //         console.log("VISTADATA:  " + data);
+    //         //   console.log("VISTADATA:  " + data);
+    //         // Crear un buffer alrededor de las líneas
+    //         // let bufferedLayer = L.geoJSON(turf.buffer(data, 100, { units: 'meters' }), {
+    //         //     style: {
+    //         //         color: 'blue',
+    //         //         weight: 2,
+    //         //         opacity: 0.7
+    //         //     }
+    //         // }).addTo(this.map);
+    //     })
+    //     .catch(function (error) {
+    //         console.error('Error:', error);
+    //     });
+}
+
 
 ////////// Ver Ambulancias y ServiciosEmergencia con cobertura en mi zona //////////
-let coorUserlon;
-let coorUserlat;
-let a, b, c, d;
-let puntose;
 function intersectpoint() {
     obtenerCoordenadas()
         .then(function (coor) {
@@ -160,6 +222,20 @@ function intersectpoint() {
         'typeName=Geo_lab2023_g14PersistenceUnit:vista_buff_cobertura_user&' +
         'outputFormat=application/json&' +
         'CQL_FILTER=INTERSECTS(buffer_zona_cobertura,POINT(' + coorUserlon + ' ' + coorUserlat + '))';
+
+
+    // // Realizar la solicitud HTTP para obtener los datos
+    // fetch(url)
+    // .then(response => response.json())
+    // .then(data => {
+    //     // Manipular los datos devueltos según sea necesario
+    //     console.log(data);
+    // })
+    // .catch(error => {
+    //     // Manejar cualquier error que ocurra durante la solicitud
+    //     console.error(error);
+    // });
+
     fetch(urlIntersect)
         .then(function (response) {
             return response.json();
@@ -174,7 +250,7 @@ function intersectpoint() {
                 puntose = data.features[0].properties.point_se;
                 c = puntose.coordinates[0];
                 d = puntose.coordinates[1];
-                //    console.log("2: ", c, " ", d);
+                console.log("2: ", c, " ", d);
             });
             geojsonLayeres.options.layerName = layerNames;
         })
@@ -248,7 +324,7 @@ function addLayerWFSbuf() {
         'http://localhost:8081/geoserver/wfs?' +
         'service=WFS&' +
         'request=GetFeature&' +
-        'typeName=Geo_lab2023_g14PersistenceUnit:vista_buff_cobertura&' +
+        'typeName=Geo_lab2023_g14PersistenceUnit:vista_buff_cobertura_user&' +
         'srsName=EPSG:32721&' +
         'outputFormat=application/json';
     fetch(url)
@@ -257,8 +333,9 @@ function addLayerWFSbuf() {
         })
         .then(function (data) {
             geojsonLayer.addData(data);
-            var s = data.features.properties;
-            console.log("VISTADATA:  " + s);
+            //    s = data.features;
+            // console.log("VISTADATA:  " + s);
+            // console.log("VISTADATA:  " + data);
             // Crear un buffer alrededor de las líneas
             // let bufferedLayer = L.geoJSON(turf.buffer(data, 100, { units: 'meters' }), {
             //     style: {
@@ -278,6 +355,65 @@ function limpiarMapa() {
     map.removeLayer(geojsonLayeres);
     removerLayer();
 }
+
+
+
+
+function solicitaAmbHospital() {
+    //   console.log("function init Layer Servicio Em: " + itemValue);
+
+    console.log('---------- aaGPSaa ------------');
+    let consultaLat = coor.latitud;
+    let consultaLon = coor.longitud;
+
+    let puntoICoords = euclideanDistanciaMetros(consultaLat, consultaLon);
+
+    console.log('ACA ANDA INDEX INVITADO LAT: ', consultaLat);
+    console.log('ACA ANDA INDEX INVITADO LON: ', consultaLon);
+
+    console.log('---------- aaPSaa ------------ ');
+
+    // let geojsonLayer = L.geoJSON(null, {
+    //     style: {
+    //         color: 'gray',
+    //         weight: 1.2,
+    //         opacity: 1
+    //     },
+    // }).addTo(this.map);
+    // let url =
+    //     'http://localhost:8081/geoserver/wfs?' +
+    //     'service=WFS&' +
+    //     'request=GetFeature&' +
+    //     'typeName=Geo_lab2023_g14PersistenceUnit:vista_buff_cobertura&' +
+    //     'srsName=EPSG:32721&' +
+    //     'outputFormat=application/json';
+    // fetch(url)
+    //     .then(function (response) {
+    //         return response.json();
+    //     })
+    //     .then(function (data) {
+    //         geojsonLayer.addData(data);
+    //         var s = data.features.properties;
+    //         console.log("VISTADATA:  " + s);
+
+    //     })
+    //     .catch(function (error) {
+    //         console.error('Error:', error);
+    //     });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
