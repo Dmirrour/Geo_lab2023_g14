@@ -240,9 +240,10 @@
 
       let mapaAdmin = new ControladorMapa();
       mapaAdmin.crearMapaAdmin();
+      mapaAdmin.addLayerWFSbuf();
       mapaAdmin.addLayersWFS();
       mapaAdmin.addLayerWFSLine();
-      mapaAdmin.addLayerWFSbuf();
+
 
       function mostrarMarker() {
          mapaAdmin.cargarMapaAltaSE();

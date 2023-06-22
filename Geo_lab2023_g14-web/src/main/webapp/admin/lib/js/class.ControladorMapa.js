@@ -186,7 +186,17 @@ class ControladorMapa extends Configuracion {
         let geojsonLayer = L.geoJSON(null, {
             pointToLayer: function (feature, latlng) {
                 let idh = feature.properties.idhospital;
-                let markerColor = this.generarColor(idh) || 'blue';
+                // Calcula los componentes de color
+                var rojo = (idh * 170) % 256;   // Rango de 0 a 255
+                var verde = (idh * 130) % 256;  // Rango de 0 a 255
+                var azul = (idh * 210) % 256;   // Rango de 0 a 255
+
+                // Retorna el color hexadecimal en el formato "#RRGGBB"
+                let color = "#" + rojo.toString(16).padStart(2, '0') +
+                    verde.toString(16).padStart(2, '0') +
+                    azul.toString(16).padStart(2, '0');
+
+                let markerColor = color || 'blue';
 
                 return L.circleMarker(latlng, {
                     radius: 8,
