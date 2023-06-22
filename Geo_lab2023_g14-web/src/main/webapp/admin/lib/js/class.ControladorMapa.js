@@ -186,7 +186,17 @@ class ControladorMapa extends Configuracion {
         let geojsonLayer = L.geoJSON(null, {
             pointToLayer: function (feature, latlng) {
                 let idh = feature.properties.idhospital;
-                let markerColor = this.generarColor(idh) || 'blue';
+                // Calcula los componentes de color
+                var rojo = (idh * 170) % 256;   // Rango de 0 a 255
+                var verde = (idh * 130) % 256;  // Rango de 0 a 255
+                var azul = (idh * 210) % 256;   // Rango de 0 a 255
+
+                // Retorna el color hexadecimal en el formato "#RRGGBB"
+                let color = "#" + rojo.toString(16).padStart(2, '0') +
+                    verde.toString(16).padStart(2, '0') +
+                    azul.toString(16).padStart(2, '0');
+
+                let markerColor = color || 'blue';
 
                 return L.circleMarker(latlng, {
                     radius: 8,
@@ -344,27 +354,31 @@ class ControladorMapa extends Configuracion {
             document.getElementById(prefijo + ":latitud").value = e.latlng.lat;
             document.getElementById(prefijo + ":longitud").value = e.latlng.lng;
 
-            this.markerSE = markerSE;
-        }, this);
-    }
-    cargarMapaModSE(data) {
+                this.markerSE = markerSE;
+            }, this);
+        }
+    cargarMapaModSE(date) {
         // Crea un marcador y guarda la posición en los campos de latitud y longitud
         let markerSE = L.marker([0, 0]).addTo(this.map);
         this.map.on('click', function (e) {
-            let prefijo = "mods";
+            /*let prefijo = "dialogMODSE";
+            let pref2 = "mod";*/
             let latitud = e.latlng.lat;
             let longitud = e.latlng.lng;
 
-            let row = data.closest('tr');
-            let id = row.getAttibute('data-ri');
+            //let row = data.closest('tr');
+            //let id = row.getAttibute('data-ri');
+/*
             console.log("Lat antes de act: " + document.getElementById(prefijo + ":" + id + ":frmMODSElatitud").value);
+*/
+            console.log('Número recibido:', date);
 
             markerSE.setLatLng(e.latlng);
             markerSE.bindPopup("Modificar Servicio de Emergencia en:<br>Latitud: " + latitud.toFixed(6) + "<br>Longitud: " + longitud.toFixed(6)).openPopup();
 
-            document.getElementById(prefijo + ":" + id + ":frmMODSElatitud").value = latitud;
-            document.getElementById(prefijo + ":" + id + ":frmMODSElongitud").value = longitud;
-            console.log("Lat despues de act: " + document.getElementById(prefijo + ":" + id + ":frmMODSElatitud").value);
+            document.getElementById("mods:" + date + ":frmMODSElatitud").value = latitud;
+            document.getElementById("mods:" + date + ":frmMODSElongitud").value = longitud;
+            /*console.log("Lat despues de act: " + document.getElementById(prefijo + ":" + id + ":frmMODSElatitud").value);*/
 
             this.markerSE = markerSE;
         }, this);

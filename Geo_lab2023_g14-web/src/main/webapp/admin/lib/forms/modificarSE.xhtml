@@ -16,72 +16,55 @@
                 <p:dataTable value="#{servicioEBean.servicioEmergenciaDTOS}"
                              id="mods"
                              var="serv"
-                             editable="true"
                              scrollable="true"
                              scrollHeight="400px">
-                    <p:ajax event="rowEdit" listener="#{servicioEBean.modServ}" update=":frmMODSE:msg :frmMODSE:mods"/>
-                    <p:ajax event="rowEditCancel" listener="#{servicioEBean.cancelar}" update=":frmMODSE:msg :frmMODSE:mods"/>
+
 
                     <p:column headerText="Nro" sortBy="#{serv.idServicio}" filterBy="#{serv.idServicio}" filterMatchMode="contains">
                         <h:outputText value="#{serv.idServicio}" />
                     </p:column>
 
                     <p:column headerText="Nom" sortBy="#{serv.nombre}" filterBy="#{serv.nombre}" filterMatchMode="contains">
-                        <p:cellEditor>
-                            <f:facet name="output">
                                 <h:outputText value="#{serv.nombre}" />
-                            </f:facet>
-                            <f:facet name="input">
-                                <p:inputText value="#{servicioEBean.nombreS}" />
-                            </f:facet>
-                        </p:cellEditor>
-
                     </p:column>
 
                     <p:column headerText="T. Camas" sortBy="#{serv.totalCama}">
-                    <p:cellEditor>
-                        <f:facet name="output">
                             <h:outputText value="#{serv.totalCama}" />
-                        </f:facet>
-                        <f:facet name="input">
-                            <p:inputText value="#{servicioEBean.totalCama}" />
-                        </f:facet>
-                    </p:cellEditor>
+                    </p:column>
 
+                    <p:column exportable="false">
+                        <p:commandButton styleClass="rounded-button ui-button-success"
+                                         icon="pi pi-pencil"
+                                         process="@this"
+                                         action="#{servicioEBean.setIdServE(serv.idServicio)}"
+                                         onclick="PF('modificar').show();"
+                        />
+                        <p:dialog id="mod" header="Modificar" widgetVar="modificar" resizable="false">
+                            <div class="w-fit m-auto mb-4">
+                                <div class="field grid">
+                                    <h:outputLabel for="Nombre" class="col-12 mb-2 md:col-4 md:mb-0">Nombre</h:outputLabel>
+                                       <p:inputText id="Nombre" value="#{servicioEBean.nombreS}"  />
+                                </div>
+                                <div class="field grid">
+                                    <h:outputLabel for="camasL" class="col-12 mb-2 md:col-4 md:mb-0">Camas Libres</h:outputLabel>
+                                      <p:inputText id="camasL" value="#{servicioEBean.camasLibre}"/>
+                                </div>
+                                <div class="field grid">
+                                    <h:outputLabel for="totalC" class="col-12 mb-2 md:col-4 md:mb-0">Total Camas</h:outputLabel>
+                                    <p:inputText id="totalC" value="#{servicioEBean.totalCama}" defaultValue="#{serv.totalCama.toString()}"/>
+                                </div>
+
+                                <p:inputText id="frmMODSElatitud" name="latitud" value="#{servicioEBean.latitud}" class="col-md-6 col-sm-12" required="true" style="display: block;" requiredMessage="La latitud es requerida" />
+                                <p:inputText id="frmMODSElongitud" name="longitud" value="#{servicioEBean.longitud}" class="col-md-6 col-sm-12" required="true" style="display: block;" requiredMessage="La longitud es requerida" />
+
+                                <div class="text-right">
+                                    <p:commandButton value="Confirmar" action="#{servicioEBean.modServ}" oncomplete="PF('modificarEmpresa').hide; location.reload();" class="text-white bg-primary-500 border-primary-500 px-3 py-2 text-base border-1 border-solid border-round cursor-pointer transition-all transition-duration-200 hover:bg-primary-600 hover:border-primary-600 active:bg-primary-700 active:border-primary-700"/>
+                                </div>
+                            </div>
+                        </p:dialog>
                     </p:column>
-                    <p:column headerText="C. Libres" sortBy="#{serv.camasLibres}">
-                        <p:cellEditor>
-                            <f:facet name="output">
-                                <h:outputText value="#{serv.camasLibres}" />
-                            </f:facet>
-                            <f:facet name="input">
-                                <p:inputText value="#{servicioEBean.camasLibre}" />
-                            </f:facet>
-                        </p:cellEditor>
-                    </p:column>
-                     <p:column styleClass="invisible-column">
-                        <p:cellEditor>
-                            <f:facet name="output">
-                                <h:outputText value="#{servicioEBean.latitud}" />
-                            </f:facet>
-                            <f:facet name="input">
-                                <p:inputText id="frmMODSElongitud" name="latitud" value="#{servicioEBean.latitud}" class="col-md-6 col-sm-12" required="true" style="display: block;" requiredMessage="La latitud es requerida" />
-                            </f:facet>
-                        </p:cellEditor>
-                    </p:column>
-                    <p:column styleClass="invisible-column">
-                        <p:cellEditor>
-                            <f:facet name="output">
-                                <h:outputText value="#{servicioEBean.longitud}" />
-                            </f:facet>
-                            <f:facet name="input">
-                                <p:inputText id="longitud" name="longitud" value="#{servicioEBean.longitud}" class="col-md-6 col-sm-12" required="true" style="display: block;" requiredMessage="La longitud es requerida" />
-                            </f:facet>
-                        </p:cellEditor>
-                    </p:column>
-                    <p:column>
-                        <p:rowEditor styleClass="rounded-button ui-button-success" icon="pi pi-pencil" onclick="cargarMapaModSE(this)" />
-                    </p:column>
+
+
                 </p:dataTable>
                <!-- <p:inputText id="frmMODSElongitud" name="frmMODSElongitud" value="#{servicioEBean.longitud}" class="col-md-6 col-sm-12" required="true" style="display: block;" requiredMessage="La longitud es requerida" />
                 <p:inputText id="frmMODSElatitud" name="frmMODSElatitud" value="#{servicioEBean.latitud}" class="col-md-6 col-sm-12" required="true" style="display: block;" requiredMessage="La latitud es requerida" />-->
@@ -89,13 +72,6 @@
         </h:form>
     </f:view>
 </p:dialog>
-<!--<script>
-    function tuFuncionJS() {
-        // Aquí puedes realizar las acciones que deseas ejecutar en JavaScript
-        PF('dlg4').hide();
-        PF('dlg8').show();
-        console.log('Función JS ejecutada desde el Managed Bean');
-    }
-</script>-->
+
 
 </html>

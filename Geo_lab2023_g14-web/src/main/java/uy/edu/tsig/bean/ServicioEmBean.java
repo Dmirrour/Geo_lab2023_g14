@@ -43,7 +43,9 @@ public class ServicioEmBean implements Serializable {
     private double longitud; // agregamos la propiedad longitud
     private String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
     private String usuario = "postgres";
-    private String contraseña = "lapass";
+    //private String contraseña = "admin";
+    private String contraseña = "1234";
+    private int size;
 
     private ServicioEmergenciaDTO servselect;
 
@@ -52,10 +54,12 @@ public class ServicioEmBean implements Serializable {
     private ServicioEmergenciaDTO selectedEmergencyService;
     private List<AmbulanciaDTO> ambuPerjudicadas = new ArrayList<>();
     private ServicioEmergenciaDTO sA;
+    private String departede;
 
     public void initS() {
         s = iServicioEmergenciaService.listarServiciosEmergensias();
         servicioEmergenciaDTOS = s.getListServiciosEmergencias();
+        size=servicioEmergenciaDTOS.size()-1;//arracamos de 0 asi que le restamos 1
     }
 
     public void addServicioE() throws IOException {
@@ -98,6 +102,7 @@ public class ServicioEmBean implements Serializable {
                                                                                                // confirmación
     }
 
+<<<<<<< HEAD
     public void modServ(RowEditEvent event) throws IOException {
         System.out.println(latitud + "  " + longitud);
         FacesContext fC = FacesContext.getCurrentInstance();
@@ -156,6 +161,100 @@ public class ServicioEmBean implements Serializable {
          * }
          * }
          */
+=======
+    private ServicioEmergenciaDTO buscarDTO(){
+        ServicioEmergenciaDTO servicioEmergenciaEncontrado = null;
+
+        for (ServicioEmergenciaDTO servicioEmergencia : servicioEmergenciaDTOS) {
+            if (servicioEmergencia.getIdServicio().equals(idServE)) {
+                servicioEmergenciaEncontrado = servicioEmergencia;
+                break;
+            }
+        }
+        return servicioEmergenciaEncontrado;
+
+    }
+    public void modServ() {
+        System.out.println("nombre:"+nombreS+" Camas T:"+totalCama+" camas L:"+camasLibre+" id:"+idServE);
+        System.out.println(latitud + "  " + longitud);
+        ServicioEmergenciaDTO a = buscarDTO();
+        if(totalCama==0)
+            totalCama=a.getTotalCama();
+        if(camasLibre==0 && a.getCamasLibres()>totalCama) {
+            camasLibre = a.getTotalCama() - (a.getTotalCama() - a.getCamasLibres());//si se sacaron camas pero el servicio de emergencia tenia mas agarro la nuevas cantidad de camas y le resto las que estaban ocupadas
+            if(camasLibre<0){
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Tienes menos camas quelas ocupadas", ""));
+                return;
+            }
+        }
+        if(nombreS.isEmpty() && nombreS=="")
+            nombreS=a.getNombre();
+        ServicioEmergenciaDTO mod= ServicioEmergenciaDTO.builder()
+                .idServicio(a.getIdServicio())
+                .totalCama(totalCama)
+                .camasLibres(camasLibre)
+                .nombre(nombreS)
+                .build();
+        iServicioEmergenciaService.modificar(mod);
+
+        try {
+            if(longitud!=0.0 && latitud!=0.0){
+                Connection conn = DriverManager.getConnection(url, usuario, contraseña);
+                Statement stmt = conn.createStatement();
+                String sql="SELECT a.* " +
+                        "FROM ambulancia a " +
+                        "JOIN servicioemergencia se ON a.hospital_idhospital = se.hospital_idhospital " +
+                        "WHERE se.idservicio = "+ a.getIdServicio() +
+                        "  AND a.hospital_idhospital = "+a.getHospital().getIdHospital()+
+                        "  AND ST_Intersects(ST_Buffer(a.polyline, ((a.distanciamaxdesvio * 9.41090001733132E-4) / 100)), se.point) " +
+                        "  AND NOT EXISTS ( " +
+                        "    SELECT 1 " +
+                        "    FROM servicioemergencia se2 " +
+                        "    JOIN ambulancia a2 ON a2.hospital_idhospital = se.hospital_idhospital " +
+                        "    WHERE se2.idservicio <> " + a.getIdServicio() +
+                        "      AND a2.idambulancia = a.idambulancia " +
+                        "      AND ST_Intersects(ST_Buffer(a2.polyline, ((a.distanciamaxdesvio * 9.41090001733132E-4) / 100)), se2.point) " +
+                        "  ) " +
+                        "  AND NOT EXISTS ( " +
+                        "    SELECT 1 " +
+                        "    FROM ambulancia a3 " +
+                        "    WHERE a3.idambulancia = a.idambulancia " +
+                        "      AND ST_Intersects(ST_Buffer(a3.polyline, ((a.distanciamaxdesvio * 9.41090001733132E-4) / 100)), ST_SetSRID(ST_MakePoint(" + longitud + ", " + latitud + "), 32721)) " +
+                        "  );";
+                System.out.println(sql);
+                ResultSet rs = stmt.executeQuery(sql);
+                if (rs.next()) {
+                    ambuPerjudicadas.clear();
+                    System.out.println("el resultado no es null");
+                    do {
+
+                        AmbulanciaDTO ambulanciaDTO= AmbulanciaDTO.builder()
+                                .idAmbulancia(rs.getLong("idambulancia"))
+                                .idCodigo(rs.getInt("idcodigo"))
+                                .distanciaMaxDesvio(rs.getInt("distanciamaxdesvio"))
+                                .build();
+                        ambuPerjudicadas.add(ambulanciaDTO);
+                    } while (rs.next());
+                    System.out.println(ambuPerjudicadas);
+                    sA=a;
+                    departede="Mod";
+                    FacesContext fC = FacesContext.getCurrentInstance();
+                    ExternalContext eC = fC.getExternalContext();
+                    eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true&showDialogs=true");
+
+                }else{
+                    rs = stmt.executeQuery(
+                            "UPDATE servicioemergencia set point = (ST_SetSRID(ST_MakePoint(" + longitud + ", " + latitud
+                                    + "), 32721)) WHERE idservicio=" + idServE + ";");
+                }
+
+            }
+        } catch (SQLException  | IOException e) {
+            // e.printStackTrace();
+            System.out.println("ATENCION: si no guarda, verificar el archivo ServicioEmBEan.java, cambiar pass en las propiedades de la calse.");
+            System.out.println("No conecta."+e.getMessage());
+        }
+>>>>>>> aeabf201545bb99f84fc538af5282f82ef026d80
     }
 
     public void cancelar(RowEditEvent event) {
@@ -207,7 +306,12 @@ public class ServicioEmBean implements Serializable {
                     ambuPerjudicadas.add(ambulanciaDTO);
                 } while (rs.next());
                 System.out.println(ambuPerjudicadas);
+<<<<<<< HEAD
                 sA = se;
+=======
+                sA=se;
+                departede="Eliminar";
+>>>>>>> aeabf201545bb99f84fc538af5282f82ef026d80
                 FacesContext fC = FacesContext.getCurrentInstance();
                 ExternalContext eC = fC.getExternalContext();
                 eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true&showDialogs=true");
@@ -334,5 +438,21 @@ public class ServicioEmBean implements Serializable {
 
     public void setsA(ServicioEmergenciaDTO sA) {
         this.sA = sA;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public String getDepartede() {
+        return departede;
+    }
+
+    public void setDepartede(String departede) {
+        this.departede = departede;
     }
 }

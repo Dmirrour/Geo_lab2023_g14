@@ -157,7 +157,6 @@ function elegirEsquina() {
 
 //function actualizarMapa(Lat = null, Lng = null) {
 function actualizarMapa(Lat, Lng) {
-
     let iconoPersonalizado = L.icon({
         iconUrl: 'resources/marker-icons/marker-iconnaranjaf.png',
         iconSize: [22, 36], // especifica el tamaño del icono en píxeles
@@ -192,7 +191,7 @@ function actualizarMapa(Lat, Lng) {
     //frmBuscar.style.display = 'none';
     //btnMostrarBuscador.style.backgroundColor = '#f4f4f4';
     //map.setView([seleccionEsq.lat, seleccionEsq.lng], 13);
-
+  
 
     ///////////////// USUARIO
     var Usuario = {

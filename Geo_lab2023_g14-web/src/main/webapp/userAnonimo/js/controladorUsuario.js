@@ -137,7 +137,6 @@ function wfsSelectHospitales() {
                         map.removeLayer(geojsonLayeres);
                         removerLayer();
                         initLayers(newItemValue);
-
                         //  openFrm();
                         //  masCercana(newItemValue);
                         //  buscarUbicacion; // crear recorrido
@@ -335,6 +334,24 @@ function masCercana(seleccionEsq) {
 
 }
 
+function obtenerCoordenadasGPS() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            this.latitudeGPS = position.coords.latitude;
+            this.longitudeGPS = position.coords.longitude;
+
+            // Actualizar las coordenadas del marcador
+            marker.setLatLng([latitude, longitude]);
+
+            // Centrar el mapa en las nuevas coordenadas
+            map.setView([latitude, longitude], 13);
+        }, function (error) {
+            console.error("Error al obtener la ubicación: " + error.message);
+        });
+    } else {
+        console.error("Tu navegador no admite la geolocalización.");
+    }
+}
 
 var iconA = L.icon({
     iconUrl: './resources/marker-icons/ambulance.png',
