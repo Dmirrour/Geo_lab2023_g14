@@ -257,12 +257,8 @@ public class ServicioEmBean implements Serializable {
                     ambuPerjudicadas.add(ambulanciaDTO);
                 } while (rs.next());
                 System.out.println(ambuPerjudicadas);
-<<<<<<< HEAD
                 sA = se;
-=======
-                sA=se;
-                departede="Eliminar";
->>>>>>> aeabf201545bb99f84fc538af5282f82ef026d80
+                departede = "Eliminar";
                 FacesContext fC = FacesContext.getCurrentInstance();
                 ExternalContext eC = fC.getExternalContext();
                 eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true&showDialogs=true");
