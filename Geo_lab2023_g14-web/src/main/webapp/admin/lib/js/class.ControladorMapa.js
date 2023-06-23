@@ -402,7 +402,7 @@ class ControladorMapa extends Configuracion {
             verde.toString(16).padStart(2, '0') +
             azul.toString(16).padStart(2, '0');
     }
-    cargarMapaAltaAmbulancia() {
+    cargarMapaAltaAmbulancia(date2) {
         ///////////////////////// FIN OPCIONES DE MAPA /////////////////////////
         /*
         var recorrido = [];
@@ -452,6 +452,7 @@ class ControladorMapa extends Configuracion {
             var polyline = layer.toGeoJSON().geometry.coordinates;
             var formattedPolyline = this.formatPolyline(polyline);
             this.savePolyline(formattedPolyline);
+            this.savePolyline2(formattedPolyline, date2);
             this.drawLayers.addLayer(layer);
         }, this);
 
@@ -478,6 +479,10 @@ class ControladorMapa extends Configuracion {
         console.log(polyline);
         let prefijo = "formAA";
         document.getElementById(prefijo + ":rec").value = polyline;
+    }
+    savePolyline2(polyline, date2) {
+        console.log(polyline);
+        document.getElementById("modsA:"+date2+":rec").value = polyline;
     }
     async sugerencia(text) {
 

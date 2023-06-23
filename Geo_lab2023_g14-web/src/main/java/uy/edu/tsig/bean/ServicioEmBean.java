@@ -179,9 +179,18 @@ public class ServicioEmBean implements Serializable {
                     eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true&showDialogs=true");
 
                 }else{
-                    rs = stmt.executeQuery(
+                    stmt.executeUpdate(
                             "UPDATE servicioemergencia set point = (ST_SetSRID(ST_MakePoint(" + longitud + ", " + latitud
                                     + "), 32721)) WHERE idservicio=" + idServE + ";");
+                    totalCama = 0;
+                    nombreS = null;
+                    idHospital = null;
+                    latitud = 0;
+                    longitud = 0;
+                    FacesContext facesContext = FacesContext.getCurrentInstance();
+                    facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", ""));
+                    ExternalContext externalContext = facesContext.getExternalContext();
+                    externalContext.redirect(externalContext.getRequestContextPath() + "/admin/indexAdm.xhtml");
                 }
 
             }

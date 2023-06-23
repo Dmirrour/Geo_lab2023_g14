@@ -103,7 +103,9 @@
       <ui:include src="lib/forms/eliminarHospital.xhtml" />
       <ui:include src="lib/forms/eliminarSE.xhtml" />
       <ui:include src="lib/forms/modificarSE.xhtml" />
+      <ui:include src="lib/forms/modificarAmbu.xhtml" />
       <ui:include src="lib/forms/AmbulaciaFueraService.xhtml" />
+
    </p:outputPanel>
    <!-- END FORMS -->
 
@@ -251,8 +253,15 @@
       function mostrarMarker2(date) {
          mapaAdmin.cargarMapaModSE(date);
       }
+      /*let date2=#{adminBean.size}*/
+      /*$(document).ready(function() {
+         console.log('El documento HTML se ha cargado por completo.');
 
-      mapaAdmin.cargarMapaAltaAmbulancia();
+         mapaAdmin.cargarMapaAltaAmbulancia(#{adminBean.size});
+
+         // Resto del código que deseas ejecutar después de la carga inicial
+      });*/
+      mapaAdmin.cargarMapaAltaAmbulancia(#{adminBean.size});
    </script>
    <script type="text/javascript">
       $(document).ready(function () {
