@@ -54,13 +54,15 @@
 
 <body>
     <div id="navbar">
-        <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-sm navbar-black bg-black">
             <div class="container-fluid">
-                <a class="navbar-brand" href="javascript:void(0)">TSIG - G14</a>
+                <a class="navbar-brand" href="javascript:void(0)"></a>
+                <img id="logo" src="./admin/lib/images/logo.jpg" alt="AAAS"></img>
+
                 <div class="d-flex" id="mynavbar">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="/Geo_lab2023_g14-web/login.xhtml">Ingresar</a>
+                            <a class="nav-link" style="color:#00a5ff" href="/Geo_lab2023_g14-web/login.xhtml">Ingresar</a>
                         </li>
                     </ul>
                 </div>
@@ -260,6 +262,7 @@
 <script>
     menuInicio();
     initLayers(0); // indexInvitado.js
+    moverAmbu();
     // hardcodedDataPoint();
     // addLayerWFSbuf();
     

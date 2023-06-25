@@ -375,6 +375,18 @@ var iconA = L.icon({
 });
 
 
+
+///////////////////////// GENERA COLOR /////////////////////////
+function moverAmbu() {
+   
+
+
+    
+}
+
+
+
+
 ///////////////////////// FUNCIONES AUXILIARES /////////////////////////
 function euclideanDistancia(punto1, punto2) { // Distancia euclidiana entre dos puntos 
     let dx = punto2.x - punto1.x;

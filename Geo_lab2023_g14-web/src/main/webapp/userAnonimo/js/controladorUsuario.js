@@ -24,7 +24,8 @@ function menuInicio() {
                 { label: "Ingresar dirección", value: 22 },
             ],
         },
-        { label: "Graficar busqueda", value: 3 }
+        { label: "Graficar busqueda", value: 3 },
+        { label: "Servicio con disponibilidad", value: 4 }
     ];
 
     selectCtrlInicio = L.control.select({
@@ -78,6 +79,13 @@ function menuInicio() {
                     dibujarPolyline();
                     // ocultarFrm();
                     // selectCtrlHospital.remove();
+                    break;
+                case 4:
+                    console.log("Servicio disponible ");
+                    map.removeLayer(geojsonLayer);
+                    map.removeLayer(geojsonLayere);
+                    map.removeLayer(geojsonLayeres);
+                    camasDisponibles();
                     break;
             }
         },
@@ -149,6 +157,88 @@ function wfsSelectHospitales() {
         });
 }
 
+var concatenarPoints = "";
+let camas;
+var geojsonLayeresCamas;
+function camasDisponibles() {
+    //  var drawLayer = new L.FeatureGroup().addTo(map); // Crear una nueva capa de dibujo
+
+
+    let cero = 0;
+    let filters = "camaslibres>'" + cero + "'";
+    let urlCamas =
+        'http://localhost:8081/geoserver/wfs?' +
+        'service=WFS&' +
+        'request=GetFeature&' +
+        'typeName=Geo_lab2023_g14PersistenceUnit:vista_se_h&' +
+        'srsName=EPSG:32721&' +
+        'outputFormat=application/json';
+
+    urlCamas += '&CQL_FILTER=' + filters;
+
+    geojsonLayer = L.geoJSON(null, {
+        pointToLayer: function (feature, latlng) {
+            let idh = feature.properties.idhospital * 20;
+            let markerColor = generarColor(idh) || 'blue';
+            return L.circleMarker(latlng, {
+                radius: 8,
+                fillColor: markerColor,
+                color: '#000',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            });
+        }
+    }).addTo(map); // Crear una capa de GeoJSON, agrega los puntos de SERVICIO EMERGENCIA 
+    fetch(urlCamas)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            geojsonLayer.addData(data);
+            //   console.log(data);
+            let puntosArray2 = [];
+            for (let i = 0; i < data.features.length; i++) {
+                laAmb2 = data.features[i].geometry.coordinates[1];
+                loAmb2 = data.features[i].geometry.coordinates[0];
+                puntosArray2.push({
+                    laAmb2,
+                    loAmb2
+                });
+            }
+            // camas = data.features[i].properties.camaslibres;
+            // console.log("camas: ", camas);
+
+            // if (camas > 0) {
+            geojsonLayer.eachLayer(function (layer) {
+                layer.on('click', function (e) {
+                    let properties = e.target.feature.properties;
+                    coorServicioEmer = e.target.feature.geometry.coordinates;
+                    //  let coordenadas = e.target.feature.geometry.coordinates;
+                    //  console.log(coorServicioEmer);
+                    let popupContent =
+                        '<div class="popup-content">' +
+                        '<h5><b>' + properties.nombre + '</b></h5>' +
+                        '<em>aaaaCamas libres: </em><b>' + properties.camaslibres + '</b></br>' +
+                        '<em>Total de camas: </em><b>' + properties.totalcama + '</b></br>' +
+                        '<em>Hospital Nombre: </em><b>' + properties.nombrehospital + '</b></br>' +
+                        '<em>Hospital Tipo: </em><b>' + properties.tipohospital + '</b></br>' +
+                        //   '<em>Coordenadas: </em><b>' + coorServicioEmer[0] + " , " + coorServicioEmer[1] + '</b></br>' +
+                        '</div>';
+                    let popupOptions = {
+                        className: 'custom-popup'
+                    };
+                    layer.closePopup(); // Cerrar el popup anterior si existe
+                    layer.bindPopup(popupContent, popupOptions).openPopup();
+                })
+            });
+            geojsonLayer.options.layerName = layerName;
+        })
+        .catch(function (error) {
+            console.error('Error:', error);
+        });
+}
+
 
 
 var concatenarPoints = "";
@@ -164,7 +254,6 @@ function dibujarPolyline() {
         },
         edit: false
     }).addTo(map);
-
 
     let wfsURL = 'http://localhost:8081/geoserver/wfs?' +
         'service=WFS&' +
@@ -228,7 +317,7 @@ function dibujarPolyline() {
     // Limpiar la capa de dibujo cuando se haga clic en el mapa
     map.on('click', function () {
         drawLayer.clearLayers();
-       // drawControlPoligon.remove(); remover control
+        // drawControlPoligon.remove(); remover control
     });
 }
 
@@ -250,7 +339,7 @@ let laAmb2aux;
 let prop;
 function masCercana(seleccionEsq) {
     console.log("selectEsq: " + seleccionEsq.lat, seleccionEsq.lng);
-     //  'CQL_FILTER=DWITHIN(point, POINT(-56.18581498973073 -34.86255776861203), 5000000, meters)&' +
+    //  'CQL_FILTER=DWITHIN(point, POINT(-56.18581498973073 -34.86255776861203), 5000000, meters)&' +
     //  'CQL_FILTER=INTERSECTS(buffer_zona_cobertura,POINT(' + coorUserlon + ' ' + coorUserlat + '))';
     //  geojsonLa = L.geoJSON(null, {
     // style: {     color: 'red',  weight: 0.8, opacity: 0.5  }, }).addTo(map);
