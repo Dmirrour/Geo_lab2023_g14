@@ -87,20 +87,23 @@ function CrearMapaInvitado() {
     drawControl = new L.Control.DrawPlus({
         position: 'topright',
         draw: {
-            circle: true,
-            polyline: true
+            circle: false,
+            polyline: false
         },
-        edit: {
-            featureGroup: drawLayers,
-            edit: true
-        }
+        // edit: {
+        //     featureGroup: drawLayers,
+        //     edit: false
+        // }
     });
 
     map.addLayer(drawLayers);
-    // map.addControl(drawControl);
+    //  map.addControl(drawControl);
 
     map.on(L.Draw.Event.CREATED, function (e) {
+        //  console.log("drawLayers: ", drawLayers._layers[179])
+        //  console.log("drawLayers: ", e.layer);
         drawLayers.addLayer(e.layer);
+
     });
     ///////////////////////// FIN OPCIONES DE MAPA /////////////////////////
 
@@ -114,7 +117,6 @@ function CrearMapaInvitado() {
         console.log("Latitud:", latitud) // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
         console.log("Longitud:", longitud)
     });
-
     map.on('click', function (e) {
         let latitud = e.latlng.lat;
         let longitud = e.latlng.lng;
@@ -398,6 +400,7 @@ function euclideanDistanciaMetrosObj(latlng1, latlng2) { // Distancia euclidiana
 
 function removerLayer() {
     map.removeLayer(geojsonLayer);
+    ocultarFrm();
 }
 
 function BorrarMarcadorALtaSE() {

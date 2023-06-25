@@ -28,8 +28,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 @Named("adminBean")
 @SessionScoped
 public class AdminBean implements Serializable {
@@ -58,11 +56,10 @@ public class AdminBean implements Serializable {
     private ServiciosEmergencias s;
     private ArrayList<ServicioEmergenciaDTO> servicioEmergenciaDTOS;
 
-
     private String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
     private String usuario = "postgres";
-    //private String contraseña = "admin";
-    private String contraseña = "1234";
+    // private String contraseña = "admin";
+    private String contraseña = "lapass";
     @Inject
     private ServicioEmBean servicioEmBean;
 
@@ -78,32 +75,36 @@ public class AdminBean implements Serializable {
 
     public void addAmbulancia() throws IOException {
 
-        //double  des= (desvio*100)/(6378137*0.9996); no erra casi nada presisa entre mas grande el buffer mas margen tenia ya que habria que hacerlo atraves de operacciones con longitud
-        double grados=9.41090001733132E-4;//Probado hasta que encontrara saque una equivalencia en grados este numero equivale a esto+-5m
-        double des=(desvio*grados)/100;//regla de 3
+        // double des= (desvio*100)/(6378137*0.9996); no erra casi nada presisa entre
+        // mas grande el buffer mas margen tenia ya que habria que hacerlo atraves de
+        // operacciones con longitud
+        double grados = 9.41090001733132E-4;// Probado hasta que encontrara saque una equivalencia en grados este numero equivale a esto+-5m
+        double des = (desvio * grados) / 100;// regla de 3
         Connection conn;
         try {
             conn = DriverManager.getConnection(url, usuario, contraseña);
-            List<ServicioEmergencia> servasocioados= new ArrayList<>();
+            List<ServicioEmergencia> servasocioados = new ArrayList<>();
             Statement stmt = conn.createStatement();
-            //alta logicaa
+            // alta logicaa
             Ambulancia a = Ambulancia.builder()
                     .idCodigo(codigo)
                     .distanciaMaxDesvio(desvio)
-                    //.ServEdelRecorrido(servasocioados)
+                    // .ServEdelRecorrido(servasocioados)
                     .build();
             AmbulanciaDTO aDTO = iAmbulaciasService.altaAmbulacia(a, idHospital);
 
             System.out.println(aDTO);
-            System.out.println("ATENCION: si no guarda linestring en la vista, verificar el archivo AdminBEan.java, metodo addAmbulancia(); poner la contraseña correcta para su equipo.");
+            System.out.println(
+                    "ATENCION: si no guarda linestring en la vista, verificar el archivo AdminBEan.java, metodo addAmbulancia(); poner la contraseña correcta para su equipo.");
             System.out.println(des);
-            System.out.println("verificar reco antes de enviar query: "+rec);
+            System.out.println("verificar reco antes de enviar query: " + rec);
 
             ResultSet resultSet = stmt.executeQuery("SELECT se.* FROM servicioemergencia se " +
-                    "JOIN (SELECT ST_Buffer(ST_SetSRID(ST_GeomFromText('"+ rec +"'), 32721)," + des +") AS buffer_geom " +
-                    "FROM ambulancia a WHERE a.idambulancia = "+ aDTO.getIdAmbulancia() +") AS buffer " +
+                    "JOIN (SELECT ST_Buffer(ST_SetSRID(ST_GeomFromText('" + rec + "'), 32721)," + des
+                    + ") AS buffer_geom " +
+                    "FROM ambulancia a WHERE a.idambulancia = " + aDTO.getIdAmbulancia() + ") AS buffer " +
                     "ON ST_Within(se.point, buffer.buffer_geom) " +
-                    "WHERE se.hospital_idhospital = "+ idHospital +";");
+                    "WHERE se.hospital_idhospital = " + idHospital + ";");
             System.out.println("Pase la query");
             FacesContext fC = FacesContext.getCurrentInstance();
             ExternalContext eC = fC.getExternalContext();
@@ -117,18 +118,16 @@ public class AdminBean implements Serializable {
                     servicioEmergencia.setNombre(resultSet.getString("nombre"));
                     servasocioados.add(servicioEmergencia);
 
-
                 } while (resultSet.next());
 
                 System.out.println(servasocioados);
                 System.out.println("pase el wild");
 
-                //alta recorrido
-                int rowsAffected  = stmt.executeUpdate(
-                        "UPDATE ambulancia SET polyline = ST_SetSRID(ST_GeomFromText('"+ rec +"'), 32721)" +
+                // alta recorrido
+                int rowsAffected = stmt.executeUpdate(
+                        "UPDATE ambulancia SET polyline = ST_SetSRID(ST_GeomFromText('" + rec + "'), 32721)" +
                                 "WHERE idambulancia=" + aDTO.getIdAmbulancia() + ";");
                 System.out.println("Recorrido insertado correctamente.");
-
 
                 String msj = String.format("Se agregó la ambulancia %s.", codigo);
                 addMensaje("Ambulancias", msj);
@@ -140,34 +139,33 @@ public class AdminBean implements Serializable {
                 System.out.println("guardado recA, redireccion....");
 
                 eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true"); // Reemplaza con la URL de la página de confirmación
-            }else {
+            } else {
                 String msj = String.format("No hay servicios en su Zona.");
-                addMensaje("Ambulancias", msj);//creo que ninguno de los mensajes se captan en menu creo que es porque se recarga la paguina y no se ve
+                addMensaje("Ambulancias", msj);// creo que ninguno de los mensajes se captan en menu creo que es porque se recarga la paguina y no se ve
                 System.out.println("el resultado es null");
                 eliminarA(aDTO.getIdAmbulancia());
                 eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true");
             }
-        }catch (SQLException e){
-            System.out.println("No conecta."+e.getMessage());
+        } catch (SQLException e) {
+            System.out.println("No conecta." + e.getMessage());
         }
 
     }
-
 
     private void addMensaje(String summary, String detail) {
         FacesMessage mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
         FacesContext.getCurrentInstance().addMessage(null, mensaje);
     }
 
-    public void modBuffer(String red){
-        List<AmbulanciaDTO> a= servicioEmBean.getAmbuPejudicadas();
+    public void modBuffer(String red) {
+        List<AmbulanciaDTO> a = servicioEmBean.getAmbuPejudicadas();
         System.out.println();
         for (AmbulanciaDTO ambulanciaDTO : a) {
-            ambulanciaDTO.setDistanciaMaxDesvio(ambulanciaDTO.getDistanciaMaxDesvio()+desvio);
+            ambulanciaDTO.setDistanciaMaxDesvio(ambulanciaDTO.getDistanciaMaxDesvio() + desvio);
             System.out.println("AdminBean::distancia maxima: " + ambulanciaDTO.getDistanciaMaxDesvio());
             iAmbulaciasService.modificar(ambulanciaDTO);
         }
-        switch (red){
+        switch (red) {
             case "Mod":
                 servicioEmBean.modServ();
                 break;
@@ -184,7 +182,6 @@ public class AdminBean implements Serializable {
                 .tipoHospital(tipoH)
                 .build();
         HospitalDTO hos = iHospitalService.altaHospital(h);
-
 
         String msj = String.format("Se agregó el hospital %s.", nombreH);
         addMensaje("Hospitales", msj);
@@ -204,7 +201,7 @@ public class AdminBean implements Serializable {
 
     public void eliminarA(Long idAmbulancia) {
 
-        boolean r= iAmbulaciasService.borrarA(idAmbulancia);
+        boolean r = iAmbulaciasService.borrarA(idAmbulancia);
         if (r) {
             initA();
             String msj = String.format("Se Borro el Servicio con id %s.", idAmbulancia);
@@ -241,7 +238,10 @@ public class AdminBean implements Serializable {
         return codigo;
     }
 
-    public String getRec() { return rec;}
+    public String getRec() {
+        return rec;
+    }
+
     public void setRec(String rec) {
         this.rec = rec;
     }
