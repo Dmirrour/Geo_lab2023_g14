@@ -9,10 +9,6 @@
     <f:view>
         <h:form id="frmMODAD" prependId="false">
             <p:card styleClass="flex justify-content-center">
-                <p:growl id="msg2" >
-                    <p:autoUpdate />
-                </p:growl>
-                <p:messages autoUpdate="true" />
                 <p:dataTable value="#{adminBean.ambulanciaDTOS}"
                              id="modsA"
                              var="ambu"
@@ -51,7 +47,7 @@
                                 </div>
 
                                 <div class="text-right">
-                                    <p:commandButton value="Confirmar" action="#{adminBean.modAmbu}" oncomplete="PF('modificar2').hide; location.reload();" class="text-white bg-primary-500 border-primary-500 px-3 py-2 text-base border-1 border-solid border-round cursor-pointer transition-all transition-duration-200 hover:bg-primary-600 hover:border-primary-600 active:bg-primary-700 active:border-primary-700"/>
+                                    <p:commandButton value="Confirmar" action="#{adminBean.modAmbu}" update="modsA messages" oncomplete="PF('modificar2').hide;" class="text-white bg-primary-500 border-primary-500 px-3 py-2 text-base border-1 border-solid border-round cursor-pointer transition-all transition-duration-200 hover:bg-primary-600 hover:border-primary-600 active:bg-primary-700 active:border-primary-700"/>
                                 </div>
                             </div>
                         </p:dialog>

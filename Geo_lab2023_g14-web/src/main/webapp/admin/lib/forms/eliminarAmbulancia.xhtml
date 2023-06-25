@@ -3,7 +3,7 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui">
 
-    <p:dialog styleClass="ancho80" header="Eliminar Ambulancia" widgetVar="dlg7" showEffect="fade" modal="true">
+    <p:dialog styleClass="ancho80" header="Eliminar Ambulancia" widgetVar="dlg7" showEffect="fade" modal="true" >
         <f:view>
             <h:form id="formEA" class="frmFlotante">
                 <p:card styleClass="flex justify-content-center">
@@ -22,7 +22,7 @@
                         </p:column>
 
                         <p:column headerText="Elim.">
-                            <p:commandButton styleClass="rounded-button ui-button-danger" icon="pi pi-trash" process="@this" action="#{adminBean.eliminarA(ambu.idAmbulancia)}" update="tableA" />
+                            <p:commandButton styleClass="rounded-button ui-button-danger" icon="pi pi-trash" process="@this" action="#{adminBean.eliminarA(ambu.idAmbulancia)}" update="tableA messages"  />
                         </p:column>
                     </p:dataTable>
                 </p:card>

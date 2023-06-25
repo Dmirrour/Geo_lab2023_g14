@@ -27,7 +27,7 @@ public class Ambulancia implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idAmbulancia;
     @Column(unique = true)
-    private int idCodigo;
+    private String idCodigo;
     private int distanciaMaxDesvio;
 
     @ManyToMany
@@ -46,7 +46,7 @@ public class Ambulancia implements Serializable {
     private LineString polyline;
 
 
-    public Ambulancia(Long idAmbulancia, int idCodigo, int distanciaMaxDesvio){
+    public Ambulancia(Long idAmbulancia, String idCodigo, int distanciaMaxDesvio){
         this.idAmbulancia =idAmbulancia;
         this.idCodigo=idCodigo;
         this.distanciaMaxDesvio=distanciaMaxDesvio;

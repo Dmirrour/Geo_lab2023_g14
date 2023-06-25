@@ -6,6 +6,7 @@ import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.context.Flash;
 import jakarta.faces.event.AjaxBehaviorEvent;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
@@ -65,37 +66,42 @@ public class ServicioEmBean implements Serializable {
     public void addServicioE() throws IOException {
         ServicioEmergencia se = ServicioEmergencia.builder()
                 .totalCama(totalCama)
-                .nombre(nombreS)
+                .nombre(idHospital+"_"+nombreS)
                 .build();
-        ServicioEmergenciaDTO sedto=iServicioEmergenciaService.altaServicioE(se, idHospital,longitud,latitud);
-
-        System.out.println("ATENCION: si no guarda puntos en la vista, verificar el archivo ServicioEmBEan.java, metodo addServicioE(); poner la contraseña correcta para su equipo.");
-
-        Connection conn;
         try {
-            conn = DriverManager.getConnection(url, usuario, contraseña);
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(
-                    "UPDATE servicioemergencia set point = (ST_SetSRID(ST_MakePoint(" + longitud + ", " + latitud
-                            + "), 32721)) WHERE idservicio=" + sedto.getIdServicio() + ";");
-            System.out.println("Punto insertado correctamente.");
-        } catch (SQLException e) {
-            // e.printStackTrace();
-            System.out.println("ATENCION: si no guarda, verificar el archivo ServicioEmBEan.java, cambiar pass en las propiedades de la calse.");
-            System.out.println("No conecta."+e.getMessage());
-        }
+            ServicioEmergenciaDTO sedto=iServicioEmergenciaService.altaServicioE(se, idHospital,longitud,latitud);
+            Connection conn;
+            try {
+                conn = DriverManager.getConnection(url, usuario, contraseña);
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(
+                        "UPDATE servicioemergencia set point = (ST_SetSRID(ST_MakePoint(" + longitud + ", " + latitud
+                                + "), 32721)) WHERE idservicio=" + sedto.getIdServicio() + ";");
+                System.out.println("Punto insertado correctamente.");
+            } catch (SQLException e) {
+                // e.printStackTrace();
+                System.out.println("ATENCION: si no guarda, verificar el archivo ServicioEmBEan.java, cambiar pass en las propiedades de la calse.");
+                System.out.println("No conecta."+e.getMessage());
+            }
 
-        String msj = String.format("Se agregó el servicio de emergencia con %s camas.", totalCama);
-        addMensaje("S. Emergencia", msj);
-        totalCama = 0;
-        nombreS = null;
-        idHospital = null;
-        latitud = 0;
-        longitud = 0;
-        System.out.println("guardado SE, redireccion....");
-        FacesContext fC = FacesContext.getCurrentInstance();
-        ExternalContext eC = fC.getExternalContext();
-        eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true"); // Reemplaza con la URL de la página de confirmación
+            String msj = String.format("Se agregó el servicio de emergencia con %s camas.", totalCama);
+            addMensaje("S. Emergencia", msj, "exito");
+            totalCama = 0;
+            nombreS = null;
+            idHospital = null;
+            latitud = 0;
+            longitud = 0;
+            System.out.println("guardado SE, redireccion....");
+            FacesContext fC = FacesContext.getCurrentInstance();
+            ExternalContext eC = fC.getExternalContext();
+            eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true"); // Reemplaza con la URL de la página de confirmación
+
+        }catch (Exception e){
+            String msj = String.format("Codigo repetido");
+            addMensaje("S. Emergencia", msj, "error");
+            latitud = 0;
+            longitud = 0;
+        }
     }
 
     private ServicioEmergenciaDTO buscarDTO(){
@@ -111,8 +117,6 @@ public class ServicioEmBean implements Serializable {
 
     }
     public void modServ() {
-        System.out.println("nombre:"+nombreS+" Camas T:"+totalCama+" camas L:"+camasLibre+" id:"+idServE);
-        System.out.println(latitud + "  " + longitud);
         ServicioEmergenciaDTO a = buscarDTO();
         if(totalCama==0)
             totalCama=a.getTotalCama();
@@ -129,9 +133,19 @@ public class ServicioEmBean implements Serializable {
                 .idServicio(a.getIdServicio())
                 .totalCama(totalCama)
                 .camasLibres(camasLibre)
-                .nombre(nombreS)
+                .nombre(a.getHospital().getIdHospital()+"_"+nombreS)
                 .build();
-        iServicioEmergenciaService.modificar(mod);
+        String msj;
+        try {
+            msj = String.format("Se a modificado los datos");
+            addMensaje("Servivio de Emergencia", msj,"exito");
+            iServicioEmergenciaService.modificar(mod);
+
+        }catch (Exception e){
+             msj = String.format("El Codigo seleccionado ya existe");
+            addMensaje("S. Emergencia", msj, "error");
+        }
+
 
         try {
             if(longitud!=0.0 && latitud!=0.0){
@@ -156,17 +170,19 @@ public class ServicioEmBean implements Serializable {
                         "    FROM ambulancia a3 " +
                         "    WHERE a3.idambulancia = a.idambulancia " +
                         "      AND ST_Intersects(ST_Buffer(a3.polyline, ((a.distanciamaxdesvio * 9.41090001733132E-4) / 100)), ST_SetSRID(ST_MakePoint(" + longitud + ", " + latitud + "), 32721)) " +
-                        "  );";
+                        "  );";//Primero calcula sus buffers, luego chequea que esta en la inteseccion de su buffers no tengan mas de un servicio exlullendo el que estamos modificando, y al final exclulle aquellas que esten tocando la nueva ubiccaccion del serviccio
                 System.out.println(sql);
                 ResultSet rs = stmt.executeQuery(sql);
                 if (rs.next()) {
+                    msj = String.format("Conflicto con ambulacias");
+                    addMensaje("Servivio de Emergencia", msj,"advertencia");
                     ambuPerjudicadas.clear();
                     System.out.println("el resultado no es null");
                     do {
 
                         AmbulanciaDTO ambulanciaDTO= AmbulanciaDTO.builder()
                                 .idAmbulancia(rs.getLong("idambulancia"))
-                                .idCodigo(rs.getInt("idcodigo"))
+                                .idCodigo(rs.getString("idcodigo"))
                                 .distanciaMaxDesvio(rs.getInt("distanciamaxdesvio"))
                                 .build();
                         ambuPerjudicadas.add(ambulanciaDTO);
@@ -187,8 +203,9 @@ public class ServicioEmBean implements Serializable {
                     idHospital = null;
                     latitud = 0;
                     longitud = 0;
+                    msj = String.format("Se Modifico la ubicación");
+                    addMensaje("Servivio de Emergencia", msj,"exito");
                     FacesContext facesContext = FacesContext.getCurrentInstance();
-                    facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Éxito", ""));
                     ExternalContext externalContext = facesContext.getExternalContext();
                     externalContext.redirect(externalContext.getRequestContextPath() + "/admin/indexAdm.xhtml");
                 }
@@ -241,7 +258,7 @@ public class ServicioEmBean implements Serializable {
 
                     AmbulanciaDTO ambulanciaDTO= AmbulanciaDTO.builder()
                             .idAmbulancia(rs.getLong("idambulancia"))
-                            .idCodigo(rs.getInt("idcodigo"))
+                            .idCodigo(rs.getString("idcodigo"))
                             .distanciaMaxDesvio(rs.getInt("distanciamaxdesvio"))
                             .build();
                     ambuPerjudicadas.add(ambulanciaDTO);
@@ -262,23 +279,45 @@ public class ServicioEmBean implements Serializable {
             System.out.println("No conecta.BorrarServ"+e.getMessage());
         }
     }
-    private void borrardefinitivo(long ids){
+    private void borrardefinitivo(long ids) throws IOException {
         boolean r = iServicioEmergenciaService.borrarSE(ids);
 
         if (r) {
             initS();
             String msj = String.format("Se Borro el Servicio con id %s.", ids);
-            addMensaje("Servicio", msj);
+            addMensaje("Servicio", msj, "exito");
         } else {
             String msj = String.format("No se puedo Borrar el Servicio con id %s", ids);
-            addMensaje("Servicio", msj);
+            addMensaje("Servicio", msj, "error");
         }
+        FacesContext fC = FacesContext.getCurrentInstance();
+        ExternalContext eC = fC.getExternalContext();
+        eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true");
     }
 
+    private void addMensaje(String summary, String detail, String tipoMensaje) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        Flash flash = facesContext.getExternalContext().getFlash();
+        flash.setKeepMessages(true);
 
-    private void addMensaje(String summary, String detail) {
-        FacesMessage mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
-        FacesContext.getCurrentInstance().addMessage(null, mensaje);
+        FacesMessage.Severity severity = null;
+        switch (tipoMensaje) {
+            case "exito":
+                severity = FacesMessage.SEVERITY_INFO;
+                break;
+            case "advertencia":
+                severity = FacesMessage.SEVERITY_WARN;
+                break;
+            case "error":
+                severity = FacesMessage.SEVERITY_ERROR;
+                break;
+            default:
+                // Tipo de mensaje no válido, se asume error por defecto
+                severity = FacesMessage.SEVERITY_ERROR;
+                break;
+        }
+
+        facesContext.addMessage(null, new FacesMessage(severity, summary, detail));
     }
 
     public String getNombreS() {

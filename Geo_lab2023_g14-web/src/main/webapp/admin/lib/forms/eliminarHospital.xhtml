@@ -4,7 +4,7 @@
       xmlns:p="http://primefaces.org/ui">
 
 
-    <p:dialog styleClass="ancho80" header="Eliminar Hospital" widgetVar="dlg8" showEffect="fade" modal="true">
+    <p:dialog styleClass="ancho80" header="Eliminar Hospital" widgetVar="dlg8" showEffect="fade" modal="true" >
         <f:view>
             <h:form id="formEH" class="frmFlotante">
                 <p:card styleClass="flex justify-content-center">
@@ -57,7 +57,7 @@
                             <p:commandButton id="mostrarAmbulacias" styleClass="rounded-button ui-button-primary" icon="pi pi-plus" onclick="PF('listaAmbulacias').show();" />
                         </p:column>
                         <p:column headerText="Elim.">
-                            <p:commandButton styleClass="rounded-button ui-button-danger" icon="pi pi-trash" process="@this" action="#{adminBean.eliminarH(hospitales.idHospital)}" update="table" />
+                            <p:commandButton styleClass="rounded-button ui-button-danger" icon="pi pi-trash" process="@this" action="#{adminBean.eliminarH(hospitales.idHospital)}" update="table messages" />
                         </p:column>
                     </p:dataTable>
                     </div>

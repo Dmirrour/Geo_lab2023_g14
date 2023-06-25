@@ -331,7 +331,7 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
                     console.log(properties);
                     let popupContent =
                         '<div class="popup-content">' +
-                        '<h5><b>Codigo ' + properties.idcodigo + '</b></h5>' +
+                        '<em>Codigo: </em><b>' + roperties.idcodigo + '</b></br>' +
                         '<em>Distancia max. desvio: </em><b>' + properties.distanciamaxdesvio + ' m</b></br>' +
                         '<em>Hospital: </em><b>' + properties.hospital_idhospital + '</b></br>' +
                         '</div>';

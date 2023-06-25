@@ -23,6 +23,7 @@ public class ServicioEmergencia implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idServicio;
+    @Column(unique = true)
     private String nombre;
     private int totalCama;
     private int camasLibres;

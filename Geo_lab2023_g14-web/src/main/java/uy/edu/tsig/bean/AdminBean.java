@@ -5,8 +5,10 @@ import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.context.Flash;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
+import org.primefaces.PrimeFaces;
 import uy.edu.tsig.dto.AmbulanciaDTO;
 import uy.edu.tsig.dto.HospitalDTO;
 import uy.edu.tsig.dto.ServicioEmergenciaDTO;
@@ -30,6 +32,7 @@ import java.util.List;
 
 
 
+
 @Named("adminBean")
 @SessionScoped
 public class AdminBean implements Serializable {
@@ -47,7 +50,7 @@ public class AdminBean implements Serializable {
     // alta Ambulancia
     private long idHospital;
     private int desvio;
-    private int codigo;
+    private String codigo;
     private long idAmbu;
     private int size;
 
@@ -80,151 +83,181 @@ public class AdminBean implements Serializable {
     }
 
     public void addAmbulancia() throws IOException {
-
-        //double  des= (desvio*100)/(6378137*0.9996); no erra casi nada presisa entre mas grande el buffer mas margen tenia ya que habria que hacerlo atraves de operacciones con longitud
         double grados=9.41090001733132E-4;//Probado hasta que encontrara saque una equivalencia en grados este numero equivale a esto+-5m
         double des=(desvio*grados)/100;//regla de 3
         Connection conn;
         try {
             conn = DriverManager.getConnection(url, usuario, contraseña);
-            List<ServicioEmergencia> servasocioados= new ArrayList<>();
             Statement stmt = conn.createStatement();
             //alta logicaa
             Ambulancia a = Ambulancia.builder()
-                    .idCodigo(codigo)
+                    .idCodigo(idHospital+"_"+codigo)
                     .distanciaMaxDesvio(desvio)
-                    //.ServEdelRecorrido(servasocioados)
                     .build();
-            AmbulanciaDTO aDTO = iAmbulaciasService.altaAmbulacia(a, idHospital);
+            try {
+                AmbulanciaDTO aDTO = iAmbulaciasService.altaAmbulacia(a, idHospital);
+                ResultSet resultSet = stmt.executeQuery("SELECT se.* FROM servicioemergencia se " +
+                        "JOIN (SELECT ST_Buffer(ST_SetSRID(ST_GeomFromText('"+ rec +"'), 32721)," + des +") AS buffer_geom " +
+                        "FROM ambulancia a WHERE a.idambulancia = "+ aDTO.getIdAmbulancia() +") AS buffer " +
+                        "ON ST_Within(se.point, buffer.buffer_geom) " +
+                        "WHERE se.hospital_idhospital = "+ idHospital +";");
+                System.out.println("Pase la query");
+                FacesContext fC = FacesContext.getCurrentInstance();
+                ExternalContext eC = fC.getExternalContext();
 
-            System.out.println(aDTO);
-            System.out.println("ATENCION: si no guarda linestring en la vista, verificar el archivo AdminBEan.java, metodo addAmbulancia(); poner la contraseña correcta para su equipo.");
-            System.out.println(des);
-            System.out.println("verificar reco antes de enviar query: "+rec);
-
-            ResultSet resultSet = stmt.executeQuery("SELECT se.* FROM servicioemergencia se " +
-                    "JOIN (SELECT ST_Buffer(ST_SetSRID(ST_GeomFromText('"+ rec +"'), 32721)," + des +") AS buffer_geom " +
-                    "FROM ambulancia a WHERE a.idambulancia = "+ aDTO.getIdAmbulancia() +") AS buffer " +
-                    "ON ST_Within(se.point, buffer.buffer_geom) " +
-                    "WHERE se.hospital_idhospital = "+ idHospital +";");
-            System.out.println("Pase la query");
-            FacesContext fC = FacesContext.getCurrentInstance();
-            ExternalContext eC = fC.getExternalContext();
-
-            if (resultSet.next()) {
-                System.out.println("el resultado no es null");
-                do {
-
-                    ServicioEmergencia servicioEmergencia = new ServicioEmergencia();
-                    servicioEmergencia.setIdServicio(resultSet.getLong("idservicio"));
-                    servicioEmergencia.setNombre(resultSet.getString("nombre"));
-                    servasocioados.add(servicioEmergencia);
+                if (resultSet.next()) {
+                    //alta recorrido
+                    stmt.executeUpdate(
+                            "UPDATE ambulancia SET polyline = ST_SetSRID(ST_GeomFromText('"+ rec +"'), 32721)" +
+                                    "WHERE idambulancia=" + aDTO.getIdAmbulancia() + ";");
+                    System.out.println("Recorrido insertado correctamente.");
 
 
-                } while (resultSet.next());
+                    String msj = String.format("Se agregó la ambulancia %s_%s.",idHospital,codigo);
+                    addMensaje("Ambulancias", msj,"exito");
 
-                System.out.println(servasocioados);
-                System.out.println("pase el wild");
+                    codigo = "";
+                    desvio = 0;
+                    idHospital = 0;
+                    rec = "";
+                    System.out.println("guardado recA, redireccion....");
+                    initA();
 
-                //alta recorrido
-                int rowsAffected  = stmt.executeUpdate(
-                        "UPDATE ambulancia SET polyline = ST_SetSRID(ST_GeomFromText('"+ rec +"'), 32721)" +
-                                "WHERE idambulancia=" + aDTO.getIdAmbulancia() + ";");
-                System.out.println("Recorrido insertado correctamente.");
+                    eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true"); // Reemplaza con la URL de la página de confirmación
+                }else {
+                    String msj = String.format("No hay servicios en su Zona.");
+                    addMensaje("Ambulancias", msj,"advertencia");//creo que ninguno de los mensajes se captan en menu creo que es porque se recarga la paguina y no se ve
+                    System.out.println("el resultado es null");
+                    eliminarA(aDTO.getIdAmbulancia());
+                    eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true");
+                }
 
-
-                String msj = String.format("Se agregó la ambulancia %s.", codigo);
-                addMensaje("Ambulancias", msj);
-
-                codigo = 0;
-                desvio = 0;
-                idHospital = 0;
-                rec = "";
-                System.out.println("guardado recA, redireccion....");
-
-                eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true"); // Reemplaza con la URL de la página de confirmación
-            }else {
-                String msj = String.format("No hay servicios en su Zona.");
-                addMensaje("Ambulancias", msj);//creo que ninguno de los mensajes se captan en menu creo que es porque se recarga la paguina y no se ve
-                System.out.println("el resultado es null");
-                eliminarA(aDTO.getIdAmbulancia());
-                eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true");
+            }catch (SQLException e){
+                System.out.println("No conecta."+e.getMessage());
             }
+        }catch (Exception e){
+            String msj = String.format("Codigo repetido");
+            addMensaje("Ambulancias", msj,"error");//creo que ninguno de los mensajes se captan en menu creo que es porque se recarga la paguina y no se ve
+        }
+    }
+    public void modAaux(AmbulanciaDTO amb, String tipo,boolean vacio){
+        AmbulanciaDTO mod = AmbulanciaDTO.builder()
+                .idAmbulancia(idAmbu)
+                .idCodigo(vacio ? (amb.getHospital().getIdHospital() + "_" + codigo) : codigo)
+                .distanciaMaxDesvio(desvio)
+                .build();
 
-        }catch (SQLException e){
-            System.out.println("No conecta."+e.getMessage());
+
+        try {
+            iAmbulaciasService.modificar(mod);
+            String msj;
+            switch (tipo){
+                case "ahiSE":
+                     msj = String.format("Se persistido los datos de logica.");
+                    addMensaje("Ambulancias", msj,"exito");
+                    break;
+                case "bufout":
+                    msj = String.format("Se persistido el codigo, no se a podido actulizar distancia fuera de S.E");
+                    addMensaje("Ambulancias", msj,"advertencia");
+                default:
+                    break;
+            }
+        }catch (Exception e){
+            String msj = String.format("Se persitido los datos de logica.");
+            addMensaje("Ambulancias", msj,"error");
         }
 
     }
-
     public void modAmbu(){
-        System.out.println("id:"+idAmbu+"Codigo:"+codigo+"Desvio:"+desvio+ "Recorrido"+rec );
-        double grados=9.41090001733132E-4;//Probado hasta que encontrara saque una equivalencia en grados este numero equivale a esto+-5m
-        double des=(desvio*grados)/100;//regla de 3
-        Connection conn;
         AmbulanciaDTO amb = buscarDTOA();
+        Connection conn;
+        boolean per =false;
+        boolean novacio=true;
         try{
-            AmbulanciaDTO mod = AmbulanciaDTO.builder()
-                    .idAmbulancia(idAmbu)
-                    .idCodigo(codigo)
-                    .distanciaMaxDesvio(desvio)
-                    .build();
-            iAmbulaciasService.modificar(mod);
             conn = DriverManager.getConnection(url, usuario, contraseña);
-            List<ServicioEmergencia> servasocioados= new ArrayList<>();
             Statement stmt = conn.createStatement();
+            double grados=9.41090001733132E-4;//Probado hasta que encontrara saque una equivalencia en grados este numero equivale a esto+-5m
+            double des;
+            if(codigo.isEmpty()){
+                codigo=amb.getIdCodigo();
+                novacio=false;
+            }
+            if(desvio==0){
+                desvio=amb.getDistanciaMaxDesvio();
+                modAaux(amb,"ahiSE",novacio);
+            }else if(desvio<amb.getDistanciaMaxDesvio()){
+                des=(desvio*grados)/100;
+                ResultSet resultSet = stmt.executeQuery("SELECT se.* FROM servicioemergencia se " +
+                        "JOIN (SELECT ST_Buffer(a.polyline," + des +") AS buffer_geom " +
+                        "FROM ambulancia a WHERE a.idambulancia = "+ idAmbu +") AS buffer " +
+                        "ON ST_Within(se.point, buffer.buffer_geom) " +
+                        "WHERE se.hospital_idhospital = "+ amb.getHospital().getIdHospital() +";");
+                if (resultSet.next()) {
+                    modAaux(amb,"ahiSE",novacio);
+                }else{//no hay servicios en el buffer queda ver el nuevo recorrido
+                    per=true;
+                }
+            }else{//me ahorro la query sql ya que es mallor el buffer no va a quedarse sin buffer aunque no se cambien el recorrido
+                modAaux(amb,"ahiSE",novacio);
+            }
 
-            ResultSet resultSet = stmt.executeQuery("SELECT se.* FROM servicioemergencia se " +
-                    "JOIN (SELECT ST_Buffer(ST_SetSRID(ST_GeomFromText('"+ rec +"'), 32721)," + des +") AS buffer_geom " +
-                    "FROM ambulancia a WHERE a.idambulancia = "+ idAmbu +") AS buffer " +
-                    "ON ST_Within(se.point, buffer.buffer_geom) " +
-                    "WHERE se.hospital_idhospital = "+ amb.getHospital() +";");
+            if(!rec.isEmpty()){// si no es vasio entro al modifico
+                des=(desvio*grados)/100;//regla de 3
+                ResultSet resultSet = stmt.executeQuery("SELECT se.* FROM servicioemergencia se " +
+                        "JOIN (SELECT ST_Buffer(ST_SetSRID(ST_GeomFromText('"+ rec +"'), 32721)," + des +") AS buffer_geom " +
+                        "FROM ambulancia a WHERE a.idambulancia = "+ idAmbu +") AS buffer " +
+                        "ON ST_Within(se.point, buffer.buffer_geom) " +
+                        "WHERE se.hospital_idhospital = "+ amb.getHospital().getIdHospital() +";");
 
-            System.out.println("Pase la query");
-            FacesContext fC = FacesContext.getCurrentInstance();
-            ExternalContext eC = fC.getExternalContext();
-            if (resultSet.next()) {
-                System.out.println("el resultado no es null");
-                do {
+                System.out.println("Pase la query");
+                FacesContext fC = FacesContext.getCurrentInstance();
+                ExternalContext eC = fC.getExternalContext();
+                if (resultSet.next()) {
+                    System.out.println("el resultado no es null");
+                    //update recorrido
+                    int rowsAffected  = stmt.executeUpdate(
+                            "UPDATE ambulancia SET polyline = ST_SetSRID(ST_GeomFromText('"+ rec +"'), 32721)" +
+                                    "WHERE idambulancia=" + idAmbu + ";");
+                    if(per){//solo se ejecuta en el caso de que se alla modificado el buffe y no quedara cubierto por el anterior recorrido
+                        modAaux(amb,"ahiSE",novacio);
+                    }
 
-                    ServicioEmergencia servicioEmergencia = new ServicioEmergencia();
-                    servicioEmergencia.setIdServicio(resultSet.getLong("idservicio"));
-                    servicioEmergencia.setNombre(resultSet.getString("nombre"));
-                    servasocioados.add(servicioEmergencia);
+                    String msj = String.format("Se actualizo el recorrido de la ambulancia %s.", codigo);
+                    addMensaje("Ambulancias", msj,"exito");
+                    codigo = "";
+                    desvio = 0;
+                    idHospital = 0;
+                    rec = "";
 
-
-                } while (resultSet.next());
-
-                System.out.println(servasocioados);
-                System.out.println("pase el wild");
-
-                //update recorrido
-                int rowsAffected  = stmt.executeUpdate(
-                        "UPDATE ambulancia SET polyline = ST_SetSRID(ST_GeomFromText('"+ rec +"'), 32721)" +
-                                "WHERE idambulancia=" + idAmbu + ";");
-                String msj = String.format("Se agregó la ambulancia %s.", codigo);
-                addMensaje("Ambulancias", msj);
-
-                codigo = 0;
-                desvio = 0;
-                idHospital = 0;
-                rec = "";
-                System.out.println("guardado recA, redireccion....");
-
-                eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true"); // Reemplaza con la URL de la página de confirmación
-            }else {
-                String msj = String.format("Datos perositidos \n No se a modificado el recorrido fuera de servicios.");
-                addMensaje("Ambulancias", msj);//creo que ninguno de los mensajes se captan en menu creo que es porque se recarga la paguina y no se ve
-                System.out.println("el resultado es null");
-                codigo = 0;
-                desvio = 0;
-                idHospital = 0;
-                rec = "";
-                eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true");
+                    eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true"); // Reemplaza con la URL de la página de confirmación
+                }else {
+                        if(per){
+                            desvio=amb.getDistanciaMaxDesvio();
+                            modAaux(amb,"bufout",novacio);
+                        }
+                        String msj = String.format("No se a modificado el recorrido queda fuera de servicios.");
+                        addMensaje("Ambulancias", msj,"advertencia");
+                        codigo = null;
+                        desvio = 0;
+                        idHospital = 0;
+                        rec = null;
+                        eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true");
+                }
+            }else{
+                if(per) {
+                    desvio=amb.getDistanciaMaxDesvio();
+                    modAaux(amb, "bufout", novacio);
+                }
             }
         }catch (SQLException | IOException e){
             System.out.println("No conecta."+e.getMessage());
         }
+        initA();
+        codigo = null;
+        desvio = 0;
+        idHospital = 0;
+        rec = null;
+
 
 
     }
@@ -241,9 +274,33 @@ public class AdminBean implements Serializable {
 
     }
 
-    private void addMensaje(String summary, String detail) {
+    /*private void addMensaje(String summary, String detail) {
         FacesMessage mensaje = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
         FacesContext.getCurrentInstance().addMessage(null, mensaje);
+    }*/
+    private void addMensaje(String summary, String detail, String tipoMensaje) {
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        Flash flash = facesContext.getExternalContext().getFlash();
+        flash.setKeepMessages(true);
+
+        FacesMessage.Severity severity = null;
+        switch (tipoMensaje) {
+            case "exito":
+                severity = FacesMessage.SEVERITY_INFO;
+                break;
+            case "advertencia":
+                severity = FacesMessage.SEVERITY_WARN;
+                break;
+            case "error":
+                severity = FacesMessage.SEVERITY_ERROR;
+                break;
+            default:
+                // Tipo de mensaje no válido, se asume error por defecto
+                severity = FacesMessage.SEVERITY_ERROR;
+                break;
+        }
+
+        facesContext.addMessage(null, new FacesMessage(severity, summary, detail));
     }
 
     public void modBuffer(String red){
@@ -270,36 +327,55 @@ public class AdminBean implements Serializable {
                 .nombreHospital(nombreH)
                 .tipoHospital(tipoH)
                 .build();
-        HospitalDTO hos = iHospitalService.altaHospital(h);
-        initH();
-
-        String msj = String.format("Se agregó el hospital %s.", nombreH);
-        addMensaje("Hospitales", msj);
-    }
-
-    public void eliminarH(Long idHospital) {
-        boolean r = iHospitalService.borrarH(idHospital);
-        if (r) {
+        try {
+            HospitalDTO hos = iHospitalService.altaHospital(h);
             initH();
-            String msj = String.format("Se Borro el Hospital con id %s.", idHospital);
-            addMensaje("Hospitales", msj);
-        } else {
-            String msj = String.format("No se puedo Borrar el Hospital con id %s", idHospital);
-            addMensaje("Hospitales", msj);
+            String msj = String.format("Se agregó el hospital %s.", nombreH);
+            addMensaje("Hospitales", msj,"exito");
+            redirectH();
+        }catch (Exception e) {
+            String msj = String.format("Se nombre de hospital %s repetido.", nombreH);
+            addMensaje("Hospitales", msj, "error");
         }
     }
 
-    public void eliminarA(Long idAmbulancia) {
+    public void eliminarH(Long idHospital) throws IOException {
+        boolean r = iHospitalService.borrarH(idHospital);
+
+        if (r) {
+            initH();
+            String msj = String.format("Se Borro el Hospital con id %s.", idHospital);
+            addMensaje("Hospitales", msj,"exito");
+            redirectH();
+        } else {
+            String msj = String.format("No se puedo Borrar el Hospital con id %s", idHospital);
+            addMensaje("Hospitales", msj,"error");
+            redirectH();
+        }
+
+    }
+    private void redirectH() throws IOException {
+        FacesContext fC = FacesContext.getCurrentInstance();
+        ExternalContext eC = fC.getExternalContext();
+        eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true");
+    }
+
+    public void eliminarA(Long idAmbulancia) throws IOException {
 
         boolean r= iAmbulaciasService.borrarA(idAmbulancia);
         if (r) {
             initA();
             String msj = String.format("Se Borro el Servicio con id %s.", idAmbulancia);
-            addMensaje("Servicio", msj);
+            addMensaje("Servicio", msj,"exito");
         } else {
             String msj = String.format("No se puedo Borrar el Servicio con id %s", idAmbulancia);
-            addMensaje("Servicio", msj);
+            addMensaje("Servicio", msj,"error");
         }
+        redirectH();
+    }
+    public void cancelar(){
+        String msj = String.format("No se actualizo la ubucación");
+        addMensaje("Servicio Emergencia", msj,"error");
     }
 
     public String getNombreH() {
@@ -324,7 +400,7 @@ public class AdminBean implements Serializable {
         return hospitalDTOS;
     }
 
-    public int getCodigo() {
+    public String getCodigo() {
         return codigo;
     }
 
@@ -349,7 +425,7 @@ public class AdminBean implements Serializable {
         this.idHospital = idHospital;
     }
 
-    public void setCodigo(int codigo) {
+    public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
 

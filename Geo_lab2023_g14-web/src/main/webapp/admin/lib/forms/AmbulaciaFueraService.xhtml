@@ -37,7 +37,10 @@
                </div>
 
                <div class="d-grid col-12 mx-auto pt-2">
-                   <p:commandButton value="Crear" action="#{adminBean.modBuffer('Eliminar')}" update="messages" styleClass="ui-button-raised ui-button-success ui-button-flat" class="col-md-6" onclick="PF('dlg9').hide()" />
+                   <p:commandButton value="Actualizar" action="#{adminBean.modBuffer('Eliminar')}" update="messages" styleClass="ui-button-raised ui-button-success ui-button-flat" class="col-md-6" onclick="PF('dlg9').hide()" />
+               </div>
+               <div class="d-grid col-12 mx-auto pt-2">
+                   <p:commandButton value="Cancelar" action="#{adminBean.cancelar()}" update="messages" styleClass="ui-button-raised ui-button-success ui-button-flat" class="col-md-6" onclick="PF('dlg9').hide()" />
                </div>
            </p:card>
        </h:form>
