@@ -401,7 +401,7 @@ function obtenerCoordenadasGPS() {
         }, function (error) {
             console.error("Error al obtener la ubicación: " + error.message);
         });
-    } else {
+    } else {+
         console.error("Tu navegador no admite la geolocalización.");
     }
 }

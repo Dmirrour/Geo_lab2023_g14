@@ -100,7 +100,6 @@ function CrearMapaInvitado() {
     //  map.addControl(drawControl);
 
     map.on(L.Draw.Event.CREATED, function (e) {
-        //  console.log("drawLayers: ", drawLayers._layers[179])
         //  console.log("drawLayers: ", e.layer);
         drawLayers.addLayer(e.layer);
 
@@ -378,10 +377,10 @@ var iconA = L.icon({
 
 ///////////////////////// GENERA COLOR /////////////////////////
 function moverAmbu() {
-   
 
 
-    
+
+
 }
 
 
