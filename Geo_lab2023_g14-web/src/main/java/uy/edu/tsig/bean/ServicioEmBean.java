@@ -102,66 +102,6 @@ public class ServicioEmBean implements Serializable {
                                                                                                // confirmación
     }
 
-<<<<<<< HEAD
-    public void modServ(RowEditEvent event) throws IOException {
-        System.out.println(latitud + "  " + longitud);
-        FacesContext fC = FacesContext.getCurrentInstance();
-        ExternalContext eC = fC.getExternalContext();
-        eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true&showDialogs=true");
-        /* PrimeFaces.current().executeScript("tuFuncionJS();"); */
-
-        /*
-         * ServicioEmergenciaDTO a = (ServicioEmergenciaDTO) event.getObject();
-         * if(totalCama==0)
-         * totalCama=a.getTotalCama();
-         * if(camasLibre==0 && a.getCamasLibres()>totalCama) {
-         * camasLibre = a.getTotalCama() - (a.getTotalCama() - a.getCamasLibres());//si
-         * se sacaron camas pero el servicio de emergencia tenia mas agarro la nuevas
-         * cantidad de camas y le resto las que estaban ocupadas
-         * if(camasLibre<0){
-         * FacesContext.getCurrentInstance().addMessage(null, new
-         * FacesMessage(FacesMessage.SEVERITY_ERROR,
-         * "Tienes menos camas quelas ocupadas", ""));
-         * return;
-         * }
-         * 
-         * }
-         * if(nombreS.isEmpty() && nombreS=="")
-         * nombreS=a.getNombre();
-         * ServicioEmergenciaDTO mod= ServicioEmergenciaDTO.builder()
-         * .idServicio(a.getIdServicio())
-         * .totalCama(totalCama)
-         * .camasLibres(camasLibre)
-         * .nombre(nombreS)
-         * .build();
-         * iServicioEmergenciaService.modificar(mod);
-         * System.out.println(mod+"\n");
-         * System.out.println(latitud+"   "+longitud+"   "+nombreS+"   "
-         * +camasLibre+"   "+totalCama);
-         * 
-         * 
-         * if(longitud!=0.0 && latitud!=0.0){
-         * 
-         * 
-         * Connection conn;
-         * try {
-         * conn = DriverManager.getConnection(url, usuario, contraseña);
-         * Statement stmt = conn.createStatement();
-         * ResultSet rs = stmt.executeQuery(
-         * "UPDATE servicioemergencia set point = (ST_SetSRID(ST_MakePoint(" + longitud
-         * + ", " + latitud
-         * + "), 32721)) WHERE idservicio=" + idServE + ";");
-         * System.out.println("Punto modificado correctamente.");
-         * } catch (SQLException e) {
-         * // e.printStackTrace();
-         * System.out.
-         * println("ATENCION: si no guarda, verificar el archivo ServicioEmBEan.java, cambiar pass en las propiedades de la calse."
-         * );
-         * System.out.println("No conecta."+e.getMessage());
-         * }
-         * }
-         */
-=======
     private ServicioEmergenciaDTO buscarDTO(){
         ServicioEmergenciaDTO servicioEmergenciaEncontrado = null;
 
@@ -254,7 +194,6 @@ public class ServicioEmBean implements Serializable {
             System.out.println("ATENCION: si no guarda, verificar el archivo ServicioEmBEan.java, cambiar pass en las propiedades de la calse.");
             System.out.println("No conecta."+e.getMessage());
         }
->>>>>>> aeabf201545bb99f84fc538af5282f82ef026d80
     }
 
     public void cancelar(RowEditEvent event) {
@@ -306,12 +245,8 @@ public class ServicioEmBean implements Serializable {
                     ambuPerjudicadas.add(ambulanciaDTO);
                 } while (rs.next());
                 System.out.println(ambuPerjudicadas);
-<<<<<<< HEAD
-                sA = se;
-=======
                 sA=se;
                 departede="Eliminar";
->>>>>>> aeabf201545bb99f84fc538af5282f82ef026d80
                 FacesContext fC = FacesContext.getCurrentInstance();
                 ExternalContext eC = fC.getExternalContext();
                 eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true&showDialogs=true");
