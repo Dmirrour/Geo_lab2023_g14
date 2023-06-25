@@ -6349,8 +6349,8 @@
 		options: {
 			// @option icon: Icon = *
 			// Icon class to use for rendering the marker. See [Icon documentation](#L.Icon) for details on how to customize the marker icon. If not specified, a new `L.Icon.Default` is used.
-			icon:null,// new L.Icon.Default(),  // SGL
-
+			//	icon: null,// new L.Icon.Default(),  // SGL
+			icon: new L.Icon.Default(),  // SGL
 			// Option inherited from "Interactive layer" abstract class
 			interactive: true,
 

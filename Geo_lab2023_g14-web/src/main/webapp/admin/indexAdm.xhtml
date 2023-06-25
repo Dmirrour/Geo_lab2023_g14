@@ -1,11 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html
-        xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:h="http://xmlns.jcp.org/jsf/html"
-        xmlns:p="http://primefaces.org/ui"
-        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-        xmlns:f="http://xmlns.jcp.org/jsf/core"
-        lang="es" xml:lang="es">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core" lang="es" xml:lang="es">
 
 <h:head>
    <!-- VERIFICAR SESION -->
@@ -35,7 +29,6 @@
    <script type="" src="lib/js/class.ControladorMapa.js"></script>
    <script type="" src="../scripts/geolet.js"></script>
 
-   <!-- //<script src="../scripts/lib/indexInvitado.js"></script> -->
    <!-- JTS -->
    <script type="" src="https://cdn.jsdelivr.net/npm/elm-pep@1.0.6/dist/elm-pep.js"></script>
    <script type="" src="https://cdn.jsdelivr.net/npm/jsts@2.3.0/dist/jsts.min.js"></script>
@@ -44,6 +37,7 @@
    <!-- CONSULTAS query -->
    <script type="" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
    <script type="" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
    <!-- ICONOS -->
    <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
    <link rel="stylesheet" href="https://unpkg.com/primeflex@^3/primeflex.css" />
@@ -70,7 +64,7 @@
                   </p:submenu>
                   <p:submenu label="Modificar">
                      <p:menuitem value="Modificar Ambulancia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg5').show()" />
-                     <p:menuitem value="Modificar S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg4').show(); mostrarMarker2(#{servicioEBean.size});" />
+                     <p:menuitem value="Modificar S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg4').show(); mostrarMarker2('#{servicioEBean.size}');" />
                   </p:submenu>
                   <p:submenu label="Alta">
                      <p:menuitem value="Alta Hospital" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg1').show()" />
@@ -237,6 +231,7 @@
          PF('dlg8').hide();
          PF('dlg9').hide();
       }
+
       let mapaAdmin = new ControladorMapa();
       mapaAdmin.crearMapaAdmin();
       mapaAdmin.addLayerWFSbuf();
@@ -252,7 +247,6 @@
       }
 
       mapaAdmin.cargarMapaAltaAmbulancia();
-
    </script>
    <script type="text/javascript">
       $(document).ready(function () {
