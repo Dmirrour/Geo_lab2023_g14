@@ -9,6 +9,7 @@ import jakarta.faces.context.FacesContext;
 import jakarta.faces.context.Flash;
 import jakarta.faces.event.AjaxBehaviorEvent;
 import jakarta.faces.view.ViewScoped;
+import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.RowEditEvent;
@@ -56,6 +57,9 @@ public class ServicioEmBean implements Serializable {
     private ServicioEmergenciaDTO sA;
     private String departede;
     private String camasLib;
+    @Inject
+    private AdminBean adminBean;
+    private boolean eliomod;
 
     public void initS() {
         s = iServicioEmergenciaService.listarServiciosEmergensias();
@@ -91,6 +95,7 @@ public class ServicioEmBean implements Serializable {
             idHospital = null;
             latitud = 0;
             longitud = 0;
+            adminBean.setCanseldesvio(0);
             System.out.println("guardado SE, redireccion....");
             FacesContext fC = FacesContext.getCurrentInstance();
             ExternalContext eC = fC.getExternalContext();
@@ -120,6 +125,7 @@ public class ServicioEmBean implements Serializable {
     public void modServ() {
         ServicioEmergenciaDTO a = buscarDTO();
         boolean vas=true;
+
         if(camasLib.isEmpty()){
             camasLibre=-1;
         }else{
@@ -203,7 +209,7 @@ public class ServicioEmBean implements Serializable {
 
                         AmbulanciaDTO ambulanciaDTO= AmbulanciaDTO.builder()
                                 .idAmbulancia(rs.getLong("idambulancia"))
-                                .idCodigo(rs.getInt("idcodigo"))
+                                .idCodigo(rs.getString("idcodigo"))
                                 .distanciaMaxDesvio(rs.getInt("distanciamaxdesvio"))
                                 .build();
                         ambuPerjudicadas.add(ambulanciaDTO);
@@ -211,6 +217,7 @@ public class ServicioEmBean implements Serializable {
                     System.out.println(ambuPerjudicadas);
                     sA=a;
                     departede="Mod";
+                    eliomod=true;
                     FacesContext fC = FacesContext.getCurrentInstance();
                     ExternalContext eC = fC.getExternalContext();
                     eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true&showDialogs=true");
@@ -292,6 +299,7 @@ public class ServicioEmBean implements Serializable {
                 System.out.println(ambuPerjudicadas);
                 sA=se;
                 departede="Eliminar";
+                eliomod=false;
                 FacesContext fC = FacesContext.getCurrentInstance();
                 ExternalContext eC = fC.getExternalContext();
                 eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true&showDialogs=true");
@@ -465,5 +473,13 @@ public class ServicioEmBean implements Serializable {
 
     public void setCamasLib(String camasLib) {
         this.camasLib = camasLib;
+    }
+
+    public boolean isEliomod() {
+        return eliomod;
+    }
+
+    public void setEliomod(boolean eliomod) {
+        this.eliomod = eliomod;
     }
 }

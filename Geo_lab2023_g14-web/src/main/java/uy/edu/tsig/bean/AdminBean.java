@@ -5,6 +5,7 @@ import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
+import jakarta.faces.context.Flash;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import uy.edu.tsig.dto.AmbulanciaDTO;
@@ -66,6 +67,8 @@ public class AdminBean implements Serializable {
     @Inject
     private ServicioEmBean servicioEmBean;
 
+    private int canseldesvio;
+
     public void initH() {
         h = iHospitalService.obtenerHospitales();
         hospitalDTOS = h.getListHospitales();
@@ -123,7 +126,7 @@ public class AdminBean implements Serializable {
                     String msj = String.format("No hay servicios en su Zona.");
                     addMensaje("Ambulancias", msj,"advertencia");//creo que ninguno de los mensajes se captan en menu creo que es porque se recarga la paguina y no se ve
                     System.out.println("el resultado es null");
-                    eliminarA(aDTO.getIdAmbulancia());
+                    eliminarA(aDTO.getIdAmbulancia(),false);
                     eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true");
                 }
 
@@ -301,6 +304,7 @@ public class AdminBean implements Serializable {
     public void modBuffer(){
         List<AmbulanciaDTO> a= servicioEmBean.getAmbuPejudicadas();
         System.out.println();
+        canseldesvio= canseldesvio+desvio;
         for (AmbulanciaDTO ambulanciaDTO : a) {
             ambulanciaDTO.setDistanciaMaxDesvio(ambulanciaDTO.getDistanciaMaxDesvio()+desvio);
             System.out.println("AdminBean::distancia maxima: " + ambulanciaDTO.getDistanciaMaxDesvio());
@@ -355,22 +359,34 @@ public class AdminBean implements Serializable {
         eC.redirect(eC.getRequestContextPath() + "/admin/indexAdm.xhtml?faces-redirect=true");
     }
 
-    public void eliminarA(Long idAmbulancia) throws IOException {
+    public void eliminarA(Long idAmbulancia, boolean mensaje) throws IOException {
 
         boolean r= iAmbulaciasService.borrarA(idAmbulancia);
-        if (r) {
-            initA();
-            String msj = String.format("Se Borro el Servicio con id %s.", idAmbulancia);
-            addMensaje("Servicio", msj,"exito");
-        } else {
-            String msj = String.format("No se puedo Borrar el Servicio con id %s", idAmbulancia);
-            addMensaje("Servicio", msj,"error");
+        if(mensaje){
+            if (r) {
+                initA();
+                String msj = String.format("Se Borro el Servicio con id %s.", idAmbulancia);
+                addMensaje("Servicio", msj,"exito");
+            } else {
+                String msj = String.format("No se puedo Borrar el Servicio con id %s", idAmbulancia);
+                addMensaje("Servicio", msj,"error");
+            }
+            redirectH();
         }
-        redirectH();
+
     }
-    public void cancelar(){
+    public void cancelar() throws IOException {
+        List<AmbulanciaDTO> a= servicioEmBean.getAmbuPejudicadas();
+        for (AmbulanciaDTO ambulanciaDTO : a) {
+            ambulanciaDTO.setDistanciaMaxDesvio(ambulanciaDTO.getDistanciaMaxDesvio()-canseldesvio);
+            System.out.println("AdminBean::distancia maxima: " + ambulanciaDTO.getDistanciaMaxDesvio());
+            iAmbulaciasService.modificar(ambulanciaDTO);
+        }
+        servicioEmBean.getAmbuPejudicadas().clear();
+        canseldesvio=0;
         String msj = String.format("No se actualizo la ubucación");
         addMensaje("Servicio Emergencia", msj,"error");
+        redirectH();
     }
 
     public String getNombreH() {
@@ -450,5 +466,13 @@ public class AdminBean implements Serializable {
 
     public void setSize(int size) {
         this.size = size;
+    }
+
+    public int getCanseldesvio() {
+        return canseldesvio;
+    }
+
+    public void setCanseldesvio(int canseldesvio) {
+        this.canseldesvio = canseldesvio;
     }
 }

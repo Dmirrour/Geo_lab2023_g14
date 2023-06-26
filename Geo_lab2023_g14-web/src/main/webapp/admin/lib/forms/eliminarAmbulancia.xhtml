@@ -22,7 +22,7 @@
                         </p:column>
 
                         <p:column headerText="Elim.">
-                            <p:commandButton styleClass="rounded-button ui-button-danger" icon="pi pi-trash" process="@this" action="#{adminBean.eliminarA(ambu.idAmbulancia)}" update="tableA messages"  />
+                            <p:commandButton styleClass="rounded-button ui-button-danger" icon="pi pi-trash" process="@this" action="#{adminBean.eliminarA(ambu.idAmbulancia,true)}" update="tableA messages"  />
                         </p:column>
                     </p:dataTable>
                 </p:card>
