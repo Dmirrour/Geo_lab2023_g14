@@ -5,7 +5,7 @@
 <h:head>
 <link rel="stylesheet" href="https://unpkg.com/primeflex@^3/primeflex.css"/>
 </h:head>
-<p:dialog id="dialogMODAB" header="Mofiicar Ambulacia" widgetVar="dlg5" width="600px" minWidth="400" minHeight="400" draggable="false" styleClass="my-dialog-style" showEffect="fade">
+<p:dialog id="dialogMODAB" header="Modificar Ambulacia" widgetVar="dlg5" width="600px" minWidth="400" minHeight="400" draggable="false" styleClass="my-dialog-style" showEffect="fade">
     <f:view>
         <h:form id="frmMODAD" prependId="false">
             <p:card styleClass="flex justify-content-center">
@@ -16,11 +16,11 @@
                              scrollHeight="400px">
 
 
-                    <p:column headerText="Codigo" sortBy="#{ambu.idCodigo}" filterBy="#{ambu.idCodigo}" filterMatchMode="contains">
+                    <p:column headerText="Codigo" sortBy="#{ambu.idCodigo}">
                         <h:outputText value="#{ambu.idCodigo}" />
                     </p:column>
 
-                    <p:column headerText="Distatancia Maxima desvio" sortBy="#{ambu.distanciaMaxDesvio}" filterBy="#{ambu.distanciaMaxDesvio}" filterMatchMode="contains">
+                    <p:column headerText="Distatancia Maxima desvio" sortBy="#{ambu.distanciaMaxDesvio}">
                                 <h:outputText value="#{ambu.distanciaMaxDesvio}" />
                     </p:column>
 
@@ -43,7 +43,7 @@
                                 </div>
 
                                 <div class="col-12 py-2">
-                                    <h:inputText id="rec" name="rec" value="#{adminBean.rec}"/>
+                                    <h:inputText id="rec" name="rec" value="#{adminBean.rec}" style="display: none;"/>
                                 </div>
 
                                 <div class="text-right">

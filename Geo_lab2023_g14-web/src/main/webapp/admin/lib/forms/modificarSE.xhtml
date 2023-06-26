@@ -5,7 +5,7 @@
 <h:head>
 <link rel="stylesheet" href="https://unpkg.com/primeflex@^3/primeflex.css"/>
 </h:head>
-<p:dialog id="dialogMODSE" header="Mofiicar servicio de emergencia" widgetVar="dlg4" width="600px" minWidth="400" minHeight="400" draggable="false" styleClass="my-dialog-style" showEffect="fade" onHide="mapaAdmin.BorrarMarcadorALtaSE()">
+<p:dialog id="dialogMODSE" header="Modificar servicio de emergencia" widgetVar="dlg4" width="600px" minWidth="400" minHeight="400" draggable="false" styleClass="my-dialog-style" showEffect="fade" onHide="mapaAdmin.BorrarMarcadorALtaSE()">
     <f:view>
         <h:form id="frmMODSE" prependId="false">
             <p:card styleClass="flex justify-content-center">
@@ -16,16 +16,16 @@
                              scrollHeight="400px">
 
 
-                    <p:column headerText="Nro" sortBy="#{serv.idServicio}" filterBy="#{serv.idServicio}" filterMatchMode="contains">
-                        <h:outputText value="#{serv.idServicio}" />
-                    </p:column>
-
-                    <p:column headerText="Nom" sortBy="#{serv.nombre}" filterBy="#{serv.nombre}" filterMatchMode="contains">
+                    <p:column headerText="Nom" sortBy="#{serv.nombre}" >
                                 <h:outputText value="#{serv.nombre}" />
                     </p:column>
 
                     <p:column headerText="T. Camas" sortBy="#{serv.totalCama}">
                             <h:outputText value="#{serv.totalCama}" />
+                    </p:column>
+
+                    <p:column headerText="Camas L" sortBy="#{serv.camasLibres}">
+                        <h:outputText value="#{serv.camasLibres}" />
                     </p:column>
 
                     <p:column exportable="false">
@@ -42,19 +42,20 @@
                                        <p:inputText id="Nombre" value="#{servicioEBean.nombreS}"  />
                                 </div>
                                 <div class="field grid">
-                                    <h:outputLabel for="camasL" class="col-12 mb-2 md:col-4 md:mb-0">Camas Libres</h:outputLabel>
-                                      <p:inputText id="camasL" value="#{servicioEBean.camasLibre}"/>
+                                    <h:outputLabel for="totalC" class="col-12 mb-2 md:col-4 md:mb-0">Total Camas</h:outputLabel>
+                                    <p:inputText id="totalC" type="number" value="#{servicioEBean.totalCama}" required="true" requiredMessage="El campo es obligatorio" />
                                 </div>
                                 <div class="field grid">
-                                    <h:outputLabel for="totalC" class="col-12 mb-2 md:col-4 md:mb-0">Total Camas</h:outputLabel>
-                                    <p:inputText id="totalC" value="#{servicioEBean.totalCama}" defaultValue="#{serv.totalCama.toString()}"/>
+                                    <h:outputLabel for="camasL" class="col-12 mb-2 md:col-4 md:mb-0">Camas Libres</h:outputLabel>
+                                    <p:inputText id="camasL" value="#{servicioEBean.camasLib}"/>
                                 </div>
 
-                                <p:inputText id="frmMODSElatitud" name="latitud" value="#{servicioEBean.latitud}" class="col-md-6 col-sm-12" required="true" style="display: block;" requiredMessage="La latitud es requerida" />
-                                <p:inputText id="frmMODSElongitud" name="longitud" value="#{servicioEBean.longitud}" class="col-md-6 col-sm-12" required="true" style="display: block;" requiredMessage="La longitud es requerida" />
+
+                                <p:inputText id="frmMODSElatitud" name="latitud" value="#{servicioEBean.latitud}" class="col-md-6 col-sm-12" required="true" style="display: none;" requiredMessage="La latitud es requerida" />
+                                <p:inputText id="frmMODSElongitud" name="longitud" value="#{servicioEBean.longitud}" class="col-md-6 col-sm-12" required="true" style="display: none;" requiredMessage="La longitud es requerida" />
 
                                 <div class="text-right">
-                                    <p:commandButton value="Confirmar" action="#{servicioEBean.modServ}" oncomplete="PF('modificar').hide;" class="text-white bg-primary-500 border-primary-500 px-3 py-2 text-base border-1 border-solid border-round cursor-pointer transition-all transition-duration-200 hover:bg-primary-600 hover:border-primary-600 active:bg-primary-700 active:border-primary-700"/>
+                                    <p:commandButton value="Confirmar" action="#{servicioEBean.modServ}" update="mods messages" oncomplete="PF('modificar').hide;" class="text-white bg-primary-500 border-primary-500 px-3 py-2 text-base border-1 border-solid border-round cursor-pointer transition-all transition-duration-200 hover:bg-primary-600 hover:border-primary-600 active:bg-primary-700 active:border-primary-700"/>
                                 </div>
                             </div>
                         </p:dialog>

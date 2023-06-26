@@ -303,7 +303,7 @@ public class AdminBean implements Serializable {
         facesContext.addMessage(null, new FacesMessage(severity, summary, detail));
     }
 
-    public void modBuffer(String red){
+    public void modBuffer(){
         List<AmbulanciaDTO> a= servicioEmBean.getAmbuPejudicadas();
         System.out.println();
         for (AmbulanciaDTO ambulanciaDTO : a) {
@@ -311,7 +311,7 @@ public class AdminBean implements Serializable {
             System.out.println("AdminBean::distancia maxima: " + ambulanciaDTO.getDistanciaMaxDesvio());
             iAmbulaciasService.modificar(ambulanciaDTO);
         }
-        switch (red){
+        switch (servicioEmBean.getDepartede()){
             case "Mod":
                 servicioEmBean.modServ();
                 break;

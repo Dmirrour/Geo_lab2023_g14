@@ -56,6 +56,7 @@ public class ServicioEmBean implements Serializable {
     private List<AmbulanciaDTO> ambuPerjudicadas= new ArrayList<>();
     private ServicioEmergenciaDTO sA;
     private String departede;
+    private String camasLib;
 
 
     public void initS() {
@@ -118,28 +119,48 @@ public class ServicioEmBean implements Serializable {
     }
     public void modServ() {
         ServicioEmergenciaDTO a = buscarDTO();
-        if(totalCama==0)
-            totalCama=a.getTotalCama();
-        if(camasLibre==0 && a.getCamasLibres()>totalCama) {
-            camasLibre = a.getTotalCama() - (a.getTotalCama() - a.getCamasLibres());//si se sacaron camas pero el servicio de emergencia tenia mas agarro la nuevas cantidad de camas y le resto las que estaban ocupadas
-            if(camasLibre<0){
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Tienes menos camas quelas ocupadas", ""));
-                return;
+        boolean vas=true;
+        if(camasLib.isEmpty()){
+            camasLibre=-1;
+        }else{
+            camasLibre= Integer.parseInt(camasLib);
+        }
+        if(camasLibre==-1){
+            camasLibre=a.getCamasLibres();
+            if(totalCama==0)
+                totalCama=a.getTotalCama();
+            else if(a.getCamasLibres()>totalCama) {
+                camasLibre = totalCama - (a.getTotalCama() - a.getCamasLibres());//si se sacaron camas pero el servicio de emergencia tenia mas agarro la nuevas cantidad de camas y le resto las que estaban ocupadas
+                if (camasLibre < 0) {
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Tienes menos camas quelas ocupadas", ""));
+                    return;
+                }
+            }
+        }else{
+            if(totalCama==0)
+                totalCama=a.getTotalCama();
+            if(totalCama<camasLibre){
+                totalCama=camasLibre;
             }
         }
-        if(nombreS.isEmpty() && nombreS=="")
-            nombreS=a.getNombre();
+
+        if(nombreS.isEmpty()) {
+            nombreS = a.getNombre();
+            vas=false;
+        }
         ServicioEmergenciaDTO mod= ServicioEmergenciaDTO.builder()
                 .idServicio(a.getIdServicio())
                 .totalCama(totalCama)
                 .camasLibres(camasLibre)
-                .nombre(a.getHospital().getIdHospital()+"_"+nombreS)
+                .nombre(vas ? (a.getHospital().getIdHospital()+"_"+nombreS) : nombreS)
                 .build();
         String msj;
         try {
+            iServicioEmergenciaService.modificar(mod);
             msj = String.format("Se a modificado los datos");
             addMensaje("Servivio de Emergencia", msj,"exito");
-            iServicioEmergenciaService.modificar(mod);
+            initS();
+
 
         }catch (Exception e){
              msj = String.format("El Codigo seleccionado ya existe");
@@ -201,6 +222,8 @@ public class ServicioEmBean implements Serializable {
                     totalCama = 0;
                     nombreS = null;
                     idHospital = null;
+                    camasLib=null;
+                    camasLibre = -1;
                     latitud = 0;
                     longitud = 0;
                     msj = String.format("Se Modifico la ubicación");
@@ -210,6 +233,8 @@ public class ServicioEmBean implements Serializable {
                     externalContext.redirect(externalContext.getRequestContextPath() + "/admin/indexAdm.xhtml");
                 }
 
+            }else{
+                camasLib=null;
             }
         } catch (SQLException  | IOException e) {
             // e.printStackTrace();
@@ -426,5 +451,13 @@ public class ServicioEmBean implements Serializable {
 
     public void setDepartede(String departede) {
         this.departede = departede;
+    }
+
+    public String getCamasLib() {
+        return camasLib;
+    }
+
+    public void setCamasLib(String camasLib) {
+        this.camasLib = camasLib;
     }
 }
