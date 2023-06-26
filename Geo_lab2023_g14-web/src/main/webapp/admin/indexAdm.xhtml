@@ -1,11 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html
-        xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:h="http://xmlns.jcp.org/jsf/html"
-        xmlns:p="http://primefaces.org/ui"
-        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-        xmlns:f="http://xmlns.jcp.org/jsf/core"
-        lang="es" xml:lang="es">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core" lang="es" xml:lang="es">
 
 <h:head>
    <!-- VERIFICAR SESION -->
@@ -35,7 +29,6 @@
    <script type="" src="lib/js/class.ControladorMapa.js"></script>
    <script type="" src="../scripts/geolet.js"></script>
 
-   <!-- //<script src="../scripts/lib/indexInvitado.js"></script> -->
    <!-- JTS -->
    <script type="" src="https://cdn.jsdelivr.net/npm/elm-pep@1.0.6/dist/elm-pep.js"></script>
    <script type="" src="https://cdn.jsdelivr.net/npm/jsts@2.3.0/dist/jsts.min.js"></script>
@@ -44,6 +37,7 @@
    <!-- CONSULTAS query -->
    <script type="" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
    <script type="" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
    <!-- ICONOS -->
    <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
    <link rel="stylesheet" href="https://unpkg.com/primeflex@^3/primeflex.css" />
@@ -57,7 +51,7 @@
 
 <h:body>
 
-   <p:growl id="messages" showDetail="true" />
+   <p:growl id="messages" showDetail="true" autoUpdate="true" />
    <div id="top">
       <div class="navbar navbar-expand-sm">
          <div class="container-fluid">
@@ -70,12 +64,12 @@
                   </p:submenu>
                   <p:submenu label="Modificar">
                      <p:menuitem value="Modificar Ambulancia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg5').show()" />
-                     <p:menuitem value="Modificar S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg4').show(); mostrarMarker2(#{servicioEBean.size});" />
+                     <p:menuitem value="Modificar S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg4').show(); mostrarMarker2('#{servicioEBean.size}');" />
                   </p:submenu>
                   <p:submenu label="Alta">
                      <p:menuitem value="Alta Hospital" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg1').show()" />
                      <p:menuitem value="Alta Ambulancia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg2').show()" />
-                     <p:menuitem value="Alta S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg3').show(); mostrarMarker();" />
+                     <p:menuitem value="Alta S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg3').show(); mostrarMarker();" oncomplete=""/>
                   </p:submenu>
                </p:menubar>
             </div>
@@ -103,7 +97,9 @@
       <ui:include src="lib/forms/eliminarHospital.xhtml" />
       <ui:include src="lib/forms/eliminarSE.xhtml" />
       <ui:include src="lib/forms/modificarSE.xhtml" />
+      <ui:include src="lib/forms/modificarAmbu.xhtml" />
       <ui:include src="lib/forms/AmbulaciaFueraService.xhtml" />
+
    </p:outputPanel>
    <!-- END FORMS -->
 
@@ -199,7 +195,7 @@
          </div>
       </form>
       <script type="">
-         var collapseEsquina = new bootstrap.Collapse(document.getElementById("collapseEsquina"));
+         var collapseEsquina = new bootstrap.Collapse(document.getElementById("collapseEsquina"));//este tira un error en cosola
          var collapseNumero = new bootstrap.Collapse(document.getElementById("collapseNumero"));
 
          // Escuchar el evento de mostrar el acordeón de Esquina
@@ -237,6 +233,12 @@
          PF('dlg8').hide();
          PF('dlg9').hide();
       }
+      function actualizarD() {
+         PF('dlg2').refresh()
+         PF('dlg3').refresh()
+         PF('dlg8').refresh()
+      }
+
       let mapaAdmin = new ControladorMapa();
       mapaAdmin.crearMapaAdmin();
       mapaAdmin.addLayerWFSbuf();
@@ -250,9 +252,15 @@
       function mostrarMarker2(date) {
          mapaAdmin.cargarMapaModSE(date);
       }
+      /*let date2=#{adminBean.size}*/
+      /*$(document).ready(function() {
+         console.log('El documento HTML se ha cargado por completo.');
 
-      mapaAdmin.cargarMapaAltaAmbulancia();
+         mapaAdmin.cargarMapaAltaAmbulancia(#{adminBean.size});
 
+         // Resto del código que deseas ejecutar después de la carga inicial
+      });*/
+      mapaAdmin.cargarMapaAltaAmbulancia(#{adminBean.size});
    </script>
    <script type="text/javascript">
       $(document).ready(function () {

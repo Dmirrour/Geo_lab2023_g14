@@ -87,20 +87,22 @@ function CrearMapaInvitado() {
     drawControl = new L.Control.DrawPlus({
         position: 'topright',
         draw: {
-            circle: true,
-            polyline: true
+            circle: false,
+            polyline: false
         },
-        edit: {
-            featureGroup: drawLayers,
-            edit: true
-        }
+        // edit: {
+        //     featureGroup: drawLayers,
+        //     edit: false
+        // }
     });
 
     map.addLayer(drawLayers);
-    // map.addControl(drawControl);
+    //  map.addControl(drawControl);
 
     map.on(L.Draw.Event.CREATED, function (e) {
+        //  console.log("drawLayers: ", e.layer);
         drawLayers.addLayer(e.layer);
+
     });
     ///////////////////////// FIN OPCIONES DE MAPA /////////////////////////
 
@@ -114,7 +116,6 @@ function CrearMapaInvitado() {
         console.log("Latitud:", latitud) // .toFixed(2) muestra 2 decimales(no usar para guardar datos en bd)
         console.log("Longitud:", longitud)
     });
-
     map.on('click', function (e) {
         let latitud = e.latlng.lat;
         let longitud = e.latlng.lng;
@@ -348,7 +349,7 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
                     //   console.log(properties);
                     let popupContent =
                         '<div class="popup-content">' +
-                        '<h5><b>Codigo ' + properties.idcodigo + '</b></h5>' +
+                        '<em>Codigo: </em><b>' + properties.idcodigo + '</b></p>' +
                         '<em>Distancia max. desvio: </em><b>' + properties.distanciamaxdesvio + ' m</b></br>' +
                         '<em>Hospital: </em><b>' + properties.hospital_idhospital + '</b></br>' +
                         //    '<em>Coordenadas: </em><b>' + geo[0] + " , " + geo[1] + '</b></br>' +
@@ -371,6 +372,18 @@ var iconA = L.icon({
     iconUrl: './resources/marker-icons/ambulance.png',
     iconSize: [22, 22]
 });
+
+
+
+///////////////////////// GENERA COLOR /////////////////////////
+function moverAmbu() {
+
+
+
+
+}
+
+
 
 
 ///////////////////////// FUNCIONES AUXILIARES /////////////////////////
@@ -398,6 +411,7 @@ function euclideanDistanciaMetrosObj(latlng1, latlng2) { // Distancia euclidiana
 
 function removerLayer() {
     map.removeLayer(geojsonLayer);
+    ocultarFrm();
 }
 
 function BorrarMarcadorALtaSE() {

@@ -11,6 +11,7 @@ let puntose;
 let latitudeGPS;
 let longitudeGPS;
 var idhosss;
+var drawControlPoligon;
 /////////////////// SELECT CONTROL ///////////////////
 function menuInicio() {
     let listaSelect;
@@ -23,25 +24,27 @@ function menuInicio() {
                 { label: "Ingresar dirección", value: 22 },
             ],
         },
-        { label: "Graficar busqueda", value: 3 }
+        { label: "Graficar busqueda", value: 3 },
+        { label: "Servicio con disponibilidad", value: 4 }
     ];
 
     selectCtrlInicio = L.control.select({
         position: "topleft",
-        selectedDefault: false,
+        selectedDefault: 9,
         items: listaSelect,
         onSelect: function (newItemValue) {
             switch (newItemValue) {
                 case 1:
                     console.log("Cobertura en mi ubicación");
+                    // limpiarButton();
+                    // initLayers(0);
+                    ocultarFrm();
                     map.removeLayer(geojsonLayer);
                     obtenerCoordenadas()
                         .then(function (coor) {
-                            console.log('Long obtener Coordenadas: ', coor.longitud);
-                            console.log('Lat obtener Coordenadas: ', coor.latitud);
                             coorUserlon = coor.longitud;
                             coorUserlat = coor.latitud;
-                            console.log('Lat obtener Coordenadas: ', coorUserlat);
+                            console.log('Lat obtener Coordenadas: ', coorUserlat, ' ', coorUserlon);
                             intersectpoint(coorUserlat, coorUserlon);
                         })
                         .catch(function (error) {
@@ -51,37 +54,38 @@ function menuInicio() {
                 case 21:
                     console.log("Seleccionar hospital");
                     wfsSelectHospitales();
+                    ocultarFrm();
                     limpiarButton();
+                    drawControlPoligon.remove();
                     break;
                 case 22:
                     console.log("Ingresar dirección");
-                    // masCercana();
                     // limpiarButton();
-                    // initLayers(0);
+                    if (selectCtrlHospital != null) { // boton seleccion hospitales
+                        selectCtrlHospital.remove();
+                    }
                     map.removeLayer(geojsonLayere);
                     map.removeLayer(geojsonLayeres);
                     removerLayer();
                     masCercana(seleccionEsq);
                     openFrm();
+                    drawControlPoligon.remove();
                     break;
                 case 3:
                     console.log("Graficar ");
-                    // limpiarButton();
                     map.removeLayer(geojsonLayer);
-                    //  removerLayer();
-                    //  limpiarMapa();
-                    obtenerCoordenadas()
-                        .then(function (coor) {
-                            console.log('Long obtener Coordenadas: ', coor.longitud);
-                            console.log('Lat obtener Coordenadas: ', coor.latitud);
-                            coorUserlon = coor.longitud;
-                            coorUserlat = coor.latitud;
-                            console.log('Lat obtener Coordenadas: ', coorUserlat);
-                            intersectpoint(coorUserlat, coorUserlon);
-                        })
-                        .catch(function (error) {
-                            console.error('Error al obtener las coordenadas:', error);
-                        });
+                    map.removeLayer(geojsonLayere);
+                    map.removeLayer(geojsonLayeres);
+                    dibujarPolyline();
+                    // ocultarFrm();
+                    // selectCtrlHospital.remove();
+                    break;
+                case 4:
+                    console.log("Servicio disponible ");
+                    map.removeLayer(geojsonLayer);
+                    map.removeLayer(geojsonLayere);
+                    map.removeLayer(geojsonLayeres);
+                    camasDisponibles();
                     break;
             }
         },
@@ -91,6 +95,7 @@ function menuInicio() {
     }).addTo(map);
 
 }
+
 
 var selectCtrlHospital;
 function wfsSelectHospitales() {
@@ -129,6 +134,7 @@ function wfsSelectHospitales() {
                         map.removeLayer(geojsonLayeres);
                         map.removeLayer(geojsonLayer);
                         removerLayer();
+                        ocultarFrm();
                         initLayers(0);
                         //  selectCtrlHospital.remove();
                         //  selectCtrlInicio();
@@ -142,7 +148,6 @@ function wfsSelectHospitales() {
                         //  buscarUbicacion; // crear recorrido
                         // var buscarUbicacionBtn = document.getElementById('buscarUbicacion');
                         //    selectCtrlHospital.remove();
-                        //  selectCtrlInicio();
                     }
                 },
             }).addTo(map);
@@ -152,10 +157,176 @@ function wfsSelectHospitales() {
         });
 }
 
+var concatenarPoints = "";
+let camas;
+var geojsonLayeresCamas;
+function camasDisponibles() {
+    //  var drawLayer = new L.FeatureGroup().addTo(map); // Crear una nueva capa de dibujo
+
+
+    let cero = 0;
+    let filters = "camaslibres>'" + cero + "'";
+    let urlCamas =
+        'http://localhost:8081/geoserver/wfs?' +
+        'service=WFS&' +
+        'request=GetFeature&' +
+        'typeName=Geo_lab2023_g14PersistenceUnit:vista_se_h&' +
+        'srsName=EPSG:32721&' +
+        'outputFormat=application/json';
+
+    urlCamas += '&CQL_FILTER=' + filters;
+
+    geojsonLayer = L.geoJSON(null, {
+        pointToLayer: function (feature, latlng) {
+            let idh = feature.properties.idhospital * 20;
+            let markerColor = generarColor(idh) || 'blue';
+            return L.circleMarker(latlng, {
+                radius: 8,
+                fillColor: markerColor,
+                color: '#000',
+                weight: 1,
+                opacity: 1,
+                fillOpacity: 0.8
+            });
+        }
+    }).addTo(map); // Crear una capa de GeoJSON, agrega los puntos de SERVICIO EMERGENCIA 
+    fetch(urlCamas)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            geojsonLayer.addData(data);
+            //   console.log(data);
+            let puntosArray2 = [];
+            for (let i = 0; i < data.features.length; i++) {
+                laAmb2 = data.features[i].geometry.coordinates[1];
+                loAmb2 = data.features[i].geometry.coordinates[0];
+                puntosArray2.push({
+                    laAmb2,
+                    loAmb2
+                });
+            }
+            // camas = data.features[i].properties.camaslibres;
+            // console.log("camas: ", camas);
+
+            // if (camas > 0) {
+            geojsonLayer.eachLayer(function (layer) {
+                layer.on('click', function (e) {
+                    let properties = e.target.feature.properties;
+                    coorServicioEmer = e.target.feature.geometry.coordinates;
+                    //  let coordenadas = e.target.feature.geometry.coordinates;
+                    //  console.log(coorServicioEmer);
+                    let popupContent =
+                        '<div class="popup-content">' +
+                        '<h5><b>' + properties.nombre + '</b></h5>' +
+                        '<em>aaaaCamas libres: </em><b>' + properties.camaslibres + '</b></br>' +
+                        '<em>Total de camas: </em><b>' + properties.totalcama + '</b></br>' +
+                        '<em>Hospital Nombre: </em><b>' + properties.nombrehospital + '</b></br>' +
+                        '<em>Hospital Tipo: </em><b>' + properties.tipohospital + '</b></br>' +
+                        //   '<em>Coordenadas: </em><b>' + coorServicioEmer[0] + " , " + coorServicioEmer[1] + '</b></br>' +
+                        '</div>';
+                    let popupOptions = {
+                        className: 'custom-popup'
+                    };
+                    layer.closePopup(); // Cerrar el popup anterior si existe
+                    layer.bindPopup(popupContent, popupOptions).openPopup();
+                })
+            });
+            geojsonLayer.options.layerName = layerName;
+        })
+        .catch(function (error) {
+            console.error('Error:', error);
+        });
+}
+
+
+
+var concatenarPoints = "";
+function dibujarPolyline() {
+    var drawLayer = new L.FeatureGroup().addTo(map); // Crear una nueva capa de dibujo
+    if (drawControlPoligon != null) {
+        drawControlPoligon.remove();
+    }
+
+    drawControlPoligon = new L.Control.Draw({ // Activar la herramienta de dibujo de polilíneas
+        draw: {
+            polygon: true,
+        },
+        edit: false
+    }).addTo(map);
+
+    let wfsURL = 'http://localhost:8081/geoserver/wfs?' +
+        'service=WFS&' +
+        'request=GetFeature&' +
+        'typeName=Geo_lab2023_g14PersistenceUnit:ambulancia&' +
+        'srsName=EPSG:32721&' +
+        'outputFormat=application/json';
+    fetch(wfsURL)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            geojsonLayer.addData(data);
+
+            let puntosArray2 = [];
+            for (let i = 0; i < data.features.length; i++) {
+                ambuInter = data.features[i].geometry.coordinates[1];
+                ambuInter2 = data.features[i].geometry.coordinates[0];
+                puntosArray2.push({
+                    ambuInter2,
+                    ambuInter
+                });
+                concatenarPoints = '[' + ambuInter2 + ', ' + ambuInter + '],' + concatenarPoints;
+            }
+        });
+
+
+    ////// Evento de dibujo de polilínea completada
+    map.on('draw:created', function (e) {
+        let layer = e.layer;
+        let latlngs = layer.getLatLngs();  // Obtener las coordenadas de la polilínea
+
+        // point
+        concatenarPoints = concatenarPoints.slice(0, -1);
+        var coordPointText = '[' + concatenarPoints + ']';
+        var coordPoint = JSON.parse(coordPointText);
+        coordPoint[0].push(coordPoint[0][0]); // Para que la primera y ultima coordenada sean iguales 
+        var points = turf.points(coordPoint);
+
+        // polygon
+        var polygonCoordinates = latlngs[0].map(function (latlng) {
+            return '[' + latlng.lng + ', ' + latlng.lat + ']';
+        }).join(',');
+        var coordText = '[[' + polygonCoordinates + ']]';
+        var coordPolygon = JSON.parse(coordText);
+        coordPolygon[0].push(coordPolygon[0][0]); // Para que la primera y ultima coordenada sean iguales 
+
+        var polygons = turf.polygon(coordPolygon, {
+            "fill": "#00F",
+            "fill-opacity": 0.1
+        });
+        L.geoJSON(polygons).addTo(map);
+
+        var ptsWithin = turf.pointsWithinPolygon(points, polygons);
+        var diffGeojson = L.geoJSON(ptsWithin).addTo(map);
+        // map.fitBounds(diffGeojson.getBounds());  // efecto zoom
+
+        drawLayer.addLayer(layer); // Añadir la polilínea
+    });
+
+    // Limpiar la capa de dibujo cuando se haga clic en el mapa
+    map.on('click', function () {
+        drawLayer.clearLayers();
+        // drawControlPoligon.remove(); remover control
+    });
+}
+
+
 function limpiarButton() {
     if (selectCtrlHospital != null) {
         selectCtrlHospital.remove();
     }
+    // agregar todos lo botones
     ocultarFrm();
 }
 
@@ -166,19 +337,10 @@ let geojsonLa;
 let loAmb2aux;
 let laAmb2aux;
 let prop;
-
 function masCercana(seleccionEsq) {
     console.log("selectEsq: " + seleccionEsq.lat, seleccionEsq.lng);
-    //  openFrm();
-    // openFrm();
-    //console.log("openFrm: " + seleccionEsq.lat);
-
-    // 'CQL_FILTER=DWITHIN(point_se, POINT(' + seleccionEsq.lng + ' ' + seleccionEsq.lat + '), 50000, feet)&' +
-    //   'sortBy=point asc&' +
-    // 'maxFeatures=1&' +
     //  'CQL_FILTER=DWITHIN(point, POINT(-56.18581498973073 -34.86255776861203), 5000000, meters)&' +
     //  'CQL_FILTER=INTERSECTS(buffer_zona_cobertura,POINT(' + coorUserlon + ' ' + coorUserlat + '))';
-    //  var geojsonLayer = L.geoJSON().addTo(map);
     //  geojsonLa = L.geoJSON(null, {
     // style: {     color: 'red',  weight: 0.8, opacity: 0.5  }, }).addTo(map);
     let urlss =
@@ -199,13 +361,9 @@ function masCercana(seleccionEsq) {
             let puntosArray2 = [];
             for (let i = 0; i < data.features.length; i++) {
                 closestFeature = data.features[i].geometry.coordinates;
-                // = data.features[i].properties.hospital_idhospital;
-                //  let disaa = addObjLatLng(seleccionEsq.lng, seleccionEsq.lat);
-                //   console.log("c", closestFeature);  console.log("c", disaa);
                 disaa = addObjLaLng(seleccionEsq.lat, seleccionEsq.lng)
                 distancia = euclideanDistanciaMetrosObj(disaa, closestFeature);
-                //  Coordenadas: -56.23197147 , -34.86140257
-                // -56.15258217 , -34.86441034   juan pablo ii
+                //  Coordenadas: -56.23197147 , -34.86140257  // -56.15258217 , -34.86441034   juanp ii
                 if (distancia < menorDistancia) {
                     menorDistancia = distancia;
                     idhosss = data.features[i].properties.idhospital;
@@ -223,115 +381,10 @@ function masCercana(seleccionEsq) {
             initLayers(idhosss);
             openFrm();
             ocultarFrm();
-            // openFrm();
         })
         .catch(function (error) {
             console.error('Error:', error);
         });
-
-    /*  fetch(urlss)
-          .then(function (response) {
-              return response.json();
-          })
-          .then(function (data) {
-              geojsonLa.addData(data);
-              console.log("asdas");
-              //    if (data.features.length > 0) {
-              console.log("data ", data);
-              let puntosArray3 = [];
-              for (let i = 0; i < data.features.length; i++) {
-                  prop = data.features[i].properties;
-                  console.log("data ", prop);
-                  closestFeature = data.features[i].geometry.coordinates;
-  
-                  //  let closestFeature = data.feature.geometry.coordinates[0];
-                  let disa = addObjLatLng(seleccionEsq.lng, seleccionEsq.lat);
-                  let disb = addObjLatLng(closestFeature[0], closestFeature[1]);
-  
-                  let distancia = euclideanDistanciaMetrosObj(disa, disb);
-  
-                  if (distancia < menorDistancia) {
-                      menorDistancia = distancia;
-                      laAmb2 = data.features[i].geometry.coordinates[1];
-                      loAmb2 = data.features[i].geometry.coordinates[0];
-                      //  entidadMasCercana = entidad;
-                  }
-  
-                  console.log(distancia, " ", loAmb2, laAmb2);
-                  // console.log(seleccionEsq);
-                  // console.log(closestFeature);
-                  // puntosArray3.push({
-                  //     laAmb3,
-                  //     loAmb3
-                  // });
-              }
-              console.log(loAmb2 + " 99 " + laAmb2);
-  
-              //     console.log("menor: ", menorDistancia);
-              //    // var diasa = addObjLatLng(loAmb2, laAmb2);
-              //     console.log("menor: ", diasa.lat);
-              //     // return diasa;
-  
-              // if (data.features.length > 0) {
-              //     let feature = data.features[0];
-              //     // Hacer algo con el resultado obtenido
-              //     console.log('-34.881743689093234 , -56.25985917951554: RESULTADO: ', feature);
-              // } else {
-              //     console.log('No se encontraron resultados.');
-              // }
-              // let puntosArray2 = [];
-              // for (let i = 0; i < data.features.length; i++) {
-              //     laAmb2 = data.features[i].geometry.coordinates[1];
-              //     loAmb2 = data.features[i].geometry.coordinates[0];
-              //     // console.log(loAmb2+ " 99 " + laAmb2);
-              //     puntosArray2.push({
-              //         laAmb2,
-              //         loAmb2
-              //     });
-              // }
-              // console.log(laAmb2[0])
-              // geojsonLayer.eachLayer(function (layer) {  // Evento clic marcadores
-              //     layer.on('click', function (e) {
-              //         let properties = e.target.feature.properties;
-              //         let popupContent = '<div class="popup-content">' + properties.idcodigo + '</div>';
-              //         let popupOptions = {
-              //             className: 'custom-popup'
-              //         };
-              //         layer.closePopup();
-              //         layer.bindPopup(popupContent, popupOptions);
-              //         //    layer.bindPopup(popupContent, popupOptions).openPopup();
-              //     })
-              // })
-          })
-          .catch(function (error) {
-              console.error('Error:', error);
-          });*/
-
-    //// POINT AMBULANCIA ////
-    // var iconAmbulancia = L.icon({
-    //     iconUrl: 'resources/marker-icons/ambulance.svg',
-    //     iconSize: [36, 36],
-    // });
-    // var fijarAmbulancia = {
-    //     type: 'FeatureCollection',
-    //     features: [{
-    //         type: 'Feature',
-    //         properties: {},
-    //         geometry: {
-    //             type: 'Point',
-    //             coordinates: [ambLat, ambLon]
-    //         }
-    //     },
-    //     ]
-    // };
-    // L.geoJSON(fijarAmbulancia, {
-    //     pointToLayer: function (feature, latlng) {
-    //         return L.marker(latlng, {
-    //             icon: iconAmbulancia
-    //         });
-    //     }
-    // }).addTo(map);
-
 }
 
 function obtenerCoordenadasGPS() {
@@ -348,7 +401,7 @@ function obtenerCoordenadasGPS() {
         }, function (error) {
             console.error("Error al obtener la ubicación: " + error.message);
         });
-    } else {
+    } else {+
         console.error("Tu navegador no admite la geolocalización.");
     }
 }
@@ -357,9 +410,10 @@ var iconA = L.icon({
     iconUrl: './resources/marker-icons/ambulance.png',
     iconSize: [22, 22]
 });
-////////// Ver Ambulancias y ServiciosEmergencia con cobertura en mi zona //////////
-function intersectpoint(coorUserlat, coorUserlon) {
 
+
+////////// VER AMBULANCIAS Y SERVICIOSEMERGENCIA CON COBERTURA EN MI ZONA //////////
+function intersectpoint(coorUserlat, coorUserlon) {
     let iconoPersonalizado = L.icon({
         iconUrl: 'resources/marker-icons/marker-iconnaranjaf.png',
         iconSize: [22, 36]
@@ -385,7 +439,6 @@ function intersectpoint(coorUserlat, coorUserlon) {
         'typeName=Geo_lab2023_g14PersistenceUnit:vista_buff_cobertura_user&' +
         'outputFormat=application/json&' +
         'CQL_FILTER=INTERSECTS(buffer_zona_cobertura,POINT(' + coorUserlon + ' ' + coorUserlat + '))';
-
     fetch(urlIntersect)
         .then(function (response) {
             return response.json();
@@ -400,9 +453,9 @@ function intersectpoint(coorUserlat, coorUserlon) {
                 puntose = data.features[0].properties.point_se;
                 c = puntose.coordinates[0];
                 d = puntose.coordinates[1];
-                //   console.log("2: ", c, " ", d);
             });
             geojsonLayeres.options.layerName = layerNames;
+
         })
     // .catch(function (error) {
     //     console.error('Error:', error);
@@ -423,10 +476,10 @@ function intersectpoint(coorUserlat, coorUserlon) {
     L.geoJSON(puntos2, {
         pointToLayer: function (feature, latlng) {
             return L.marker(latlng, {
-                icon: iconA
+                // icon: iconA
             });
         }
-    }).addTo(map);
+    })//.addTo(map);
 
     var punto = {
         type: 'FeatureCollection',
@@ -457,8 +510,8 @@ function intersectpoint(coorUserlat, coorUserlon) {
 }
 
 
-let geojsonLayerBuff;
 /////////////////// addLayer WFS BUFFER ///////////////////
+let geojsonLayerBuff;
 function addLayerWFSbuf() {
     geojsonLayerBuff = L.geoJSON(null, {
         style: {
@@ -506,26 +559,6 @@ function limpiarMapa() {
     // if (geojsonLayer != null) {
     //     geojsonLayer.remove();
     // }
-
-}
-
-
-
-
-function solicitaAmbHospital() {
-    //   console.log("function init Layer Servicio Em: " + itemValue);
-    console.log('---------- aaGPSaa ------------');
-    let consultaLat = coor.latitud;
-    let consultaLon = coor.longitud;
-
-    let puntoICoords = euclideanDistanciaMetros(consultaLat, consultaLon);
-
-    console.log('ACA ANDA INDEX INVITADO LAT: ', consultaLat);
-    console.log('ACA ANDA INDEX INVITADO LON: ', consultaLon);
-
-    console.log('---------- aaPSaa ------------ ');
-
-
 }
 
 
@@ -534,9 +567,9 @@ function solicitaAmbHospital() {
 
 
 
+//////////////// ARRIBA SE ESTA USANDO///////////////////
 
-
-function obtenerCoordenadasGPS() {
+function obtenerCoordenadasGPSs() {// ver repetido
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
             this.latitudeGPS = position.coords.latitude;
@@ -555,11 +588,8 @@ function obtenerCoordenadasGPS() {
     }
 }
 
-
-
-
 ////////// Ver Ambulancias y ServiciosEmergencia con cobertura en mi zona //////////
-function intersectpoint2() {
+function intersectpoint2() {  ///adriana
     obtenerCoordenadasGPS();
     let latiPrueba = this.latitudeGPS;
     let lonPrueba = this.longitudeGPS;
@@ -593,7 +623,7 @@ function intersectpoint2() {
                 puntose = data.features[0].properties.point_se;
                 c = puntose.coordinates[0];
                 d = puntose.coordinates[1];
-                console.log("2: ", c, " ", d);
+                //    console.log("2: ", c, " ", d);
             });
             geojsonLayeres.options.layerName = layerNames;
         })
@@ -653,24 +683,3 @@ var iconA = L.icon({
     iconSize: [22, 22]
 });
 
-
-
-
-
-
-
-
-
-
-
-    //  let filter = "idambulancia='" + newItemValue + "'";
-   // let urlIntersect =
-    //     'http://localhost:8081/geoserver/wfs?' +
-    //     'service=WFS&' +
-    //     'request=GetFeature&' +
-    //     'typeName=Geo_lab2023_g14PersistenceUnit:vista_buff_cobertura&' +
-    //     'srsName=EPSG:32721&' +
-    //     'outputFormat=application/json';
-    // urlIntersect += '&CQL_FILTER=' + filter;
-
-     // [-34.85875015620534], [-56.22253417968751] [-34.86903379735205], [-56.20038986206055]

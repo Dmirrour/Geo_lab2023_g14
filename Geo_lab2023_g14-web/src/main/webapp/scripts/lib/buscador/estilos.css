@@ -28,7 +28,7 @@ body {
     font-size: 24px;
     cursor: pointer;
     position: relative;
-    top: 90px;
+    top: 181px;
     margin-left: 10px;
     z-index: 1700;
 }
@@ -97,14 +97,34 @@ body {
     background-color: #f4f4f4;
     line-height: 14px;
     display: block;
-    text-align: center;
+    text-align: bottom;
     text-decoration: none;
     border: 2px solid rgba(0, 0, 0, 0.3);
     color: black;
     font-size: 11px;
     cursor: pointer;
-    position: absolute;
-    top: 286px;
+    position: relative;
+    top: 150px;
+    margin-left: 10px;
+    z-index: 1700;
+}
+
+#btnUpdate {
+    width: 34px;
+    height: 34px;
+    border-radius: 4px;
+    border-bottom: none;
+    background-color: #f4f4f4;
+    line-height: 14px;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    border: 2px solid rgba(0, 0, 0, 0.3);
+    color: black;
+    font-size: 26px;
+    cursor: pointer;
+    position: relative;
+    top: 220px;
     margin-left: 10px;
     z-index: 1700;
 }

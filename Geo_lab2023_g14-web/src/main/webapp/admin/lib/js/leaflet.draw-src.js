@@ -17,7 +17,7 @@
 	 * ```
 	 *
 	 * ### Adding the edit toolbar
-	 * To use the edit toolbar you must initialise the Leaflet.draw control and manually add it to the map.
+	 * Para usar la barra de herramientas de edición, debe inicializar el control Leaflet.draw y agregarlo manualmente al mapa.
 	 *
 	 * ```js
 	 *      var map = L.map('map').setView([51.505, -0.09], 13);
@@ -38,13 +38,13 @@
 	 *      map.addControl(drawControl);
 	 * ```
 	 *
-	 * The key here is the featureGroup option. This tells the plugin which FeatureGroup contains the layers that
-	 * should be editable. The featureGroup can contain 0 or more features with geometry types Point, LineString, and Polygon.
-	 * Leaflet.draw does not work with multigeometry features such as MultiPoint, MultiLineString, MultiPolygon,
-	 * or GeometryCollection. If you need to add multigeometry features to the draw plugin, convert them to a
-	 * FeatureCollection of non-multigeometries (Points, LineStrings, or Polygons).
-	 */
-	L.Draw = {};
+	* La clave aquí es la opción FeatureGroup. Esto le dice al complemento qué FeatureGroup contiene las capas que
+* debe ser editable. El featureGroup puede contener 0 o más entidades con tipos de geometría Point, LineString y Polygon.
+* Leaflet.draw no funciona con características multigeométricas como MultiPoint, MultiLineString, MultiPolygon,
+* o GeometryCollection. Si necesita agregar características multigeométricas al complemento de dibujo, conviértalas en un
+* Colección de características de geometrías no múltiples (puntos, cadenas de líneas o polígonos).
+	*/
+L.Draw = {};
 
 	/**
 	 * @class L.drawLocal
@@ -65,9 +65,9 @@
 	 *      });
 	 * ```
 	 *
-	 * The default state for the control is the draw toolbar just below the zoom control.
-	 *  This will allow map users to draw vectors and markers.
-	 *  **Please note the edit toolbar is not enabled by default.**
+	 * El estado predeterminado del control es la barra de herramientas de dibujo justo debajo del control de zoom.
+* Esto permitirá a los usuarios del mapa dibujar vectores y marcadores.
+* **Tenga en cuenta que la barra de herramientas de edición no está habilitada de forma predeterminada.**
 	 */
 	L.drawLocal = {
 		draw: {
@@ -172,12 +172,13 @@
 
 	/**
 	 * ### Events
-	 * Once you have successfully added the Leaflet.draw plugin to your map you will want to respond to the different
-	 * actions users can initiate. The following events will be triggered on the map:
+	* Una vez que haya agregado con éxito el complemento Leaflet.draw a su mapa, querrá responder a los diferentes
+* acciones que los usuarios pueden iniciar. Los siguientes eventos se activarán en el mapa:
 	 *
 	 * @class L.Draw.Event
 	 * @aka Draw.Event
-	 *
+	 * 
+	 *Utilice las constantes `L.Draw.Event.EVENTNAME` para asegurarse de que los eventos sean correctos.
 	 * Use `L.Draw.Event.EVENTNAME` constants to ensure events are correct.
 	 *
 	 * @example
@@ -202,7 +203,9 @@
 	 * Layer that was just created.
 	 * The type of layer this is. One of: `polyline`; `polygon`; `rectangle`; `circle`; `marker`
 	 * Triggered when a new vector or marker has been created.
-	 *
+	 ** Capa que se acaba de crear.
+* El tipo de capa que es. Uno de: `polilínea`; `polígono`; `rectángulo`; `círculo`; `marcador`
+* Activado cuando se ha creado un nuevo vector o marcador.
 	 */
 	L.Draw.Event.CREATED = 'draw:created';
 
@@ -210,11 +213,13 @@
 	 * @event draw:edited: LayerGroup
 	 *
 	 * List of all layers just edited on the map.
-	 *
-	 *
+		   
 	 * Triggered when layers in the FeatureGroup; initialised with the plugin; have been edited and saved.
-	 *
-	 * @example
+	 * Lista de todas las capas recién editadas en el mapa.
+* Activado cuando las capas en el FeatureGroup; inicializado con el complemento; han sido editados y guardados.
+*/
+/**
+ * @example
 	 * ```js
 	 *      map.on('draw:edited'; function (e) {
 		 *          var layers = e.layers;
@@ -3078,7 +3083,7 @@
 	L.Polygon.include({
 
 		// @method intersects(): boolean
-		// Checks a polygon for any intersecting line segments. Ignores holes.
+		// Comprueba un polígono en busca de segmentos de línea que se crucen. Ignora los agujeros.
 		intersects: function () {
 			var polylineIntersects,
 				points = this._getProjectedPoints(),
@@ -3692,7 +3697,7 @@
 		getModeHandlers: function (map) {
 			return [
 				{
-					enabled: this.options.polyline,
+					disable: this.options.polyline, // SGL
 					handler: new L.Draw.Polyline(map, this.options.polyline),
 					title: L.drawLocal.draw.toolbar.buttons.polyline
 				},
@@ -3702,17 +3707,17 @@
 					title: L.drawLocal.draw.toolbar.buttons.polygon
 				},
 				{
-					enabled: this.options.rectangle,
+					disable: this.options.rectangle, // SGL
 					handler: new L.Draw.Rectangle(map, this.options.rectangle),
 					title: L.drawLocal.draw.toolbar.buttons.rectangle
 				},
 				{
-					enabled: this.options.circle,
+					disable: this.options.circle, // SGL
 					handler: new L.Draw.Circle(map, this.options.circle),
 					title: L.drawLocal.draw.toolbar.buttons.circle
 				},
 				{
-					enabled: this.options.marker,
+					disable: this.options.marker, // SGL
 					handler: new L.Draw.Marker(map, this.options.marker),
 					title: L.drawLocal.draw.toolbar.buttons.marker
 				}

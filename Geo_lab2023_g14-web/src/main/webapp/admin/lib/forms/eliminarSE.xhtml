@@ -24,7 +24,7 @@
                             <h:outputText value="#{SE.camasLibres}" />
                         </p:column>
                         <p:column headerText="Elim.">
-                            <p:commandButton styleClass="rounded-button ui-button-danger" icon="pi pi-trash" process="@this" action="#{servicioEBean.eliminarS(SE)}" />
+                            <p:commandButton styleClass="rounded-button ui-button-danger" icon="pi pi-trash" process="@this" action="#{servicioEBean.eliminarS(SE)}" update="messages"/>
                         </p:column>
                     </p:dataTable>
                 </p:card>
