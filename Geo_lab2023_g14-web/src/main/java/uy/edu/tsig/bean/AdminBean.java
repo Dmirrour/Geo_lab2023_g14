@@ -5,10 +5,8 @@ import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
-import jakarta.faces.context.Flash;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import org.primefaces.PrimeFaces;
 import uy.edu.tsig.dto.AmbulanciaDTO;
 import uy.edu.tsig.dto.HospitalDTO;
 import uy.edu.tsig.dto.ServicioEmergenciaDTO;
@@ -29,9 +27,6 @@ import java.io.Serializable;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
-
-
 
 @Named("adminBean")
 @SessionScoped

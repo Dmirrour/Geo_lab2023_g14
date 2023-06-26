@@ -26,7 +26,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Named("servicioEBean")
 @SessionScoped
 public class ServicioEmBean implements Serializable {
@@ -50,20 +49,20 @@ public class ServicioEmBean implements Serializable {
 
     private ServicioEmergenciaDTO servselect;
 
-    //---------atributos necesarios extras----------//
+    // ---------atributos necesarios extras----------//
     private Long idHospital;
     private ServicioEmergenciaDTO selectedEmergencyService;
-    private List<AmbulanciaDTO> ambuPerjudicadas= new ArrayList<>();
+    private List<AmbulanciaDTO> ambuPerjudicadas = new ArrayList<>();
     private ServicioEmergenciaDTO sA;
     private String departede;
     private String camasLib;
 
-
     public void initS() {
         s = iServicioEmergenciaService.listarServiciosEmergensias();
         servicioEmergenciaDTOS = s.getListServiciosEmergencias();
-        size=servicioEmergenciaDTOS.size()-1;//arracamos de 0 asi que le restamos 1
+        size = servicioEmergenciaDTOS.size() - 1;// arracamos de 0 asi que le restamos 1
     }
+    
     public void addServicioE() throws IOException {
         ServicioEmergencia se = ServicioEmergencia.builder()
                 .totalCama(totalCama)
@@ -117,6 +116,7 @@ public class ServicioEmBean implements Serializable {
         return servicioEmergenciaEncontrado;
 
     }
+
     public void modServ() {
         ServicioEmergenciaDTO a = buscarDTO();
         boolean vas=true;
@@ -203,7 +203,7 @@ public class ServicioEmBean implements Serializable {
 
                         AmbulanciaDTO ambulanciaDTO= AmbulanciaDTO.builder()
                                 .idAmbulancia(rs.getLong("idambulancia"))
-                                .idCodigo(rs.getString("idcodigo"))
+                                .idCodigo(rs.getInt("idcodigo"))
                                 .distanciaMaxDesvio(rs.getInt("distanciamaxdesvio"))
                                 .build();
                         ambuPerjudicadas.add(ambulanciaDTO);
@@ -242,6 +242,7 @@ public class ServicioEmBean implements Serializable {
             System.out.println("No conecta."+e.getMessage());
         }
     }
+
     public void cancelar(RowEditEvent event) {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Cancelado", ""));
     }
@@ -304,6 +305,7 @@ public class ServicioEmBean implements Serializable {
             System.out.println("No conecta.BorrarServ"+e.getMessage());
         }
     }
+
     private void borrardefinitivo(long ids) throws IOException {
         boolean r = iServicioEmergenciaService.borrarSE(ids);
 
@@ -356,6 +358,7 @@ public class ServicioEmBean implements Serializable {
     public void setServicioEmergenciaDTOS(ArrayList<ServicioEmergenciaDTO> servicioEmergenciaDTOS) {
         this.servicioEmergenciaDTOS = servicioEmergenciaDTOS;
     }
+
     public ArrayList<ServicioEmergenciaDTO> getServicioEmergenciaDTOS() {
         return servicioEmergenciaDTOS;
     }
@@ -411,9 +414,11 @@ public class ServicioEmBean implements Serializable {
     public ServicioEmergenciaDTO getServselect() {
         return servselect;
     }
+
     public void setServselect(ServicioEmergenciaDTO servselect) {
         this.servselect = servselect;
     }
+
     public ServicioEmergenciaDTO getSelectedEmergencyService() {
         return selectedEmergencyService;
     }
@@ -421,6 +426,7 @@ public class ServicioEmBean implements Serializable {
     public void setSelectedEmergencyService(ServicioEmergenciaDTO selectedEmergencyService) {
         this.selectedEmergencyService = selectedEmergencyService;
     }
+
     public List<AmbulanciaDTO> getAmbuPejudicadas() {
         return ambuPerjudicadas;
     }

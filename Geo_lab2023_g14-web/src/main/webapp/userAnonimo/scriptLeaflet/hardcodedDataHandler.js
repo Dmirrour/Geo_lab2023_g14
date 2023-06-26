@@ -21,7 +21,7 @@ function hardcodedDataPoint() {
                 }
             }]
     }
-    L.geoJSON(lineStr).addTo(map);
+    // L.geoJSON(lineStr).addTo(map);
 
 
     /// POLIGONO
@@ -33,11 +33,11 @@ function hardcodedDataPoint() {
                 "geometry": {
                     "type": "Polygon",
                     "coordinates": [
-                        [[-66.0, -20.0],
-                        [-67.0, -20.0],
-                        [-67.0, -21.0],
-                        [-66.0, -21.0],
-                        [-66.0, -20.0]]
+                        [[-56.12345 - 34.56789],
+                        [-56.23456 - 34.67890],
+                        [-56.34567 - 34.78901],
+                        [-56.45678 - 34.89012],
+                        [-56.12345 - 34.56789]]
                     ]
                 },
                 "properties": {
@@ -64,7 +64,7 @@ function hardcodedDataPoint() {
         },  // Agrega más puntos
         ]
     };
-    //  L.geoJSON(puntos2).addTo(map);
+    // L.geoJSON(puntos2).addTo(map);
 
 
     /////////////////// ICON ///////////////////
@@ -97,12 +97,24 @@ function hardcodedDataPoint() {
     /////////////////// CIRCLE /////////////////// addto(map) para visualizar
     circulo = L.circle([-34.8503303549236, -56.185222811229534], { // Circulo zona personalizado
         radius: 1300,
-        color: "green"
-    })//.addTo(map)
+         color: "green"
+    })///.addTo(map)
     //circulo.bindPopup("Circulo")
 }
 
 
+
+    // var polygons = turf.polygon([[
+    //     [126, -28],
+    //     [140, -28],
+    //     [140, -20],
+    //     [126, -20],
+    //     [126, -28]
+    // ]], {
+    //     "fill": "#00F",
+    //     "fill-opacity": 0.1
+    // });
+    
 ///////////////////////// EJEMPLO OBJETO GEOJSON FEATURECOLLECTION /////////////////////////
 // {
 //     "type": "FeatureCollection",

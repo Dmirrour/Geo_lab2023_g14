@@ -30,7 +30,6 @@ async function sugerencia(text) {
         try {
             const response = await axios.get(urlCalle);
             if (response.status == 200) {
-                // console.log(response.data[0].nombre);
                 options = '<select class="form-select" id="idElegirCalle" size="6" aria-label="size 6 select" onchange="elegirCalle();">';
                 options += '<option class="dropdown-header dropdown-notifications-header" disabled>IDE.uy</option>';
                 options += '<option disabled>---------------------------------</option>';
@@ -125,7 +124,7 @@ async function buscarCalleNumeroAsync(portal) {
         const response = await fetch(urlEsq)
             .then((response) => response.json())
             .then((item) => {
-                console.log("buscarCalleNumero: " + item[0].nomVia);
+                //     console.log("buscarCalleNumero: " + item[0].nomVia);
                 seleccionEsq = item[0];
                 document.getElementById('direccion').value = item[0].address;
                 actualizarMapa();
@@ -142,13 +141,20 @@ function elegirCalle(selectedValue) {
     document.getElementById("visorDeListado").style.display = "none";
     buscarEsquinas();
 }
+let diasa;
 function elegirEsquina() {
     var selectedValue = document.getElementById('idSelectEsquina').options[document.getElementById('idSelectEsquina').selectedIndex].value;
+
     seleccionEsq = datoEsq.find(item => item.idCalleEsq == selectedValue);
     document.getElementById('direccion').value = seleccion.address;
-    actualizarMapa();
+    // console.log("aca " + seleccionEsq.lat + seleccionEsq.lng);
+    //actualizarMapa();
+    masCercana(seleccionEsq);
+    actualizarMapa(seleccionEsq.lat, seleccionEsq.lng);
+
 }
-// function actualizarMapa(Lat = null, Lng = null) {
+
+//function actualizarMapa(Lat = null, Lng = null) {
 function actualizarMapa(Lat, Lng) {
     let iconoPersonalizado = L.icon({
         iconUrl: 'resources/marker-icons/marker-iconnaranjaf.png',
@@ -156,83 +162,80 @@ function actualizarMapa(Lat, Lng) {
         iconAnchor: [12, 35], // especifica el punto de anclaje del icono relativo a su posición
         popupAnchor: [0, -32] // especifica el punto de anclaje del popup relativo al icono
     });
+
     if (Lat != null && Lng != null) {
         seleccionEsq.lat = Lat;
         seleccionEsq.lng = Lng;
         seleccionEsq.address = "Ubicacion del usuario";
     }
+
     if (marcador != null) {
         map.removeLayer(marcador);
     }
     if (circulo != null) {
         map.removeLayer(circulo);
     }
+    // if (ambulanciaMarcador != null) {
+    //     map.removeLayer(ambulanciaMarcador);
+    // }
 
     marcador = L.marker([seleccionEsq.lat, seleccionEsq.lng], { icon: iconoPersonalizado }).addTo(map);
     marcador.bindPopup("<h4>Mi ubicación</h4><br>" + seleccionEsq.address + "<br>" + seleccionEsq.lat + " , " + seleccionEsq.lng);
     marcador.display;
     circulo = L.circle([seleccionEsq.lat, seleccionEsq.lng], { // Circulo verde zona
-        radius: 700,
-        color: 'black',
+        radius: 600,
         weight: 0.9,
-        opacity: 0.5
+        opacity: 1,
+        fillOpacity: 0.09,
+        color: '#035'
     }).addTo(map)
-    // circulo.bindPopup("Circulo")
-    frmBuscar.style.display = 'none';
-    btnMostrarBuscador.style.backgroundColor = '#f4f4f4';
+    //circulo.bindPopup("Circulo")
+    //frmBuscar.style.display = 'none';
+    //btnMostrarBuscador.style.backgroundColor = '#f4f4f4';
+    //map.setView([seleccionEsq.lat, seleccionEsq.lng], 13);
+
 
     ///////////////// USUARIO
     var Usuario = {
         lat: seleccionEsq.lat,
         lon: seleccionEsq.lng
     };
-    // let alaAmb = -34.8588634;
-    // let aloAmb = -56.2194844;
-    // var Usuario = {
-    //     lat: -34.8588634,
-    //     lon: -56.2194844
-    // }; //-34.86860943844723], [-56.19680643081666]
 
     var Ambulancia = {
-        lat: loAmb, // Latitud del punto de inicio
-        lon: laAmb // Longitud del punto de inicio
+        lat: loAmb,
+        lon: laAmb
     };
 
-    let at = puntoInicioCoords[0];
-    let oot = puntoInicioCoords[1];
     var SerEme = {
-        lat: oot, // Latitud del punto de fin
-        lon: at // Longitud del punto de fin
+        lat: laAmb2,
+        lon: loAmb2
     };
+    // let diasa;
+    // diasa = masCercana(seleccionEsq).lat;
+    // diasaa = masCercana(seleccionEsq).lng;
+    // // loAmb2 = diasa.Lng;
+    // // laAmb2 = diasa.Lat;
+    // console.log("Ser " + diasa, diasa);
+    // var Usuario = {
+    //     lat: -56.2194844,
+    //     lon: -34.8588634
+    // }; //-34.86860943844723], [-56.19680643081666]
 
-    console.log(SerEme.lat + " :-: " + SerEme.lon);
-
-    // var SerEme = {
-    //     lat: -34.87325916579713, // Latitud del punto de fin
-    //     lon: -56.11936569213868  // Longitud del punto de fin
-    // };
     var ambulanciaMarcador = L.icon({
         iconUrl: 'resources/marker-icons/ambulance_color.png',
-        iconSize: [28, 28]   // especifica el tamaño del icono en píxeles
-        // iconAnchor: [16, 30],  // especifica el punto de anclaje del icono relativo a su posición
-        //popupAnchor: [0, -32]  // especifica el punto de anclaje del popup relativo al icono
+        iconSize: [28, 28],
+        iconAnchor: [12, 35],
+        popupAnchor: [0, -32]
     });
 
-    // var AmbulanciaMarcador = L.icon({
-    //     //  iconUrl: 'resources/marker-icons/marken-icon.png',
-    //     //  iconSize: [30, 30], // especifica el tamaño del icono en píxeles
-    //     iconAnchor: [12, 35], // especifica el punto de anclaje del icono relativo a su posición
-    //     popupAnchor: [0, -32] // especifica el punto de anclaje del popup relativo al icono
-    // });
-
     var markerAmbulancia = L.marker([SerEme.lat, SerEme.lon], { icon: ambulanciaMarcador }).addTo(map);
-
     crearRecorrido(Ambulancia, SerEme, Usuario, markerAmbulancia);
 }
+
 function crearRecorrido(Ambulancia, SerEme, Usuario, markerAmbulancia) {
-    console.log("s" + Ambulancia.lat, Ambulancia.lon);
-    console.log(Usuario.lat, Usuario.lon);
-    console.log(SerEme.lat, SerEme.lon);
+    console.log("A " + Ambulancia.lat, Ambulancia.lon);
+    console.log("U " + Usuario.lat, Usuario.lon);
+    console.log("S " + SerEme.lat, SerEme.lon);
     L.Routing.control({
         waypoints: [
             L.latLng(Ambulancia.lat, Ambulancia.lon),
@@ -256,8 +259,7 @@ function crearRecorrido(Ambulancia, SerEme, Usuario, markerAmbulancia) {
 function buscarCalleNumero() {
     let portal = document.getElementById('numeroCalle').value;
     // verificar que ya se haya llenado campo calle
-    if (seleccion.id != null) {
-        // verificar que se haya cargado un numero
+    if (seleccion.id != null) {      // verificar que se haya cargado un numero
         if (portal.length > 0) {
             // enviar las busqueda
             buscarCalleNumeroAsync(portal);
@@ -269,7 +271,6 @@ function buscarCalleNumero() {
     }
 }
 
-
 // Obtener referencia a los botones
 var mostrarBuscadorBtn = document.getElementById('mostrarBuscador');
 var buscarUbicacionBtn = document.getElementById('buscarUbicacion');
@@ -278,18 +279,18 @@ var buscarUbicacionBtn = document.getElementById('buscarUbicacion');
 buscarUbicacionBtn.addEventListener('click', function () {
     obtenerCoordenadas()
         .then(function (coor) {
-            console.log('Latitud GPS: ', coor.latitud);
-            console.log('Longitud GPS: ', coor.longitud);
+            console.log('---------- GPS ------------');
+            console.log('Latitud: ', coor.latitud);
+            console.log('Longitud: ', coor.longitud);
+            coor.longitud = -56.16586446762086;
+            coor.latitud = -34.91755507267872;
             actualizarMapa(coor.latitud, coor.longitud);
         })
         .catch(function (error) {
-            //  console.error('Error al obtener las coordenadas:', error);
+            //      console.error('Error al obtener las coordenadas:', error);
         });
-    //  console.log("NUEVOOO: " + obtenerCoordenadas());
-    // } else {
-    //     console.log("ERROR: ");
-    // }
 });
+
 
 document.getElementById('mostrarBuscador').addEventListener('click', function () {
     if (frmBuscar.style.display === 'none') {

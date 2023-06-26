@@ -36,9 +36,6 @@ public class Ambulancia implements Serializable {
     @ManyToOne
     private Hospital hospital;
 
-
-
-
     // lo dejo asi entonces para q no joda, para referencia de lo q hay
     @Transient
     @Column(columnDefinition = "geometry(LineString, 32721)")
