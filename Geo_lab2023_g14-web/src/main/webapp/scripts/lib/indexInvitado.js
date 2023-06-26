@@ -178,6 +178,7 @@ function initLayers(itemValue) {
     initLayerServicioEm(urlSe, 'layerSE'); // point se
     initLayerLineAmbu(urlAmbu, 'layerAmulancia'); // polyline ambu
     initLayerPointAmbu(urlAmbu, 'pointAmulancia'); // point Ambu
+    //  moviendoAmbulancia();
 }
 
 
@@ -250,6 +251,7 @@ function initLayerServicioEm(urlSe, layerName) {
         });
 }
 
+
 //////////////////////// LINESTRING AMBULANCIA ///////////////////////
 let geojsonLayere;
 function initLayerLineAmbu(urlAmbu, layerName) {
@@ -293,13 +295,52 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
             geojsonLayeres.addData(data);
 
             let puntosArray = [];
+            let concatenarPoints2 = "";
             for (let i = 0; i < data.features.length; i++) {
                 laAmb = data.features[i].geometry.coordinates[0][0];
                 loAmb = data.features[i].geometry.coordinates[0][1];
                 datosAmd = data.features[i].properties.idcodigo;
                 distancia = data.features[i].properties.distanciamaxdesvio;
                 idhospital = data.features[i].properties.hospital_idhospital;
-                //   console.log(laAmb + " 88 " + loAmb);
+                let largo = 0;
+                largo = data.features[i].geometry.coordinates.length;
+                console.log("lardo= ", largo);
+                concatenarPoints2 = "";
+                for (let j = 0; j < largo; j++) {
+                    laAmba = data.features[i].geometry.coordinates[j][0];
+                    loAmba = data.features[i].geometry.coordinates[j][1];
+                    console.log("lardo ", largo - 1, j);
+                    concatenarPoints2 = '[' + loAmba + ',' + laAmba + '],' + concatenarPoints2;
+                    console.log(concatenarPoints2);
+                }
+                for (let j = largo - 1; j >= 0; j--) {
+                    laAmba = data.features[i].geometry.coordinates[j][0];
+                    loAmba = data.features[i].geometry.coordinates[j][1];
+                    console.log("lardo ", largo - 1, j);
+                    concatenarPoints2 = '[' + loAmba + ',' + laAmba + '],' + concatenarPoints2;
+                    console.log(concatenarPoints2);
+                }
+
+                console.log(concatenarPoints2);
+                concatenarPoints2 = concatenarPoints2.slice(0, -1); // quitar coma final
+                concatenarPoints2 = '[' + concatenarPoints2 + ']';
+                var coordPoint3 = JSON.parse(concatenarPoints2);
+
+                var iconA = L.icon({
+                    iconUrl: './resources/marker-icons/ambulance.png',
+                    iconSize: [22, 22]
+                });
+
+                //  coordPoint3[0].push(coordPoint3[0][0]); // Para que la primera y ultima coordenada sean iguales 
+                var recorridoInteractivoa = coordPoint3;
+                var marker3 = L.Marker.movingMarker(recorridoInteractivoa,
+                    [1500, 1500, 1500, 1500, 1500, 1200, 1500], {
+                    autostart: true, loop: true, icon: iconA
+                }).addTo(map);
+                marker3.loops = 0;
+                marker3.on('loop', function (e) {
+                    marker3.loops++;
+                });
                 puntosArray.push({
                     laAmb,
                     loAmb,
@@ -314,7 +355,7 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
                 type: 'FeatureCollection',
                 features: []
             };
-            // console.log(puntosArray);
+
             puntosArray.forEach(function (datos) {
                 let feature = {
                     type: 'Feature',
@@ -330,7 +371,6 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
                 };
                 puntos.features.push(feature);
             });
-            //   console.log(puntosArray);
 
             geojsonLayeres = L.geoJSON(puntos, {
                 pointToLayer: function (feature, latlng) {
@@ -338,7 +378,7 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
                         icon: iconA
                     });
                 }
-            }).addTo(map);
+            })//.addTo(map);
             geojsonLayeres.addData(puntos);
 
             geojsonLayeres.eachLayer(function (puntos) {
@@ -346,7 +386,6 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
                     let properties = e.target.feature.properties;
                     let geo = e.target.feature.geometry.coordinates;
                     // console.log(geo);
-                    //   console.log(properties);
                     let popupContent =
                         '<div class="popup-content">' +
                         '<h5><b>Codigo ' + properties.idcodigo + '</b></h5>' +
@@ -374,15 +413,26 @@ var iconA = L.icon({
 });
 
 
-
-///////////////////////// GENERA COLOR /////////////////////////
-function moverAmbu() {
-
-
-
-
+///////////////////////// /////////////////////////
+function moviendoAmbulancia() {
+    control.log("mode ", loAmb);
+    var recorridoInteractivo = [[51.507222, -0.1275], [50.85, 4.35], [50.85, 4.35], [51.507222, -0.1275]];
+    var marker3 = L.Marker.movingMarker(recorridoInteractivo,
+        [2000, 0, 2000, 0], { autostart: true, loop: true }).addTo(map);
+    marker3.loops = 0;
+    marker3.bindPopup('', { closeOnClick: false });
+    marker3.on('loop', function (e) {
+        marker3.loops++;
+        if (e.elapsedTime < 50) {
+            marker3.getPopup().setContent("<b>Loop: " + marker3.loops + "</b>")
+            marker3.openPopup();
+            setTimeout(function () {
+                marker3.closePopup();
+            }, 2000);
+        }
+    });
+    map.fitBounds(recorridoInteractivo);
 }
-
 
 
 

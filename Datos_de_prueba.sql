@@ -24,17 +24,22 @@ INSERT INTO hospital("idhospital","nombrehospital","tipohospital")VALUES(6,'Hosp
 INSERT INTO ambulancia("idambulancia","distanciamaxdesvio","idcodigo","hospital_idhospital","polyline")VALUES(1,1000,10,1,null);
 INSERT INTO ambulancia("idambulancia","distanciamaxdesvio","idcodigo","hospital_idhospital","polyline")VALUES(2,155,450,2,null);
 INSERT INTO ambulancia("idambulancia","distanciamaxdesvio","idcodigo","hospital_idhospital","polyline")VALUES(3,2000,25,4,null);
-INSERT INTO ambulancia("idambulancia","distanciamaxdesvio","idcodigo","hospital_idhospital","polyline")VALUES(4,120,25,2,null);
+INSERT INTO ambulancia("idambulancia","distanciamaxdesvio","idcodigo","hospital_idhospital","polyline")VALUES(4,420,25,5,null);
+
 INSERT INTO ambulancia("idambulancia","distanciamaxdesvio","idcodigo","hospital_idhospital","polyline")VALUES(5,300,30,2,null);
 INSERT INTO ambulancia("idambulancia","distanciamaxdesvio","idcodigo","hospital_idhospital","polyline")VALUES(6,250,35,3,null);
 --*-*-*-*-*-*-*-*-*- UPDATE AMBULANCIA -*-*-*-*-*-*-*-*-*--
 UPDATE ambulancia SET polyline='LINESTRING(-56.19890928268433 -34.87205101405393,-56.18869543075562 -34.871346829572325,-56.18227447776008 -34.870898537473224, -56.18304669857026 -34.87280360455116)' WHERE idambulancia=1;
 UPDATE ambulancia SET polyline='LINESTRING(-56.24213576316834 -34.87111126177625,-56.22702956199647 -34.8587365053499,-56.2242615222931 -34.86014068248701, -56.22278630733491 -34.858529618291136)' WHERE idambulancia=2;
-UPDATE ambulancia SET polyline='LINESTRING(-56.16814613290445 -34.863877701507064,-56.1479886937741 -34.87931822276983,-56.15241050720215 -34.881974972559426, -56.15324199199677 -34.881147655057795)' WHERE idambulancia=3;
+UPDATE ambulancia SET polyline='LINESTRING(-56.16814613290445 -34.86387770150706,-56.1479886937741 -34.87931822276983,-56.15241050720215 -34.881974972559426, -56.15324199199677 -34.881147655057795)' WHERE idambulancia=3;
+UPDATE ambulancia SET polyline='LINESTRING(-56.19317088836397 -34.89957290575177,-56.19279588987410 -34.90334227984780)' WHERE idambulancia=4;
+
+
 UPDATE ambulancia SET polyline='LINESTRING(-56.198608875274665 -34.90644748064126,-56.193619966506965 -34.90606914064883,-56.192906498909 -34.912747025259556, -56.19525611400605 -34.91206518447018)' WHERE idambulancia=4;
 UPDATE ambulancia SET polyline='LINESTRING(-56.164666414206295 -34.89814433959129,-56.16328418254853 -34.71090384260483,-56.171126961708076 -34.70824237220117)' WHERE idambulancia=5;
 UPDATE ambulancia SET polyline='LINESTRING(-56.897106838226325 -34.84093351099642,-56.19352877140046 -34.837367166344926,-56.170676350593574 -34.81493528019694)' WHERE idambulancia=6;
-
+-34.89957290575177], [-56.19317088836397
+-34.903342279847806], [-56.192795889874105]
 
 --*-*-*-*-*-*-*-*-*- HOSPITAL_AMBULANCIA -*-*-*-*-*-*-*-*-*--
 INSERT INTO hospital_ambulancia(hospital_idhospital,ambulancia_idambulancia)VALUES(1,1);
