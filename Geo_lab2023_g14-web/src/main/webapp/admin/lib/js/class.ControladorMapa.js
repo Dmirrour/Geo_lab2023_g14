@@ -6,16 +6,22 @@ class ControladorMapa extends Configuracion {
     drawLayers;
     // heatmap;
     markerSE;
+    marcador;
+    marcadorMiUbicacion;
 
     urlBase = "https://direcciones.ide.uy/api/v1/geocode/";
     dato = [];
     datoEsq = [];
     seleccion = [];
     seleccionEsq = [];
-    marcador;
+    coordenadasA = [];
+    coordenadasSE = [];
     circulo = null;
     controlEnrutamiento;
     capaAddLayerWFSbufferNoIntersect;
+    capaCoberturaEnMiUbicacion;
+    capaCoberturaEnMiUbicacionA;
+    capaAddLayerWFSbuf;
     formularioContainer = document.getElementById("contenedorFrmBuscar");
     btnMostrarBuscador = document.getElementById('mostrarBuscador');
 
@@ -77,7 +83,8 @@ class ControladorMapa extends Configuracion {
         //this.addLayerWFSbufferNoIntersect();
 
         this.agregarBotonFormularioGPS();
-        this.agregarBotonZonasSinCobertura();
+        this.agregarBotonServicioMasAmbulancia();
+        this.agregarBotonMostrarBuffer();
         this.agregarBotonFormualrioDireccion();
     }
     agregarBotonFormualrioDireccion() {
@@ -89,10 +96,20 @@ class ControladorMapa extends Configuracion {
             button.id = "mostrarBuscador";
             button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" className="bi bi-signpost-2" viewBox="0 0 16 16">' +
                 '<path d="M7 1.414V2H2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h5v1H2.5a1 1 0 0 0-.8.4L.725 8.7a.5.5 0 0 0 0 .6l.975 1.3a1 1 0 0 0 .8.4H7v5h2v-5h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H9V6h4.5a1 1 0 0 0 .8-.4l.975-1.3a.5.5 0 0 0 0-.6L14.3 2.4a1 1 0 0 0-.8-.4H9v-.586a1 1 0 0 0-2 0zM13.5 3l.75 1-.75 1H2V3h11.5zm.5 5v2H2.5l-.75-1 .75-1H14z"/></svg>';
+            // Crear el tooltip
+            let tooltip = L.tooltip({
+                permanent: true,
+                direction: 'top',
+                className: 'tooltip-custom',
+                offset: [0, -10],
+                sticky: true
+            }).setContent('Servicios en una direccion.');
 
+            // Asignar el tooltip al botón
+            //tooltip.addTo(this.map);
             // Agregar evento clic para mostrar el formulario
             L.DomEvent.on(button, 'click', function () {
-                console.log("controladorMapa::agregarBotonZonasSinCobertura: AAGREGAR CODIGO PARA MOSTARR FORMULARIO DE DIRECCION");
+                console.log("controladorMapa::agregarBotonFormularioDireccion: AAGREGAR CODIGO PARA MOSTARR FORMULARIO DE DIRECCION");
                 let formularioContainer = document.getElementById("contenedorFrmBuscar");
                 let btnMostrarBuscador = document.getElementById('mostrarBuscador');
                 if (formularioContainer.style.display == "none") {
@@ -102,42 +119,72 @@ class ControladorMapa extends Configuracion {
                     formularioContainer.style.display = 'none';
                     btnMostrarBuscador.style.backgroundColor = '#f4f4f4';
                 }
-
             }, this);
             return button;
-        };
-
+        }
         botonFormulario.addTo(this.map);
     }
-    agregarBotonZonasSinCobertura(mapaAdmin) {
+    agregarBotonServicioMasAmbulancia(mapaAdmin) {
         // Crear el botón
         let btnCobertura = L.control({ position: 'topright' });
 
         btnCobertura.onAdd = function (map) {
             let button = L.DomUtil.create('button', 'leaflet-touch');
-            button.id = "btnCobertura";
+            button.id = "btnServMasAmb";
             button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">' +
                 '<path d="M7.5 19c-3.866 0-7-3.134-7-7V8c0-3.866 3.134-7 7-7s7 3.134 7 7v4c0 3.866-3.134 7-7 7zm0-16C4.462 3 2 5.462 2 8v4c0 2.538 2.462 5 5.5 5S13 14.538 13 12V8c0-2.538-2.462-5-5.5-5zm0 1c2.481 0 4.5 2.019 4.5 4.5v4c0 2.481-2.019 4.5-4.5 4.5S3 14.481 3 12V8c0-2.481 2.019-4.5 4.5-4.5zm2.5 4H5v2h5v-2z" fill="currentColor" />' +
                 '</svg>';
+            // Crear el tooltip
+            let tooltip = L.tooltip({
+                permanent: true,
+                direction: 'left',
+                className: 'tooltip-custom',
+                offset: [0, -10],
+                sticky: true
+            }).setContent('Servicios con mas ambulancias');
 
-            // Agregar evento clic para mostrar el formulario
-            /*
+            // Asignar el tooltip al botón
+            //tooltip.addTo(this.map);
+
             L.DomEvent.on(button, 'click', function () {
-                console.log("controladorMapa::agregarBotonZonasSinCobertura: AGREGAR CODIGO APRA QUE MUESTRE U OCULTE LA CAPA CON LAS ZONAS SIN COBERTURA");
-                // this.addLayerWFSbufferNoIntersect();
-                if (mapaAdmin.capaAddLayerWFSbufferNoIntersect != null) {
-                    mapaAdmin.capaAddLayerWFSbufferNoIntersect.remove();
-                    mapaAdmin.capaAddLayerWFSbufferNoIntersect = null;
-                }else {
-                    mapaAdmin.addLayerWFSbufferNoIntersect();
+                let btn = document.getElementById('btnServMasAmb');
+                let color = '#f60707';
+                if (btn.style.backgroundColor == color) {
+                    btn.style.backgroundColor = 'rgba(38,71,191,1)';
+                } else {
+                    btn.style.backgroundColor = color;
                 }
-                // this.map.removeLayer(this.capaAddLayerWFSbufferNoIntersect);
-            });
-            */
+            }, this);
             return button;
         };
 
         btnCobertura.addTo(this.map);
+    }
+    agregarBotonMostrarBuffer(mapaAdmin) {
+        // Crear el botón
+        let btnMBuffer = L.control({ position: 'topright' });
+
+        btnMBuffer.onAdd = function (map) {
+            let button = L.DomUtil.create('button', 'leaflet-touch');
+            button.id = "btnMBuffer";
+            // Crear el tooltip
+            let tooltip = L.tooltip({
+                permanent: true,
+                direction: 'top',
+                className: 'tooltip-custom',
+                offset: [0, -10],
+                sticky: true
+            }).setContent('Ver Zonas CON Cobertura.');
+
+            // Asignar el tooltip al botón
+            //tooltip.addTo(this.map);
+            button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20">' +
+                '<path d="M7.5 19c-3.866 0-7-3.134-7-7V8c0-3.866 3.134-7 7-7s7 3.134 7 7v4c0 3.866-3.134 7-7 7zm0-16C4.462 3 2 5.462 2 8v4c0 2.538 2.462 5 5.5 5S13 14.538 13 12V8c0-2.538-2.462-5-5.5-5zm0 1c2.481 0 4.5 2.019 4.5 4.5v4c0 2.481-2.019 4.5-4.5 4.5S3 14.481 3 12V8c0-2.481 2.019-4.5 4.5-4.5zm2.5 4H5v2h5v-2z" fill="currentColor" />' +
+                '</svg>';
+            return button;
+        };
+
+        btnMBuffer.addTo(this.map);
     }
     agregarBotonFormularioGPS() {
         // Crear el botón
@@ -149,7 +196,17 @@ class ControladorMapa extends Configuracion {
             button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-geo" viewBox="0 0 16 16">\n' +
                 '<path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm0-15a7 7 0 1 1 0 14A7 7 0 0 1 8 1zm0 4a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm0 1a2 2 0 1 1 0 4 2 2 0 0 1 0-4z" />\n' +
                 '</svg>';
+            // Crear el tooltip
+            let tooltip = L.tooltip({
+                permanent: false,
+                direction: 'top',
+                className: 'tooltip-custom',
+                offset: [0, -10],
+                sticky: true
+            }).setContent('Servicios en mi ubicación.');
 
+            // Asignar el tooltip al botón
+            //tooltip.addTo(this.map);
             // Agregar evento clic para mostrar el formulario
             L.DomEvent.on(button, 'click', function () {
                 if (navigator.geolocation) {
@@ -320,8 +377,9 @@ class ControladorMapa extends Configuracion {
         let geojsonLayer = L.geoJSON(null, {
             style: {
                 color: 'blue',
-                weight: 3,
-                opacity: 1
+                weight: 0,
+                opacity: 1,
+                fillOpacity: 1
             },
         }).addTo(this.map);
         let url =
@@ -343,10 +401,12 @@ class ControladorMapa extends Configuracion {
             .catch(function (error) {
                 console.error('Error addLayerWFSbuf: ', error);
             });
+        console.log('asignar capa de buffer');
+        this.capaAddLayerWFSbuf = geojsonLayer;
     }
     addLayerWFSbufferNoIntersect() {
-        let geojsonLayer = this.capaAddLayerWFSbufferNoIntersect;
-        geojsonLayer = L.geoJSON(null, {
+        // Servicio con mas ambulancias
+        let geojsonLayer = L.geoJSON(null, {
             style: {
                 color: 'green',
                 weight: 3,
@@ -390,6 +450,120 @@ class ControladorMapa extends Configuracion {
             .catch(function (error) {
                 console.error('Error en addLayerWFSbufferNoIntersec: ', error);
             });
+        console.log('asigna capa buff no intersctado....');
+        this.capaAddLayerWFSbufferNoIntersect = geojsonLayer;
+    }
+    coberturaEnMiUbicacion (coorUserlat, coorUserlon) {
+        let iconoPersonalizado = L.icon({
+            iconUrl: '../resources/marker-icons/mapbox-marker-icon-20px-yellow.png',
+            conSize: [30, 30],
+            iconAnchor: [15, 30],
+            popupAnchor: [0, -30]
+        });
+        let marcador = L.marker([coorUserlat, coorUserlon], { icon: iconoPersonalizado }).addTo(this.map);
+        marcador.display;
+        marcador.bindPopup('<b>Estas aqui</b>').openPopup();
+        if (this.marcadorMiUbicacion) {
+            this.map.removeLayer(this.marcadorMiUbicacion);
+        }
+        this.marcadorMiUbicacion = marcador;
+        let geojsonLayer = L.geoJSON(null, {
+            style: {
+                color: 'red',
+                weight: 0.8,
+                opacity: 0.5
+            },
+        })//.addTo(this.map);
+        let urlIntersect =
+            'http://localhost:' +
+            this.puertoGeoServer +
+            '/geoserver/wfs?service=WFS&' +
+            'request=GetFeature&typeName=' +
+            this.baseDatos + ':' +
+            this.vista_CoberturaEnPutno +
+            '&outputFormat=application/json&' +
+            'CQL_FILTER=INTERSECTS(buffer_zona_cobertura,POINT(' + coorUserlon + ' ' + coorUserlat + '))';
+        let a, b, c, d;
+        fetch(urlIntersect)
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                geojsonLayer.addData(data);
+                console.log("DATOS buscar cobertura en direccion: ", data);
+                this.coordenadasA.splice(0, this.coordenadasA.length);
+                this.coordenadasSE.splice(0, this.coordenadasSE.length);
+                data.features.forEach(function (feature) {
+                    let idh = feature.geometry.coordinates; // Coordenadas de la geometría del feature
+                    this.coordenadasA.push({ idh });
+
+                    let idse = feature.properties.first_point_recorrido.coordinates; // Coordenadas del punto "first_point_recorrido"
+                    this.coordenadasSE.push({ idse });
+
+                    this.ubicarPuntosDeCobertura(geojsonLayer);
+                }.bind(this));
+                //geojsonLayeres.options.layerName = layerNames;
+            }.bind(this))
+            .catch(function (error) {
+                console.error('Error coberturaEnMiUbicacion:', error);
+            });
+    }
+    ubicarPuntosDeCobertura (geojsonLayer) {
+        let latlng = this.coordenadasA[0].idh[0][0];
+        let latlngSE = this.coordenadasSE[0].idse;
+
+        var ptoA = {
+            type: 'FeatureCollection',
+            features: [{
+                type: 'Feature',
+                properties: {},
+                geometry: {
+                    type: 'Point',
+                    coordinates: latlng
+                }
+            }]
+        };
+        geojsonLayer = L.geoJSON(ptoA, {
+             pointToLayer: function (feature, latlng) {
+                 let icono = L.icon({
+                     iconUrl: '../resources/marker-icons/mapbox-marker-icon-20px-green.png',
+                     iconSize: [30, 30],
+                     iconAnchor: [15, 30],
+                     popupAnchor: [0, -30]
+                 });
+                 let marcador = L.marker(latlng, { icon: icono });
+                 marcador.bindPopup('<b>Ambulancia cercana...</b>').openPopup();
+                 return marcador;
+             }
+        });
+        this.capaCoberturaEnMiUbicacionA = geojsonLayer;
+
+        var ptoSE = {
+            type: 'FeatureCollection',
+            features: [{
+                type: 'Feature',
+                properties: {},
+                geometry: {
+                    type: 'Point',
+                    coordinates: latlngSE
+                }
+            }]
+        };
+        geojsonLayer = L.geoJSON(ptoSE, {
+            pointToLayer: function (feature, latlng) {
+                let icono = L.icon({
+                    iconUrl: '../resources/marker-icons/mapbox-marker-icon-20px-orange.png',
+                    iconSize: [30, 30],
+                    iconAnchor: [15, 30],
+                    popupAnchor: [0, -30]
+                });
+                let marcador = L.marker(latlng, { icon: icono });
+                marcador.bindPopup('<b>Servicio de emergencia cercano...</b>').openPopup();
+                return marcador;
+            }
+        });
+
+        this.capaCoberturaEnMiUbicacion = geojsonLayer;
     }
     cargarMapaAltaSE() {
         // Crea un marcador y guarda la posición en los campos de latitud y longitud
@@ -648,7 +822,8 @@ class ControladorMapa extends Configuracion {
                     console.log("buscarCalleNumero: " + item[0].nomVia);
                     this.seleccionEsq = item[0];
                     document.getElementById('direccion').value = item[0].address;
-                    this.actualizarMapa();
+                    // this.actualizarMapa();
+                    this.coberturaEnMiUbicacion(this.seleccionEsq.lat, this.seleccionEsq.lng);
                 }, this.seleccionEsq);
         } catch (error) {
             console.error(error);
@@ -666,7 +841,8 @@ class ControladorMapa extends Configuracion {
         var selectedValue = document.getElementById('idSelectEsquina').options[document.getElementById('idSelectEsquina').selectedIndex].value;
         this.seleccionEsq = this.datoEsq.find(item => item.idCalleEsq == selectedValue);
         document.getElementById('direccion').value = this.seleccion.address;
-        this.actualizarMapa();
+        // this.actualizarMapa();
+        this.coberturaEnMiUbicacion(this.seleccionEsq.lat, this.seleccionEsq.lng);
     }
     actualizarMapa(Lat = null, Lng = null) {
         var iconoPersonalizado = L.icon({

@@ -13,6 +13,7 @@ class Configuracion {
     vista_LineString;
     vista_buf;
     vista_bufNoIntersec;
+    vista_CoberturaEnPutno;
 
     constructor() {
         this.urlOpenStreet = 'https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png';
@@ -27,5 +28,6 @@ class Configuracion {
         this.vista_LineString = 'vista_a_rec';
         this.vista_buf = 'vista_buf';
         this.vista_bufNoIntersec = 'vista_buffer_no_intersect';
+        this.vista_CoberturaEnPutno = 'vista_buff_cobertura_user';
     }
 }

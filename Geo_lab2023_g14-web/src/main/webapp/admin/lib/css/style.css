@@ -188,6 +188,11 @@ body {
   z-index: 1700;
 }
 
+#btnMOBuffer, #mostrarBuscador, #btnServMasAmb, #btnGPS {
+  width: 34px;
+  height: 34px;
+}
+
 #mostrarBuscador:hover {
   background-color: orange;
 }

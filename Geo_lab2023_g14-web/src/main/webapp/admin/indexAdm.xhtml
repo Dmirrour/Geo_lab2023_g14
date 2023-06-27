@@ -253,25 +253,49 @@
          mapaAdmin.cargarMapaModSE(date);
       }
 
-      var btnCobertura = document.getElementById("btnCobertura");
+      var btnCobertura = document.getElementById("btnServMasAmb");
       btnCobertura.addEventListener("click", function () {
-         console.log("click en btnCobertura");
-         // this.addLayerWFSbufferNoIntersect();
+         console.log("click en btnServMasAmb");
+
          if (mapaAdmin.capaAddLayerWFSbufferNoIntersect != null) {
+            btnCobertura.style.backgroundColor = '#f4f4f4';
             mapaAdmin.capaAddLayerWFSbufferNoIntersect.remove();
             mapaAdmin.capaAddLayerWFSbufferNoIntersect = null;
          }else {
+            // Servicio con mas ambulancias
             mapaAdmin.addLayerWFSbufferNoIntersect();
+            btnCobertura.style.backgroundColor = '#f60707';
          }
       });
-      /*let date2=#{adminBean.size}*/
-      /*$(document).ready(function() {
-         console.log('El documento HTML se ha cargado por completo.');
+      $(document).ready(function() {
+         $(btnCobertura).tooltip({
+            placement: "left",
+            title: "Servicios con mas ambulancias.",
+            trigger: "hover"
+         });
+      });
 
-         mapaAdmin.cargarMapaAltaAmbulancia(#{adminBean.size});
+      var btnMOBuffer = document.getElementById("btnMBuffer");
+        btnMOBuffer.addEventListener("click", function () {
+             console.log("click en btnMBuffer");
+             if (mapaAdmin.capaAddLayerWFSbuf != null) {
+                btnMOBuffer.style.backgroundColor = '#f60707';
+                mapaAdmin.capaAddLayerWFSbuf.remove();
+                mapaAdmin.capaAddLayerWFSbuf = null;
+             }else {
+                // buffer
+                btnMOBuffer.style.backgroundColor = '#f4f4f4';
+                mapaAdmin.addLayerWFSbuf();
+             }
+        });
+      $(document).ready(function() {
+         $(btnMOBuffer).tooltip({
+            placement: "left",
+            title: "Mostrar/Ocultar zonas CON cobertura.",
+            trigger: "hover"
+         });
+      });
 
-         // Resto del código que deseas ejecutar después de la carga inicial
-      });*/
       mapaAdmin.cargarMapaAltaAmbulancia(#{adminBean.size});
    </script>
    <script type="text/javascript">
