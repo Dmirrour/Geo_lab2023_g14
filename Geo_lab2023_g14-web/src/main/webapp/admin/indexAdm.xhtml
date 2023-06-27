@@ -32,6 +32,7 @@
    <!-- JTS -->
    <script type="" src="https://cdn.jsdelivr.net/npm/elm-pep@1.0.6/dist/elm-pep.js"></script>
    <script type="" src="https://cdn.jsdelivr.net/npm/jsts@2.3.0/dist/jsts.min.js"></script>
+   <script type="" src="../scripts/lib/buscador/axios.min.js"></script>
 
 
    <!-- CONSULTAS query -->
@@ -245,13 +246,24 @@
       mapaAdmin.addLayersWFS();
       mapaAdmin.addLayerWFSLine();
 
-
       function mostrarMarker() {
          mapaAdmin.cargarMapaAltaSE();
       }
       function mostrarMarker2(date) {
          mapaAdmin.cargarMapaModSE(date);
       }
+
+      var btnCobertura = document.getElementById("btnCobertura");
+      btnCobertura.addEventListener("click", function () {
+         console.log("click en btnCobertura");
+         // this.addLayerWFSbufferNoIntersect();
+         if (mapaAdmin.capaAddLayerWFSbufferNoIntersect != null) {
+            mapaAdmin.capaAddLayerWFSbufferNoIntersect.remove();
+            mapaAdmin.capaAddLayerWFSbufferNoIntersect = null;
+         }else {
+            mapaAdmin.addLayerWFSbufferNoIntersect();
+         }
+      });
       /*let date2=#{adminBean.size}*/
       /*$(document).ready(function() {
          console.log('El documento HTML se ha cargado por completo.');

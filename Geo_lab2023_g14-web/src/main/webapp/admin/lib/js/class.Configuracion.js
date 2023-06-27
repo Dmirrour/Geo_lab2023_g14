@@ -7,9 +7,12 @@ class Configuracion {
     rutas;
     ejes;
     deptos;
+    colors;
+    // vistas
     vista_SEH;
     vista_LineString;
-    colors;
+    vista_buf;
+    vista_bufNoIntersec;
 
     constructor() {
         this.urlOpenStreet = 'https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png';
@@ -22,5 +25,7 @@ class Configuracion {
         this.deptos = 'ft_00departamento';
         this.vista_SEH = 'vista_se_h';
         this.vista_LineString = 'vista_a_rec';
+        this.vista_buf = 'vista_buf';
+        this.vista_bufNoIntersec = 'vista_buffer_no_intersect';
     }
 }
