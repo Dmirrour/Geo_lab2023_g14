@@ -19,7 +19,7 @@ class ControladorMapa extends Configuracion {
     circulo = null;
     controlEnrutamiento;
     capaAddLayerWFSbufferNoIntersect;
-    capaCoberturaEnMiUbicacion;
+    capaCoberturaEnMiUbicacionSE;
     capaCoberturaEnMiUbicacionA;
     capaAddLayerWFSbuf;
     formularioContainer = document.getElementById("contenedorFrmBuscar");
@@ -496,11 +496,11 @@ class ControladorMapa extends Configuracion {
                 data.features.forEach(function (feature) {
                     console.log("feature: ", feature);
                     let idh = feature.properties.first_point_recorrido.coordinates; // Coordenadas de la geometría del feature
-                    console.log("idh: ", idh);
+                    //console.log("idh: ", idh);
                     this.coordenadasA.push({ idh });
 
                     let idse = feature.properties.point_se.coordinates; // Coordenadas del punto "first_point_recorrido"
-                    console.log("idse: ", idse);
+                    //console.log("idse: ", idse);
                     this.coordenadasSE.push({ idse });
 
                     //if (feature.length())
@@ -572,7 +572,7 @@ class ControladorMapa extends Configuracion {
                     return marcador;
                 }
             });
-            this.capaCoberturaEnMiUbicacion = geojsonLayer;
+            this.capaCoberturaEnMiUbicacionSE = geojsonLayer;
         }
     }
     cargarMapaAltaSE() {
