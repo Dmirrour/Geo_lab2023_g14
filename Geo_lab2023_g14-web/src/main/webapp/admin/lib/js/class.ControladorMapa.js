@@ -63,7 +63,10 @@ class ControladorMapa extends Configuracion {
         let drawControl = new L.Control.DrawPlus({
             position: 'topright',
             draw: {
-                polyline: true
+                polyline: true,
+                polygon: false,
+                rectangle: false,
+                circle: false
             },
             edit: {
                 featureGroup: this.drawLayers,
@@ -79,8 +82,6 @@ class ControladorMapa extends Configuracion {
         this.map.on(L.Draw.Event.CREATED, function (e) {
             this.drawLayers.addLayer(e.layer);
         }, this);
-
-        //this.addLayerWFSbufferNoIntersect();
 
         this.agregarBotonFormularioGPS();
         this.agregarBotonServicioMasAmbulancia();
@@ -453,6 +454,70 @@ class ControladorMapa extends Configuracion {
         console.log('asigna capa buff no intersctado....');
         this.capaAddLayerWFSbufferNoIntersect = geojsonLayer;
     }
+    //let geojsonsLayere;
+    //var bufferCoordinates;
+    //var polygons;
+    //let geojsonLayerBuff2;
+    zonasSinCobertura() {
+        // geojsonLayerBuff2 = L.geoJSON(null, {
+        //     style: {
+        //         //   color: 'red',
+        //         weight: 1,
+        //         opacity: 0.4
+        //     },
+        // })//.addTo(map);
+        let urlSinCobertura =
+            'http://localhost:8081/geoserver/wfs?' +
+            'service=WFS&' +
+            'request=GetFeature&' +
+            'typeName=Geo_lab2023_g14PersistenceUnit:vista_union_buf&' +
+            'srsName=EPSG:32721&' +
+            'outputFormat=application/json';
+        fetch(urlSinCobertura)
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                //      geojsonLayerBuff2.addData(data);
+                var features = data.features;
+                features.forEach(function (feature) {
+                    var geometry = feature.geometry;
+                    bufferCoordinates = geometry.coordinates;
+                    buffLenght = geometry.coordinates.length;
+                    polygons = turf.polygon(bufferCoordinates[0], {});
+                });
+                L.geoJson(polygonMontevideo(), {
+                    onEachFeature: function (feature, layer) {
+                        var poly1 = feature.geometry;
+                        L.geoJson(polygons, {
+                            onEachFeature: function (feature, layer) {
+                                var poly2 = feature.geometry;
+                                var intersection = turf.difference(poly1, poly2);
+                                for (let i = 0; i < buffLenght; i++) {
+                                    polygons = turf.polygon(bufferCoordinates[i], {});
+                                    intersection = turf.difference(intersection, polygons);
+                                }
+                                //   L.geoJson(intersection).addTo(map);
+                                L.geoJSON(intersection, {
+                                    style: {
+                                        color: 'blue',
+                                        weight: 1,
+                                        opacity: 0.7
+                                    },
+                                }).addTo(map);
+                                //  console.log({ poly1, poly2, intersection })
+                            }
+                        })
+                    }
+                })
+                // difference // intersect
+            })
+            .catch(function (error) {
+                console.error('Error:', error);
+            });
+
+    }
+
     coberturaEnMiUbicacion (coorUserlat, coorUserlon) {
         let iconoPersonalizado = L.icon({
             iconUrl: '../resources/marker-icons/mapbox-marker-icon-20px-yellow.png',
@@ -502,10 +567,8 @@ class ControladorMapa extends Configuracion {
                     let idse = feature.properties.point_se.coordinates; // Coordenadas del punto "first_point_recorrido"
                     //console.log("idse: ", idse);
                     this.coordenadasSE.push({ idse });
-
-                    //if (feature.length())
-                    this.ubicarPuntosDeCobertura(geojsonLayer);
                 }.bind(this));
+                this.ubicarPuntosDeCobertura(geojsonLayer);
             }.bind(this))
             .catch(function (error) {
                 console.error('Error coberturaEnMiUbicacion:', error);
@@ -736,10 +799,7 @@ class ControladorMapa extends Configuracion {
             try {
                 const response = await axios.get(urlCalle);
                 if (response.status == 200) {
-                    options = '<select class="form-select" id="idElegirCalle" size="6" aria-label="size 6 select" onchange="mapaAdmin.elegirCalle();">';
-                    options += '<option class="dropdown-header dropdown-notifications-header" disabled>lab tsig 2023 G14</option>';
-                    options += '<option disabled>---------------------------------</option>';
-                    options = '<h6 class="dropdown-header dropdown-notifications-header"><i data-feather="bell"></i>IDE.uy</h6>';
+                    options = '<h6 class="dropdown-header dropdown-notifications-header"><i data-feather="bell"></i>Resultado autocumpletar...</h6>';
                     response.data.forEach(function (item) {
                         if (item.idCalle > 0) {
                             //console.log(item);

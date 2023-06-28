@@ -188,13 +188,16 @@ body {
   z-index: 1700;
 }
 
-#btnMOBuffer, #mostrarBuscador, #btnServMasAmb, #btnGPS {
+#btnMBuffer, #mostrarBuscador, #btnServMasAmb, #btnGPS {
   width: 34px;
   height: 34px;
+  border-radius: 4px;
+  line-height: 15px;
+  color: black;
 }
 
-#mostrarBuscador:hover {
-  background-color: orange;
+#mostrarBuscador:hover, #btnMBuffer:hover, #btnServMasAmb:hover, #btnGPS:hover {
+  background-color: orange !important;
 }
 
 #contenedorFrmBuscar {
