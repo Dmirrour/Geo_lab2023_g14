@@ -483,7 +483,7 @@ class ControladorMapa extends Configuracion {
             this.vista_CoberturaEnPutno +
             '&outputFormat=application/json&' +
             'CQL_FILTER=INTERSECTS(buffer_zona_cobertura,POINT(' + coorUserlon + ' ' + coorUserlat + '))';
-        let a, b, c, d;
+        // let a, b, c, d;
         fetch(urlIntersect)
             .then(function (response) {
                 return response.json();
@@ -494,76 +494,86 @@ class ControladorMapa extends Configuracion {
                 this.coordenadasA.splice(0, this.coordenadasA.length);
                 this.coordenadasSE.splice(0, this.coordenadasSE.length);
                 data.features.forEach(function (feature) {
-                    let idh = feature.geometry.coordinates; // Coordenadas de la geometría del feature
+                    console.log("feature: ", feature);
+                    let idh = feature.properties.first_point_recorrido.coordinates; // Coordenadas de la geometría del feature
+                    console.log("idh: ", idh);
                     this.coordenadasA.push({ idh });
 
-                    let idse = feature.properties.first_point_recorrido.coordinates; // Coordenadas del punto "first_point_recorrido"
+                    let idse = feature.properties.point_se.coordinates; // Coordenadas del punto "first_point_recorrido"
+                    console.log("idse: ", idse);
                     this.coordenadasSE.push({ idse });
 
+                    //if (feature.length())
                     this.ubicarPuntosDeCobertura(geojsonLayer);
                 }.bind(this));
-                //geojsonLayeres.options.layerName = layerNames;
             }.bind(this))
             .catch(function (error) {
                 console.error('Error coberturaEnMiUbicacion:', error);
             });
     }
     ubicarPuntosDeCobertura (geojsonLayer) {
-        let latlng = this.coordenadasA[0].idh[0][0];
+        console.log("ubicarPuntosDeCobertura: ", this.coordenadasA);
+        console.log("ubicarPuntosDeCobertura: ", this.coordenadasSE);
+
+        // ambulancias
+        let latlng = this.coordenadasA[0].idh;
+        if (latlng[0] != 0) {
+            var ptoA = {
+                type: 'FeatureCollection',
+                features: [{
+                    type: 'Feature',
+                    properties: {},
+                    geometry: {
+                        type: 'Point',
+                        coordinates: latlng
+                    }
+                }]
+            };
+            geojsonLayer = L.geoJSON(ptoA, {
+                 pointToLayer: function (feature, latlng) {
+                     let icono = L.icon({
+                         iconUrl: '../resources/marker-icons/mapbox-marker-icon-20px-green.png',
+                         iconSize: [30, 30],
+                         iconAnchor: [15, 30],
+                         popupAnchor: [0, -30]
+                     });
+                     let marcador = L.marker(latlng, { icon: icono });
+                     marcador.bindPopup('<b>Ambulancia cercana...</b>').openPopup();
+                     return marcador;
+                 }
+            });
+            this.capaCoberturaEnMiUbicacionA = geojsonLayer;
+        }
+
+        // servicio de emergencia
         let latlngSE = this.coordenadasSE[0].idse;
-
-        var ptoA = {
-            type: 'FeatureCollection',
-            features: [{
-                type: 'Feature',
-                properties: {},
-                geometry: {
-                    type: 'Point',
-                    coordinates: latlng
+        if (latlngSE[0] != 0) {
+            var ptoSE = {
+                type: 'FeatureCollection',
+                features: [{
+                    type: 'Feature',
+                    properties: {},
+                    geometry: {
+                        type: 'Point',
+                        coordinates: latlngSE
+                    }
+                }]
+            };
+            geojsonLayer = L.geoJSON(ptoSE, {
+                pointToLayer: function (feature, latlng) {
+                    let icono = L.icon({
+                        iconUrl: '../resources/marker-icons/mapbox-marker-icon-20px-orange.png',
+                        iconSize: [30, 30],
+                        iconAnchor: [15, 30],
+                        popupAnchor: [0, -30]
+                    });
+                    let marcador = L.marker(latlng, {icon: icono});
+                    marcador.bindPopup('<b>Servicio de emergencia cercano...</b>').openPopup();
+                    return marcador;
                 }
-            }]
-        };
-        geojsonLayer = L.geoJSON(ptoA, {
-             pointToLayer: function (feature, latlng) {
-                 let icono = L.icon({
-                     iconUrl: '../resources/marker-icons/mapbox-marker-icon-20px-green.png',
-                     iconSize: [30, 30],
-                     iconAnchor: [15, 30],
-                     popupAnchor: [0, -30]
-                 });
-                 let marcador = L.marker(latlng, { icon: icono });
-                 marcador.bindPopup('<b>Ambulancia cercana...</b>').openPopup();
-                 return marcador;
-             }
-        });
-        this.capaCoberturaEnMiUbicacionA = geojsonLayer;
-
-        var ptoSE = {
-            type: 'FeatureCollection',
-            features: [{
-                type: 'Feature',
-                properties: {},
-                geometry: {
-                    type: 'Point',
-                    coordinates: latlngSE
-                }
-            }]
-        };
-        geojsonLayer = L.geoJSON(ptoSE, {
-            pointToLayer: function (feature, latlng) {
-                let icono = L.icon({
-                    iconUrl: '../resources/marker-icons/mapbox-marker-icon-20px-orange.png',
-                    iconSize: [30, 30],
-                    iconAnchor: [15, 30],
-                    popupAnchor: [0, -30]
-                });
-                let marcador = L.marker(latlng, { icon: icono });
-                marcador.bindPopup('<b>Servicio de emergencia cercano...</b>').openPopup();
-                return marcador;
-            }
-        });
-
-        this.capaCoberturaEnMiUbicacion = geojsonLayer;
+            });
+            this.capaCoberturaEnMiUbicacion = geojsonLayer;
+        }
     }
     cargarMapaAltaSE() {
         // Crea un marcador y guarda la posición en los campos de latitud y longitud
