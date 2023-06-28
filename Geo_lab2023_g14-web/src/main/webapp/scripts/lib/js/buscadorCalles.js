@@ -151,7 +151,6 @@ function elegirEsquina() {
     //actualizarMapa();
     masCercana(seleccionEsq);
     actualizarMapa(seleccionEsq.lat, seleccionEsq.lng);
-
 }
 
 //function actualizarMapa(Lat = null, Lng = null) {
@@ -213,8 +212,8 @@ function actualizarMapa(Lat, Lng) {
     // let diasa;
     // diasa = masCercana(seleccionEsq).lat;
     // diasaa = masCercana(seleccionEsq).lng;
-    // // loAmb2 = diasa.Lng;
-    // // laAmb2 = diasa.Lat;
+    // loAmb2 = diasa.Lng;
+    //laAmb2 = diasa.Lat;
     // console.log("Ser " + diasa, diasa);
     // var Usuario = {
     //     lat: -56.2194844,

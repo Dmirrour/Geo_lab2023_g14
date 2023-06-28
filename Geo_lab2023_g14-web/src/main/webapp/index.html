@@ -46,7 +46,7 @@
     <link rel="stylesheet" href="scripts/lib/buscador/estilos.css" />
     <link rel="stylesheet" href="scripts/lib/buscador/fontawesome6.all.min.css" />
 
-    <link rel="stylesheet" href="admin/lib/css/leaflet.css" />
+    <link rel="stylesheet" href="userAnonimo/css/leaflet.css" />
     <link rel="stylesheet" href="admin/lib/css/leaflet.draw.css" />
     <link rel="stylesheet" href="admin/lib/css/leaflet.draw-shapefile.css" />
     <link rel="stylesheet" href="userAnonimo/css/leaflet.control.select.css" />
@@ -240,9 +240,10 @@
         map.removeLayer(geojsonLayere);
         map.removeLayer(geojsonLayeres);
         map.removeLayer(geojsonLayer);
+   
         removerLayer();
         geojsonLayerBuff.remove();
-        initLayers(0)
+       // initLayers(0)
     });
     
     bufferBtn2.addEventListener("click", function () {
@@ -270,8 +271,9 @@
 <script>
     menuInicio();
     initLayers(0); // indexInvitado.js
-
-    // hardcodedDataPoint();
+ // montevideo();
+zonasSinCobertura();
+// hardcodedDataPoint();
     // addLayerWFSbuf();
     
     // wfsSelectHospitales(); // controladorUsuario.js // Seleccionar Hospital (control-button)

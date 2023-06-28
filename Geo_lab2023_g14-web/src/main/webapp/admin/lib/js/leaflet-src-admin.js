@@ -35,10 +35,10 @@
 
 
     /*
-	 * @namespace Util
-	 *
-	 * Various utility functions, used by Leaflet internally.
-	 */
+     * @namespace Util
+     *
+     * Various utility functions, used by Leaflet internally.
+     */
 
     L.Util = {
 
@@ -401,40 +401,40 @@
 
 
     /*
-	 * @class Evented
-	 * @aka L.Evented
-	 * @inherits Class
-	 *
-	 * A set of methods shared between event-powered classes (like `Map` and `Marker`). Generally, events allow you to execute some function when something happens with an object (e.g. the user clicks on the map, causing the map to fire `'click'` event).
-	 *
-	 * @example
-	 *
-	 * ```js
-	 * map.on('click', function(e) {
-	 * 	alert(e.latlng);
-	 * } );
-	 * ```
-	 *
-	 * Leaflet deals with event listeners by reference, so if you want to add a listener and then remove it, define it as a function:
-	 *
-	 * ```js
-	 * function onClick(e) { ... }
-	 *
-	 * map.on('click', onClick);
-	 * map.off('click', onClick);
-	 * ```
-	 */
+     * @class Evented
+     * @aka L.Evented
+     * @inherits Class
+     *
+     * A set of methods shared between event-powered classes (like `Map` and `Marker`). Generally, events allow you to execute some function when something happens with an object (e.g. the user clicks on the map, causing the map to fire `'click'` event).
+     *
+     * @example
+     *
+     * ```js
+     * map.on('click', function(e) {
+     * 	alert(e.latlng);
+     * } );
+     * ```
+     *
+     * Leaflet deals with event listeners by reference, so if you want to add a listener and then remove it, define it as a function:
+     *
+     * ```js
+     * function onClick(e) { ... }
+     *
+     * map.on('click', onClick);
+     * map.off('click', onClick);
+     * ```
+     */
 
 
     L.Evented = L.Class.extend({
 
         /* @method on(type: String, fn: Function, context?: Object): this
-		 * Adds a listener function (`fn`) to a particular event type of the object. You can optionally specify the context of the listener (object the this keyword will point to). You can also pass several space-separated types (e.g. `'click dblclick'`).
-		 *
-		 * @alternative
-		 * @method on(eventMap: Object): this
-		 * Adds a set of type/listener pairs, e.g. `{click: onClick, mousemove: onMouseMove}`
-		 */
+         * Adds a listener function (`fn`) to a particular event type of the object. You can optionally specify the context of the listener (object the this keyword will point to). You can also pass several space-separated types (e.g. `'click dblclick'`).
+         *
+         * @alternative
+         * @method on(eventMap: Object): this
+         * Adds a set of type/listener pairs, e.g. `{click: onClick, mousemove: onMouseMove}`
+         */
         on: function (types, fn, context) {
 
             // types can be a map of types/handlers
@@ -458,16 +458,16 @@
         },
 
         /* @method off(type: String, fn?: Function, context?: Object): this
-		 * Removes a previously added listener function. If no function is specified, it will remove all the listeners of that particular event from the object. Note that if you passed a custom context to `on`, you must pass the same context to `off` in order to remove the listener.
-		 *
-		 * @alternative
-		 * @method off(eventMap: Object): this
-		 * Removes a set of type/listener pairs.
-		 *
-		 * @alternative
-		 * @method off: this
-		 * Removes all listeners to all events on the object.
-		 */
+         * Removes a previously added listener function. If no function is specified, it will remove all the listeners of that particular event from the object. Note that if you passed a custom context to `on`, you must pass the same context to `off` in order to remove the listener.
+         *
+         * @alternative
+         * @method off(eventMap: Object): this
+         * Removes a set of type/listener pairs.
+         *
+         * @alternative
+         * @method off: this
+         * Removes all listeners to all events on the object.
+         */
         off: function (types, fn, context) {
 
             if (!types) {
@@ -693,19 +693,19 @@
 
 
     /*
-	 * @namespace Browser
-	 * @aka L.Browser
-	 *
-	 * A namespace with static properties for browser/feature detection used by Leaflet internally.
-	 *
-	 * @example
-	 *
-	 * ```js
-	 * if (L.Browser.ielt9) {
-	 *   alert('Upgrade your browser, dude!');
-	 * }
-	 * ```
-	 */
+     * @namespace Browser
+     * @aka L.Browser
+     *
+     * A namespace with static properties for browser/feature detection used by Leaflet internally.
+     *
+     * @example
+     *
+     * ```js
+     * if (L.Browser.ielt9) {
+     *   alert('Upgrade your browser, dude!');
+     * }
+     * ```
+     */
 
     (function () {
 
@@ -847,24 +847,24 @@
 
 
     /*
-	 * @class Point
-	 * @aka L.Point
-	 *
-	 * Represents a point with `x` and `y` coordinates in pixels.
-	 *
-	 * @example
-	 *
-	 * ```js
-	 * var point = L.point(200, 300);
-	 * ```
-	 *
-	 * All Leaflet methods and options that accept `Point` objects also accept them in a simple Array form (unless noted otherwise), so these lines are equivalent:
-	 *
-	 * ```js
-	 * map.panBy([200, 300]);
-	 * map.panBy(L.point(200, 300));
-	 * ```
-	 */
+     * @class Point
+     * @aka L.Point
+     *
+     * Represents a point with `x` and `y` coordinates in pixels.
+     *
+     * @example
+     *
+     * ```js
+     * var point = L.point(200, 300);
+     * ```
+     *
+     * All Leaflet methods and options that accept `Point` objects also accept them in a simple Array form (unless noted otherwise), so these lines are equivalent:
+     *
+     * ```js
+     * map.panBy([200, 300]);
+     * map.panBy(L.point(200, 300));
+     * ```
+     */
 
     L.Point = function (x, y, round) {
         // @property x: Number; The `x` coordinate of the point
@@ -1050,25 +1050,25 @@
 
 
     /*
-	 * @class Bounds
-	 * @aka L.Bounds
-	 *
-	 * Represents a rectangular area in pixel coordinates.
-	 *
-	 * @example
-	 *
-	 * ```js
-	 * var p1 = L.point(10, 10),
-	 * p2 = L.point(40, 60),
-	 * bounds = L.bounds(p1, p2);
-	 * ```
-	 *
-	 * All Leaflet methods that accept `Bounds` objects also accept them in a simple Array form (unless noted otherwise), so the bounds example above can be passed like this:
-	 *
-	 * ```js
-	 * otherBounds.intersects([[10, 10], [40, 60]]);
-	 * ```
-	 */
+     * @class Bounds
+     * @aka L.Bounds
+     *
+     * Represents a rectangular area in pixel coordinates.
+     *
+     * @example
+     *
+     * ```js
+     * var p1 = L.point(10, 10),
+     * p2 = L.point(40, 60),
+     * bounds = L.bounds(p1, p2);
+     * ```
+     *
+     * All Leaflet methods that accept `Bounds` objects also accept them in a simple Array form (unless noted otherwise), so the bounds example above can be passed like this:
+     *
+     * ```js
+     * otherBounds.intersects([[10, 10], [40, 60]]);
+     * ```
+     */
 
     L.Bounds = function (a, b) {
         if (!a) { return; }
@@ -1208,22 +1208,22 @@
 
 
     /*
-	 * @class Transformation
-	 * @aka L.Transformation
-	 *
-	 * Represents an affine transformation: a set of coefficients `a`, `b`, `c`, `d`
-	 * for transforming a point of a form `(x, y)` into `(a*x + b, c*y + d)` and doing
-	 * the reverse. Used by Leaflet in its projections code.
-	 *
-	 * @example
-	 *
-	 * ```js
-	 * var transformation = new L.Transformation(2, 5, -1, 10),
-	 * 	p = L.point(1, 2),
-	 * 	p2 = transformation.transform(p), //  L.point(7, 8)
-	 * 	p3 = transformation.untransform(p2); //  L.point(1, 2)
-	 * ```
-	 */
+     * @class Transformation
+     * @aka L.Transformation
+     *
+     * Represents an affine transformation: a set of coefficients `a`, `b`, `c`, `d`
+     * for transforming a point of a form `(x, y)` into `(a*x + b, c*y + d)` and doing
+     * the reverse. Used by Leaflet in its projections code.
+     *
+     * @example
+     *
+     * ```js
+     * var transformation = new L.Transformation(2, 5, -1, 10),
+     * 	p = L.point(1, 2),
+     * 	p2 = transformation.transform(p), //  L.point(7, 8)
+     * 	p3 = transformation.untransform(p2); //  L.point(1, 2)
+     * ```
+     */
 
 
     // factory new L.Transformation(a: Number, b: Number, c: Number, d: Number)
@@ -1265,15 +1265,15 @@
 
 
     /*
-	 * @namespace DomUtil
-	 *
-	 * Utility functions to work with the [DOM](https://developer.mozilla.org/docs/Web/API/Document_Object_Model)
-	 * tree, used by Leaflet internally.
-	 *
-	 * Most functions expecting or returning a `HTMLElement` also work for
-	 * SVG elements. The only difference is that classes refer to CSS classes
-	 * in HTML and SVG classes in SVG.
-	 */
+     * @namespace DomUtil
+     *
+     * Utility functions to work with the [DOM](https://developer.mozilla.org/docs/Web/API/Document_Object_Model)
+     * tree, used by Leaflet internally.
+     *
+     * Most functions expecting or returning a `HTMLElement` also work for
+     * SVG elements. The only difference is that classes refer to CSS classes
+     * in HTML and SVG classes in SVG.
+     */
 
     L.DomUtil = {
 
@@ -1588,25 +1588,25 @@
 
 
     /* @class LatLng
-	 * @aka L.LatLng
-	 *
-	 * Represents a geographical point with a certain latitude and longitude.
-	 *
-	 * @example
-	 *
-	 * ```
-	 * var latlng = L.latLng(50.5, 30.5);
-	 * ```
-	 *
-	 * All Leaflet methods that accept LatLng objects also accept them in a simple Array form and simple object form (unless noted otherwise), so these lines are equivalent:
-	 *
-	 * ```
-	 * map.panTo([50, 30]);
-	 * map.panTo({lon: 30, lat: 50});
-	 * map.panTo({lat: 50, lng: 30});
-	 * map.panTo(L.latLng(50, 30));
-	 * ```
-	 */
+     * @aka L.LatLng
+     *
+     * Represents a geographical point with a certain latitude and longitude.
+     *
+     * @example
+     *
+     * ```
+     * var latlng = L.latLng(50.5, 30.5);
+     * ```
+     *
+     * All Leaflet methods that accept LatLng objects also accept them in a simple Array form and simple object form (unless noted otherwise), so these lines are equivalent:
+     *
+     * ```
+     * map.panTo([50, 30]);
+     * map.panTo({lon: 30, lat: 50});
+     * map.panTo({lat: 50, lng: 30});
+     * map.panTo(L.latLng(50, 30));
+     * ```
+     */
 
     L.LatLng = function (lat, lng, alt) {
         if (isNaN(lat) || isNaN(lng)) {
@@ -1720,30 +1720,30 @@
 
 
     /*
-	 * @class LatLngBounds
-	 * @aka L.LatLngBounds
-	 *
-	 * Represents a rectangular geographical area on a map.
-	 *
-	 * @example
-	 *
-	 * ```js
-	 * var corner1 = L.latLng(40.712, -74.227),
-	 * corner2 = L.latLng(40.774, -74.125),
-	 * bounds = L.latLngBounds(corner1, corner2);
-	 * ```
-	 *
-	 * All Leaflet methods that accept LatLngBounds objects also accept them in a simple Array form (unless noted otherwise), so the bounds example above can be passed like this:
-	 *
-	 * ```js
-	 * map.fitBounds([
-	 * 	[40.712, -74.227],
-	 * 	[40.774, -74.125]
-	 * ]);
-	 * ```
-	 *
-	 * Caution: if the area crosses the antimeridian (often confused with the International Date Line), you must specify corners _outside_ the [-180, 180] degrees longitude range.
-	 */
+     * @class LatLngBounds
+     * @aka L.LatLngBounds
+     *
+     * Represents a rectangular geographical area on a map.
+     *
+     * @example
+     *
+     * ```js
+     * var corner1 = L.latLng(40.712, -74.227),
+     * corner2 = L.latLng(40.774, -74.125),
+     * bounds = L.latLngBounds(corner1, corner2);
+     * ```
+     *
+     * All Leaflet methods that accept LatLngBounds objects also accept them in a simple Array form (unless noted otherwise), so the bounds example above can be passed like this:
+     *
+     * ```js
+     * map.fitBounds([
+     * 	[40.712, -74.227],
+     * 	[40.774, -74.125]
+     * ]);
+     * ```
+     *
+     * Caution: if the area crosses the antimeridian (often confused with the International Date Line), you must specify corners _outside_ the [-180, 180] degrees longitude range.
+     */
 
     L.LatLngBounds = function (corner1, corner2) { // (LatLng, LatLng) or (LatLng[])
         if (!corner1) { return; }
@@ -1966,17 +1966,17 @@
 
 
     /*
-	 * @namespace Projection
-	 * @section
-	 * Leaflet comes with a set of already defined Projections out of the box:
-	 *
-	 * @projection L.Projection.LonLat
-	 *
-	 * Equirectangular, or Plate Carree projection — the most simple projection,
-	 * mostly used by GIS enthusiasts. Directly maps `x` as longitude, and `y` as
-	 * latitude. Also suitable for flat worlds, e.g. game maps. Used by the
-	 * `EPSG:3395` and `Simple` CRS.
-	 */
+     * @namespace Projection
+     * @section
+     * Leaflet comes with a set of already defined Projections out of the box:
+     *
+     * @projection L.Projection.LonLat
+     *
+     * Equirectangular, or Plate Carree projection — the most simple projection,
+     * mostly used by GIS enthusiasts. Directly maps `x` as longitude, and `y` as
+     * latitude. Also suitable for flat worlds, e.g. game maps. Used by the
+     * `EPSG:3395` and `Simple` CRS.
+     */
 
     L.Projection = {};
 
@@ -1995,13 +1995,13 @@
 
 
     /*
-	 * @namespace Projection
-	 * @projection L.Projection.SphericalMercator
-	 *
-	 * Spherical Mercator projection — the most common projection for online maps,
-	 * used by almost all free and commercial tile providers. Assumes that Earth is
-	 * a sphere. Used by the `EPSG:3857` CRS.
-	 */
+     * @namespace Projection
+     * @projection L.Projection.SphericalMercator
+     *
+     * Spherical Mercator projection — the most common projection for online maps,
+     * used by almost all free and commercial tile providers. Assumes that Earth is
+     * a sphere. Used by the `EPSG:3857` CRS.
+     */
 
     L.Projection.SphericalMercator = {
 
@@ -2036,17 +2036,17 @@
 
 
     /*
-	 * @class CRS
-	 * @aka L.CRS
-	 * Abstract class that defines coordinate reference systems for projecting
-	 * geographical points into pixel (screen) coordinates and back (and to
-	 * coordinates in other units for [WMS](https://en.wikipedia.org/wiki/Web_Map_Service) services). See
-	 * [spatial reference system](http://en.wikipedia.org/wiki/Coordinate_reference_system).
-	 *
-	 * Leaflet defines the most usual CRSs by default. If you want to use a
-	 * CRS not defined by default, take a look at the
-	 * [Proj4Leaflet](https://github.com/kartena/Proj4Leaflet) plugin.
-	 */
+     * @class CRS
+     * @aka L.CRS
+     * Abstract class that defines coordinate reference systems for projecting
+     * geographical points into pixel (screen) coordinates and back (and to
+     * coordinates in other units for [WMS](https://en.wikipedia.org/wiki/Web_Map_Service) services). See
+     * [spatial reference system](http://en.wikipedia.org/wiki/Coordinate_reference_system).
+     *
+     * Leaflet defines the most usual CRSs by default. If you want to use a
+     * CRS not defined by default, take a look at the
+     * [Proj4Leaflet](https://github.com/kartena/Proj4Leaflet) plugin.
+     */
 
     L.CRS = {
         // @method latLngToPoint(latlng: LatLng, zoom: Number): Point
@@ -2169,14 +2169,14 @@
 
 
     /*
-	 * @namespace CRS
-	 * @crs L.CRS.Simple
-	 *
-	* Un CRS simple que mapea la longitud y la latitud en `x` e `y` directamente.
+     * @namespace CRS
+     * @crs L.CRS.Simple
+     *
+    * Un CRS simple que mapea la longitud y la latitud en `x` e `y` directamente.
 * Puede usarse para mapas de superficies planas (por ejemplo, mapas de juegos). Tenga en cuenta que la `y`
 * el eje aún debe estar invertido (yendo de abajo hacia arriba). `distancia()` devuelve
 * distancia euclidiana simple.
-	 */
+     */
 
     L.CRS.Simple = L.extend({}, L.CRS, {
         projection: L.Projection.LonLat,
@@ -2203,14 +2203,14 @@
 
 
     /*
-	 * @namespace CRS
-	 * @crs L.CRS.Earth
-	 *
-	 * Serves as the base for CRS that are global such that they cover the earth.
-	 * Can only be used as the base for other CRS and cannot be used directly,
-	 * since it does not have a `code`, `projection` or `transformation`. `distance()` returns
-	 * meters.
-	 */
+     * @namespace CRS
+     * @crs L.CRS.Earth
+     *
+     * Serves as the base for CRS that are global such that they cover the earth.
+     * Can only be used as the base for other CRS and cannot be used directly,
+     * since it does not have a `code`, `projection` or `transformation`. `distance()` returns
+     * meters.
+     */
 
     L.CRS.Earth = L.extend({}, L.CRS, {
         wrapLng: [-180, 180],
@@ -2235,13 +2235,13 @@
 
 
     /*
-	 * @namespace CRS
-	 * @crs L.CRS.EPSG3857
-	 *
-	 * The most common CRS for online maps, used by almost all free and commercial
-	 * tile providers. Uses Spherical Mercator projection. Set in by default in
-	 * Map's `crs` option.
-	 */
+     * @namespace CRS
+     * @crs L.CRS.EPSG3857
+     *
+     * The most common CRS for online maps, used by almost all free and commercial
+     * tile providers. Uses Spherical Mercator projection. Set in by default in
+     * Map's `crs` option.
+     */
 
     L.CRS.EPSG3857 = L.extend({}, L.CRS.Earth, {
         code: 'EPSG:3857',
@@ -2260,17 +2260,17 @@
 
 
     /*
-	 * @namespace CRS
-	 * @crs L.CRS.EPSG4326
-	 *
-	 * A common CRS among GIS enthusiasts. Uses simple Equirectangular projection.
-	 *
-	 * Leaflet 1.0.x complies with the [TMS coordinate scheme for EPSG:4326](https://wiki.osgeo.org/wiki/Tile_Map_Service_Specification#global-geodetic),
-	 * which is a breaking change from 0.7.x behaviour.  If you are using a `TileLayer`
-	 * with this CRS, ensure that there are two 256x256 pixel tiles covering the
-	 * whole earth at zoom level zero, and that the tile coordinate origin is (-180,+90),
-	 * or (-180,-90) for `TileLayer`s with [the `tms` option](#tilelayer-tms) set.
-	 */
+     * @namespace CRS
+     * @crs L.CRS.EPSG4326
+     *
+     * A common CRS among GIS enthusiasts. Uses simple Equirectangular projection.
+     *
+     * Leaflet 1.0.x complies with the [TMS coordinate scheme for EPSG:4326](https://wiki.osgeo.org/wiki/Tile_Map_Service_Specification#global-geodetic),
+     * which is a breaking change from 0.7.x behaviour.  If you are using a `TileLayer`
+     * with this CRS, ensure that there are two 256x256 pixel tiles covering the
+     * whole earth at zoom level zero, and that the tile coordinate origin is (-180,+90),
+     * or (-180,-90) for `TileLayer`s with [the `tms` option](#tilelayer-tms) set.
+     */
 
     L.CRS.EPSG4326 = L.extend({}, L.CRS.Earth, {
         code: 'EPSG:32721',
@@ -2281,23 +2281,23 @@
 
 
     /*
-	 * @class Map
-	 * @aka L.Map
-	 * @inherits Evented
-	 *
-	 * The central class of the API — it is used to create a map on a page and manipulate it.
-	 *
-	 * @example
-	 *
-	 * ```js
-	 * // initialize the map on the "map" div with a given center and zoom
-	 * var map = L.map('map', {
-	 * 	center: [51.505, -0.09],
-	 * 	zoom: 13
-	 * });
-	 * ```
-	 *
-	 */
+     * @class Map
+     * @aka L.Map
+     * @inherits Evented
+     *
+     * The central class of the API — it is used to create a map on a page and manipulate it.
+     *
+     * @example
+     *
+     * ```js
+     * // initialize the map on the "map" div with a given center and zoom
+     * var map = L.map('map', {
+     * 	center: [51.505, -0.09],
+     * 	zoom: 13
+     * });
+     * ```
+     *
+     */
 
     L.Map = L.Evented.extend({
 
@@ -3723,9 +3723,9 @@
         // returns offset needed for pxBounds to get inside maxBounds at a specified zoom
         _getBoundsOffset: function (pxBounds, maxBounds, zoom) {
             var projectedMaxBounds = L.bounds(
-                    this.project(maxBounds.getNorthEast(), zoom),
-                    this.project(maxBounds.getSouthWest(), zoom)
-                ),
+                this.project(maxBounds.getNorthEast(), zoom),
+                this.project(maxBounds.getSouthWest(), zoom)
+            ),
                 minOffset = projectedMaxBounds.min.subtract(pxBounds.min),
                 maxOffset = projectedMaxBounds.max.subtract(pxBounds.max),
 
@@ -3889,28 +3889,28 @@
 
 
     /*
-	 * @class Layer
-	 * @inherits Evented
-	 * @aka L.Layer
-	 * @aka ILayer
-	 *
-	 * A set of methods from the Layer base class that all Leaflet layers use.
-	 * Inherits all methods, options and events from `L.Evented`.
-	 *
-	 * @example
-	 *
-	 * ```js
-	 * var layer = L.Marker(latlng).addTo(map);
-	 * layer.addTo(map);
-	 * layer.remove();
-	 * ```
-	 *
-	 * @event add: Event
-	 * Fired after the layer is added to a map
-	 *
-	 * @event remove: Event
-	 * Fired after the layer is removed from a map
-	 */
+     * @class Layer
+     * @inherits Evented
+     * @aka L.Layer
+     * @aka ILayer
+     *
+     * A set of methods from the Layer base class that all Leaflet layers use.
+     * Inherits all methods, options and events from `L.Evented`.
+     *
+     * @example
+     *
+     * ```js
+     * var layer = L.Marker(latlng).addTo(map);
+     * layer.addTo(map);
+     * layer.remove();
+     * ```
+     *
+     * @event add: Event
+     * Fired after the layer is added to a map
+     *
+     * @event remove: Event
+     * Fired after the layer is removed from a map
+     */
 
 
     L.Layer = L.Evented.extend({
@@ -3928,11 +3928,11 @@
         },
 
         /* @section
-		 * Classes extending `L.Layer` will inherit the following methods:
-		 *
-		 * @method addTo(map: Map): this
-		 * Adds the layer to the given map
-		 */
+         * Classes extending `L.Layer` will inherit the following methods:
+         *
+         * @method addTo(map: Map): this
+         * Adds the layer to the given map
+         */
         addTo: function (map) {
             map.addLayer(this);
             return this;
@@ -4004,38 +4004,38 @@
     });
 
     /* @section Extension methods
-	 * @uninheritable
-	 *
-	 * Every layer should extend from `L.Layer` and (re-)implement the following methods.
-	 *
-	 * @method onAdd(map: Map): this
-	 * Should contain code that creates DOM elements for the layer, adds them to `map panes` where they should belong and puts listeners on relevant map events. Called on [`map.addLayer(layer)`](#map-addlayer).
-	 *
-	 * @method onRemove(map: Map): this
-	 * Should contain all clean up code that removes the layer's elements from the DOM and removes listeners previously added in [`onAdd`](#layer-onadd). Called on [`map.removeLayer(layer)`](#map-removelayer).
-	 *
-	 * @method getEvents(): Object
-	 * This optional method should return an object like `{ viewreset: this._reset }` for [`addEventListener`](#evented-addeventlistener). The event handlers in this object will be automatically added and removed from the map with your layer.
-	 *
-	 * @method getAttribution(): String
-	 * This optional method should return a string containing HTML to be shown on the `Attribution control` whenever the layer is visible.
-	 *
-	 * @method beforeAdd(map: Map): this
-	 * Optional method. Called on [`map.addLayer(layer)`](#map-addlayer), before the layer is added to the map, before events are initialized, without waiting until the map is in a usable state. Use for early initialization only.
-	 */
+     * @uninheritable
+     *
+     * Every layer should extend from `L.Layer` and (re-)implement the following methods.
+     *
+     * @method onAdd(map: Map): this
+     * Should contain code that creates DOM elements for the layer, adds them to `map panes` where they should belong and puts listeners on relevant map events. Called on [`map.addLayer(layer)`](#map-addlayer).
+     *
+     * @method onRemove(map: Map): this
+     * Should contain all clean up code that removes the layer's elements from the DOM and removes listeners previously added in [`onAdd`](#layer-onadd). Called on [`map.removeLayer(layer)`](#map-removelayer).
+     *
+     * @method getEvents(): Object
+     * This optional method should return an object like `{ viewreset: this._reset }` for [`addEventListener`](#evented-addeventlistener). The event handlers in this object will be automatically added and removed from the map with your layer.
+     *
+     * @method getAttribution(): String
+     * This optional method should return a string containing HTML to be shown on the `Attribution control` whenever the layer is visible.
+     *
+     * @method beforeAdd(map: Map): this
+     * Optional method. Called on [`map.addLayer(layer)`](#map-addlayer), before the layer is added to the map, before events are initialized, without waiting until the map is in a usable state. Use for early initialization only.
+     */
 
 
     /* @namespace Map
-	 * @section Layer events
-	 *
-	 * @event layeradd: LayerEvent
-	 * Fired when a new layer is added to the map.
-	 *
-	 * @event layerremove: LayerEvent
-	 * Fired when some layer is removed from the map
-	 *
-	 * @section Methods for Layers and Controls
-	 */
+     * @section Layer events
+     *
+     * @event layeradd: LayerEvent
+     * Fired when a new layer is added to the map.
+     *
+     * @event layerremove: LayerEvent
+     * Fired when some layer is removed from the map
+     *
+     * @section Methods for Layers and Controls
+     */
     L.Map.include({
         // @method addLayer(layer: Layer): this
         // Adds the given layer to the map
@@ -4089,13 +4089,13 @@
         },
 
         /* @method eachLayer(fn: Function, context?: Object): this
-		 * Iterates over the layers of the map, optionally specifying context of the iterator function.
-		 * ```
-		 * map.eachLayer(function(layer){
-		 *     layer.bindPopup('Hello');
-		 * });
-		 * ```
-		 */
+         * Iterates over the layers of the map, optionally specifying context of the iterator function.
+         * ```
+         * map.eachLayer(function(layer){
+         *     layer.bindPopup('Hello');
+         * });
+         * ```
+         */
         eachLayer: function (method, context) {
             for (var i in this._layers) {
                 method.call(context, this._layers[i]);
@@ -4162,9 +4162,9 @@
 
 
     /*
-	 * @namespace DomEvent
-	 * Utility functions to work with the [DOM events](https://developer.mozilla.org/docs/Web/API/Event), used by Leaflet internally.
-	 */
+     * @namespace DomEvent
+     * Utility functions to work with the [DOM events](https://developer.mozilla.org/docs/Web/API/Event), used by Leaflet internally.
+     */
 
     // Inspired by John Resig, Dean Edwards and YUI addEvent implementations.
 
@@ -4476,21 +4476,21 @@
 
 
     /*
-	 * @class PosAnimation
-	 * @aka L.PosAnimation
-	 * @inherits Evented
-	 * Used internally for panning animations, utilizing CSS3 Transitions for modern browsers and a timer fallback for IE6-9.
-	 *
-	 * @example
-	 * ```js
-	 * var fx = new L.PosAnimation();
-	 * fx.run(el, [300, 500], 0.5);
-	 * ```
-	 *
-	 * @constructor L.PosAnimation()
-	 * Creates a `PosAnimation` object.
-	 *
-	 */
+     * @class PosAnimation
+     * @aka L.PosAnimation
+     * @inherits Evented
+     * Used internally for panning animations, utilizing CSS3 Transitions for modern browsers and a timer fallback for IE6-9.
+     *
+     * @example
+     * ```js
+     * var fx = new L.PosAnimation();
+     * fx.run(el, [300, 500], 0.5);
+     * ```
+     *
+     * @constructor L.PosAnimation()
+     * Creates a `PosAnimation` object.
+     *
+     */
 
     L.PosAnimation = L.Evented.extend({
 
@@ -4574,11 +4574,11 @@
 
 
     /*
-	 * @namespace Projection
-	 * @projection L.Projection.Mercator
-	 *
-	 * Elliptical Mercator projection — more complex than Spherical Mercator. Takes into account that Earth is a geoid, not a perfect sphere. Used by the EPSG:3395 CRS.
-	 */
+     * @namespace Projection
+     * @projection L.Projection.Mercator
+     *
+     * Elliptical Mercator projection — more complex than Spherical Mercator. Takes into account that Earth is a geoid, not a perfect sphere. Used by the EPSG:3395 CRS.
+     */
 
     L.Projection.Mercator = {
         R: 6378137,
@@ -4622,11 +4622,11 @@
 
 
     /*
-	 * @namespace CRS
-	 * @crs L.CRS.EPSG3395
-	 *
-	 * Rarely used by some commercial tile providers. Uses Elliptical Mercator projection.
-	 */
+     * @namespace CRS
+     * @crs L.CRS.EPSG3395
+     *
+     * Rarely used by some commercial tile providers. Uses Elliptical Mercator projection.
+     */
 
     L.CRS.EPSG3395 = L.extend({}, L.CRS.Earth, {
         code: 'EPSG:3395',
@@ -4641,69 +4641,69 @@
 
 
     /*
-	 * @class GridLayer
-	 * @inherits Layer
-	 * @aka L.GridLayer
-	 *
-	 * Generic class for handling a tiled grid of HTML elements. This is the base class for all tile layers and replaces `TileLayer.Canvas`.
-	 * GridLayer can be extended to create a tiled grid of HTML elements like `<canvas>`, `<img>` or `<div>`. GridLayer will handle creating and animating these DOM elements for you.
-	 *
-	 *
-	 * @section Synchronous usage
-	 * @example
-	 *
-	 * To create a custom layer, extend GridLayer and implement the `createTile()` method, which will be passed a `Point` object with the `x`, `y`, and `z` (zoom level) coordinates to draw your tile.
-	 *
-	 * ```js
-	 * var CanvasLayer = L.GridLayer.extend({
-	 *     createTile: function(coords){
-	 *         // create a <canvas> element for drawing
-	 *         var tile = L.DomUtil.create('canvas', 'leaflet-tile');
-	 *
-	 *         // setup tile width and height according to the options
-	 *         var size = this.getTileSize();
-	 *         tile.width = size.x;
-	 *         tile.height = size.y;
-	 *
-	 *         // get a canvas context and draw something on it using coords.x, coords.y and coords.z
-	 *         var ctx = tile.getContext('2d');
-	 *
-	 *         // return the tile so it can be rendered on screen
-	 *         return tile;
-	 *     }
-	 * });
-	 * ```
-	 *
-	 * @section Asynchronous usage
-	 * @example
-	 *
-	 * Tile creation can also be asynchronous, this is useful when using a third-party drawing library. Once the tile is finished drawing it can be passed to the `done()` callback.
-	 *
-	 * ```js
-	 * var CanvasLayer = L.GridLayer.extend({
-	 *     createTile: function(coords, done){
-	 *         var error;
-	 *
-	 *         // create a <canvas> element for drawing
-	 *         var tile = L.DomUtil.create('canvas', 'leaflet-tile');
-	 *
-	 *         // setup tile width and height according to the options
-	 *         var size = this.getTileSize();
-	 *         tile.width = size.x;
-	 *         tile.height = size.y;
-	 *
-	 *         // draw something asynchronously and pass the tile to the done() callback
-	 *         setTimeout(function() {
-	 *             done(error, tile);
-	 *         }, 1000);
-	 *
-	 *         return tile;
-	 *     }
-	 * });
-	 * ```
-	 *
-	 * @section
-	 */
+     * @class GridLayer
+     * @inherits Layer
+     * @aka L.GridLayer
+     *
+     * Generic class for handling a tiled grid of HTML elements. This is the base class for all tile layers and replaces `TileLayer.Canvas`.
+     * GridLayer can be extended to create a tiled grid of HTML elements like `<canvas>`, `<img>` or `<div>`. GridLayer will handle creating and animating these DOM elements for you.
+     *
+     *
+     * @section Synchronous usage
+     * @example
+     *
+     * To create a custom layer, extend GridLayer and implement the `createTile()` method, which will be passed a `Point` object with the `x`, `y`, and `z` (zoom level) coordinates to draw your tile.
+     *
+     * ```js
+     * var CanvasLayer = L.GridLayer.extend({
+     *     createTile: function(coords){
+     *         // create a <canvas> element for drawing
+     *         var tile = L.DomUtil.create('canvas', 'leaflet-tile');
+     *
+     *         // setup tile width and height according to the options
+     *         var size = this.getTileSize();
+     *         tile.width = size.x;
+     *         tile.height = size.y;
+     *
+     *         // get a canvas context and draw something on it using coords.x, coords.y and coords.z
+     *         var ctx = tile.getContext('2d');
+     *
+     *         // return the tile so it can be rendered on screen
+     *         return tile;
+     *     }
+     * });
+     * ```
+     *
+     * @section Asynchronous usage
+     * @example
+     *
+     * Tile creation can also be asynchronous, this is useful when using a third-party drawing library. Once the tile is finished drawing it can be passed to the `done()` callback.
+     *
+     * ```js
+     * var CanvasLayer = L.GridLayer.extend({
+     *     createTile: function(coords, done){
+     *         var error;
+     *
+     *         // create a <canvas> element for drawing
+     *         var tile = L.DomUtil.create('canvas', 'leaflet-tile');
+     *
+     *         // setup tile width and height according to the options
+     *         var size = this.getTileSize();
+     *         tile.width = size.x;
+     *         tile.height = size.y;
+     *
+     *         // draw something asynchronously and pass the tile to the done() callback
+     *         setTimeout(function() {
+     *             done(error, tile);
+     *         }, 1000);
+     *
+     *         return tile;
+     *     }
+     * });
+     * ```
+     *
+     * @section
+     */
 
 
     L.GridLayer = L.Layer.extend({
@@ -5508,34 +5508,34 @@
 
 
     /*
-	 * @class TileLayer
-	 * @inherits GridLayer
-	 * @aka L.TileLayer
-	 * Used to load and display tile layers on the map. Extends `GridLayer`.
-	 *
-	 * @example
-	 *
-	 * ```js
-	 * L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar'}).addTo(map);
-	 * ```
-	 *
-	 * @section URL template
-	 * @example
-	 *
-	 * A string of the following form:
-	 *
-	 * ```
-	 * 'http://{s}.somedomain.com/blabla/{z}/{x}/{y}{r}.png'
-	 * ```
-	 *
-	 * `{s}` means one of the available subdomains (used sequentially to help with browser parallel requests per domain limitation; subdomain values are specified in options; `a`, `b` or `c` by default, can be omitted), `{z}` — zoom level, `{x}` and `{y}` — tile coordinates. `{r}` can be used to add @2x to the URL to load retina tiles.
-	 *
-	 * You can use custom keys in the template, which will be [evaluated](#util-template) from TileLayer options, like this:
-	 *
-	 * ```
-	 * L.tileLayer('http://{s}.somedomain.com/{foo}/{z}/{x}/{y}.png', {foo: 'bar'});
-	 * ```
-	 */
+     * @class TileLayer
+     * @inherits GridLayer
+     * @aka L.TileLayer
+     * Used to load and display tile layers on the map. Extends `GridLayer`.
+     *
+     * @example
+     *
+     * ```js
+     * L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar'}).addTo(map);
+     * ```
+     *
+     * @section URL template
+     * @example
+     *
+     * A string of the following form:
+     *
+     * ```
+     * 'http://{s}.somedomain.com/blabla/{z}/{x}/{y}{r}.png'
+     * ```
+     *
+     * `{s}` means one of the available subdomains (used sequentially to help with browser parallel requests per domain limitation; subdomain values are specified in options; `a`, `b` or `c` by default, can be omitted), `{z}` — zoom level, `{x}` and `{y}` — tile coordinates. `{r}` can be used to add @2x to the URL to load retina tiles.
+     *
+     * You can use custom keys in the template, which will be [evaluated](#util-template) from TileLayer options, like this:
+     *
+     * ```
+     * L.tileLayer('http://{s}.somedomain.com/{foo}/{z}/{x}/{y}.png', {foo: 'bar'});
+     * ```
+     */
 
 
     L.TileLayer = L.GridLayer.extend({
@@ -5650,15 +5650,15 @@
             }
 
             /*
-			 Alt tag is set to empty string to keep screen readers from reading URL and for compliance reasons
-			 http://www.w3.org/TR/WCAG20-TECHS/H67
-			*/
+             Alt tag is set to empty string to keep screen readers from reading URL and for compliance reasons
+             http://www.w3.org/TR/WCAG20-TECHS/H67
+            */
             tile.alt = '';
 
             /*
-			 Set role="presentation" to force screen readers to ignore this
-			 https://www.w3.org/TR/wai-aria/roles#textalternativecomputation
-			*/
+             Set role="presentation" to force screen readers to ignore this
+             https://www.w3.org/TR/wai-aria/roles#textalternativecomputation
+            */
             tile.setAttribute('role', 'presentation');
 
             tile.src = this.getTileUrl(coords);
@@ -5792,22 +5792,22 @@
 
 
     /*
-	 * @class TileLayer.WMS
-	 * @inherits TileLayer
-	 * @aka L.TileLayer.WMS
-	 * Used to display [WMS](https://en.wikipedia.org/wiki/Web_Map_Service) services as tile layers on the map. Extends `TileLayer`.
-	 *
-	 * @example
-	 *
-	 * ```js
-	 * var nexrad = L.tileLayer.wms("http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi", {
-	 * 	layers: 'nexrad-n0r-900913',
-	 * 	format: 'image/png',
-	 * 	transparent: true,
-	 * 	attribution: "Weather data © 2012 IEM Nexrad"
-	 * });
-	 * ```
-	 */
+     * @class TileLayer.WMS
+     * @inherits TileLayer
+     * @aka L.TileLayer.WMS
+     * Used to display [WMS](https://en.wikipedia.org/wiki/Web_Map_Service) services as tile layers on the map. Extends `TileLayer`.
+     *
+     * @example
+     *
+     * ```js
+     * var nexrad = L.tileLayer.wms("http://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0r.cgi", {
+     * 	layers: 'nexrad-n0r-900913',
+     * 	format: 'image/png',
+     * 	transparent: true,
+     * 	attribution: "Weather data © 2012 IEM Nexrad"
+     * });
+     * ```
+     */
 
     L.TileLayer.WMS = L.TileLayer.extend({
 
@@ -5924,20 +5924,20 @@
 
 
     /*
-	 * @class ImageOverlay
-	 * @aka L.ImageOverlay
-	 * @inherits Interactive layer
-	 *
-	 * Used to load and display a single image over specific bounds of the map. Extends `Layer`.
-	 *
-	 * @example
-	 *
-	 * ```js
-	 * var imageUrl = 'http://www.lib.utexas.edu/maps/historical/newark_nj_1922.jpg',
-	 * 	imageBounds = [[40.712216, -74.22655], [40.773941, -74.12544]];
-	 * L.imageOverlay(imageUrl, imageBounds).addTo(map);
-	 * ```
-	 */
+     * @class ImageOverlay
+     * @aka L.ImageOverlay
+     * @inherits Interactive layer
+     *
+     * Used to load and display a single image over specific bounds of the map. Extends `Layer`.
+     *
+     * @example
+     *
+     * ```js
+     * var imageUrl = 'http://www.lib.utexas.edu/maps/historical/newark_nj_1922.jpg',
+     * 	imageBounds = [[40.712216, -74.22655], [40.773941, -74.12544]];
+     * L.imageOverlay(imageUrl, imageBounds).addTo(map);
+     * ```
+     */
 
     L.ImageOverlay = L.Layer.extend({
 
@@ -6128,72 +6128,72 @@
 
 
     /*
-	 * @class Icon
-	 * @aka L.Icon
-	 * @inherits Layer
-	 *
-	 * Represents an icon to provide when creating a marker.
-	 *
-	 * @example
-	 *
-	 * ```js
-	 * var myIcon = L.icon({
-	 *     iconUrl: 'my-icon.png',
-	 *     iconRetinaUrl: 'my-icon@2x.png',
-	 *     iconSize: [38, 95],
-	 *     iconAnchor: [22, 94],
-	 *     popupAnchor: [-3, -76],
-	 *     shadowUrl: 'my-icon-shadow.png',
-	 *     shadowRetinaUrl: 'my-icon-shadow@2x.png',
-	 *     shadowSize: [68, 95],
-	 *     shadowAnchor: [22, 94]
-	 * });
-	 *
-	 * L.marker([50.505, 30.57], {icon: myIcon}).addTo(map);
-	 * ```
-	 *
-	 * `L.Icon.Default` extends `L.Icon` and is the blue icon Leaflet uses for markers by default.
-	 *
-	 */
+     * @class Icon
+     * @aka L.Icon
+     * @inherits Layer
+     *
+     * Represents an icon to provide when creating a marker.
+     *
+     * @example
+     *
+     * ```js
+     * var myIcon = L.icon({
+     *     iconUrl: 'my-icon.png',
+     *     iconRetinaUrl: 'my-icon@2x.png',
+     *     iconSize: [38, 95],
+     *     iconAnchor: [22, 94],
+     *     popupAnchor: [-3, -76],
+     *     shadowUrl: 'my-icon-shadow.png',
+     *     shadowRetinaUrl: 'my-icon-shadow@2x.png',
+     *     shadowSize: [68, 95],
+     *     shadowAnchor: [22, 94]
+     * });
+     *
+     * L.marker([50.505, 30.57], {icon: myIcon}).addTo(map);
+     * ```
+     *
+     * `L.Icon.Default` extends `L.Icon` and is the blue icon Leaflet uses for markers by default.
+     *
+     */
 
     L.Icon = L.Class.extend({
 
         /* @section
-		 * @aka Icon options
-		 *
-		 * @option iconUrl: String = null
-		 * **(required)** The URL to the icon image (absolute or relative to your script path).
-		 *
-		 * @option iconRetinaUrl: String = null
-		 * The URL to a retina sized version of the icon image (absolute or relative to your
-		 * script path). Used for Retina screen devices.
-		 *
-		 * @option iconSize: Point = null
-		 * Size of the icon image in pixels.
-		 *
-		 * @option iconAnchor: Point = null
-		 * The coordinates of the "tip" of the icon (relative to its top left corner). The icon
-		 * will be aligned so that this point is at the marker's geographical location. Centered
-		 * by default if size is specified, also can be set in CSS with negative margins.
-		 *
-		 * @option popupAnchor: Point = null
-		 * The coordinates of the point from which popups will "open", relative to the icon anchor.
-		 *
-		 * @option shadowUrl: String = null
-		 * The URL to the icon shadow image. If not specified, no shadow image will be created.
-		 *
-		 * @option shadowRetinaUrl: String = null
-		 *
-		 * @option shadowSize: Point = null
-		 * Size of the shadow image in pixels.
-		 *
-		 * @option shadowAnchor: Point = null
-		 * The coordinates of the "tip" of the shadow (relative to its top left corner) (the same
-		 * as iconAnchor if not specified).
-		 *
-		 * @option className: String = ''
-		 * A custom class name to assign to both icon and shadow images. Empty by default.
-		 */
+         * @aka Icon options
+         *
+         * @option iconUrl: String = null
+         * **(required)** The URL to the icon image (absolute or relative to your script path).
+         *
+         * @option iconRetinaUrl: String = null
+         * The URL to a retina sized version of the icon image (absolute or relative to your
+         * script path). Used for Retina screen devices.
+         *
+         * @option iconSize: Point = null
+         * Size of the icon image in pixels.
+         *
+         * @option iconAnchor: Point = null
+         * The coordinates of the "tip" of the icon (relative to its top left corner). The icon
+         * will be aligned so that this point is at the marker's geographical location. Centered
+         * by default if size is specified, also can be set in CSS with negative margins.
+         *
+         * @option popupAnchor: Point = null
+         * The coordinates of the point from which popups will "open", relative to the icon anchor.
+         *
+         * @option shadowUrl: String = null
+         * The URL to the icon shadow image. If not specified, no shadow image will be created.
+         *
+         * @option shadowRetinaUrl: String = null
+         *
+         * @option shadowSize: Point = null
+         * Size of the shadow image in pixels.
+         *
+         * @option shadowAnchor: Point = null
+         * The coordinates of the "tip" of the shadow (relative to its top left corner) (the same
+         * as iconAnchor if not specified).
+         *
+         * @option className: String = ''
+         * A custom class name to assign to both icon and shadow images. Empty by default.
+         */
 
         initialize: function (options) {
             L.setOptions(this, options);
@@ -6274,27 +6274,27 @@
 
 
     /*
-	 * @miniclass Icon.Default (Icon)
-	 * @aka L.Icon.Default
-	 * @section
-	 *
-	 * A trivial subclass of `Icon`, represents the icon to use in `Marker`s when
-	 * no icon is specified. Points to the blue marker image distributed with Leaflet
-	 * releases.
-	 *
-	 * In order to customize the default icon, just change the properties of `L.Icon.Default.prototype.options`
-	 * (which is a set of `Icon options`).
-	 *
-	 * If you want to _completely_ replace the default icon, override the
-	 * `L.Marker.prototype.options.icon` with your own icon instead.
-	 */
+     * @miniclass Icon.Default (Icon)
+     * @aka L.Icon.Default
+     * @section
+     *
+     * A trivial subclass of `Icon`, represents the icon to use in `Marker`s when
+     * no icon is specified. Points to the blue marker image distributed with Leaflet
+     * releases.
+     *
+     * In order to customize the default icon, just change the properties of `L.Icon.Default.prototype.options`
+     * (which is a set of `Icon options`).
+     *
+     * If you want to _completely_ replace the default icon, override the
+     * `L.Marker.prototype.options.icon` with your own icon instead.
+     */
 
     L.Icon.Default = L.Icon.extend({
 
         options: {
-            iconUrl: '../images/marker-icon.png',
-            iconRetinaUrl: '../images/marker-icon-2x.png',
-            shadowUrl: '../images/marker-shadow.png',
+            iconUrl: '../images/ambulance.svg',
+            iconRetinaUrl: '../images/ambulance.svg',
+            shadowUrl: '../images/ambulance.svg',
             iconSize: [25, 41],
             iconAnchor: [12, 41],
             popupAnchor: [1, -34],
@@ -6322,24 +6322,24 @@
             document.body.removeChild(el);
 
             return path.indexOf('url') === 0 ?
-                path.replace(/^url\([\"\']?/, '').replace(/marker-icon\.png[\"\']?\)$/, '') : '';
+                path.replace(/^url\([\"\']?/, '').replace(/ambulance\.png[\"\']?\)$/, '') : '';
         }
     });
 
 
 
     /*
-	 * @class Marker
-	 * @inherits Interactive layer
-	 * @aka L.Marker
-	 * L.Marker is used to display clickable/draggable icons on the map. Extends `Layer`.
-	 *
-	 * @example
-	 *
-	 * ```js
-	 * L.marker([50.5, 30.5]).addTo(map);
-	 * ```
-	 */
+     * @class Marker
+     * @inherits Interactive layer
+     * @aka L.Marker
+     * L.Marker is used to display clickable/draggable icons on the map. Extends `Layer`.
+     *
+     * @example
+     *
+     * ```js
+     * L.marker([50.5, 30.5]).addTo(map);
+     * ```
+     */
 
     L.Marker = L.Layer.extend({
 
@@ -6394,9 +6394,9 @@
         },
 
         /* @section
-		 *
-		 * In addition to [shared layer methods](#Layer) like `addTo()` and `remove()` and [popup methods](#Popup) like bindPopup() you can also use the following methods:
-		 */
+         *
+         * In addition to [shared layer methods](#Layer) like `addTo()` and `remove()` and [popup methods](#Popup) like bindPopup() you can also use the following methods:
+         */
 
         initialize: function (latlng, options) {
             L.setOptions(this, options);
@@ -6697,23 +6697,23 @@
 
 
     /*
-	 * @class DivIcon
-	 * @aka L.DivIcon
-	 * @inherits Icon
-	 *
-	 * Represents a lightweight icon for markers that uses a simple `<div>`
-	 * element instead of an image. Inherits from `Icon` but ignores the `iconUrl` and shadow options.
-	 *
-	 * @example
-	 * ```js
-	 * var myIcon = L.divIcon({className: 'my-div-icon'});
-	 * // you can set .my-div-icon styles in CSS
-	 *
-	 * L.marker([50.505, 30.57], {icon: myIcon}).addTo(map);
-	 * ```
-	 *
-	 * By default, it has a 'leaflet-div-icon' CSS class and is styled as a little white square with a shadow.
-	 */
+     * @class DivIcon
+     * @aka L.DivIcon
+     * @inherits Icon
+     *
+     * Represents a lightweight icon for markers that uses a simple `<div>`
+     * element instead of an image. Inherits from `Icon` but ignores the `iconUrl` and shadow options.
+     *
+     * @example
+     * ```js
+     * var myIcon = L.divIcon({className: 'my-div-icon'});
+     * // you can set .my-div-icon styles in CSS
+     *
+     * L.marker([50.505, 30.57], {icon: myIcon}).addTo(map);
+     * ```
+     *
+     * By default, it has a 'leaflet-div-icon' CSS class and is styled as a little white square with a shadow.
+     */
 
     L.DivIcon = L.Icon.extend({
         options: {
@@ -6764,11 +6764,11 @@
 
 
     /*
-	 * @class DivOverlay
-	 * @inherits Layer
-	 * @aka L.DivOverlay
-	 * Base model for L.Popup and L.Tooltip. Inherit from it for custom popup like plugins.
-	 */
+     * @class DivOverlay
+     * @inherits Layer
+     * @aka L.DivOverlay
+     * Base model for L.Popup and L.Tooltip. Inherit from it for custom popup like plugins.
+     */
 
     // @namespace DivOverlay
     L.DivOverlay = L.Layer.extend({
@@ -6964,30 +6964,30 @@
 
 
     /*
-	 * @class Popup
-	 * @inherits DivOverlay
-	 * @aka L.Popup
-	 * Used to open popups in certain places of the map. Use [Map.openPopup](#map-openpopup) to
-	 * open popups while making sure that only one popup is open at one time
-	 * (recommended for usability), or use [Map.addLayer](#map-addlayer) to open as many as you want.
-	 *
-	 * @example
-	 *
-	 * If you want to just bind a popup to marker click and then open it, it's really easy:
-	 *
-	 * ```js
-	 * marker.bindPopup(popupContent).openPopup();
-	 * ```
-	 * Path overlays like polylines also have a `bindPopup` method.
-	 * Here's a more complicated way to open a popup on a map:
-	 *
-	 * ```js
-	 * var popup = L.popup()
-	 * 	.setLatLng(latlng)
-	 * 	.setContent('<p>Hello world!<br />This is a nice popup.</p>')
-	 * 	.openOn(map);
-	 * ```
-	 */
+     * @class Popup
+     * @inherits DivOverlay
+     * @aka L.Popup
+     * Used to open popups in certain places of the map. Use [Map.openPopup](#map-openpopup) to
+     * open popups while making sure that only one popup is open at one time
+     * (recommended for usability), or use [Map.addLayer](#map-addlayer) to open as many as you want.
+     *
+     * @example
+     *
+     * If you want to just bind a popup to marker click and then open it, it's really easy:
+     *
+     * ```js
+     * marker.bindPopup(popupContent).openPopup();
+     * ```
+     * Path overlays like polylines also have a `bindPopup` method.
+     * Here's a more complicated way to open a popup on a map:
+     *
+     * ```js
+     * var popup = L.popup()
+     * 	.setLatLng(latlng)
+     * 	.setContent('<p>Hello world!<br />This is a nice popup.</p>')
+     * 	.openOn(map);
+     * ```
+     */
 
 
     // @namespace Popup
@@ -7246,10 +7246,10 @@
 
 
     /* @namespace Map
-	 * @section Interaction Options
-	 * @option closePopupOnClick: Boolean = true
-	 * Set it to `false` if you don't want popups to close when user clicks the map.
-	 */
+     * @section Interaction Options
+     * @option closePopupOnClick: Boolean = true
+     * Set it to `false` if you don't want popups to close when user clicks the map.
+     */
     L.Map.mergeOptions({
         closePopupOnClick: true
     });
@@ -7299,19 +7299,19 @@
     });
 
     /*
-	 * @namespace Layer
-	 * @section Popup methods example
-	 *
-	 * All layers share a set of methods convenient for binding popups to it.
-	 *
-	 * ```js
-	 * var layer = L.Polygon(latlngs).bindPopup('Hi There!').addTo(map);
-	 * layer.openPopup();
-	 * layer.closePopup();
-	 * ```
-	 *
-	 * Popups will also be automatically opened when the layer is clicked on and closed when the layer is removed from the map or another popup is opened.
-	 */
+     * @namespace Layer
+     * @section Popup methods example
+     *
+     * All layers share a set of methods convenient for binding popups to it.
+     *
+     * ```js
+     * var layer = L.Polygon(latlngs).bindPopup('Hi There!').addTo(map);
+     * layer.openPopup();
+     * layer.closePopup();
+     * ```
+     *
+     * Popups will also be automatically opened when the layer is clicked on and closed when the layer is removed from the map or another popup is opened.
+     */
 
     // @section Popup methods
     L.Layer.include({
@@ -7474,24 +7474,24 @@
 
 
     /*
-	 * @class Tooltip
-	 * @inherits DivOverlay
-	 * @aka L.Tooltip
-	 * Used to display small texts on top of map layers.
-	 *
-	 * @example
-	 *
-	 * ```js
-	 * marker.bindTooltip("my tooltip text").openTooltip();
-	 * ```
-	 * Note about tooltip offset. Leaflet takes two options in consideration
-	 * for computing tooltip offseting:
-	 * - the `offset` Tooltip option: it defaults to [0, 0], and it's specific to one tooltip.
-	 *   Add a positive x offset to move the tooltip to the right, and a positive y offset to
-	 *   move it to the bottom. Negatives will move to the left and top.
-	 * - the `tooltipAnchor` Icon option: this will only be considered for Marker. You
-	 *   should adapt this value if you use a custom icon.
-	 */
+     * @class Tooltip
+     * @inherits DivOverlay
+     * @aka L.Tooltip
+     * Used to display small texts on top of map layers.
+     *
+     * @example
+     *
+     * ```js
+     * marker.bindTooltip("my tooltip text").openTooltip();
+     * ```
+     * Note about tooltip offset. Leaflet takes two options in consideration
+     * for computing tooltip offseting:
+     * - the `offset` Tooltip option: it defaults to [0, 0], and it's specific to one tooltip.
+     *   Add a positive x offset to move the tooltip to the right, and a positive y offset to
+     *   move it to the bottom. Negatives will move to the left and top.
+     * - the `tooltipAnchor` Icon option: this will only be considered for Marker. You
+     *   should adapt this value if you use a custom icon.
+     */
 
 
     // @namespace Tooltip
@@ -7698,17 +7698,17 @@
     });
 
     /*
-	 * @namespace Layer
-	 * @section Tooltip methods example
-	 *
-	 * All layers share a set of methods convenient for binding tooltips to it.
-	 *
-	 * ```js
-	 * var layer = L.Polygon(latlngs).bindTooltip('Hi There!').addTo(map);
-	 * layer.openTooltip();
-	 * layer.closeTooltip();
-	 * ```
-	 */
+     * @namespace Layer
+     * @section Tooltip methods example
+     *
+     * All layers share a set of methods convenient for binding tooltips to it.
+     *
+     * ```js
+     * var layer = L.Polygon(latlngs).bindTooltip('Hi There!').addTo(map);
+     * layer.openTooltip();
+     * layer.closeTooltip();
+     * ```
+     */
 
     // @section Tooltip methods
     L.Layer.include({
@@ -7885,22 +7885,22 @@
 
 
     /*
-	 * @class LayerGroup
-	 * @aka L.LayerGroup
-	 * @inherits Layer
-	 *
-	 * Used to group several layers and handle them as one. If you add it to the map,
-	 * any layers added or removed from the group will be added/removed on the map as
-	 * well. Extends `Layer`.
-	 *
-	 * @example
-	 *
-	 * ```js
-	 * L.layerGroup([marker1, marker2])
-	 * 	.addLayer(polyline)
-	 * 	.addTo(map);
-	 * ```
-	 */
+     * @class LayerGroup
+     * @aka L.LayerGroup
+     * @inherits Layer
+     *
+     * Used to group several layers and handle them as one. If you add it to the map,
+     * any layers added or removed from the group will be added/removed on the map as
+     * well. Extends `Layer`.
+     *
+     * @example
+     *
+     * ```js
+     * L.layerGroup([marker1, marker2])
+     * 	.addLayer(polyline)
+     * 	.addTo(map);
+     * ```
+     */
 
     L.LayerGroup = L.Layer.extend({
 
@@ -8047,26 +8047,26 @@
 
 
     /*
-	 * @class FeatureGroup
-	 * @aka L.FeatureGroup
-	 * @inherits LayerGroup
-	 *
-	 * Extended `LayerGroup` that makes it easier to do the same thing to all its member layers:
-	 *  * [`bindPopup`](#layer-bindpopup) binds a popup to all of the layers at once (likewise with [`bindTooltip`](#layer-bindtooltip))
-	 *  * Events are propagated to the `FeatureGroup`, so if the group has an event
-	 * handler, it will handle events from any of the layers. This includes mouse events
-	 * and custom events.
-	 *  * Has `layeradd` and `layerremove` events
-	 *
-	 * @example
-	 *
-	 * ```js
-	 * L.featureGroup([marker1, marker2, polyline])
-	 * 	.bindPopup('Hello world!')
-	 * 	.on('click', function() { alert('Clicked on a member of the group!'); })
-	 * 	.addTo(map);
-	 * ```
-	 */
+     * @class FeatureGroup
+     * @aka L.FeatureGroup
+     * @inherits LayerGroup
+     *
+     * Extended `LayerGroup` that makes it easier to do the same thing to all its member layers:
+     *  * [`bindPopup`](#layer-bindpopup) binds a popup to all of the layers at once (likewise with [`bindTooltip`](#layer-bindtooltip))
+     *  * Events are propagated to the `FeatureGroup`, so if the group has an event
+     * handler, it will handle events from any of the layers. This includes mouse events
+     * and custom events.
+     *  * Has `layeradd` and `layerremove` events
+     *
+     * @example
+     *
+     * ```js
+     * L.featureGroup([marker1, marker2, polyline])
+     * 	.bindPopup('Hello world!')
+     * 	.on('click', function() { alert('Clicked on a member of the group!'); })
+     * 	.addTo(map);
+     * ```
+     */
 
     L.FeatureGroup = L.LayerGroup.extend({
 
@@ -8141,24 +8141,24 @@
 
 
     /*
-	 * @class Renderer
-	 * @inherits Layer
-	 * @aka L.Renderer
-	 *
-	 * Base class for vector renderer implementations (`SVG`, `Canvas`). Handles the
-	 * DOM container of the renderer, its bounds, and its zoom animation.
-	 *
-	 * A `Renderer` works as an implicit layer group for all `Path`s - the renderer
-	 * itself can be added or removed to the map. All paths use a renderer, which can
-	 * be implicit (the map will decide the type of renderer and use it automatically)
-	 * or explicit (using the [`renderer`](#path-renderer) option of the path).
-	 *
-	 * Do not use this class directly, use `SVG` and `Canvas` instead.
-	 *
-	 * @event update: Event
-	 * Fired when the renderer updates its bounds, center and zoom, for example when
-	 * its map has moved
-	 */
+     * @class Renderer
+     * @inherits Layer
+     * @aka L.Renderer
+     *
+     * Base class for vector renderer implementations (`SVG`, `Canvas`). Handles the
+     * DOM container of the renderer, its bounds, and its zoom animation.
+     *
+     * A `Renderer` works as an implicit layer group for all `Path`s - the renderer
+     * itself can be added or removed to the map. All paths use a renderer, which can
+     * be implicit (the map will decide the type of renderer and use it automatically)
+     * or explicit (using the [`renderer`](#path-renderer) option of the path).
+     *
+     * Do not use this class directly, use `SVG` and `Canvas` instead.
+     *
+     * @event update: Event
+     * Fired when the renderer updates its bounds, center and zoom, for example when
+     * its map has moved
+     */
 
     L.Renderer = L.Layer.extend({
 
@@ -8311,13 +8311,13 @@
 
 
     /*
-	 * @class Path
-	 * @aka L.Path
-	 * @inherits Interactive layer
-	 *
-	 * An abstract class that contains options and constants shared between vector
-	 * overlays (Polygon, Polyline, Circle). Do not use it directly. Extends `Layer`.
-	 */
+     * @class Path
+     * @aka L.Path
+     * @inherits Interactive layer
+     *
+     * An abstract class that contains options and constants shared between vector
+     * overlays (Polygon, Polyline, Circle). Do not use it directly. Extends `Layer`.
+     */
 
     L.Path = L.Layer.extend({
 
@@ -8450,10 +8450,10 @@
 
 
     /*
-	 * @namespace LineUtil
-	 *
-	 * Various utility functions for polyine points processing, used by Leaflet internally to make polylines lightning-fast.
-	 */
+     * @namespace LineUtil
+     *
+     * Various utility functions for polyine points processing, used by Leaflet internally to make polylines lightning-fast.
+     */
 
     L.LineUtil = {
 
@@ -8681,42 +8681,42 @@
 
 
     /*
-	 * @class Polyline
-	 * @aka L.Polyline
-	 * @inherits Path
-	 *
-	 * A class for drawing polyline overlays on a map. Extends `Path`.
-	 *
-	 * @example
-	 *
-	 * ```js
-	 * // create a red polyline from an array of LatLng points
-	 * var latlngs = [
-	 * 	[45.51, -122.68],
-	 * 	[37.77, -122.43],
-	 * 	[34.04, -118.2]
-	 * ];
-	 *
-	 * var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
-	 *
-	 * // zoom the map to the polyline
-	 * map.fitBounds(polyline.getBounds());
-	 * ```
-	 *
-	 * You can also pass a multi-dimensional array to represent a `MultiPolyline` shape:
-	 *
-	 * ```js
-	 * // create a red polyline from an array of arrays of LatLng points
-	 * var latlngs = [
-	 * 	[[45.51, -122.68],
-	 * 	 [37.77, -122.43],
-	 * 	 [34.04, -118.2]],
-	 * 	[[40.78, -73.91],
-	 * 	 [41.83, -87.62],
-	 * 	 [32.76, -96.72]]
-	 * ];
-	 * ```
-	 */
+     * @class Polyline
+     * @aka L.Polyline
+     * @inherits Path
+     *
+     * A class for drawing polyline overlays on a map. Extends `Path`.
+     *
+     * @example
+     *
+     * ```js
+     * // create a red polyline from an array of LatLng points
+     * var latlngs = [
+     * 	[45.51, -122.68],
+     * 	[37.77, -122.43],
+     * 	[34.04, -118.2]
+     * ];
+     *
+     * var polyline = L.polyline(latlngs, {color: 'red'}).addTo(map);
+     *
+     * // zoom the map to the polyline
+     * map.fitBounds(polyline.getBounds());
+     * ```
+     *
+     * You can also pass a multi-dimensional array to represent a `MultiPolyline` shape:
+     *
+     * ```js
+     * // create a red polyline from an array of arrays of LatLng points
+     * var latlngs = [
+     * 	[[45.51, -122.68],
+     * 	 [37.77, -122.43],
+     * 	 [34.04, -118.2]],
+     * 	[[40.78, -73.91],
+     * 	 [41.83, -87.62],
+     * 	 [32.76, -96.72]]
+     * ];
+     * ```
+     */
 
     L.Polyline = L.Path.extend({
 
@@ -8981,18 +8981,18 @@
 
 
     /*
-	 * @namespace PolyUtil
-	 * Various utility functions for polygon geometries.
-	 */
+     * @namespace PolyUtil
+     * Various utility functions for polygon geometries.
+     */
 
     L.PolyUtil = {};
 
     /* @function clipPolygon(points: Point[], bounds: Bounds, round?: Boolean): Point[]
-	 * Clips the polygon geometry defined by the given `points` by the given bounds (using the [Sutherland-Hodgeman algorithm](https://en.wikipedia.org/wiki/Sutherland%E2%80%93Hodgman_algorithm)).
-	 * Used by Leaflet to only show polygon points that are on the screen or near, increasing
-	 * performance. Note that polygon points needs different algorithm for clipping
-	 * than polyline, so there's a seperate method for it.
-	 */
+     * Clips the polygon geometry defined by the given `points` by the given bounds (using the [Sutherland-Hodgeman algorithm](https://en.wikipedia.org/wiki/Sutherland%E2%80%93Hodgman_algorithm)).
+     * Used by Leaflet to only show polygon points that are on the screen or near, increasing
+     * performance. Note that polygon points needs different algorithm for clipping
+     * than polyline, so there's a seperate method for it.
+     */
     L.PolyUtil.clipPolygon = function (points, bounds, round) {
         var clippedPoints,
             edges = [1, 4, 2, 8],
@@ -9040,50 +9040,50 @@
 
 
     /*
-	 * @class Polygon
-	 * @aka L.Polygon
-	 * @inherits Polyline
-	 *
-	 * A class for drawing polygon overlays on a map. Extends `Polyline`.
-	 *
-	 * Note that points you pass when creating a polygon shouldn't have an additional last point equal to the first one — it's better to filter out such points.
-	 *
-	 *
-	 * @example
-	 *
-	 * ```js
-	 * // create a red polygon from an array of LatLng points
-	 * var latlngs = [[37, -109.05],[41, -109.03],[41, -102.05],[37, -102.04]];
-	 *
-	 * var polygon = L.polygon(latlngs, {color: 'red'}).addTo(map);
-	 *
-	 * // zoom the map to the polygon
-	 * map.fitBounds(polygon.getBounds());
-	 * ```
-	 *
-	 * You can also pass an array of arrays of latlngs, with the first array representing the outer shape and the other arrays representing holes in the outer shape:
-	 *
-	 * ```js
-	 * var latlngs = [
-	 *   [[37, -109.05],[41, -109.03],[41, -102.05],[37, -102.04]], // outer ring
-	 *   [[37.29, -108.58],[40.71, -108.58],[40.71, -102.50],[37.29, -102.50]] // hole
-	 * ];
-	 * ```
-	 *
-	 * Additionally, you can pass a multi-dimensional array to represent a MultiPolygon shape.
-	 *
-	 * ```js
-	 * var latlngs = [
-	 *   [ // first polygon
-	 *     [[37, -109.05],[41, -109.03],[41, -102.05],[37, -102.04]], // outer ring
-	 *     [[37.29, -108.58],[40.71, -108.58],[40.71, -102.50],[37.29, -102.50]] // hole
-	 *   ],
-	 *   [ // second polygon
-	 *     [[41, -111.03],[45, -111.04],[45, -104.05],[41, -104.05]]
-	 *   ]
-	 * ];
-	 * ```
-	 */
+     * @class Polygon
+     * @aka L.Polygon
+     * @inherits Polyline
+     *
+     * A class for drawing polygon overlays on a map. Extends `Polyline`.
+     *
+     * Note that points you pass when creating a polygon shouldn't have an additional last point equal to the first one — it's better to filter out such points.
+     *
+     *
+     * @example
+     *
+     * ```js
+     * // create a red polygon from an array of LatLng points
+     * var latlngs = [[37, -109.05],[41, -109.03],[41, -102.05],[37, -102.04]];
+     *
+     * var polygon = L.polygon(latlngs, {color: 'red'}).addTo(map);
+     *
+     * // zoom the map to the polygon
+     * map.fitBounds(polygon.getBounds());
+     * ```
+     *
+     * You can also pass an array of arrays of latlngs, with the first array representing the outer shape and the other arrays representing holes in the outer shape:
+     *
+     * ```js
+     * var latlngs = [
+     *   [[37, -109.05],[41, -109.03],[41, -102.05],[37, -102.04]], // outer ring
+     *   [[37.29, -108.58],[40.71, -108.58],[40.71, -102.50],[37.29, -102.50]] // hole
+     * ];
+     * ```
+     *
+     * Additionally, you can pass a multi-dimensional array to represent a MultiPolygon shape.
+     *
+     * ```js
+     * var latlngs = [
+     *   [ // first polygon
+     *     [[37, -109.05],[41, -109.03],[41, -102.05],[37, -102.04]], // outer ring
+     *     [[37.29, -108.58],[40.71, -108.58],[40.71, -102.50],[37.29, -102.50]] // hole
+     *   ],
+     *   [ // second polygon
+     *     [[41, -111.03],[45, -111.04],[45, -104.05],[41, -104.05]]
+     *   ]
+     * ];
+     * ```
+     */
 
     L.Polygon = L.Polyline.extend({
 
@@ -9194,30 +9194,30 @@
 
 
     /*
-	 * L.Rectangle extends Polygon and creates a rectangle when passed a LatLngBounds object.
-	 */
+     * L.Rectangle extends Polygon and creates a rectangle when passed a LatLngBounds object.
+     */
 
     /*
-	 * @class Rectangle
-	 * @aka L.Retangle
-	 * @inherits Polygon
-	 *
-	 * A class for drawing rectangle overlays on a map. Extends `Polygon`.
-	 *
-	 * @example
-	 *
-	 * ```js
-	 * // define rectangle geographical bounds
-	 * var bounds = [[54.559322, -5.767822], [56.1210604, -3.021240]];
-	 *
-	 * // create an orange rectangle
-	 * L.rectangle(bounds, {color: "#ff7800", weight: 1}).addTo(map);
-	 *
-	 * // zoom the map to the rectangle bounds
-	 * map.fitBounds(bounds);
-	 * ```
-	 *
-	 */
+     * @class Rectangle
+     * @aka L.Retangle
+     * @inherits Polygon
+     *
+     * A class for drawing rectangle overlays on a map. Extends `Polygon`.
+     *
+     * @example
+     *
+     * ```js
+     * // define rectangle geographical bounds
+     * var bounds = [[54.559322, -5.767822], [56.1210604, -3.021240]];
+     *
+     * // create an orange rectangle
+     * L.rectangle(bounds, {color: "#ff7800", weight: 1}).addTo(map);
+     *
+     * // zoom the map to the rectangle bounds
+     * map.fitBounds(bounds);
+     * ```
+     *
+     */
 
 
     L.Rectangle = L.Polygon.extend({
@@ -9251,12 +9251,12 @@
 
 
     /*
-	 * @class CircleMarker
-	 * @aka L.CircleMarker
-	 * @inherits Path
-	 *
-	 * A circle of a fixed size with radius specified in pixels. Extends `Path`.
-	 */
+     * @class CircleMarker
+     * @aka L.CircleMarker
+     * @inherits Path
+     *
+     * A circle of a fixed size with radius specified in pixels. Extends `Path`.
+     */
 
     L.CircleMarker = L.Path.extend({
 
@@ -9348,20 +9348,20 @@
 
 
     /*
-	 * @class Circle
-	 * @aka L.Circle
-	 * @inherits CircleMarker
-	 *
-	 * A class for drawing circle overlays on a map. Extends `CircleMarker`.
-	 *
-	 * It's an approximation and starts to diverge from a real circle closer to poles (due to projection distortion).
-	 *
-	 * @example
-	 *
-	 * ```js
-	 * L.circle([50.5, 30.5], {radius: 200}).addTo(map);
-	 * ```
-	 */
+     * @class Circle
+     * @aka L.Circle
+     * @inherits CircleMarker
+     *
+     * A class for drawing circle overlays on a map. Extends `CircleMarker`.
+     *
+     * It's an approximation and starts to diverge from a real circle closer to poles (due to projection distortion).
+     *
+     * @example
+     *
+     * ```js
+     * L.circle([50.5, 30.5], {radius: 200}).addTo(map);
+     * ```
+     */
 
     L.Circle = L.CircleMarker.extend({
 
@@ -9456,40 +9456,40 @@
 
 
     /*
-	 * @class SVG
-	 * @inherits Renderer
-	 * @aka L.SVG
-	 *
-	 * Allows vector layers to be displayed with [SVG](https://developer.mozilla.org/docs/Web/SVG).
-	 * Inherits `Renderer`.
-	 *
-	 * Due to [technical limitations](http://caniuse.com/#search=svg), SVG is not
-	 * available in all web browsers, notably Android 2.x and 3.x.
-	 *
-	 * Although SVG is not available on IE7 and IE8, these browsers support
-	 * [VML](https://en.wikipedia.org/wiki/Vector_Markup_Language)
-	 * (a now deprecated technology), and the SVG renderer will fall back to VML in
-	 * this case.
-	 *
-	 * @example
-	 *
-	 * Use SVG by default for all paths in the map:
-	 *
-	 * ```js
-	 * var map = L.map('map', {
-	 * 	renderer: L.svg()
-	 * });
-	 * ```
-	 *
-	 * Use a SVG renderer with extra padding for specific vector geometries:
-	 *
-	 * ```js
-	 * var map = L.map('map');
-	 * var myRenderer = L.svg({ padding: 0.5 });
-	 * var line = L.polyline( coordinates, { renderer: myRenderer } );
-	 * var circle = L.circle( center, { renderer: myRenderer } );
-	 * ```
-	 */
+     * @class SVG
+     * @inherits Renderer
+     * @aka L.SVG
+     *
+     * Allows vector layers to be displayed with [SVG](https://developer.mozilla.org/docs/Web/SVG).
+     * Inherits `Renderer`.
+     *
+     * Due to [technical limitations](http://caniuse.com/#search=svg), SVG is not
+     * available in all web browsers, notably Android 2.x and 3.x.
+     *
+     * Although SVG is not available on IE7 and IE8, these browsers support
+     * [VML](https://en.wikipedia.org/wiki/Vector_Markup_Language)
+     * (a now deprecated technology), and the SVG renderer will fall back to VML in
+     * this case.
+     *
+     * @example
+     *
+     * Use SVG by default for all paths in the map:
+     *
+     * ```js
+     * var map = L.map('map', {
+     * 	renderer: L.svg()
+     * });
+     * ```
+     *
+     * Use a SVG renderer with extra padding for specific vector geometries:
+     *
+     * ```js
+     * var map = L.map('map');
+     * var myRenderer = L.svg({ padding: 0.5 });
+     * var line = L.polyline( coordinates, { renderer: myRenderer } );
+     * var circle = L.circle( center, { renderer: myRenderer } );
+     * ```
+     */
 
     L.SVG = L.Renderer.extend({
 
@@ -9696,17 +9696,17 @@
 
 
     /*
-	 * Thanks to Dmitry Baranovsky and his Raphael library for inspiration!
-	 */
+     * Thanks to Dmitry Baranovsky and his Raphael library for inspiration!
+     */
 
     /*
-	 * @class SVG
-	 *
-	 * Although SVG is not available on IE7 and IE8, these browsers support [VML](https://en.wikipedia.org/wiki/Vector_Markup_Language), and the SVG renderer will fall back to VML in this case.
-	 *
-	 * VML was deprecated in 2012, which means VML functionality exists only for backwards compatibility
-	 * with old versions of Internet Explorer.
-	 */
+     * @class SVG
+     *
+     * Although SVG is not available on IE7 and IE8, these browsers support [VML](https://en.wikipedia.org/wiki/Vector_Markup_Language), and the SVG renderer will fall back to VML in this case.
+     *
+     * VML was deprecated in 2012, which means VML functionality exists only for backwards compatibility
+     * with old versions of Internet Explorer.
+     */
 
     // @namespace Browser; @property vml: Boolean
     // `true` if the browser supports [VML](https://en.wikipedia.org/wiki/Vector_Markup_Language).
@@ -9855,36 +9855,36 @@
 
 
     /*
-	 * @class Canvas
-	 * @inherits Renderer
-	 * @aka L.Canvas
-	 *
-	 * Allows vector layers to be displayed with [`<canvas>`](https://developer.mozilla.org/docs/Web/API/Canvas_API).
-	 * Inherits `Renderer`.
-	 *
-	 * Due to [technical limitations](http://caniuse.com/#search=canvas), Canvas is not
-	 * available in all web browsers, notably IE8, and overlapping geometries might
-	 * not display properly in some edge cases.
-	 *
-	 * @example
-	 *
-	 * Use Canvas by default for all paths in the map:
-	 *
-	 * ```js
-	 * var map = L.map('map', {
-	 * 	renderer: L.canvas()
-	 * });
-	 * ```
-	 *
-	 * Use a Canvas renderer with extra padding for specific vector geometries:
-	 *
-	 * ```js
-	 * var map = L.map('map');
-	 * var myRenderer = L.canvas({ padding: 0.5 });
-	 * var line = L.polyline( coordinates, { renderer: myRenderer } );
-	 * var circle = L.circle( center, { renderer: myRenderer } );
-	 * ```
-	 */
+     * @class Canvas
+     * @inherits Renderer
+     * @aka L.Canvas
+     *
+     * Allows vector layers to be displayed with [`<canvas>`](https://developer.mozilla.org/docs/Web/API/Canvas_API).
+     * Inherits `Renderer`.
+     *
+     * Due to [technical limitations](http://caniuse.com/#search=canvas), Canvas is not
+     * available in all web browsers, notably IE8, and overlapping geometries might
+     * not display properly in some edge cases.
+     *
+     * @example
+     *
+     * Use Canvas by default for all paths in the map:
+     *
+     * ```js
+     * var map = L.map('map', {
+     * 	renderer: L.canvas()
+     * });
+     * ```
+     *
+     * Use a Canvas renderer with extra padding for specific vector geometries:
+     *
+     * ```js
+     * var map = L.map('map');
+     * var myRenderer = L.canvas({ padding: 0.5 });
+     * var line = L.polyline( coordinates, { renderer: myRenderer } );
+     * var circle = L.circle( center, { renderer: myRenderer } );
+     * ```
+     */
 
     L.Canvas = L.Renderer.extend({
         getEvents: function () {
@@ -10365,74 +10365,74 @@
 
 
     /*
-	 * @class GeoJSON
-	 * @aka L.GeoJSON
-	 * @inherits FeatureGroup
-	 *
-	 * Represents a GeoJSON object or an array of GeoJSON objects. Allows you to parse
-	 * GeoJSON data and display it on the map. Extends `FeatureGroup`.
-	 *
-	 * @example
-	 *
-	 * ```js
-	 * L.geoJSON(data, {
-	 * 	style: function (feature) {
-	 * 		return {color: feature.properties.color};
-	 * 	}
-	 * }).bindPopup(function (layer) {
-	 * 	return layer.feature.properties.description;
-	 * }).addTo(map);
-	 * ```
-	 */
+     * @class GeoJSON
+     * @aka L.GeoJSON
+     * @inherits FeatureGroup
+     *
+     * Represents a GeoJSON object or an array of GeoJSON objects. Allows you to parse
+     * GeoJSON data and display it on the map. Extends `FeatureGroup`.
+     *
+     * @example
+     *
+     * ```js
+     * L.geoJSON(data, {
+     * 	style: function (feature) {
+     * 		return {color: feature.properties.color};
+     * 	}
+     * }).bindPopup(function (layer) {
+     * 	return layer.feature.properties.description;
+     * }).addTo(map);
+     * ```
+     */
 
     L.GeoJSON = L.FeatureGroup.extend({
 
         /* @section
-		 * @aka GeoJSON options
-		 *
-		 * @option pointToLayer: Function = *
-		 * A `Function` defining how GeoJSON points spawn Leaflet layers. It is internally
-		 * called when data is added, passing the GeoJSON point feature and its `LatLng`.
-		 * The default is to spawn a default `Marker`:
-		 * ```js
-		 * function(geoJsonPoint, latlng) {
-		 * 	return L.marker(latlng);
-		 * }
-		 * ```
-		 *
-		 * @option style: Function = *
-		 * A `Function` defining the `Path options` for styling GeoJSON lines and polygons,
-		 * called internally when data is added.
-		 * The default value is to not override any defaults:
-		 * ```js
-		 * function (geoJsonFeature) {
-		 * 	return {}
-		 * }
-		 * ```
-		 *
-		 * @option onEachFeature: Function = *
-		 * A `Function` that will be called once for each created `Feature`, after it has
-		 * been created and styled. Useful for attaching events and popups to features.
-		 * The default is to do nothing with the newly created layers:
-		 * ```js
-		 * function (feature, layer) {}
-		 * ```
-		 *
-		 * @option filter: Function = *
-		 * A `Function` that will be used to decide whether to include a feature or not.
-		 * The default is to include all features:
-		 * ```js
-		 * function (geoJsonFeature) {
-		 * 	return true;
-		 * }
-		 * ```
-		 * Note: dynamically changing the `filter` option will have effect only on newly
-		 * added data. It will _not_ re-evaluate already included features.
-		 *
-		 * @option coordsToLatLng: Function = *
-		 * A `Function` that will be used for converting GeoJSON coordinates to `LatLng`s.
-		 * The default is the `coordsToLatLng` static method.
-		 */
+         * @aka GeoJSON options
+         *
+         * @option pointToLayer: Function = *
+         * A `Function` defining how GeoJSON points spawn Leaflet layers. It is internally
+         * called when data is added, passing the GeoJSON point feature and its `LatLng`.
+         * The default is to spawn a default `Marker`:
+         * ```js
+         * function(geoJsonPoint, latlng) {
+         * 	return L.marker(latlng);
+         * }
+         * ```
+         *
+         * @option style: Function = *
+         * A `Function` defining the `Path options` for styling GeoJSON lines and polygons,
+         * called internally when data is added.
+         * The default value is to not override any defaults:
+         * ```js
+         * function (geoJsonFeature) {
+         * 	return {}
+         * }
+         * ```
+         *
+         * @option onEachFeature: Function = *
+         * A `Function` that will be called once for each created `Feature`, after it has
+         * been created and styled. Useful for attaching events and popups to features.
+         * The default is to do nothing with the newly created layers:
+         * ```js
+         * function (feature, layer) {}
+         * ```
+         *
+         * @option filter: Function = *
+         * A `Function` that will be used to decide whether to include a feature or not.
+         * The default is to include all features:
+         * ```js
+         * function (geoJsonFeature) {
+         * 	return true;
+         * }
+         * ```
+         * Note: dynamically changing the `filter` option will have effect only on newly
+         * added data. It will _not_ re-evaluate already included features.
+         *
+         * @option coordsToLatLng: Function = *
+         * A `Function` that will be used for converting GeoJSON coordinates to `LatLng`s.
+         * The default is the `coordsToLatLng` static method.
+         */
 
         initialize: function (geojson, options) {
             L.setOptions(this, options);
@@ -10760,20 +10760,20 @@
 
 
     /*
-	 * @class Draggable
-	 * @aka L.Draggable
-	 * @inherits Evented
-	 *
-	 * A class for making DOM elements draggable (including touch support).
-	 * Used internally for map and marker dragging. Only works for elements
-	 * that were positioned with [`L.DomUtil.setPosition`](#domutil-setposition).
-	 *
-	 * @example
-	 * ```js
-	 * var draggable = new L.Draggable(elementToDrag);
-	 * draggable.enable();
-	 * ```
-	 */
+     * @class Draggable
+     * @aka L.Draggable
+     * @inherits Evented
+     *
+     * A class for making DOM elements draggable (including touch support).
+     * Used internally for map and marker dragging. Only works for elements
+     * that were positioned with [`L.DomUtil.setPosition`](#domutil-setposition).
+     *
+     * @example
+     * ```js
+     * var draggable = new L.Draggable(elementToDrag);
+     * draggable.enable();
+     * ```
+     */
 
     L.Draggable = L.Evented.extend({
 
@@ -10982,9 +10982,9 @@
 
 
     /*
-		L.Handler is a base class for handler classes that are used internally to inject
-		interaction features like dragging to classes like Map and Marker.
-	*/
+        L.Handler is a base class for handler classes that are used internally to inject
+        interaction features like dragging to classes like Map and Marker.
+    */
 
     // @class Handler
     // @aka L.Handler
@@ -11032,8 +11032,8 @@
 
 
     /*
-	 * L.Handler.MapDrag is used to make the map draggable (with panning inertia), enabled by default.
-	 */
+     * L.Handler.MapDrag is used to make the map draggable (with panning inertia), enabled by default.
+     */
 
     // @namespace Map
     // @section Interaction Options
@@ -11261,8 +11261,8 @@
 
 
     /*
-	 * L.Handler.DoubleClickZoom is used to handle double-click zoom on the map, enabled by default.
-	 */
+     * L.Handler.DoubleClickZoom is used to handle double-click zoom on the map, enabled by default.
+     */
 
     // @namespace Map
     // @section Interaction Options
@@ -11316,8 +11316,8 @@
 
 
     /*
-	 * L.Handler.ScrollWheelZoom is used by L.Map to enable mouse scroll wheel zoom on the map.
-	 */
+     * L.Handler.ScrollWheelZoom is used by L.Map to enable mouse scroll wheel zoom on the map.
+     */
 
     // @namespace Map
     // @section Interaction Options
@@ -11405,8 +11405,8 @@
 
 
     /*
-	 * Extends the event handling code with double tap support for mobile browsers.
-	 */
+     * Extends the event handling code with double tap support for mobile browsers.
+     */
 
     L.extend(L.DomEvent, {
 
@@ -11499,8 +11499,8 @@
 
 
     /*
-	 * Extends L.DomEvent to provide touch support for Internet Explorer and Windows-based devices.
-	 */
+     * Extends L.DomEvent to provide touch support for Internet Explorer and Windows-based devices.
+     */
 
     L.extend(L.DomEvent, {
 
@@ -11633,8 +11633,8 @@
 
 
     /*
-	 * L.Handler.TouchZoom is used by L.Map to add pinch zoom on supported mobile browsers.
-	 */
+     * L.Handler.TouchZoom is used by L.Map to add pinch zoom on supported mobile browsers.
+     */
 
     // @namespace Map
     // @section Interaction Options
@@ -11762,8 +11762,8 @@
 
 
     /*
-	 * L.Map.Tap is used to enable mobile hacks like quick taps and long hold.
-	 */
+     * L.Map.Tap is used to enable mobile hacks like quick taps and long hold.
+     */
 
     // @namespace Map
     // @section Interaction Options
@@ -11892,9 +11892,9 @@
 
 
     /*
-	 * L.Handler.BoxZoom is used to add shift-drag zoom interaction to the map
-	 * (zoom to a selected bounding box), enabled by default.
-	 */
+     * L.Handler.BoxZoom is used to add shift-drag zoom interaction to the map
+     * (zoom to a selected bounding box), enabled by default.
+     */
 
     // @namespace Map
     // @section Interaction Options
@@ -12018,8 +12018,8 @@
 
 
     /*
-	 * L.Map.Keyboard is handling keyboard interaction with the map, enabled by default.
-	 */
+     * L.Map.Keyboard is handling keyboard interaction with the map, enabled by default.
+     */
 
     // @namespace Map
     // @section Keyboard Navigation Options
@@ -12195,22 +12195,22 @@
 
 
     /*
-	 * L.Handler.MarkerDrag is used internally by L.Marker to make the markers draggable.
-	 */
+     * L.Handler.MarkerDrag is used internally by L.Marker to make the markers draggable.
+     */
 
 
     /* @namespace Marker
-	 * @section Interaction handlers
-	 *
-	 * Interaction handlers are properties of a marker instance that allow you to control interaction behavior in runtime, enabling or disabling certain features such as dragging (see `Handler` methods). Example:
-	 *
-	 * ```js
-	 * marker.dragging.disable();
-	 * ```
-	 *
-	 * @property dragging: Handler
-	 * Marker dragging handler (by both mouse and touch).
-	 */
+     * @section Interaction handlers
+     *
+     * Interaction handlers are properties of a marker instance that allow you to control interaction behavior in runtime, enabling or disabling certain features such as dragging (see `Handler` methods). Example:
+     *
+     * ```js
+     * marker.dragging.disable();
+     * ```
+     *
+     * @property dragging: Handler
+     * Marker dragging handler (by both mouse and touch).
+     */
 
     L.Handler.MarkerDrag = L.Handler.extend({
         initialize: function (marker) {
@@ -12302,13 +12302,13 @@
 
 
     /*
-	 * @class Control
-	 * @aka L.Control
-	 * @inherits Class
-	 *
-	 * L.Control is a base class for implementing map controls. Handles positioning.
-	 * All other controls extend from this class.
-	 */
+     * @class Control
+     * @aka L.Control
+     * @inherits Class
+     *
+     * L.Control is a base class for implementing map controls. Handles positioning.
+     * All other controls extend from this class.
+     */
 
     L.Control = L.Class.extend({
         // @section
@@ -12325,11 +12325,11 @@
         },
 
         /* @section
-		 * Classes extending L.Control will inherit the following methods:
-		 *
-		 * @method getPosition: string
-		 * Returns the position of the control.
-		 */
+         * Classes extending L.Control will inherit the following methods:
+         *
+         * @method getPosition: string
+         * Returns the position of the control.
+         */
         getPosition: function () {
             return this.options.position;
         },
@@ -12410,20 +12410,20 @@
     };
 
     /* @section Extension methods
-	 * @uninheritable
-	 *
-	 * Every control should extend from `L.Control` and (re-)implement the following methods.
-	 *
-	 * @method onAdd(map: Map): HTMLElement
-	 * Should return the container DOM element for the control and add listeners on relevant map events. Called on [`control.addTo(map)`](#control-addTo).
-	 *
-	 * @method onRemove(map: Map)
-	 * Optional method. Should contain all clean up code that removes the listeners previously added in [`onAdd`](#control-onadd). Called on [`control.remove()`](#control-remove).
-	 */
+     * @uninheritable
+     *
+     * Every control should extend from `L.Control` and (re-)implement the following methods.
+     *
+     * @method onAdd(map: Map): HTMLElement
+     * Should return the container DOM element for the control and add listeners on relevant map events. Called on [`control.addTo(map)`](#control-addTo).
+     *
+     * @method onRemove(map: Map)
+     * Optional method. Should contain all clean up code that removes the listeners previously added in [`onAdd`](#control-onadd). Called on [`control.remove()`](#control-remove).
+     */
 
     /* @namespace Map
-	 * @section Methods for Layers and Controls
-	 */
+     * @section Methods for Layers and Controls
+     */
     L.Map.include({
         // @method addControl(control: Control): this
         // Adds the given control to the map
@@ -12465,12 +12465,12 @@
 
 
     /*
-	 * @class Control.Zoom
-	 * @aka L.Control.Zoom
-	 * @inherits Control
-	 *
-	 * A basic zoom control with two buttons (zoom in and zoom out). It is put on the map by default unless you set its [`zoomControl` option](#map-zoomcontrol) to `false`. Extends `Control`.
-	 */
+     * @class Control.Zoom
+     * @aka L.Control.Zoom
+     * @inherits Control
+     *
+     * A basic zoom control with two buttons (zoom in and zoom out). It is put on the map by default unless you set its [`zoomControl` option](#map-zoomcontrol) to `false`. Extends `Control`.
+     */
 
     L.Control.Zoom = L.Control.extend({
         // @section
@@ -12546,8 +12546,8 @@
             link.title = title;
 
             /*
-			 * Will force screen readers like VoiceOver to read this as "Zoom in - button"
-			 */
+             * Will force screen readers like VoiceOver to read this as "Zoom in - button"
+             */
             link.setAttribute('role', 'button');
             link.setAttribute('aria-label', title);
 
@@ -12599,12 +12599,12 @@
     };
 
     /*
-	 * @class Control.Attribution
-	 * @aka L.Control.Attribution
-	 * @inherits Control
-	 *
-	 * The attribution control allows you to display attribution data in a small text box on a map. It is put on the map by default unless you set its [`attributionControl` option](#map-attributioncontrol) to `false`, and it fetches attribution texts from layers with the [`getAttribution` method](#layer-getattribution) automatically. Extends Control.
-	 */
+     * @class Control.Attribution
+     * @aka L.Control.Attribution
+     * @inherits Control
+     *
+     * The attribution control allows you to display attribution data in a small text box on a map. It is put on the map by default unless you set its [`attributionControl` option](#map-attributioncontrol) to `false`, and it fetches attribution texts from layers with the [`getAttribution` method](#layer-getattribution) automatically. Extends Control.
+     */
 
     L.Control.Attribution = L.Control.extend({
         // @section
@@ -12726,18 +12726,18 @@
 
 
     /*
-	 * @class Control.Scale
-	 * @aka L.Control.Scale
-	 * @inherits Control
-	 *
-	 * A simple scale control that shows the scale of the current center of screen in metric (m/km) and imperial (mi/ft) systems. Extends `Control`.
-	 *
-	 * @example
-	 *
-	 * ```js
-	 * L.control.scale().addTo(map);
-	 * ```
-	 */
+     * @class Control.Scale
+     * @aka L.Control.Scale
+     * @inherits Control
+     *
+     * A simple scale control that shows the scale of the current center of screen in metric (m/km) and imperial (mi/ft) systems. Extends `Control`.
+     *
+     * @example
+     *
+     * ```js
+     * L.control.scale().addTo(map);
+     * ```
+     */
 
     L.Control.Scale = L.Control.extend({
         // @section
@@ -12857,43 +12857,43 @@
 
 
     /*
-	 * @class Control.Layers
-	 * @aka L.Control.Layers
-	 * @inherits Control
-	 *
-	 * The layers control gives users the ability to switch between different base layers and switch overlays on/off (check out the [detailed example](http://leafletjs.com/examples/layers-control.html)). Extends `Control`.
-	 *
-	 * @example
-	 *
-	 * ```js
-	 * var baseLayers = {
-	 * 	"Mapbox": mapbox,
-	 * 	"OpenStreetMap": osm
-	 * };
-	 *
-	 * var overlays = {
-	 * 	"Marker": marker,
-	 * 	"Roads": roadsLayer
-	 * };
-	 *
-	 * L.control.layers(baseLayers, overlays).addTo(map);
-	 * ```
-	 *
-	 * The `baseLayers` and `overlays` parameters are object literals with layer names as keys and `Layer` objects as values:
-	 *
-	 * ```js
-	 * {
-	 *     "<someName1>": layer1,
-	 *     "<someName2>": layer2
-	 * }
-	 * ```
-	 *
-	 * The layer names can contain HTML, which allows you to add additional styling to the items:
-	 *
-	 * ```js
-	 * {"<img src='my-layer-icon' /> <span class='my-layer-item'>My Layer</span>": myLayer}
-	 * ```
-	 */
+     * @class Control.Layers
+     * @aka L.Control.Layers
+     * @inherits Control
+     *
+     * The layers control gives users the ability to switch between different base layers and switch overlays on/off (check out the [detailed example](http://leafletjs.com/examples/layers-control.html)). Extends `Control`.
+     *
+     * @example
+     *
+     * ```js
+     * var baseLayers = {
+     * 	"Mapbox": mapbox,
+     * 	"OpenStreetMap": osm
+     * };
+     *
+     * var overlays = {
+     * 	"Marker": marker,
+     * 	"Roads": roadsLayer
+     * };
+     *
+     * L.control.layers(baseLayers, overlays).addTo(map);
+     * ```
+     *
+     * The `baseLayers` and `overlays` parameters are object literals with layer names as keys and `Layer` objects as values:
+     *
+     * ```js
+     * {
+     *     "<someName1>": layer1,
+     *     "<someName2>": layer2
+     * }
+     * ```
+     *
+     * The layer names can contain HTML, which allows you to add additional styling to the items:
+     *
+     * ```js
+     * {"<img src='my-layer-icon' /> <span class='my-layer-item'>My Layer</span>": myLayer}
+     * ```
+     */
 
 
     L.Control.Layers = L.Control.extend({

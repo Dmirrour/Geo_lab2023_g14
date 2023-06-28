@@ -161,7 +161,9 @@ SELECT * FROM ft_00_vias;
             SELECT ST_Buffer(ST_SetSRID(a.polyline, 32721), ((a.distanciamaxdesvio*9.41090001733132E-4) / 100)) AS buffer_geom
             FROM ambulancia a
             GROUP BY a.distanciamaxdesvio,a.polyline;
-
+CREATE OR REPLACE VIEW public.vista_montevideo
+ AS
+ SELECT st_setsrid(a.geom, 32721) FROM ft_00departamento a WHERE a.nombre='MONTEVIDEO';
   CREATE OR REPLACE VIEW public.vista_se_h
    AS
     SELECT se.idservicio,

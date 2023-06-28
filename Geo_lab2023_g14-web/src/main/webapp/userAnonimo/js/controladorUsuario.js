@@ -157,13 +157,12 @@ function wfsSelectHospitales() {
         });
 }
 
+
 var concatenarPoints = "";
 let camas;
 var geojsonLayeresCamas;
 function camasDisponibles() {
     //  var drawLayer = new L.FeatureGroup().addTo(map); // Crear una nueva capa de dibujo
-
-
     let cero = 0;
     let filters = "camaslibres>'" + cero + "'";
     let urlCamas =
@@ -219,7 +218,7 @@ function camasDisponibles() {
                     let popupContent =
                         '<div class="popup-content">' +
                         '<h5><b>' + properties.nombre + '</b></h5>' +
-                        '<em>aaaaCamas libres: </em><b>' + properties.camaslibres + '</b></br>' +
+                        '<em>Camas libres: </em><b>' + properties.camaslibres + '</b></br>' +
                         '<em>Total de camas: </em><b>' + properties.totalcama + '</b></br>' +
                         '<em>Hospital Nombre: </em><b>' + properties.nombrehospital + '</b></br>' +
                         '<em>Hospital Tipo: </em><b>' + properties.tipohospital + '</b></br>' +
@@ -240,7 +239,7 @@ function camasDisponibles() {
 }
 
 
-
+/////////////////// AMBULANCIAS QUE CORTAN UN POLIGONO ///////////////////
 var concatenarPoints = "";
 function dibujarPolyline() {
     var drawLayer = new L.FeatureGroup().addTo(map); // Crear una nueva capa de dibujo
@@ -280,7 +279,6 @@ function dibujarPolyline() {
             }
         });
 
-
     ////// Evento de dibujo de polilínea completada
     map.on('draw:created', function (e) {
         let layer = e.layer;
@@ -299,19 +297,22 @@ function dibujarPolyline() {
         }).join(',');
         var coordText = '[[' + polygonCoordinates + ']]';
         var coordPolygon = JSON.parse(coordText);
-        coordPolygon[0].push(coordPolygon[0][0]); // Para que la primera y ultima coordenada sean iguales 
 
+        console.log(coordText);
+        coordPolygon[0].push(coordPolygon[0][0]); // Para que la primera y ultima coordenada sean iguales 
         var polygons = turf.polygon(coordPolygon, {
             "fill": "#00F",
             "fill-opacity": 0.1
         });
         L.geoJSON(polygons).addTo(map);
 
-        var ptsWithin = turf.pointsWithinPolygon(points, polygons);
-        var diffGeojson = L.geoJSON(ptsWithin).addTo(map);
-        // map.fitBounds(diffGeojson.getBounds());  // efecto zoom
 
-        drawLayer.addLayer(layer); // Añadir la polilínea
+        var ptsWithin = turf.pointsWithinPolygon(points, polygons);
+
+        var diffGeojson = L.geoJSON(ptsWithin).addTo(map);
+        //  map.fitBounds(diffGeojson.getBounds());  // efecto zoom
+
+        //   drawLayer.addLayer(layer); // Añadir la polilínea
     });
 
     // Limpiar la capa de dibujo cuando se haga clic en el mapa
@@ -338,11 +339,7 @@ let loAmb2aux;
 let laAmb2aux;
 let prop;
 function masCercana(seleccionEsq) {
-    console.log("selectEsq: " + seleccionEsq.lat, seleccionEsq.lng);
-    //  'CQL_FILTER=DWITHIN(point, POINT(-56.18581498973073 -34.86255776861203), 5000000, meters)&' +
-    //  'CQL_FILTER=INTERSECTS(buffer_zona_cobertura,POINT(' + coorUserlon + ' ' + coorUserlat + '))';
-    //  geojsonLa = L.geoJSON(null, {
-    // style: {     color: 'red',  weight: 0.8, opacity: 0.5  }, }).addTo(map);
+    // console.log("selectEsq: " + seleccionEsq.lat, seleccionEsq.lng);
     let urlss =
         'http://localhost:8081/geoserver/wfs?' +
         'service=WFS&' +
@@ -373,11 +370,10 @@ function masCercana(seleccionEsq) {
                         laAmb2,
                         loAmb2
                     });
-                    console.log(laAmb2 + " :: " + loAmb2, "distancia: ", distancia, idhosss);
+                    //      console.log(laAmb2 + " :: " + loAmb2, "distancia: ", distancia, idhosss);
                 }
             }
-            console.log(laAmb2 + " 9a9 " + loAmb2, "distancia: ", menorDistancia, idhosss);
-            console.log(idhosss + " id ");
+            //  console.log(laAmb2 + " 9a9 " + loAmb2, "distancia: ", menorDistancia, idhosss);
             initLayers(idhosss);
             openFrm();
             ocultarFrm();
@@ -386,6 +382,7 @@ function masCercana(seleccionEsq) {
             console.error('Error:', error);
         });
 }
+
 
 function obtenerCoordenadasGPS() {
     if (navigator.geolocation) {
@@ -401,8 +398,9 @@ function obtenerCoordenadasGPS() {
         }, function (error) {
             console.error("Error al obtener la ubicación: " + error.message);
         });
-    } else {+
-        console.error("Tu navegador no admite la geolocalización.");
+    } else {
+        +
+            console.error("Tu navegador no admite la geolocalización.");
     }
 }
 
@@ -445,7 +443,7 @@ function intersectpoint(coorUserlat, coorUserlon) {
         })
         .then(function (data) {
             geojsonLayer.addData(data);
-            console.log("DATOS: ", data);
+            //    console.log("DATOS: ", data);
             data.features.forEach(function (feature) {
                 idhos = data.features[0].properties.first_point_recorrido;
                 a = idhos.coordinates[0];
@@ -551,6 +549,7 @@ function addLayerWFSbuf() {
 
 }
 
+
 function limpiarMapa() {
     map.removeLayer(geojsonLayere);
     map.removeLayer(geojsonLayeres);
@@ -593,7 +592,6 @@ function intersectpoint2() {  ///adriana
     obtenerCoordenadasGPS();
     let latiPrueba = this.latitudeGPS;
     let lonPrueba = this.longitudeGPS;
-    console.log(latiPrueba + " " + lonPrueba + "Putito salio");
     let geojsonLayer = L.geoJSON(null, {
         style: {
             color: 'red',

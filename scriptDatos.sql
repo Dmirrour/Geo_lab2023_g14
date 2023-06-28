@@ -238,6 +238,13 @@ SELECT st_endpoint(polyline) from ambulancia
 
 
 
+CREATE OR REPLACE VIEW public.vista_union_buf
+ AS
+   SELECT ST_Union(buffer_geom) AS buffer_geom
+    FROM (
+        SELECT ST_Buffer(ST_SetSRID(a.polyline, 32721), ((a.distanciamaxdesvio * 9.41090001733132E-4) / 100)) AS buffer_geom
+        FROM ambulancia a
+    ) AS buffer_subquery
 
 
 

@@ -126,14 +126,16 @@ L.Control.Select = L.Control.extend({
           }
         } else {
           newState.selected = data.item.value;
-          //   console.log("Seleccionado: ");
-        }
 
+          console.log("else: ");
+        }
+        
         newState.open = data.item.parent;
+        newState.open = false;
         break;
 
       case "GROUP_OPEN":
-        // console.log("Seleccionado:");
+        console.log("GROUP_OPEN:");
         newState.open = data.item.value;
         break;
 
@@ -151,9 +153,10 @@ L.Control.Select = L.Control.extend({
 
       case "MENU_CLOSE":
         //  newState.open = _hideMenu;
+
         newState.open = false;
         // selectCtrlInicio.remove();
-        //  console.log("s:");
+        console.log("s:");
         break;
     }
 
