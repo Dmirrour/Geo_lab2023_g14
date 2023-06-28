@@ -51,9 +51,9 @@ class ControladorMapa extends Configuracion {
         ///////////////////////// OPCIONES DE MAPA /////////////////////////
         this.map = L.map('map', {
             center: [-34.8797018070320851, -56.262557241497211],
-            zoom: 18,
+            zoom: 8,
             minZoom: 2,
-            maxZoom: 18,
+            maxZoom: 11,
             layers: [this.openst],
             zoomControl: true
         });

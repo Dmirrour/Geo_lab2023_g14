@@ -41,7 +41,7 @@
                             <p:commandButton id="mostraServicios" styleClass="rounded-button ui-button-primary" icon="pi pi-plus" onclick="PF('listaServicios_#{hospitales.servicioEmergencia}').show();" />
                         </p:column>
                         <p:column headerText="Ambu.">
-                            <p:dialog id="h_ambu" header="Ambulacias" widgetVar="listaAmbulacias_#{hospitales.ambulancaDTOS}" resizable="false">
+                            <p:dialog id="h_ambu" header="Ambulacias" widgetVar="listaAmbulacias_#{hospitales.ambulanciaDTOS}" resizable="false">
                                 <p:dataTable paginator="true" rows="4" id="table_ambulancias" value="#{hospitales.ambulanciaDTOS}" var="amb" disabledSelection="true">
                                     <p:column headerText="ID Ambulancia">
                                         <p:outputLabel value="#{amb.idAmbulancia}" />
@@ -54,7 +54,7 @@
                                     </p:column>
                                 </p:dataTable>
                             </p:dialog>
-                            <p:commandButton id="mostrarAmbulacias" styleClass="rounded-button ui-button-primary" icon="pi pi-plus" onclick="PF('listaAmbulacias_#{hospitales.ambulancaDTOS}').show();" />
+                            <p:commandButton id="mostrarAmbulacias" styleClass="rounded-button ui-button-primary" icon="pi pi-plus" onclick="PF('listaAmbulacias_#{hospitales.ambulanciaDTOS}').show();" />
                         </p:column>
                         <p:column headerText="Elim.">
                             <p:commandButton styleClass="rounded-button ui-button-danger" icon="pi pi-trash" process="@this" action="#{adminBean.eliminarH(hospitales.idHospital)}" update="table messages" />
