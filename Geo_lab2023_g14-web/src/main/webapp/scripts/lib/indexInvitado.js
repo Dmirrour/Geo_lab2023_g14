@@ -175,15 +175,13 @@ function initLayers(itemValue) {
         urlAmbu += '&CQL_FILTER=' + filter2;
     }
 
-    initLayerServicioEm(urlSe, 'layerSE'); // point se
-    initLayerLineAmbu(urlAmbu, 'layerAmulancia'); // polyline ambu
-    initLayerPointAmbu(urlAmbu, 'pointAmulancia'); // point Ambu
+    initLayerServicioEm(urlSe, 'layerSE'); // POINT SERVICIO EMERGENCIA
+    initLayerLineAmbu(urlAmbu, 'layerAmulancia'); // POLYLINE AMBULANCIA
+    initLayerPointAmbu(urlAmbu, 'pointAmulancia'); // POINT AMBULANCIA
 }
 
 
 //////////////////////// SERVICIO EMERGENCIA ///////////////////////
-let laSe;
-let loSe;
 let geojsonLayer;
 var coorServicioEmer;
 function initLayerServicioEm(urlSe, layerName) {
@@ -201,7 +199,7 @@ function initLayerServicioEm(urlSe, layerName) {
                 fillOpacity: 0.8
             });
         }
-    }).addTo(map); // Crear una capa de GeoJSON, agrega los puntos de SERVICIO EMERGENCIA 
+    }).addTo(map); // Crear una capa de GeoJSON, agrega los puntos de SERVICIO EMERGENCIA
 
     fetch(urlSe)
         .then(function (response) {
@@ -250,6 +248,7 @@ function initLayerServicioEm(urlSe, layerName) {
         });
 }
 
+
 //////////////////////// LINESTRING AMBULANCIA ///////////////////////
 let geojsonLayere;
 function initLayerLineAmbu(urlAmbu, layerName) {
@@ -258,7 +257,7 @@ function initLayerLineAmbu(urlAmbu, layerName) {
             return response.json();
         })
         .then(function (data) {
-            geojsonLayere.addData(data);
+            //  geojsonLayere.addData(data);
             geojsonLayere.options.layerName = layerName; // console.log(laAmb + ' ' + loAmb);
         })
         .catch(function (error) {
@@ -277,6 +276,8 @@ function initLayerLineAmbu(urlAmbu, layerName) {
 //////////////////////// POINT AMBULANCIA ///////////////////////
 // let loAmb;let laAmb; let datosAmd;
 let geojsonLayeres;
+var marker3;
+var recorridoInteractivoa;
 function initLayerPointAmbu(urlAmbu, layerNames) {
     fetch(urlAmbu)
         .then(function (response) {
@@ -293,13 +294,52 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
             geojsonLayeres.addData(data);
 
             let puntosArray = [];
+            let concatenarPoints2 = "";
             for (let i = 0; i < data.features.length; i++) {
                 laAmb = data.features[i].geometry.coordinates[0][0];
                 loAmb = data.features[i].geometry.coordinates[0][1];
                 datosAmd = data.features[i].properties.idcodigo;
                 distancia = data.features[i].properties.distanciamaxdesvio;
                 idhospital = data.features[i].properties.hospital_idhospital;
-                //   console.log(laAmb + " 88 " + loAmb);
+                let largo = 0;
+                largo = data.features[i].geometry.coordinates.length;
+                concatenarPoints2 = "";
+                for (let j = 0; j < largo; j++) {
+                    laAmba = data.features[i].geometry.coordinates[j][0];
+                    loAmba = data.features[i].geometry.coordinates[j][1];
+                    //    console.log("lardo ", largo - 1, j);
+                    concatenarPoints2 = '[' + loAmba + ',' + laAmba + '],' + concatenarPoints2;
+                    //  console.log(concatenarPoints2);
+                }
+                for (let j = largo - 1; j >= 0; j--) {
+                    laAmba = data.features[i].geometry.coordinates[j][0];
+                    loAmba = data.features[i].geometry.coordinates[j][1];
+                    //    console.log("lardo ", largo - 1, j);
+                    concatenarPoints2 = '[' + loAmba + ',' + laAmba + '],' + concatenarPoints2;
+                    //     console.log(concatenarPoints2);
+                }
+
+                //   console.log(concatenarPoints2);
+                concatenarPoints2 = concatenarPoints2.slice(0, -1); // quitar coma final
+                concatenarPoints2 = '[' + concatenarPoints2 + ']';
+                var coordPoint3 = JSON.parse(concatenarPoints2);
+
+                var iconA = L.icon({
+                    iconUrl: './resources/marker-icons/ambulance.png',
+                    iconSize: [22, 22]
+                });
+
+                //  coordPoint3[0].push(coordPoint3[0][0]); // Para que la primera y ultima coordenada sean iguales
+                recorridoInteractivoa = coordPoint3;
+                marker3 = L.Marker.movingMarker(recorridoInteractivoa,
+                    [1500, 1500, 1500, 1500, 1500, 1200, 1500], {
+                        autostart: true, loop: true, icon: iconA
+                    }).addTo(map);
+
+                marker3.loops = 0;
+                marker3.on('loop', function (e) {
+                    marker3.loops++;
+                });
                 puntosArray.push({
                     laAmb,
                     loAmb,
@@ -309,12 +349,12 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
                 });
             }
 
-            // Point Ambulancia 
+            // Point Ambulancia
             let puntos = {
                 type: 'FeatureCollection',
                 features: []
             };
-            // console.log(puntosArray);
+
             puntosArray.forEach(function (datos) {
                 let feature = {
                     type: 'Feature',
@@ -330,7 +370,6 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
                 };
                 puntos.features.push(feature);
             });
-            //   console.log(puntosArray);
 
             geojsonLayeres = L.geoJSON(puntos, {
                 pointToLayer: function (feature, latlng) {
@@ -338,7 +377,7 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
                         icon: iconA
                     });
                 }
-            }).addTo(map);
+            })//.addTo(map);
             geojsonLayeres.addData(puntos);
 
             geojsonLayeres.eachLayer(function (puntos) {
@@ -346,10 +385,9 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
                     let properties = e.target.feature.properties;
                     let geo = e.target.feature.geometry.coordinates;
                     // console.log(geo);
-                    //   console.log(properties);
                     let popupContent =
                         '<div class="popup-content">' +
-                        '<em>Codigo: </em><b>' + properties.idcodigo + '</b></p>' +
+                        '<h5><b>Codigo ' + properties.idcodigo + '</b></h5>' +
                         '<em>Distancia max. desvio: </em><b>' + properties.distanciamaxdesvio + ' m</b></br>' +
                         '<em>Hospital: </em><b>' + properties.hospital_idhospital + '</b></br>' +
                         //    '<em>Coordenadas: </em><b>' + geo[0] + " , " + geo[1] + '</b></br>' +
@@ -374,24 +412,135 @@ var iconA = L.icon({
 });
 
 
-
-///////////////////////// GENERA COLOR /////////////////////////
-function moverAmbu() {
-
-
-
+///////////////////// ZONAS SIN COBERTURA /////////////////////
+let geojsonsLayere;
+var bufferCoordinates;
+var polygons;
+let geojsonLayerBuff2;
+function zonasSinCobertura() {
+    // geojsonLayerBuff2 = L.geoJSON(null, {
+    //     style: {
+    //         //   color: 'red',
+    //         weight: 1,
+    //         opacity: 0.4
+    //     },
+    // })//.addTo(map);
+    let urlSinCobertura =
+        'http://localhost:8081/geoserver/wfs?' +
+        'service=WFS&' +
+        'request=GetFeature&' +
+        'typeName=Geo_lab2023_g14PersistenceUnit:vista_union_buf&' +
+        'srsName=EPSG:32721&' +
+        'outputFormat=application/json';
+    fetch(urlSinCobertura)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            //      geojsonLayerBuff2.addData(data);
+            var features = data.features;
+            features.forEach(function (feature) {
+                var geometry = feature.geometry;
+                bufferCoordinates = geometry.coordinates;
+                buffLenght = geometry.coordinates.length;
+                polygons = turf.polygon(bufferCoordinates[0], {});
+            });
+            L.geoJson(polygonMontevideo(), {
+                onEachFeature: function (feature, layer) {
+                    var poly1 = feature.geometry;
+                    L.geoJson(polygons, {
+                        onEachFeature: function (feature, layer) {
+                            var poly2 = feature.geometry;
+                            var intersection = turf.difference(poly1, poly2);
+                            for (let i = 0; i < buffLenght; i++) {
+                                polygons = turf.polygon(bufferCoordinates[i], {});
+                                intersection = turf.difference(intersection, polygons);
+                            }
+                            //   L.geoJson(intersection).addTo(map);
+                            L.geoJSON(intersection, {
+                                style: {
+                                    color: 'blue',
+                                    weight: 1,
+                                    opacity: 0.7
+                                },
+                            }).addTo(map);
+                            //  console.log({ poly1, poly2, intersection })
+                        }
+                    })
+                }
+            })
+            // difference // intersect
+        })
+        .catch(function (error) {
+            console.error('Error:', error);
+        });
 
 }
 
 
 
 
+
+
+/////////////////////////ARRIBA OK /////////////////////////
+function moviendoAmbulancia() {
+    control.log("mode ", loAmb);
+    var recorridoInteractivo = [[51.507222, -0.1275], [50.85, 4.35], [50.85, 4.35], [51.507222, -0.1275]];
+    var marker3 = L.Marker.movingMarker(recorridoInteractivo,
+        [2000, 0, 2000, 0], { autostart: true, loop: true }).addTo(map);
+    marker3.loops = 0;
+    marker3.bindPopup('', { closeOnClick: false });
+    marker3.on('loop', function (e) {
+        marker3.loops++;
+        if (e.elapsedTime < 50) {
+            marker3.getPopup().setContent("<b>Loop: " + marker3.loops + "</b>")
+            marker3.openPopup();
+            setTimeout(function () {
+                marker3.closePopup();
+            }, 2000);
+        }
+    });
+    map.fitBounds(recorridoInteractivo);
+}
+
+///trabajand
+function montevideo() {
+    let itemValuae = "MONTEVIDEO";
+    // let filterc = "nombre='" + itemValuae + "'";
+    let urlMon =
+        'http://localhost:8081/geoserver/wfs?' +
+        'service=WFS&' +
+        'request=GetFeature&' +
+        'typeName=Geo_lab2023_g14PersistenceUnit:vista_union_buf&' +
+        'srsName=EPSG:32721&' +
+        'outputFormat=application/json';
+    //urlMon += '&CQL_FILTER=' + filterc;
+    fetch(urlMon)
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            geojsonsLayere.addData(data);
+            //  geojsonsLayere.options.layerName = layerName; // console.log(laAmb + ' ' + loAmb);
+        })
+        .catch(function (error) {
+            console.error('Error:', error);
+        });
+    geojsonsLayere = L.geoJSON(null, {
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, {
+                icon: iconA
+            });
+        }
+    }).addTo(map);
+}
+
 ///////////////////////// FUNCIONES AUXILIARES /////////////////////////
-function euclideanDistancia(punto1, punto2) { // Distancia euclidiana entre dos puntos 
+function euclideanDistancia(punto1, punto2) { // Distancia euclidiana entre dos puntos
     let dx = punto2.x - punto1.x;
     let dy = punto2.y - punto1.y;
     return Math.sqrt(dx * dx + dy * dy);
-} // L.CRS.Simple.distance(latlng1, latlng2) --> Distancia euclidiana entre dos puntos 
+} // L.CRS.Simple.distance(latlng1, latlng2) --> Distancia euclidiana entre dos puntos
 
 function euclideanDistanciaMetros(punto1, punto2) { // Distancia euclidiana a metros (a partir de dos punto(x,y))
     let latlng1 = L.latLng(punto1.y, punto1.x);
@@ -411,6 +560,9 @@ function euclideanDistanciaMetrosObj(latlng1, latlng2) { // Distancia euclidiana
 
 function removerLayer() {
     map.removeLayer(geojsonLayer);
+
+    marker3.removeFrom(map);
+
     ocultarFrm();
 }
 
@@ -419,52 +571,3 @@ function BorrarMarcadorALtaSE() {
     this.map.removeLayer(this.markerSE);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-   // for (let i = 0; i < data.features.length; i++) {
-// L.geoJSON(iconA, {
-//     pointToLayer: function (Feature, latlng) {
-//         return L.marker(latlng, {
-//             icon: iconA
-//         });
-//     }
-// }).addTo(map);
-// const puntoIndex = 0; // Índice del punto que deseas acceder (comenzando desde 0)
-// let punto = [];
-// //punto.push(data.features.geometry.getLatLngs()[puntoIndex]);
-// let latAmb = data.features[0].geometry.coordinates[0][0];
-// let lonAmb = data.features[0].geometry.coordinates[0][1];
-// /// POINT AMBULANCIA ////
-// var iconAmbulancia = L.icon({
-//     iconUrl: 'resources/marker-icons/ambulance.svg',
-//     iconSize: [36, 36],
-// });
-// var fijarAmbulancia = {
-//     type: 'FeatureCollection',
-//     features: [{
-//         type: 'Feature',
-//         properties: {},
-//         geometry: {
-//             type: 'Point',
-//             coordinates: [lonAmb, latAmb]
-//         }
-//     },
-//     ]
-// };
-
-// L.geoJSON(fijarAmbulancia, {
-//     pointToLayer: function (Feature, latlng) {
-//         return L.marker(latlng, {
-//             //   icon: iconAmbulancia
-//         });
-//     }
-// }).addTo(map);

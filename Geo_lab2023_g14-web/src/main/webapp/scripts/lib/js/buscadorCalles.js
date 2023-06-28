@@ -30,7 +30,10 @@ async function sugerencia(text) {
         try {
             const response = await axios.get(urlCalle);
             if (response.status == 200) {
-                options = '<h6 class="dropdown-header dropdown-notifications-header"><i data-feather="bell"></i>Resultado autocompletar....</h6>';
+                options = '<select class="form-select" id="idElegirCalle" size="6" aria-label="size 6 select" onchange="elegirCalle();">';
+                options += '<option class="dropdown-header dropdown-notifications-header" disabled>IDE.uy</option>';
+                options += '<option disabled>---------------------------------</option>';
+                options = '<h6 class="dropdown-header dropdown-notifications-header"><i data-feather="bell"></i>Resultado autocompletar...</h6>';
                 response.data.forEach(function (item, index) {
                     if (item.idCalle > 0) {
                         dato.push(item);

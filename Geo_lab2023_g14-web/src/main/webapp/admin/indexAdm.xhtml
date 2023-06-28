@@ -18,8 +18,10 @@
 
    <!-- BOOTSTRAP -->
    <link rel="stylesheet" href="lib/css/style.css" />
-   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous" />
-   <script type="javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous" />
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
    <!-- MAPA JS -->
    <script type="" src="lib/js/leaflet-src-admin.js"></script>
@@ -43,6 +45,8 @@
    <!-- ICONOS -->
    <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
    <link rel="stylesheet" href="https://unpkg.com/primeflex@^3/primeflex.css" />
+
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/Turf.js/0.0.124/turf.min.js" integrity="sha512-jpnZ8xGKbS7L9S6d5fk/zDVgF6OoVKLMoEliLxf24BRX+orWhxqJuUcoM+vGmOaozS9dD9ABjQZKAgjjcwTndA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
    #{sesion.init()}
    #{adminBean.initH()}
@@ -196,30 +200,32 @@
             </div>
          </div>
       </form>
-      <script type="">
-         var collapseEsquina = new bootstrap.Collapse(document.getElementById("collapseEsquina"));//este tira un error en cosola
-         var collapseNumero = new bootstrap.Collapse(document.getElementById("collapseNumero"));
-
-         // Escuchar el evento de mostrar el acordeón de Esquina
-         document.getElementById("acordeonEsquina").addEventListener("show.bs.collapse", function () {
-            collapseNumero.hide(); // Ocultar el acordeón de Número
-         });
-
-         // Escuchar el evento de mostrar el acordeón de Número
-         document.getElementById("acordeonNumero").addEventListener("show.bs.collapse", function () {
-            collapseEsquina.hide(); // Ocultar el acordeón de Esquina
-         });
-
-         // Obtén una referencia al botón
-         //var crearRecorridoBtn = document.getElementById("crearRecorridoBtn");
-
-         // Agrega un evento de clic al botón
-         //crearRecorridoBtn.addEventListener("click", function() {
-            // Realiza la solicitud al servidor Geoserver para obtener los puntos de inicio y fin
-            //obtenerPuntosInicioFin();
-         //});
-      </script>
    </div>
+</h:body>
+   <script>
+      var collapseEsquina = new bootstrap.Collapse(document.getElementById("collapseEsquina"));//este tira un error en cosola
+      var collapseNumero = new bootstrap.Collapse(document.getElementById("collapseNumero"));
+   </script>
+   <script>
+      // Escuchar el evento de mostrar el acordeón de Esquina
+      document.getElementById("acordeonEsquina").addEventListener("show.bs.collapse", function () {
+         collapseNumero.hide(); // Ocultar el acordeón de Número
+      });
+
+      // Escuchar el evento de mostrar el acordeón de Número
+      document.getElementById("acordeonNumero").addEventListener("show.bs.collapse", function () {
+         collapseEsquina.hide(); // Ocultar el acordeón de Esquina
+      });
+
+      // Obtén una referencia al botón
+      //var crearRecorridoBtn = document.getElementById("crearRecorridoBtn");
+
+      // Agrega un evento de clic al botón
+      //crearRecorridoBtn.addEventListener("click", function() {
+      // Realiza la solicitud al servidor Geoserver para obtener los puntos de inicio y fin
+      //obtenerPuntosInicioFin();
+      //});
+   </script>
    <!-- script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
    <script type="" src="./lib/dist/webgl-heatmap.js"></script>
    <script type="" src="./lib/dist/webgl-heatmap-leaflet.min.js"></script -->
@@ -243,9 +249,9 @@
 
       let mapaAdmin = new ControladorMapa();
       mapaAdmin.crearMapaAdmin();
-      mapaAdmin.addLayerWFSbuf();
-      mapaAdmin.addLayersWFS();
-      mapaAdmin.addLayerWFSLine();
+      //mapaAdmin.addLayerWFSbuf();
+      //mapaAdmin.addLayersWFS();
+      //mapaAdmin.addLayerWFSLine();
 
       function mostrarMarker() {
          mapaAdmin.cargarMapaAltaSE();
@@ -254,6 +260,7 @@
          mapaAdmin.cargarMapaModSE(date);
       }
 
+      // Botón de mostrar/ocultar servicio con mas ambulancias
       var btnCobertura = document.getElementById("btnServMasAmb");
       btnCobertura.addEventListener("click", function () {
          console.log("click en btnServMasAmb");
@@ -276,19 +283,50 @@
          });
       });
 
+      // Botón de mostrar/ocultar servicios de emergecnia
+      var btnMOSE = document.getElementById("btnMOSerEme");
+      btnMOSE.addEventListener("click", function () {
+         console.log("click en btnMOSerEme");
+         if (mapaAdmin.capaAddLayerWFSSE != null) {
+            btnMOSE.style.backgroundColor = '#f4f4f4';
+            mapaAdmin.capaAddLayerWFSSE.remove();
+            mapaAdmin.capaAddLayerWFSSE = null;
+         }else {
+            // Servicios de emergencia
+            btnMOSE.style.backgroundColor = '#f60707';
+            mapaAdmin.addLayersWFS();
+         }
+      });
+
+      // Botón de mostrar/ocultar recorridos
+      var btnMORecorridos = document.getElementById("btnMORecorridos");
+      btnMORecorridos.addEventListener("click", function () {
+         console.log("click en btnMORecorridos");
+         if (mapaAdmin.capaAddLayerWFSLine != null) {
+            btnMORecorridos.style.backgroundColor = '#f4f4f4';
+            mapaAdmin.capaAddLayerWFSLine.remove();
+            mapaAdmin.capaAddLayerWFSLine = null;
+         }else {
+            // Recorridos
+            btnMORecorridos.style.backgroundColor = '#f60707';
+            mapaAdmin.addLayerWFSLine();
+         }
+      });
+
+      // Botón de mostrar/ocultar buffer
       var btnMOBuffer = document.getElementById("btnMBuffer");
-        btnMOBuffer.addEventListener("click", function () {
-             console.log("click en btnMBuffer");
-             if (mapaAdmin.capaAddLayerWFSbuf != null) {
-                btnMOBuffer.style.backgroundColor = '#f60707';
-                mapaAdmin.capaAddLayerWFSbuf.remove();
-                mapaAdmin.capaAddLayerWFSbuf = null;
-             }else {
-                // buffer
-                btnMOBuffer.style.backgroundColor = '#f4f4f4';
-                mapaAdmin.addLayerWFSbuf();
-             }
-        });
+      btnMOBuffer.addEventListener("click", function () {
+         console.log("click en btnMBuffer");
+         if (mapaAdmin.capaAddLayerWFSbuf != null) {
+            btnMOBuffer.style.backgroundColor = '#f4f4f4';
+            mapaAdmin.capaAddLayerWFSbuf.remove();
+            mapaAdmin.capaAddLayerWFSbuf = null;
+         }else {
+            // buffer
+            btnMOBuffer.style.backgroundColor = '#f60707';
+            mapaAdmin.addLayerWFSbuf();
+         }
+      });
       $(document).ready(function() {
          $(btnMOBuffer).tooltip({
             placement: "left",
@@ -319,6 +357,4 @@
          }
       }
    </script>
-</h:body>
-
 </html>

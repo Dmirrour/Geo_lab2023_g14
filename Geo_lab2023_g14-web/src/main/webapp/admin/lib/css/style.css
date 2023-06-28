@@ -188,7 +188,7 @@ body {
   z-index: 1700;
 }
 
-#btnMBuffer, #mostrarBuscador, #btnServMasAmb, #btnGPS {
+#btnMBuffer, #mostrarBuscador, #btnServMasAmb, #btnGPS, #btnMORecorridos, #btnMBuffer, #btnMOSerEme {
   width: 34px;
   height: 34px;
   border-radius: 4px;
@@ -196,7 +196,7 @@ body {
   color: black;
 }
 
-#mostrarBuscador:hover, #btnMBuffer:hover, #btnServMasAmb:hover, #btnGPS:hover {
+#mostrarBuscador:hover, #btnMBuffer:hover, #btnServMasAmb:hover, #btnGPS:hover, #btnMORecorridos:hover, #btnMBuffer:hover, #btnMOSerEme:hover {
   background-color: orange !important;
 }
 
@@ -236,6 +236,12 @@ body {
   position: absolute;
   top: 378px;
   margin-left: 283px;
+}
+
+.dlgModInt {
+  position: fixed !important;
+  left: 10px !important;
+  top: 130px !important;
 }
 
 .buscador-fluid {
