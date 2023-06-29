@@ -25,8 +25,6 @@ class ControladorMapa extends Configuracion {
     capaAddLayerWFSSE;
     capaAddLayerWFSLine;
     capaAddLayerWFSZonaSCobertura;
-    formularioContainer = document.getElementById("contenedorFrmBuscar");
-    btnMostrarBuscador = document.getElementById('mostrarBuscador');
 
     constructor() {
         super();
@@ -94,9 +92,6 @@ class ControladorMapa extends Configuracion {
         this.agregarBotonMostrarOcultarSEs();
         this.agregarBotonMostrarOcultarRecorridos();
         this.agregarBotonLimpiar();
-    }
-    capaAddLayerWFSZonaSCobertura (geo) {
-        this.capaAddLayerWFSZonaSCobertura = geo;
     }
     agregarBotonFormualrioDireccion() {
         // Crear el botón
@@ -232,7 +227,6 @@ class ControladorMapa extends Configuracion {
                 offset: [0, -10],
                 sticky: true
             }).setContent('Ver Zonas CON Cobertura.');
-
             // Asignar el tooltip al botón
             //tooltip.addTo(this.map);
             button.innerHTML = 'Buff';
@@ -287,7 +281,6 @@ class ControladorMapa extends Configuracion {
         btnZsC.onAdd = function (map) {
             let button = L.DomUtil.create('button', 'leaflet-touch');
             button.id = "btnZsC";
-            button.innerHTML = 'ZsC';
             // Crear el tooltip
             let tooltip = L.tooltip({
                 permanent: false,
@@ -296,11 +289,7 @@ class ControladorMapa extends Configuracion {
                 offset: [0, -10],
                 sticky: true
             }).setContent('Zona SIN cobertura.');
-
-            L.DomEvent.on(button, 'click', function () {
-                zonasSinCobertura();
-            }, this);
-
+            button.innerHTML = 'ZsC';
             return button;
         };
 
@@ -386,6 +375,12 @@ class ControladorMapa extends Configuracion {
                         btnMOSE.style.backgroundColor = '#f4f4f4';
                         mapaAdmin.capaAddLayerWFSSE.remove();
                         mapaAdmin.capaAddLayerWFSSE = null;
+                    }
+
+                    if (mapaAdmin.capaAddLayerWFSZonaSCobertura) {
+                        btnZsC.style.backgroundColor = '#f4f4f4';
+                        mapaAdmin.capaAddLayerWFSZonaSCobertura.remove();
+                        mapaAdmin.capaAddLayerWFSZonaSCobertura = null;
                     }
 
                 } else {
@@ -565,7 +560,6 @@ class ControladorMapa extends Configuracion {
             .then(function (data) {
                 geojsonLayer.addData(data);
                 console.log(data);
-
                 geojsonLayer.eachLayer(function (layer) {
                     layer.on('click', function (e) {
                         let properties = e.target.feature.properties;
@@ -589,7 +583,6 @@ class ControladorMapa extends Configuracion {
         console.log('asigna capa buff no intersctado....');
         this.capaAddLayerWFSbufferNoIntersect = geojsonLayer;
     }
-
     coberturaEnMiUbicacion (coorUserlat, coorUserlon) {
         let iconoPersonalizado = L.icon({
             iconUrl: '../resources/marker-icons/mapbox-marker-icon-20px-yellow.png',
@@ -744,6 +737,62 @@ class ControladorMapa extends Configuracion {
         if ( ambus.length == 0 && ses.length == 0 ) {
             alert("No hay cobertura en tu ubicación");
         }
+    }
+    zonasSinCobertura() {
+        let bufferCoordinates;
+        let polygons;
+        let buffLenght;
+        let urlSinCobertura =
+            'http://localhost:8081/geoserver/wfs?' +
+            'service=WFS&' +
+            'request=GetFeature&' +
+            'typeName=Geo_lab2023_g14PersistenceUnit:vista_union_buf&' +
+            'srsName=EPSG:32721&' +
+            'outputFormat=application/json';
+        fetch(urlSinCobertura)
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                let features = data.features;
+                features.forEach(function (feature) {
+                    let geometry = feature.geometry;
+                    bufferCoordinates = geometry.coordinates;
+                    buffLenght = geometry.coordinates.length;
+                    polygons = turf.polygon(bufferCoordinates[0], {});
+                });
+                L.geoJson(mapaAdmin.polygonMontevideo(), {
+                    onEachFeature: function (feature, layer) {
+                        let poly1 = feature.geometry;
+                        console.log(feature);
+                        let geojsonLayer;
+                        L.geoJson(polygons, {
+                            onEachFeature: function (feature, layer) {
+                                console.log(feature);
+                                let poly2 = feature.geometry;
+                                console.log(poly2);
+                                let intersection = turf.difference(poly1, poly2);
+                                for (let i = 0; i < buffLenght; i++) {
+                                    polygons = turf.polygon(bufferCoordinates[i], {});
+                                    intersection = turf.difference(intersection, polygons);
+                                }
+                                geojsonLayer = L.geoJSON(intersection, {
+                                    style: {
+                                        color: 'blue',
+                                        weight: 1,
+                                        opacity: 0.7
+                                    },
+                                }).addTo(mapaAdmin.map);
+                                console.log({ poly1, poly2, intersection })
+                            }
+                        });
+                        mapaAdmin.capaAddLayerWFSZonaSCobertura = geojsonLayer;
+                    }
+                })
+            })
+            .catch(function (error) {
+                console.error('Error:', error);
+            });
     }
     cargarMapaAltaSE() {
         // Crea un marcador y guarda la posición en los campos de latitud y longitud
@@ -1113,7 +1162,6 @@ class ControladorMapa extends Configuracion {
             alert('Debe seleccionar una calle');
         }
     }
-
     polygonMontevideo() {
         var poligono = turf.polygon([[
             // [-56.211776719428606, -34.90862548679357], [-56.18954248493538, -34.912915584600256], [-56.169924011919655, -34.91345187616928], [-56.17057794705035, -34.92256757516544], [-56.16011475445704, -34.934362899552], [-56.149651582818485, -34.92149517636705], [-56.139842388220146, -34.909698002189984], [-56.122185783460736, -34.89897182250856], [-56.099297613836825, -34.895753710879966], [-56.08098705299199, -34.897362808234334], [-56.06071466580034, -34.89629009735393], [-56.028671194799244, -34.87697882023446], [-56.03848036844284, -34.86571182010802], [-56.05613701511176, -34.86678494735823], [-56.055483017116785, -34.85229671993839], [-56.055483017116785, -34.824386273581055], [-56.04698175564409, -34.80613202977699], [-56.04044227860869, -34.79324424340208], [-56.031286935322, -34.77766881583348], [-56.037172540090985, -34.76370214149499], [-56.05025149416179, -34.75832972558535], [-56.0600607097149, -34.76692545248796], [-56.075755488127484, -34.77122297598994], [-56.086218659766025, -34.77552025849953], [-56.09733574558051, -34.77176012272247], [-56.09537391923369, -34.75779244841118], [-56.106491046957686, -34.74812114555186], [-56.11957000102849, -34.7465091387161], [-56.12480158684777, -34.73307462551597], [-56.12545552197844, -34.7158752476152], [-56.139842388220146, -34.71211240458171], [-56.15488316863777, -34.718025356923555], [-56.167308208532646, -34.730387443530546], [-56.17580953286962, -34.718025356923555], [-56.1928121605888, -34.71910039922509], [-56.206545070745065, -34.734149463513816], [-56.214392480906106, -34.74919577921076], [-56.22420169645921, -34.76370214149499], [-56.23270302079619, -34.767999832825105], [-56.24578199582176, -34.75940422640649],
