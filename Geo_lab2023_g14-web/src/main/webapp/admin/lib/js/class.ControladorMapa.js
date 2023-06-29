@@ -50,10 +50,10 @@ class ControladorMapa extends Configuracion {
 
         ///////////////////////// OPCIONES DE MAPA /////////////////////////
         this.map = L.map('map', {
-            center: [-34.8797018070320851, -56.262557241497211],
-            zoom: 8,
-            minZoom: 2,
-            maxZoom: 11,
+            center: [-34.870046767198566, -56.16937894760009],
+            zoom: 13,
+            minZoom: 11,
+            maxZoom: 20,
             layers: [this.openst],
             zoomControl: true
         });
@@ -80,7 +80,7 @@ class ControladorMapa extends Configuracion {
         this.map.addLayer(this.drawLayers);
         this.map.addControl(drawControl);
 
-        this.map.fitBounds([[-35, -56], [-34, -56]]); // btn Ubicacion
+        //this.map.fitBounds([[-35, -56], [-34, -56]]); // btn Ubicacion
 
         this.map.on(L.Draw.Event.CREATED, function (e) {
             this.drawLayers.addLayer(e.layer);
@@ -94,6 +94,9 @@ class ControladorMapa extends Configuracion {
         this.agregarBotonMostrarOcultarSEs();
         this.agregarBotonMostrarOcultarRecorridos();
         this.agregarBotonLimpiar();
+    }
+    capaAddLayerWFSZonaSCobertura (geo) {
+        this.capaAddLayerWFSZonaSCobertura = geo;
     }
     agregarBotonFormualrioDireccion() {
         // Crear el botón
@@ -283,7 +286,7 @@ class ControladorMapa extends Configuracion {
 
         btnZsC.onAdd = function (map) {
             let button = L.DomUtil.create('button', 'leaflet-touch');
-            button.id = "btnGPS";
+            button.id = "btnZsC";
             button.innerHTML = 'ZsC';
             // Crear el tooltip
             let tooltip = L.tooltip({
@@ -292,10 +295,10 @@ class ControladorMapa extends Configuracion {
                 className: 'tooltip-custom',
                 offset: [0, -10],
                 sticky: true
-            }).setContent('Servicios en mi ubicación.');
+            }).setContent('Zona SIN cobertura.');
 
             L.DomEvent.on(button, 'click', function () {
-                mapaAdmin.zonasSinCobertura();
+                zonasSinCobertura();
             }, this);
 
             return button;
@@ -512,7 +515,7 @@ class ControladorMapa extends Configuracion {
                 color: 'blue',
                 weight: 0,
                 opacity: 1,
-                fillOpacity: 1
+                fillOpacity: 0.2
             },
         }).addTo(this.map);
         let url =
@@ -585,73 +588,6 @@ class ControladorMapa extends Configuracion {
             });
         console.log('asigna capa buff no intersctado....');
         this.capaAddLayerWFSbufferNoIntersect = geojsonLayer;
-    }
-    zonasSinCobertura() {
-        var bufferCoordinates;
-        var polygons;
-        var buffLenght;
-        let geojsonLayer = L.geoJSON(null, {
-            style: {
-                color: 'blue',
-                weight: 0,
-                opacity: 1,
-                fillOpacity: 1
-            },
-        });
-        let urlSinCobertura =
-            'http://localhost:8081/geoserver/wfs?' +
-            'service=WFS&' +
-            'request=GetFeature&' +
-            'typeName=Geo_lab2023_g14PersistenceUnit:' +
-            this.vista_buf +
-            '&' +
-            'srsName=EPSG:32721&' +
-            'outputFormat=application/json';
-        fetch(urlSinCobertura)
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (data) {
-                var features = data.features;
-                features.forEach(function (feature) {
-                    var geometry = feature.geometry;
-                    bufferCoordinates = geometry.coordinates;
-                    buffLenght = geometry.coordinates.length;
-                    polygons = turf.polygon(bufferCoordinates[0], {});
-                });
-                L.geoJson(mapaAdmin.polygonMontevideo(), {
-                    onEachFeature: function (feature, layer) {
-                        var poly1 = feature.geometry;
-                        console.log(feature);
-                        geojsonLayer = L.geoJson(polygons, {
-                            onEachFeature: function (feature, layer) {
-                                console.log(feature);
-                                var poly2 = feature.geometry;
-                                console.log(poly2);
-                                var intersection = turf.difference(poly1, poly2);
-                                for (let i = 0; i < buffLenght; i++) {
-                                    polygons = turf.polygon(bufferCoordinates[i], {});
-                                    intersection = turf.difference(intersection, polygons);
-                                }
-                                //   L.geoJson(intersection).addTo(map);
-                                L.geoJSON(intersection, {
-                                    style: {
-                                        color: 'blue',
-                                        weight: 1,
-                                        opacity: 0.7
-                                    },
-                                }).addTo(this.map);
-                                console.log({ poly1, poly2, intersection })
-                            }
-                        })
-                    }
-                })
-                // difference // intersect
-            })
-            .catch(function (error) {
-                console.error('Error:', error);
-            });
-        this.capaAddLayerWFSZonaSCobertura = geojsonLayer;
     }
 
     coberturaEnMiUbicacion (coorUserlat, coorUserlon) {

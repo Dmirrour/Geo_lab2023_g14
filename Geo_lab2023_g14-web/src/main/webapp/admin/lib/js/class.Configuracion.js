@@ -12,6 +12,7 @@ class Configuracion {
     vista_SEH;
     vista_LineString;
     vista_buf;
+    vista_buff;
     vista_bufNoIntersec;
     vista_CoberturaEnPutno;
 
@@ -27,6 +28,7 @@ class Configuracion {
         this.vista_SEH = 'vista_se_h';
         this.vista_LineString = 'vista_a_rec';
         this.vista_buf = 'vista_buf';
+        this.vista_buff = 'vista_union_buf';
         this.vista_bufNoIntersec = 'vista_buffer_no_intersect';
         this.vista_CoberturaEnPutno = 'vista_buff_cobertura_user';
     }

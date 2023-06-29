@@ -42,8 +42,7 @@
    <link rel="stylesheet" href="https://unpkg.com/primeflex@^3/primeflex.css" />
 
    <script src="https://cdnjs.cloudflare.com/ajax/libs/Turf.js/0.0.124/turf.min.js" integrity="sha512-jpnZ8xGKbS7L9S6d5fk/zDVgF6OoVKLMoEliLxf24BRX+orWhxqJuUcoM+vGmOaozS9dD9ABjQZKAgjjcwTndA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-
+   <script src="https://cdn.jsdelivr.net/npm/@turf/turf@5/turf.min.js"></script>
 </head>
 
 <body>
@@ -175,6 +174,7 @@
          PF('dlg8').refresh()
       }
 
+
       let mapaAdmin = new ControladorMapa();
       mapaAdmin.crearMapaAdmin();
       //mapaAdmin.addLayerWFSbuf();
@@ -241,6 +241,23 @@
          }
       });
 
+      // Botón de mostrar/ocultar zonas sin cobertura
+      var btnZsC = document.getElementById("btnZsC");
+      btnZsC.addEventListener("click", function () {
+          console.log("click en btnZsC");
+          if (mapaAdmin.capaAddLayerWFSZonaSCobertura != null) {
+             console.log("click en btnZsC deberia borrar la capa");
+             btnZsC.style.backgroundColor = '#f4f4f4';
+             mapaAdmin.capaAddLayerWFSZonaSCobertura.remove();
+             mapaAdmin.capaAddLayerWFSZonaSCobertura = null;
+          }else {
+             // zonas sin cobertura
+             console.log("click en btnZsC deberia agregar la capa");
+             btnZsC.style.backgroundColor = '#f60707';
+             zonasSinCobertura();
+          }
+      });
+
       // Botón de mostrar/ocultar buffer
       var btnMOBuffer = document.getElementById("btnMBuffer");
       btnMOBuffer.addEventListener("click", function () {
@@ -263,6 +280,71 @@
          });
       });
 
+      function zonasSinCobertura() {
+         var bufferCoordinates;
+         var polygons;
+         var buffLenght;
+         let geojsonLayer = L.geoJSON(null, {
+            style: {
+               color: 'blue',
+               weight: 0,
+               opacity: 1,
+               fillOpacity: 1
+            },
+         });
+         let urlSinCobertura =
+                 'http://localhost:8081/geoserver/wfs?' +
+                 'service=WFS&' +
+                 'request=GetFeature&' +
+                 'typeName=Geo_lab2023_g14PersistenceUnit:vista_union_buf&' +
+                 'srsName=EPSG:32721&' +
+                 'outputFormat=application/json';
+         fetch(urlSinCobertura)
+                 .then(function (response) {
+                    return response.json();
+                 })
+                 .then(function (data) {
+                    var features = data.features;
+                    features.forEach(function (feature) {
+                       var geometry = feature.geometry;
+                       bufferCoordinates = geometry.coordinates;
+                       buffLenght = geometry.coordinates.length;
+                       polygons = turf.polygon(bufferCoordinates[0], {});
+                    });
+                    L.geoJson(mapaAdmin.polygonMontevideo(), {
+                       onEachFeature: function (feature, layer) {
+                          var poly1 = feature.geometry;
+                          console.log(feature);
+                          geojsonLayer = L.geoJson(polygons, {
+                             onEachFeature: function (feature, layer) {
+                                console.log(feature);
+                                var poly2 = feature.geometry;
+                                console.log(poly2);
+                                var intersection = turf.difference(poly1, poly2);
+                                for (let i = 0; i < buffLenght; i++) {
+                                   polygons = turf.polygon(bufferCoordinates[i], {});
+                                   intersection = turf.difference(intersection, polygons);
+                                }
+                                //   L.geoJson(intersection).addTo(map);
+                                L.geoJSON(intersection, {
+                                   style: {
+                                      color: 'blue',
+                                      weight: 1,
+                                      opacity: 0.7
+                                   },
+                                }).addTo(mapaAdmin.map);
+                                console.log({ poly1, poly2, intersection })
+                             }
+                          })
+                       }
+                    })
+                    // difference // intersect
+                 })
+                 .catch(function (error) {
+                    console.error('Error:', error);
+                 });
+         mapaAdmin.capaAddLayerWFSZonaSCobertura = geojsonLayer;
+      }
 
    </script>
    <script type="text/javascript">
