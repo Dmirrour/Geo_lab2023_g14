@@ -75,12 +75,50 @@ ALTER TABLE ambulancia ADD COLUMN polyline GEOMETRY(LineString, 32721);
 
 -- public.vista_selects;
 CREATE OR REPLACE VIEW public.vista_selects AS
- SELECT DISTINCT a.idambulancia, g.hospital_idhospital,
-    st_buffer(a.polyline, (a.distanciamaxdesvio::numeric * 0.000941090001733132 / 100::numeric)::double precision) AS st_buffer,
-    st_pointn(a.polyline, 1) AS st_pointn
-   FROM servicioemergencia g, ambulancia a
-  WHERE a.hospital_idhospital = g.hospital_idhospital;
+    SELECT DISTINCT a.idambulancia, g.hospital_idhospital,
+        st_buffer(a.polyline, (a.distanciamaxdesvio::numeric * 0.000941090001733132 / 100::numeric)::double precision) AS st_buffer,
+        st_pointn(a.polyline, 1) AS st_pointn
+       FROM servicioemergencia g, ambulancia a
+    WHERE a.hospital_idhospital = g.hospital_idhospital;
 
+-- vista_buffer_no_intersect
+CREATE OR REPLACE VIEW vista_buffer_no_intersect AS
+    WITH intersecciones AS (
+        SELECT
+            se.idservicio,
+            se.nombre,
+            se.camaslibres,
+            ST_Intersection(se.point, buffer.buffer_geom) AS interseccion
+        FROM
+            servicioemergencia se
+        JOIN (
+            SELECT
+              a.hospital_idhospital,
+              ST_Buffer(a.polyline, ((a.distanciamaxdesvio * 9.41090001733132E-4) / 100)) AS buffer_geom
+            FROM
+              ambulancia a
+            GROUP BY
+              a.idambulancia, a.distanciamaxdesvio, a.polyline
+        ) AS buffer ON se.hospital_idhospital = buffer.hospital_idhospital AND ST_Intersects(se.point, buffer.buffer_geom)
+    )
+        SELECT
+            i.idservicio,
+            i.nombre,
+            i.camaslibres,
+            COUNT(i.interseccion) AS cantidad_buffers,
+            ST_Union(i.interseccion) AS union_buffers
+        FROM
+            intersecciones i
+        GROUP BY
+            i.idservicio, i.nombre, i.camaslibres
+        HAVING COUNT(i.interseccion) = (
+        SELECT MAX(count_buffers)
+        FROM (
+                 SELECT COUNT(interseccion) AS count_buffers
+                 FROM intersecciones
+                 GROUP BY idservicio
+             ) AS subquery
+    );
 
   -- View: public.vista_se_h
   CREATE OR REPLACE VIEW public.vista_se_h AS
@@ -181,9 +219,6 @@ CREATE OR REPLACE VIEW public.vista_montevideo
                END AS tipohospital
     FROM servicioemergencia se
              JOIN hospital h ON se.hospital_idhospital = h.idhospital;
-
-
-
 
 -- BUFFER / HOSPITAL - vista_buf;
 CREATE OR REPLACE VIEW public.vista_buf AS

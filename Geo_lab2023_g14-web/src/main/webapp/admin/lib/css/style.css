@@ -188,8 +188,16 @@ body {
   z-index: 1700;
 }
 
-#mostrarBuscador:hover {
-  background-color: orange;
+#btnMBuffer, #mostrarBuscador, #btnServMasAmb, #btnGPS, #btnMORecorridos, #btnMBuffer, #btnMOSerEme, #btnZsC {
+  width: 34px;
+  height: 34px;
+  border-radius: 4px;
+  line-height: 15px;
+  color: black;
+}
+
+#mostrarBuscador:hover, #btnMBuffer:hover, #btnServMasAmb:hover, #btnGPS:hover, #btnMORecorridos:hover, #btnMBuffer:hover, #btnMOSerEme:hover, #btnZsC:hover {
+  background-color: orange !important;
 }
 
 #contenedorFrmBuscar {
@@ -228,6 +236,12 @@ body {
   position: absolute;
   top: 378px;
   margin-left: 283px;
+}
+
+.dlgModInt {
+  position: fixed !important;
+  left: 10px !important;
+  top: 130px !important;
 }
 
 .buscador-fluid {
