@@ -1,10 +1,6 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:f="http://xmlns.jcp.org/jsf/core" lang="es" xml:lang="es">
-
-<h:head>
-   <!-- VERIFICAR SESION -->
-   <f:event type="preRenderView" listener="#{sesion.verificarSesion()}"></f:event>
-
+<!DOCTYPE html>
+<html lang="es" xmlns="http://www.w3.org/1999/html">
+<head>
    <!-- VERIFICAR SESION -->
    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
@@ -43,72 +39,15 @@
    <script type="" src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
    <!-- ICONOS -->
-   <h:outputStylesheet name="primeicons/primeicons.css" library="primefaces" />
    <link rel="stylesheet" href="https://unpkg.com/primeflex@^3/primeflex.css" />
 
    <script src="https://cdnjs.cloudflare.com/ajax/libs/Turf.js/0.0.124/turf.min.js" integrity="sha512-jpnZ8xGKbS7L9S6d5fk/zDVgF6OoVKLMoEliLxf24BRX+orWhxqJuUcoM+vGmOaozS9dD9ABjQZKAgjjcwTndA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
    <script src="https://cdn.jsdelivr.net/npm/@turf/turf@5/turf.min.js"></script>
+</head>
 
-   #{sesion.init()}
-   #{adminBean.initH()}
-   #{servicioEBean.initS()}
-   #{adminBean.initA()}
+<body>
 
-</h:head>
-
-<h:body>
-
-   <p:growl id="messages" showDetail="true" autoUpdate="true" />
-   <div id="top">
-      <div class="navbar navbar-expand-sm">
-         <div class="container-fluid">
-            <div id="contenedorNavbar">
-               <p:menubar>
-                  <p:submenu label="Eliminar">
-                     <p:menuitem value="Eliminar Hospital" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg8').show()" />
-                     <p:menuitem value="Eliminar Ambulancia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg7').show()" />
-                     <p:menuitem value="Eliminar S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg6').show()" />
-                  </p:submenu>
-                  <p:submenu label="Modificar">
-                     <p:menuitem value="Modificar Ambulancia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg5').show()" />
-                     <p:menuitem value="Modificar S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg4').show(); mostrarMarker2('#{servicioEBean.size}');" />
-                  </p:submenu>
-                  <p:submenu label="Alta">
-                     <p:menuitem value="Alta Hospital" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg1').show()" />
-                     <p:menuitem value="Alta Ambulancia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg2').show()" />
-                     <p:menuitem value="Alta S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg3').show(); mostrarMarker();" oncomplete=""/>
-                  </p:submenu>
-               </p:menubar>
-            </div>
-            <div id="contenedorMnuSalir">
-               <h:form id="frmSalir">
-                  <p:commandButton id="frmBtnSalir" value="Salir" action="#{sesion.cerrarSesion()}" class="btn btn-rojo" icon="pi pi-power-off" />
-               </h:form>
-            </div>
-            <div id="contenedorTitulo">
-               <h2 class="bg">
-                  <h:outputText styleClass="textoborde" value="Bienvenido #{sessionScope.usuario.usuario}" />
-               </h2>
-            </div>
-         </div>
-      </div>
-   </div>
    <div id="map"></div>
-
-   <!-- FORM'S  -->
-   <p:outputPanel id="formPanel">
-      <ui:include src="lib/forms/altaAmbulancia.xhtml" />
-      <ui:include src="lib/forms/altaHospital.xhtml" />
-      <ui:include src="lib/forms/altaServicioEmergencia.xhtml" />
-      <ui:include src="lib/forms/eliminarAmbulancia.xhtml" />
-      <ui:include src="lib/forms/eliminarHospital.xhtml" />
-      <ui:include src="lib/forms/eliminarSE.xhtml" />
-      <ui:include src="lib/forms/modificarSE.xhtml" />
-      <ui:include src="lib/forms/modificarAmbu.xhtml" />
-      <ui:include src="lib/forms/AmbulaciaFueraService.xhtml" />
-
-   </p:outputPanel>
-   <!-- END FORMS -->
 
    <div id="contenedorFrmBuscar" style="display: none;">
       <form id="frmBuscador" action="#" method="post">
@@ -202,12 +141,11 @@
          </div>
       </form>
    </div>
-</h:body>
+</body>
    <script>
       var collapseEsquina = new bootstrap.Collapse(document.getElementById("collapseEsquina"));//este tira un error en cosola
       var collapseNumero = new bootstrap.Collapse(document.getElementById("collapseNumero"));
-   </script>
-   <script>
+
       // Escuchar el evento de mostrar el acordeón de Esquina
       document.getElementById("acordeonEsquina").addEventListener("show.bs.collapse", function () {
          collapseNumero.hide(); // Ocultar el acordeón de Número
@@ -217,20 +155,8 @@
       document.getElementById("acordeonNumero").addEventListener("show.bs.collapse", function () {
          collapseEsquina.hide(); // Ocultar el acordeón de Esquina
       });
-
-      // Obtén una referencia al botón
-      //var crearRecorridoBtn = document.getElementById("crearRecorridoBtn");
-
-      // Agrega un evento de clic al botón
-      //crearRecorridoBtn.addEventListener("click", function() {
-      // Realiza la solicitud al servidor Geoserver para obtener los puntos de inicio y fin
-      //obtenerPuntosInicioFin();
-      //});
    </script>
-   <!-- script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
-   <script type="" src="./lib/dist/webgl-heatmap.js"></script>
-   <script type="" src="./lib/dist/webgl-heatmap-leaflet.min.js"></script -->
-   <script type="" src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+   <script type="text/javascript" src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
    <script type="text/javascript">
       function ocultarDlgs() {
          PF('dlg1').hide();
@@ -248,6 +174,7 @@
          PF('dlg8').refresh()
       }
 
+
       let mapaAdmin = new ControladorMapa();
       mapaAdmin.crearMapaAdmin();
       //mapaAdmin.addLayerWFSbuf();
@@ -264,7 +191,7 @@
       // Botón de mostrar/ocultar servicio con mas ambulancias
       var btnCobertura = document.getElementById("btnServMasAmb");
       btnCobertura.addEventListener("click", function () {
-         //console.log("click en btnServMasAmb");
+         console.log("click en btnServMasAmb");
 
          if (mapaAdmin.capaAddLayerWFSbufferNoIntersect != null) {
             btnCobertura.style.backgroundColor = '#f4f4f4';
@@ -287,63 +214,63 @@
       // Botón de mostrar/ocultar servicios de emergecnia
       var btnMOSE = document.getElementById("btnMOSerEme");
       btnMOSE.addEventListener("click", function () {
-         //console.log("click en btnMOSerEme");
-         if (mapaAdmin.capaAddLayerWFSSE != null) {
-            btnMOSE.style.backgroundColor = '#f4f4f4';
-            mapaAdmin.capaAddLayerWFSSE.remove();
-            mapaAdmin.capaAddLayerWFSSE = null;
-         }else {
-            // Servicios de emergencia
-            btnMOSE.style.backgroundColor = '#f60707';
-            mapaAdmin.addLayersWFS();
-         }
+          console.log("click en btnMOSerEme");
+          if (mapaAdmin.capaAddLayerWFSSE != null) {
+             btnMOSE.style.backgroundColor = '#f4f4f4';
+             mapaAdmin.capaAddLayerWFSSE.remove();
+             mapaAdmin.capaAddLayerWFSSE = null;
+          }else {
+             // Servicios de emergencia
+             btnMOSE.style.backgroundColor = '#f60707';
+             mapaAdmin.addLayersWFS();
+          }
       });
 
       // Botón de mostrar/ocultar recorridos
       var btnMORecorridos = document.getElementById("btnMORecorridos");
       btnMORecorridos.addEventListener("click", function () {
-         //console.log("click en btnMORecorridos");
+         console.log("click en btnMORecorridos");
          if (mapaAdmin.capaAddLayerWFSLine != null) {
-            btnMORecorridos.style.backgroundColor = '#f4f4f4';
-            mapaAdmin.capaAddLayerWFSLine.remove();
-            mapaAdmin.capaAddLayerWFSLine = null;
+              btnMORecorridos.style.backgroundColor = '#f4f4f4';
+              mapaAdmin.capaAddLayerWFSLine.remove();
+              mapaAdmin.capaAddLayerWFSLine = null;
          }else {
-            // Recorridos
-            btnMORecorridos.style.backgroundColor = '#f60707';
-            mapaAdmin.addLayerWFSLine();
+              // Recorridos
+              btnMORecorridos.style.backgroundColor = '#f60707';
+              mapaAdmin.addLayerWFSLine();
          }
       });
 
       // Botón de mostrar/ocultar zonas sin cobertura
       var btnZsC = document.getElementById("btnZsC");
       btnZsC.addEventListener("click", function () {
-         //console.log("click en btnZsC");
-         if (mapaAdmin.capaAddLayerWFSZonaSCobertura != null) {
-            //console.log("click en btnZsC deberia borrar la capa");
-            btnZsC.style.backgroundColor = '#f4f4f4';
-            mapaAdmin.capaAddLayerWFSZonaSCobertura.remove();
-            mapaAdmin.capaAddLayerWFSZonaSCobertura = null;
-         }else {
-            // zonas sin cobertura
-            //console.log("click en btnZsC deberia agregar la capa");
-            btnZsC.style.backgroundColor = '#f60707';
-            zonasSinCobertura();
-         }
+          console.log("click en btnZsC");
+          if (mapaAdmin.capaAddLayerWFSZonaSCobertura != null) {
+             console.log("click en btnZsC deberia borrar la capa");
+             btnZsC.style.backgroundColor = '#f4f4f4';
+             mapaAdmin.capaAddLayerWFSZonaSCobertura.remove();
+             mapaAdmin.capaAddLayerWFSZonaSCobertura = null;
+          }else {
+             // zonas sin cobertura
+             console.log("click en btnZsC deberia agregar la capa");
+             btnZsC.style.backgroundColor = '#f60707';
+             zonasSinCobertura();
+          }
       });
 
       // Botón de mostrar/ocultar buffer
       var btnMOBuffer = document.getElementById("btnMBuffer");
       btnMOBuffer.addEventListener("click", function () {
-         //console.log("click en btnMBuffer");
-         if (mapaAdmin.capaAddLayerWFSbuf != null) {
-            btnMOBuffer.style.backgroundColor = '#f4f4f4';
-            mapaAdmin.capaAddLayerWFSbuf.remove();
-            mapaAdmin.capaAddLayerWFSbuf = null;
-         }else {
-            // buffer
-            btnMOBuffer.style.backgroundColor = '#f60707';
-            mapaAdmin.addLayerWFSbuf();
-         }
+          console.log("click en btnMBuffer");
+          if (mapaAdmin.capaAddLayerWFSbuf != null) {
+             btnMOBuffer.style.backgroundColor = '#f4f4f4';
+             mapaAdmin.capaAddLayerWFSbuf.remove();
+             mapaAdmin.capaAddLayerWFSbuf = null;
+          }else {
+             // buffer
+             btnMOBuffer.style.backgroundColor = '#f60707';
+             mapaAdmin.addLayerWFSbuf();
+          }
       });
       $(document).ready(function() {
          $(btnMOBuffer).tooltip({
@@ -352,8 +279,6 @@
             trigger: "hover"
          });
       });
-
-      mapaAdmin.cargarMapaAltaAmbulancia(#{adminBean.size});
 
       function zonasSinCobertura() {
          var bufferCoordinates;
@@ -369,10 +294,10 @@
          });
          let urlSinCobertura =
                  'http://localhost:8081/geoserver/wfs?' +
-                 'service=WFS&amp;' +
-                 'request=GetFeature&amp;' +
-                 'typeName=Geo_lab2023_g14PersistenceUnit:vista_union_buf&amp;' +
-                 'srsName=EPSG:32721&amp;' +
+                 'service=WFS&' +
+                 'request=GetFeature&' +
+                 'typeName=Geo_lab2023_g14PersistenceUnit:vista_union_buf&' +
+                 'srsName=EPSG:32721&' +
                  'outputFormat=application/json';
          fetch(urlSinCobertura)
                  .then(function (response) {
@@ -389,14 +314,14 @@
                     L.geoJson(mapaAdmin.polygonMontevideo(), {
                        onEachFeature: function (feature, layer) {
                           var poly1 = feature.geometry;
-                          //console.log(feature);
+                          console.log(feature);
                           geojsonLayer = L.geoJson(polygons, {
                              onEachFeature: function (feature, layer) {
-                                //console.log(feature);
+                                console.log(feature);
                                 var poly2 = feature.geometry;
-                                //console.log(poly2);
+                                console.log(poly2);
                                 var intersection = turf.difference(poly1, poly2);
-                                for (let i = 0; i &lt; buffLenght; i++) {
+                                for (let i = 0; i < buffLenght; i++) {
                                    polygons = turf.polygon(bufferCoordinates[i], {});
                                    intersection = turf.difference(intersection, polygons);
                                 }
@@ -408,7 +333,7 @@
                                       opacity: 0.7
                                    },
                                 }).addTo(mapaAdmin.map);
-                                //console.log({ poly1, poly2, intersection })
+                                console.log({ poly1, poly2, intersection })
                              }
                           })
                        }

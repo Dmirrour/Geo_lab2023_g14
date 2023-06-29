@@ -199,7 +199,7 @@ function initLayerServicioEm(urlSe, layerName) {
                 fillOpacity: 0.8
             });
         }
-    }).addTo(map); // Crear una capa de GeoJSON, agrega los puntos de SERVICIO EMERGENCIA 
+    }).addTo(map); // Crear una capa de GeoJSON, agrega los puntos de SERVICIO EMERGENCIA
 
     fetch(urlSe)
         .then(function (response) {
@@ -287,7 +287,7 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
             geojsonLayeres = L.geoJSON(data, {
                 pointToLayer: function (feature, latlng) {
                     return L.marker(latlng, {
-                        //   icon: iconA
+                       icon: iconA
                     });
                 }
             })
@@ -334,7 +334,7 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
                 marker3 = L.Marker.movingMarker(recorridoInteractivoa,
                     [1500, 1500, 1500, 1500, 1500, 1200, 1500], {
                     autostart: true, loop: true, icon: iconA
-                }).addTo(map);
+                })//.addTo(map);
 
                 marker3.loops = 0;
                 marker3.on('loop', function (e) {
@@ -349,7 +349,7 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
                 });
             }
 
-            // Point Ambulancia 
+            // Point Ambulancia
             let puntos = {
                 type: 'FeatureCollection',
                 features: []
@@ -377,7 +377,7 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
                         icon: iconA
                     });
                 }
-            })//.addTo(map);
+            }).addTo(map);
             geojsonLayeres.addData(puntos);
 
             geojsonLayeres.eachLayer(function (puntos) {
@@ -536,11 +536,11 @@ function montevideo() {
 }
 
 ///////////////////////// FUNCIONES AUXILIARES /////////////////////////
-function euclideanDistancia(punto1, punto2) { // Distancia euclidiana entre dos puntos 
+function euclideanDistancia(punto1, punto2) { // Distancia euclidiana entre dos puntos
     let dx = punto2.x - punto1.x;
     let dy = punto2.y - punto1.y;
     return Math.sqrt(dx * dx + dy * dy);
-} // L.CRS.Simple.distance(latlng1, latlng2) --> Distancia euclidiana entre dos puntos 
+} // L.CRS.Simple.distance(latlng1, latlng2) --> Distancia euclidiana entre dos puntos
 
 function euclideanDistanciaMetros(punto1, punto2) { // Distancia euclidiana a metros (a partir de dos punto(x,y))
     let latlng1 = L.latLng(punto1.y, punto1.x);

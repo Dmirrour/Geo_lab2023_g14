@@ -27,12 +27,12 @@ public class Ambulancia implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idAmbulancia;
     @Column(unique = true)
-    private int idCodigo;
+    private String idCodigo;
     private int distanciaMaxDesvio;
 
     @ManyToMany
     List<ServicioEmergencia> ServEdelRecorrido = new ArrayList<>();
-    /// ambulancia no se relaciona con se.. // ??? ver
+
     @ManyToOne
     private Hospital hospital;
 
@@ -42,28 +42,28 @@ public class Ambulancia implements Serializable {
     @Type(type = "org.hibernate.spatial.GeometryType")
     private LineString polyline;
 
-    public Ambulancia(Long idAmbulancia, int idCodigo, int distanciaMaxDesvio) {
-        this.idAmbulancia = idAmbulancia;
-        this.idCodigo = idCodigo;
-        this.distanciaMaxDesvio = distanciaMaxDesvio;
+
+    public Ambulancia(Long idAmbulancia, String idCodigo, int distanciaMaxDesvio){
+        this.idAmbulancia =idAmbulancia;
+        this.idCodigo=idCodigo;
+        this.distanciaMaxDesvio=distanciaMaxDesvio;
     }
 
-    public HospitalDTO getHospitalDTO() {
+    public HospitalDTO getHospitalDTO(){
         return HospitalDTO.builder()
                 .idHospital(hospital.getIdHospital())
                 .nombreHospital(hospital.getNombreHospital())
                 .tipoHospital(hospital.getTipoHospital())
                 .servicioEmergencia(hospital.getServicioEmergenciaDTO())
-                // .ambulanciaDTOS(hospital.getAmbulanciasDTOS())
+                //.ambulanciaDTOS(hospital.getAmbulanciasDTOS())
                 .build();
     }
 
-    public AmbulanciaDTO getAmbulanciaDTO() {
-        return new AmbulanciaDTO(this.idAmbulancia, this.idCodigo, this.distanciaMaxDesvio);
+    public AmbulanciaDTO getAmbulanciaDTO(){
+        return new AmbulanciaDTO(this.idAmbulancia,this.idCodigo,this.distanciaMaxDesvio);
     }
-
-    public ArrayList<ServicioEmergenciaDTO> getServEdelRecorridoDTO() {
-        ArrayList<ServicioEmergenciaDTO> result = new ArrayList<>();
+    public ArrayList<ServicioEmergenciaDTO> getServEdelRecorridoDTO(){
+        ArrayList<ServicioEmergenciaDTO> result= new ArrayList<>();
         ServEdelRecorrido.forEach(servicioEmergencia -> {
             result.add(ServicioEmergenciaDTO.builder()
                     .idServicio(servicioEmergencia.getIdServicio())

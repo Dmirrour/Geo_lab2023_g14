@@ -429,7 +429,7 @@ function intersectpoint(coorUserlat, coorUserlon) {
             weight: 0.8,
             opacity: 0.5
         },
-    })//.addTo(map);
+    }).addTo(map);
     let urlIntersect =
         'http://localhost:8081/geoserver/wfs?' +
         'service=WFS&' +

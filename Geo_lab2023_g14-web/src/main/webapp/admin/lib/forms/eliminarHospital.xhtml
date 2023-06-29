@@ -4,7 +4,7 @@
       xmlns:p="http://primefaces.org/ui">
 
 
-    <p:dialog styleClass="ancho80" header="Eliminar Hospital" widgetVar="dlg8" showEffect="fade" modal="true">
+    <p:dialog styleClass="ancho80" header="Eliminar Hospital" widgetVar="dlg8" showEffect="fade" modal="true" >
         <f:view>
             <h:form id="formEH" class="frmFlotante">
                 <p:card styleClass="flex justify-content-center">
@@ -22,7 +22,7 @@
                         </p:column>
 
                         <p:column headerText="S.Eme.">
-                            <p:dialog id="s_eme" header="Servicios de Emergencia" widgetVar="listaServicios" resizable="false">
+                            <p:dialog id="s_eme" header="Servicios de Emergencia" widgetVar="listaServicios_#{hospitales.servicioEmergencia}" resizable="false">
                                 <p:dataTable paginator="true" rows="4" id="table_servicios" value="#{hospitales.servicioEmergencia}" var="ser" disabledSelection="true">
                                     <p:column headerText="ID Servicios.E" sortBy="#{ser.idServicio}" filterBy="#{ser.idServicio}" filterMatchMode="contains" >
                                         <p:outputLabel value="#{ser.idServicio}" />
@@ -38,10 +38,10 @@
                                     </p:column>
                                 </p:dataTable>
                             </p:dialog>
-                            <p:commandButton id="mostraServicios" styleClass="rounded-button ui-button-primary" icon="pi pi-plus" onclick="PF('listaServicios').show();" />
+                            <p:commandButton id="mostraServicios" styleClass="rounded-button ui-button-primary" icon="pi pi-plus" onclick="PF('listaServicios_#{hospitales.servicioEmergencia}').show();" />
                         </p:column>
                         <p:column headerText="Ambu.">
-                            <p:dialog id="h_ambu" header="Ambulacias" widgetVar="listaAmbulacias" resizable="false">
+                            <p:dialog id="h_ambu" header="Ambulacias" widgetVar="listaAmbulacias_#{hospitales.ambulanciaDTOS}" resizable="false">
                                 <p:dataTable paginator="true" rows="4" id="table_ambulancias" value="#{hospitales.ambulanciaDTOS}" var="amb" disabledSelection="true">
                                     <p:column headerText="ID Ambulancia">
                                         <p:outputLabel value="#{amb.idAmbulancia}" />
@@ -54,10 +54,10 @@
                                     </p:column>
                                 </p:dataTable>
                             </p:dialog>
-                            <p:commandButton id="mostrarAmbulacias" styleClass="rounded-button ui-button-primary" icon="pi pi-plus" onclick="PF('listaAmbulacias').show();" />
+                            <p:commandButton id="mostrarAmbulacias" styleClass="rounded-button ui-button-primary" icon="pi pi-plus" onclick="PF('listaAmbulacias_#{hospitales.ambulanciaDTOS}').show();" />
                         </p:column>
                         <p:column headerText="Elim.">
-                            <p:commandButton styleClass="rounded-button ui-button-danger" icon="pi pi-trash" process="@this" action="#{adminBean.eliminarH(hospitales.idHospital)}" update="table" />
+                            <p:commandButton styleClass="rounded-button ui-button-danger" icon="pi pi-trash" process="@this" action="#{adminBean.eliminarH(hospitales.idHospital)}" update="table messages" />
                         </p:column>
                     </p:dataTable>
                     </div>
