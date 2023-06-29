@@ -191,7 +191,7 @@
       // Botón de mostrar/ocultar servicio con mas ambulancias
       var btnCobertura = document.getElementById("btnServMasAmb");
       btnCobertura.addEventListener("click", function () {
-         console.log("click en btnServMasAmb");
+         //console.log("click en btnServMasAmb");
          if (mapaAdmin.capaAddLayerWFSbufferNoIntersect != null) {
             btnCobertura.style.backgroundColor = '#f4f4f4';
             mapaAdmin.capaAddLayerWFSbufferNoIntersect.remove();
@@ -213,7 +213,7 @@
       // Botón de mostrar/ocultar servicios de emergecnia
       var btnMOSE = document.getElementById("btnMOSerEme");
       btnMOSE.addEventListener("click", function () {
-          console.log("click en btnMOSerEme");
+          //console.log("click en btnMOSerEme");
           if (mapaAdmin.capaAddLayerWFSSE != null) {
              btnMOSE.style.backgroundColor = '#f4f4f4';
              mapaAdmin.capaAddLayerWFSSE.remove();
@@ -235,7 +235,7 @@
       // Botón de mostrar/ocultar recorridos
       var btnMORecorridos = document.getElementById("btnMORecorridos");
       btnMORecorridos.addEventListener("click", function () {
-         console.log("click en btnMORecorridos");
+         //console.log("click en btnMORecorridos");
          if (mapaAdmin.capaAddLayerWFSLine != null) {
               btnMORecorridos.style.backgroundColor = '#f4f4f4';
               mapaAdmin.capaAddLayerWFSLine.remove();
@@ -257,7 +257,7 @@
       // Botón de mostrar/ocultar zonas sin cobertura
       var btnZsC = document.getElementById("btnZsC");
       btnZsC.addEventListener("click", function () {
-          console.log("click en btnZsC");
+          //console.log("click en btnZsC");
           if (mapaAdmin.capaAddLayerWFSZonaSCobertura != null) {
              console.log("click en btnZsC deberia borrar la capa");
              btnZsC.style.backgroundColor = '#f4f4f4';
@@ -309,6 +309,36 @@
             PF('dlg9').show();
             console.log('Diálogos mostrados');
          }
+      });
+
+      // Boton de limpiar
+      var btnLimpiar = document.getElementById("btnLimpiar");
+      $(document).ready(function() {
+         $(btnLimpiar).tooltip({
+            placement: "left",
+            title: "Limpiar el mapa.",
+            trigger: "hover"
+         });
+      });
+
+      // Botono de formulario
+      var btnFormulario = document.getElementById("mostrarBuscador");
+      $(document).ready(function() {
+         $(btnFormulario).tooltip({
+            placement: "left",
+            title: "Mostrar formulario de búsqueda.",
+            trigger: "hover"
+         });
+      });
+
+      // Botono ubicacio por GPS
+      var btnUbicacion = document.getElementById("btnGPS");
+      $(document).ready(function() {
+         $(btnUbicacion).tooltip({
+            placement: "left",
+            title: "Ubicación por GPS.",
+            trigger: "hover"
+         });
       });
 
       function toggleNavbar() {

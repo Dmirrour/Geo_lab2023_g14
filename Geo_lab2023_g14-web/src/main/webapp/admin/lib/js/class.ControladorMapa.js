@@ -147,9 +147,6 @@ class ControladorMapa extends Configuracion {
                 sticky: true
             }).setContent('Servicios con mas ambulancias');
 
-            // Asignar el tooltip al botón
-            //tooltip.addTo(this.map);
-
             L.DomEvent.on(button, 'click', function () {
                 let btn = document.getElementById('btnServMasAmb');
                 let color = '#f60707';
@@ -166,9 +163,9 @@ class ControladorMapa extends Configuracion {
     }
     agregarBotonMostrarOcultarSEs(mapaAdmin) {
         // Crear el botón
-        let btnMBuffer = L.control({ position: 'topright' });
+        let btnMOSE = L.control({ position: 'topright' });
 
-        btnMBuffer.onAdd = function (map) {
+        btnMOSE.onAdd = function (map) {
             let button = L.DomUtil.create('button', 'leaflet-touch');
             button.id = "btnMOSerEme";
             // Crear el tooltip
@@ -186,7 +183,7 @@ class ControladorMapa extends Configuracion {
             return button;
         };
 
-        btnMBuffer.addTo(this.map);
+        btnMOSE.addTo(this.map);
     }
     agregarBotonMostrarOcultarRecorridos(mapaAdmin) {
         // Crear el botón
@@ -297,9 +294,9 @@ class ControladorMapa extends Configuracion {
     }
     agregarBotonOcultarRecorrido() {
         // Crear el botón
-        let btnGPS = L.control({ position: 'topright' });
+        let btnOR = L.control({ position: 'topright' });
 
-        btnGPS.onAdd = function (map) {
+        btnOR.onAdd = function (map) {
             let button = L.DomUtil.create('button', 'btn btn-primary');
             button.id = "ocultarRecorrido";
             button.innerHTML = 'X';
@@ -319,79 +316,59 @@ class ControladorMapa extends Configuracion {
             return button;
         };
 
-        btnGPS.addTo(this.map);
+        btnOR.addTo(this.map);
     }
     agregarBotonLimpiar() {
         // Crear el botón
-        let btnGPS = L.control({ position: 'topright' });
-
-        btnGPS.onAdd = function (map) {
+        let btnLimpiar = L.control({ position: 'topright' });
+        btnLimpiar.onAdd = function (map) {
             let button = L.DomUtil.create('button', 'leaflet-touch');
-            button.id = "btnGPS";
+            button.id = "btnLimpiar";
             button.innerHTML = 'L';
-            // Crear el tooltip
-            let tooltip = L.tooltip({
-                permanent: false,
-                direction: 'top',
-                className: 'tooltip-custom',
-                offset: [0, -10],
-                sticky: true
-            }).setContent('Limpiar.');
-
             L.DomEvent.on(button, 'click', function () {
                 if (navigator.geolocation) {
                     // ocultar todo
-
                     if (mapaAdmin.capaCoberturaEnMiUbicacionA) {
                         mapaAdmin.capaCoberturaEnMiUbicacionA.remove();
                         mapaAdmin.marcadorMiUbicacion.remove();
                         mapaAdmin.capaCoberturaEnMiUbicacionA = null;
                     }
-
                     if (mapaAdmin.capaCoberturaEnMiUbicacionSE) {
                         mapaAdmin.capaCoberturaEnMiUbicacionSE.remove();
                         mapaAdmin.capaCoberturaEnMiUbicacionSE = null;
                     }
-
                     if (mapaAdmin.capaAddLayerWFSbufferNoIntersect) {
                         btnCobertura.style.backgroundColor = '#f4f4f4';
                         mapaAdmin.capaAddLayerWFSbufferNoIntersect.remove();
                         mapaAdmin.capaAddLayerWFSbufferNoIntersect = null;
                     }
-
                     if (mapaAdmin.capaAddLayerWFSbuf) {
                         btnMOBuffer.style.backgroundColor = '#f4f4f4';
                         mapaAdmin.capaAddLayerWFSbuf.remove();
                         mapaAdmin.capaAddLayerWFSbuf = null;
                     }
-
                     if (mapaAdmin.capaAddLayerWFSLine) {
                         btnMORecorridos.style.backgroundColor = '#f4f4f4';
                         mapaAdmin.capaAddLayerWFSLine.remove();
                         mapaAdmin.capaAddLayerWFSLine = null;
                     }
-
                     if (mapaAdmin.capaAddLayerWFSSE) {
                         btnMOSE.style.backgroundColor = '#f4f4f4';
                         mapaAdmin.capaAddLayerWFSSE.remove();
                         mapaAdmin.capaAddLayerWFSSE = null;
                     }
-
                     if (mapaAdmin.capaAddLayerWFSZonaSCobertura) {
                         btnZsC.style.backgroundColor = '#f4f4f4';
                         mapaAdmin.capaAddLayerWFSZonaSCobertura.remove();
                         mapaAdmin.capaAddLayerWFSZonaSCobertura = null;
                     }
-
                 } else {
                     alert('Tu navegador no es compatible con la geolocalización.');
                 }
             }, this);
-
             return button;
         };
-
-        btnGPS.addTo(this.map);
+        btnLimpiar.addTo(this.map);
     }
     addLayersWFS() {
         let geojsonLayer = L.geoJSON(null, {
