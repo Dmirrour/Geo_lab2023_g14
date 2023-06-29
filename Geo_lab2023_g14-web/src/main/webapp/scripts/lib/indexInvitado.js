@@ -232,7 +232,7 @@ function initLayerServicioEm(urlSe, layerName) {
                         '<em>Total de camas: </em><b>' + properties.totalcama + '</b></br>' +
                         '<em>Hospital Nombre: </em><b>' + properties.nombrehospital + '</b></br>' +
                         '<em>Hospital Tipo: </em><b>' + properties.tipohospital + '</b></br>' +
-                        '<em>Coordenadas: </em><b>' + coorServicioEmer[0] + " , " + coorServicioEmer[1] + '</b></br>' +
+                        //       '<em>Coordenadas: </em><b>' + coorServicioEmer[0] + " , " + coorServicioEmer[1] + '</b></br>' +
                         '</div>';
                     let popupOptions = {
                         className: 'custom-popup'
@@ -275,9 +275,9 @@ function initLayerLineAmbu(urlAmbu, layerName) {
 
 //////////////////////// POINT AMBULANCIA ///////////////////////
 // let loAmb;let laAmb; let datosAmd;
-let geojsonLayeres;
-var marker3;
+var geojsonLayeres;
 var recorridoInteractivoa;
+var concatenarPoints2 = "";
 function initLayerPointAmbu(urlAmbu, layerNames) {
     fetch(urlAmbu)
         .then(function (response) {
@@ -287,14 +287,14 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
             geojsonLayeres = L.geoJSON(data, {
                 pointToLayer: function (feature, latlng) {
                     return L.marker(latlng, {
-                       icon: iconA
+                        icon: iconA
                     });
                 }
             })
             geojsonLayeres.addData(data);
 
             let puntosArray = [];
-            let concatenarPoints2 = "";
+            var marker3;
             for (let i = 0; i < data.features.length; i++) {
                 laAmb = data.features[i].geometry.coordinates[0][0];
                 loAmb = data.features[i].geometry.coordinates[0][1];
@@ -334,7 +334,7 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
                 marker3 = L.Marker.movingMarker(recorridoInteractivoa,
                     [1500, 1500, 1500, 1500, 1500, 1200, 1500], {
                     autostart: true, loop: true, icon: iconA
-                })//.addTo(map);
+                })//.addTo(map); /// descomentar para mover ambulancia
 
                 marker3.loops = 0;
                 marker3.on('loop', function (e) {
@@ -348,7 +348,6 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
                     idhospital
                 });
             }
-
             // Point Ambulancia
             let puntos = {
                 type: 'FeatureCollection',
@@ -404,6 +403,7 @@ function initLayerPointAmbu(urlAmbu, layerNames) {
         .catch(function (error) {
             console.error('Error:', error);
         });
+
 }
 
 var iconA = L.icon({
@@ -561,7 +561,7 @@ function euclideanDistanciaMetrosObj(latlng1, latlng2) { // Distancia euclidiana
 function removerLayer() {
     map.removeLayer(geojsonLayer);
 
-    marker3.removeFrom(map);
+    // marker3.removeFrom(map);
 
     ocultarFrm();
 }

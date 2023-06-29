@@ -44,7 +44,7 @@
 * o GeometryCollection. Si necesita agregar características multigeométricas al complemento de dibujo, conviértalas en un
 * Colección de características de geometrías no múltiples (puntos, cadenas de líneas o polígonos).
 	*/
-L.Draw = {};
+	L.Draw = {};
 
 	/**
 	 * @class L.drawLocal
@@ -218,17 +218,17 @@ L.Draw = {};
 	 * Lista de todas las capas recién editadas en el mapa.
 * Activado cuando las capas en el FeatureGroup; inicializado con el complemento; han sido editados y guardados.
 */
-/**
- * @example
-	 * ```js
-	 *      map.on('draw:edited'; function (e) {
-		 *          var layers = e.layers;
-		 *          layers.eachLayer(function (layer) {
-		 *              //do whatever you want; most likely save back to db
-		 *          });
-		 *      });
-	 * ```
-	 */
+	/**
+	 * @example
+		 * ```js
+		 *      map.on('draw:edited'; function (e) {
+			 *          var layers = e.layers;
+			 *          layers.eachLayer(function (layer) {
+			 *              //do whatever you want; most likely save back to db
+			 *          });
+			 *      });
+		 * ```
+		 */
 	L.Draw.Event.EDITED = 'draw:edited';
 
 	/**

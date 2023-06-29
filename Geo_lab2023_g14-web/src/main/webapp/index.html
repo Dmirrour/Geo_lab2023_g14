@@ -184,7 +184,7 @@
         <!-- <button id="crearRecorridoBtn">R</button>  -->
         <!-- <button id="mostrarBuscador">M</button> -->
         <!-- <button id="contenedorFrmBuscar">M</button> -->
-        <button id="bufferBtn2">BFR</button>
+        <button id="bufferBtn2" title="Mostrar Buffer">BFR</button>
 
         <div id="map-container">
             <div id="map"></div>
@@ -235,14 +235,17 @@
     var btnUpdate = document.getElementById("btnUpdate");
     var bufferBtn2 = document.getElementById("bufferBtn2");
     btnUpdate.addEventListener("click", function () {
-        //menuInicio();
+       // menuInicio();
         map.removeLayer(geojsonLayere);
         map.removeLayer(geojsonLayeres);
         map.removeLayer(geojsonLayer);
-   
-        removerLayer();
-        geojsonLayerBuff.remove();
-       // initLayers(0)
+      //  map.invalidateSize();
+
+       removerLayer();
+      //  geojsonLayerBuff.remove();
+
+      location.reload();
+     //  initLayers(0)
     });
     
     bufferBtn2.addEventListener("click", function () {
@@ -268,8 +271,11 @@
 <script src="./userAnonimo/scriptLeaflet/MovingMarker.js"></script>
 <!-- <script type="text/javascript" src="./userAnonimo/scriptLeaflet/Leaflet.MovingMarker-master/Leaflet.MovingMarker-master/examples/scriptRecorrido.js"></script> -->
 <script>
-    menuInicio();
-    initLayers(0); // indexInvitado.js
+            menuInicio();
+         initLayers(0); // indexInvitado.js
+             
+
+ //   map.invalidateSize();
  // montevideo();
 //zonasSinCobertura();
 // hardcodedDataPoint();

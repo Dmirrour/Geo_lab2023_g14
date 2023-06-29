@@ -6292,9 +6292,12 @@
     L.Icon.Default = L.Icon.extend({
 
         options: {
-            iconUrl: '../images/ambulance.svg',
-            iconRetinaUrl: '../images/ambulance.svg',
-            shadowUrl: '../images/ambulance.svg',
+            // iconUrl: '../images/ambulance.svg',
+            // iconRetinaUrl: '../images/ambulance.svg',
+            // shadowUrl: '../images/ambulance.svg',
+            iconUrl: '../images/marker-icon.png',
+            iconRetinaUrl: '../images/marker-icon.png',
+            shadowUrl: '../images/marker-shadow.png',
             iconSize: [25, 41],
             iconAnchor: [12, 41],
             popupAnchor: [1, -34],
@@ -6322,7 +6325,7 @@
             document.body.removeChild(el);
 
             return path.indexOf('url') === 0 ?
-                path.replace(/^url\([\"\']?/, '').replace(/ambulance\.png[\"\']?\)$/, '') : '';
+                path.replace(/^url\([\"\']?/, '').replace(/marker-icon\.png[\"\']?\)$/, '') : '';
         }
     });
 

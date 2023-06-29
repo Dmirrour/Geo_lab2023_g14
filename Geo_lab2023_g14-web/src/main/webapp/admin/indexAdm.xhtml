@@ -76,7 +76,7 @@
                   <p:submenu label="Alta">
                      <p:menuitem value="Alta Hospital" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg1').show()" />
                      <p:menuitem value="Alta Ambulancia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg2').show()" />
-                     <p:menuitem value="Alta S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg3').show(); mostrarMarker();" oncomplete=""/>
+                     <p:menuitem value="Alta S. Emergencia" type="button" icon="pi pi-external-link" onclick="ocultarDlgs(); PF('dlg3').show(); mostrarMarker();" oncomplete="" />
                   </p:submenu>
                </p:menubar>
             </div>
@@ -203,20 +203,20 @@
       </form>
    </div>
 </h:body>
-   <script>
-      var collapseEsquina = new bootstrap.Collapse(document.getElementById("collapseEsquina"));//este tira un error en cosola
-      var collapseNumero = new bootstrap.Collapse(document.getElementById("collapseNumero"));
-   </script>
-   <script>
-      // Escuchar el evento de mostrar el acordeón de Esquina
-      document.getElementById("acordeonEsquina").addEventListener("show.bs.collapse", function () {
-         collapseNumero.hide(); // Ocultar el acordeón de Número
-      });
+<script>
+   var collapseEsquina = new bootstrap.Collapse(document.getElementById("collapseEsquina"));//este tira un error en cosola
+   var collapseNumero = new bootstrap.Collapse(document.getElementById("collapseNumero"));
+</script>
+<script>
+   // Escuchar el evento de mostrar el acordeón de Esquina
+   document.getElementById("acordeonEsquina").addEventListener("show.bs.collapse", function () {
+      collapseNumero.hide(); // Ocultar el acordeón de Número
+   });
 
-      // Escuchar el evento de mostrar el acordeón de Número
-      document.getElementById("acordeonNumero").addEventListener("show.bs.collapse", function () {
-         collapseEsquina.hide(); // Ocultar el acordeón de Esquina
-      });
+   // Escuchar el evento de mostrar el acordeón de Número
+   document.getElementById("acordeonNumero").addEventListener("show.bs.collapse", function () {
+      collapseEsquina.hide(); // Ocultar el acordeón de Esquina
+   });
 
       // Obtén una referencia al botón
       //var crearRecorridoBtn = document.getElementById("crearRecorridoBtn");
@@ -226,220 +226,222 @@
       // Realiza la solicitud al servidor Geoserver para obtener los puntos de inicio y fin
       //obtenerPuntosInicioFin();
       //});
-   </script>
-   <!-- script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
+</script>
+<!-- script src="https://unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
    <script type="" src="./lib/dist/webgl-heatmap.js"></script>
    <script type="" src="./lib/dist/webgl-heatmap-leaflet.min.js"></script -->
-   <script type="" src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
-   <script type="text/javascript">
-      function ocultarDlgs() {
-         PF('dlg1').hide();
-         PF('dlg2').hide();
-         PF('dlg3').hide();
-         PF('dlg4').hide();
-         PF('dlg6').hide();
-         PF('dlg7').hide();
-         PF('dlg8').hide();
-         PF('dlg9').hide();
+<script type="" src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+<script type="text/javascript">
+   function ocultarDlgs() {
+      PF('dlg1').hide();
+      PF('dlg2').hide();
+      PF('dlg3').hide();
+      PF('dlg4').hide();
+      PF('dlg6').hide();
+      PF('dlg7').hide();
+      PF('dlg8').hide();
+      PF('dlg9').hide();
+   }
+   function actualizarD() {
+      PF('dlg2').refresh()
+      PF('dlg3').refresh()
+      PF('dlg8').refresh()
+   }
+
+   let mapaAdmin = new ControladorMapa();
+   mapaAdmin.crearMapaAdmin();
+   //mapaAdmin.addLayerWFSbuf();
+   //mapaAdmin.addLayersWFS();
+   //mapaAdmin.addLayerWFSLine();
+
+   function mostrarMarker() {
+      mapaAdmin.cargarMapaAltaSE();
+   }
+   function mostrarMarker2(date) {
+      mapaAdmin.cargarMapaModSE(date);
+   }
+
+   // Botón de mostrar/ocultar servicio con mas ambulancias
+   var btnCobertura = document.getElementById("btnServMasAmb");
+   btnCobertura.addEventListener("click", function () {
+      //console.log("click en btnServMasAmb");
+
+      if (mapaAdmin.capaAddLayerWFSbufferNoIntersect != null) {
+         btnCobertura.style.backgroundColor = '#f4f4f4';
+         mapaAdmin.capaAddLayerWFSbufferNoIntersect.remove();
+         mapaAdmin.capaAddLayerWFSbufferNoIntersect = null;
+      } else {
+         // Servicio con mas ambulancias
+         mapaAdmin.addLayerWFSbufferNoIntersect();
+         btnCobertura.style.backgroundColor = '#f60707';
       }
-      function actualizarD() {
-         PF('dlg2').refresh()
-         PF('dlg3').refresh()
-         PF('dlg8').refresh()
+   });
+   $(document).ready(function () {
+      $(btnCobertura).tooltip({
+         placement: "left",
+         title: "Servicios con mas ambulancias.",
+         trigger: "hover"
+      });
+   });
+
+   // Botón de mostrar/ocultar servicios de emergecnia
+   var btnMOSE = document.getElementById("btnMOSerEme");
+   btnMOSE.addEventListener("click", function () {
+      //console.log("click en btnMOSerEme");
+      if (mapaAdmin.capaAddLayerWFSSE != null) {
+         btnMOSE.style.backgroundColor = '#f4f4f4';
+         mapaAdmin.capaAddLayerWFSSE.remove();
+         mapaAdmin.capaAddLayerWFSSE = null;
+      } else {
+         // Servicios de emergencia
+         btnMOSE.style.backgroundColor = '#f60707';
+         mapaAdmin.addLayersWFS();
       }
+   });
 
-      let mapaAdmin = new ControladorMapa();
-      mapaAdmin.crearMapaAdmin();
-      //mapaAdmin.addLayerWFSbuf();
-      //mapaAdmin.addLayersWFS();
-      //mapaAdmin.addLayerWFSLine();
-
-      function mostrarMarker() {
-         mapaAdmin.cargarMapaAltaSE();
+   // Botón de mostrar/ocultar recorridos
+   var btnMORecorridos = document.getElementById("btnMORecorridos");
+   btnMORecorridos.addEventListener("click", function () {
+      //console.log("click en btnMORecorridos");
+      if (mapaAdmin.capaAddLayerWFSLine != null) {
+         btnMORecorridos.style.backgroundColor = '#f4f4f4';
+         mapaAdmin.capaAddLayerWFSLine.remove();
+         mapaAdmin.capaAddLayerWFSLine = null;
+      } else {
+         // Recorridos
+         btnMORecorridos.style.backgroundColor = '#f60707';
+         mapaAdmin.addLayerWFSLine();
       }
-      function mostrarMarker2(date) {
-         mapaAdmin.cargarMapaModSE(date);
+   });
+
+   // Botón de mostrar/ocultar zonas sin cobertura
+   var btnZsC = document.getElementById("btnZsC");
+   btnZsC.addEventListener("click", function () {
+      //console.log("click en btnZsC");
+      if (mapaAdmin.capaAddLayerWFSZonaSCobertura != null) {
+         //console.log("click en btnZsC deberia borrar la capa");
+         btnZsC.style.backgroundColor = '#f4f4f4';
+         mapaAdmin.capaAddLayerWFSZonaSCobertura.remove();
+         mapaAdmin.capaAddLayerWFSZonaSCobertura = null;
+      } else {
+         // zonas sin cobertura
+         //console.log("click en btnZsC deberia agregar la capa");
+         btnZsC.style.backgroundColor = '#f60707';
+         zonasSinCobertura();
       }
+   });
 
-      // Botón de mostrar/ocultar servicio con mas ambulancias
-      var btnCobertura = document.getElementById("btnServMasAmb");
-      btnCobertura.addEventListener("click", function () {
-         //console.log("click en btnServMasAmb");
-
-         if (mapaAdmin.capaAddLayerWFSbufferNoIntersect != null) {
-            btnCobertura.style.backgroundColor = '#f4f4f4';
-            mapaAdmin.capaAddLayerWFSbufferNoIntersect.remove();
-            mapaAdmin.capaAddLayerWFSbufferNoIntersect = null;
-         }else {
-            // Servicio con mas ambulancias
-            mapaAdmin.addLayerWFSbufferNoIntersect();
-            btnCobertura.style.backgroundColor = '#f60707';
-         }
-      });
-      $(document).ready(function() {
-         $(btnCobertura).tooltip({
-            placement: "left",
-            title: "Servicios con mas ambulancias.",
-            trigger: "hover"
-         });
-      });
-
-      // Botón de mostrar/ocultar servicios de emergecnia
-      var btnMOSE = document.getElementById("btnMOSerEme");
-      btnMOSE.addEventListener("click", function () {
-         //console.log("click en btnMOSerEme");
-         if (mapaAdmin.capaAddLayerWFSSE != null) {
-            btnMOSE.style.backgroundColor = '#f4f4f4';
-            mapaAdmin.capaAddLayerWFSSE.remove();
-            mapaAdmin.capaAddLayerWFSSE = null;
-         }else {
-            // Servicios de emergencia
-            btnMOSE.style.backgroundColor = '#f60707';
-            mapaAdmin.addLayersWFS();
-         }
-      });
-
-      // Botón de mostrar/ocultar recorridos
-      var btnMORecorridos = document.getElementById("btnMORecorridos");
-      btnMORecorridos.addEventListener("click", function () {
-         //console.log("click en btnMORecorridos");
-         if (mapaAdmin.capaAddLayerWFSLine != null) {
-            btnMORecorridos.style.backgroundColor = '#f4f4f4';
-            mapaAdmin.capaAddLayerWFSLine.remove();
-            mapaAdmin.capaAddLayerWFSLine = null;
-         }else {
-            // Recorridos
-            btnMORecorridos.style.backgroundColor = '#f60707';
-            mapaAdmin.addLayerWFSLine();
-         }
-      });
-
-      // Botón de mostrar/ocultar zonas sin cobertura
-      var btnZsC = document.getElementById("btnZsC");
-      btnZsC.addEventListener("click", function () {
-         //console.log("click en btnZsC");
-         if (mapaAdmin.capaAddLayerWFSZonaSCobertura != null) {
-            //console.log("click en btnZsC deberia borrar la capa");
-            btnZsC.style.backgroundColor = '#f4f4f4';
-            mapaAdmin.capaAddLayerWFSZonaSCobertura.remove();
-            mapaAdmin.capaAddLayerWFSZonaSCobertura = null;
-         }else {
-            // zonas sin cobertura
-            //console.log("click en btnZsC deberia agregar la capa");
-            btnZsC.style.backgroundColor = '#f60707';
-            zonasSinCobertura();
-         }
-      });
-
-      // Botón de mostrar/ocultar buffer
-      var btnMOBuffer = document.getElementById("btnMBuffer");
-      btnMOBuffer.addEventListener("click", function () {
-         //console.log("click en btnMBuffer");
-         if (mapaAdmin.capaAddLayerWFSbuf != null) {
-            btnMOBuffer.style.backgroundColor = '#f4f4f4';
-            mapaAdmin.capaAddLayerWFSbuf.remove();
-            mapaAdmin.capaAddLayerWFSbuf = null;
-         }else {
-            // buffer
-            btnMOBuffer.style.backgroundColor = '#f60707';
-            mapaAdmin.addLayerWFSbuf();
-         }
-      });
-      $(document).ready(function() {
-         $(btnMOBuffer).tooltip({
-            placement: "left",
-            title: "Mostrar/Ocultar zonas CON cobertura.",
-            trigger: "hover"
-         });
-      });
-
-      mapaAdmin.cargarMapaAltaAmbulancia(#{adminBean.size});
-
-      function zonasSinCobertura() {
-         var bufferCoordinates;
-         var polygons;
-         var buffLenght;
-         let geojsonLayer = L.geoJSON(null, {
-            style: {
-               color: 'blue',
-               weight: 0,
-               opacity: 1,
-               fillOpacity: 1
-            },
-         });
-         let urlSinCobertura =
-                 'http://localhost:8081/geoserver/wfs?' +
-                 'service=WFS&amp;' +
-                 'request=GetFeature&amp;' +
-                 'typeName=Geo_lab2023_g14PersistenceUnit:vista_union_buf&amp;' +
-                 'srsName=EPSG:32721&amp;' +
-                 'outputFormat=application/json';
-         fetch(urlSinCobertura)
-                 .then(function (response) {
-                    return response.json();
-                 })
-                 .then(function (data) {
-                    var features = data.features;
-                    features.forEach(function (feature) {
-                       var geometry = feature.geometry;
-                       bufferCoordinates = geometry.coordinates;
-                       buffLenght = geometry.coordinates.length;
-                       polygons = turf.polygon(bufferCoordinates[0], {});
-                    });
-                    L.geoJson(mapaAdmin.polygonMontevideo(), {
-                       onEachFeature: function (feature, layer) {
-                          var poly1 = feature.geometry;
-                          //console.log(feature);
-                          geojsonLayer = L.geoJson(polygons, {
-                             onEachFeature: function (feature, layer) {
-                                //console.log(feature);
-                                var poly2 = feature.geometry;
-                                //console.log(poly2);
-                                var intersection = turf.difference(poly1, poly2);
-                                for (let i = 0; i &lt; buffLenght; i++) {
-                                   polygons = turf.polygon(bufferCoordinates[i], {});
-                                   intersection = turf.difference(intersection, polygons);
-                                }
-                                //   L.geoJson(intersection).addTo(map);
-                                L.geoJSON(intersection, {
-                                   style: {
-                                      color: 'blue',
-                                      weight: 1,
-                                      opacity: 0.7
-                                   },
-                                }).addTo(mapaAdmin.map);
-                                //console.log({ poly1, poly2, intersection })
-                             }
-                          })
-                       }
-                    })
-                    // difference // intersect
-                 })
-                 .catch(function (error) {
-                    console.error('Error:', error);
-                 });
-         mapaAdmin.capaAddLayerWFSZonaSCobertura = geojsonLayer;
+   // Botón de mostrar/ocultar buffer
+   var btnMOBuffer = document.getElementById("btnMBuffer");
+   btnMOBuffer.addEventListener("click", function () {
+      //console.log("click en btnMBuffer");
+      if (mapaAdmin.capaAddLayerWFSbuf != null) {
+         btnMOBuffer.style.backgroundColor = '#f4f4f4';
+         mapaAdmin.capaAddLayerWFSbuf.remove();
+         mapaAdmin.capaAddLayerWFSbuf = null;
+      } else {
+         // buffer
+         btnMOBuffer.style.backgroundColor = '#f60707';
+         mapaAdmin.addLayerWFSbuf();
       }
-
-   </script>
-   <script type="text/javascript">
-      $(document).ready(function () {
-         var showDialogs = '#{param.showDialogs}';
-         console.log('entre al script');
-         if (showDialogs === 'true') {
-            PF('dlg9').show();
-            console.log('Diálogos mostrados');
-         }
+   });
+   $(document).ready(function () {
+      $(btnMOBuffer).tooltip({
+         placement: "left",
+         title: "Mostrar/Ocultar zonas CON cobertura.",
+         trigger: "hover"
       });
+   });
 
-      function toggleNavbar() {
-         var menuBar = document.getElementById("menuBar");
+   mapaAdmin.cargarMapaAltaAmbulancia(#{ adminBean.size });
 
-         if (menuBar.style.display === "none") {
-            menuBar.style.display = "block";
-         } else {
-            menuBar.style.display = "none";
+   function zonasSinCobertura() {
+      var bufferCoordinates;
+      var polygons;
+      var buffLenght;
+      let geojsonLayer = L.geoJSON(null, {
+         style: {
+            color: 'blue',
+            weight: 0,
+            opacity: 1,
+            fillOpacity: 1
+         },
+      });
+      let urlSinCobertura =
+         'http://localhost:8081/geoserver/wfs?' +
+         'service=WFS&amp;' +
+         'request=GetFeature&amp;' +
+         'typeName=Geo_lab2023_g14PersistenceUnit:vista_union_buf&amp;' +
+         'srsName=EPSG:32721&amp;' +
+         'outputFormat=application/json';
+      fetch(urlSinCobertura)
+         .then(function (response) {
+            return response.json();
+         })
+         .then(function (data) {
+            var features = data.features;
+            features.forEach(function (feature) {
+               var geometry = feature.geometry;
+               bufferCoordinates = geometry.coordinates;
+               buffLenght = geometry.coordinates.length;
+               polygons = turf.polygon(bufferCoordinates[0], {});
+            });
+            L.geoJson(mapaAdmin.polygonMontevideo(), {
+               onEachFeature: function (feature, layer) {
+                  var poly1 = feature.geometry;
+                  //console.log(feature);
+                  geojsonLayer = L.geoJson(polygons, {
+                     onEachFeature: function (feature, layer) {
+                        //console.log(feature);
+                        var poly2 = feature.geometry;
+                        //console.log(poly2);
+                        var intersection = turf.difference(poly1, poly2);
+                        for (let i = 0; i &lt; buffLenght; i++) {
+                     polygons = turf.polygon(bufferCoordinates[i], {});
+                     intersection = turf.difference(intersection, polygons);
+                  }
+                  //   L.geoJson(intersection).addTo(map);
+                  L.geoJSON(intersection, {
+                     style: {
+                        color: 'blue',
+                        weight: 1,
+                        opacity: 0.7
+                     },
+                  }).addTo(mapaAdmin.map);
+                  //console.log({ poly1, poly2, intersection })
+               }
+            })
          }
+              })
+            // difference // intersect
+         })
+         .catch (function (error) {
+      console.error('Error:', error);
+   })
+
+   mapaAdmin.capaAddLayerWFSZonaSCobertura = geojsonLayer;
+   }
+
+</script>
+<script type="text/javascript">
+   $(document).ready(function () {
+      var showDialogs = '#{param.showDialogs}';
+      console.log('entre al script');
+      if (showDialogs === 'true') {
+         PF('dlg9').show();
+         console.log('Diálogos mostrados');
       }
-   </script>
+   });
+
+   function toggleNavbar() {
+      var menuBar = document.getElementById("menuBar");
+
+      if (menuBar.style.display === "none") {
+         menuBar.style.display = "block";
+      } else {
+         menuBar.style.display = "none";
+      }
+   }
+</script>
+
 </html>

@@ -12,6 +12,7 @@ let latitudeGPS;
 let longitudeGPS;
 var idhosss;
 var drawControlPoligon;
+var op;
 /////////////////// SELECT CONTROL ///////////////////
 function menuInicio() {
     let listaSelect;
@@ -36,16 +37,23 @@ function menuInicio() {
             switch (newItemValue) {
                 case 1:
                     console.log("Cobertura en mi ubicación");
-                    // limpiarButton();
-                    // initLayers(0);
+                    limpiarButton();
+                    //  initLayers(0);
+                    map.removeLayer(geojsonLayere);
+                    map.removeLayer(geojsonLayeres);
+                    removerLayer();
+               
                     ocultarFrm();
                     map.removeLayer(geojsonLayer);
                     obtenerCoordenadas()
                         .then(function (coor) {
                             coorUserlon = coor.longitud;
                             coorUserlat = coor.latitud;
-                            console.log('Lat obtener Coordenadas: ', coorUserlat, ' ', coorUserlon);
-                            intersectpoint(coorUserlat, coorUserlon);
+                            // console.log('Lat obtener Coordenadas: ', coorUserlat, ' ', coorUserlon);
+                            // ocultarFrm();
+                            // map.removeLayer(geojsonLayer);
+                            intersectpoint(coor.latitud, coor.longitud);
+                            // intersectpoint(coorUserlat, coorUserlon);
                         })
                         .catch(function (error) {
                             console.error('Error al obtener las coordenadas:', error);
@@ -76,7 +84,11 @@ function menuInicio() {
                     map.removeLayer(geojsonLayer);
                     map.removeLayer(geojsonLayere);
                     map.removeLayer(geojsonLayeres);
-                    dibujarPolyline();
+                    //  removerLayer();
+                    // geojsonLayeres.removeFrom(map);
+
+                    // map.removerLayer(marker3);
+                   dibujarPolyline();
                     // ocultarFrm();
                     // selectCtrlHospital.remove();
                     break;
@@ -85,6 +97,7 @@ function menuInicio() {
                     map.removeLayer(geojsonLayer);
                     map.removeLayer(geojsonLayere);
                     map.removeLayer(geojsonLayeres);
+                    removerLayer();
                     camasDisponibles();
                     break;
             }
@@ -399,8 +412,8 @@ function obtenerCoordenadasGPS() {
             console.error("Error al obtener la ubicación: " + error.message);
         });
     } else {
-        +
-            console.error("Tu navegador no admite la geolocalización.");
+        //   +
+        console.error("Tu navegador no admite la geolocalización.");
     }
 }
 
@@ -414,20 +427,30 @@ var iconA = L.icon({
 function intersectpoint(coorUserlat, coorUserlon) {
     let iconoPersonalizado = L.icon({
         iconUrl: 'resources/marker-icons/marker-iconnaranjaf.png',
-        iconSize: [22, 36]
+        iconSize: [22, 36],
+        iconAnchor: [12, 35],
+        popupAnchor: [0, -32]
+
     });
+    if (marcador) {
+        map.removeLayer(marcador);
+        map.removeLayer(circulo);
+    }
     marcador = L.marker([coorUserlat, coorUserlon], { icon: iconoPersonalizado }).addTo(map);
     marcador.display;
     circulo = L.circle([coorUserlat, coorUserlon], { // Circulo verde zona
-        radius: 150,
-        color: "green"
+        radius: 600,
+        weight: 0.9,
+        opacity: 1,
+        fillOpacity: 0.09,
+        color: '#035'
     }).addTo(map)
 
-    let geojsonLayer = L.geoJSON(null, {
+    geojsonLayer = L.geoJSON(null, {
         style: {
             color: 'red',
-            weight: 0.8,
-            opacity: 0.5
+            weight: 1,
+            opacity: 0.6
         },
     }).addTo(map);
     let urlIntersect =
@@ -474,10 +497,10 @@ function intersectpoint(coorUserlat, coorUserlon) {
     L.geoJSON(puntos2, {
         pointToLayer: function (feature, latlng) {
             return L.marker(latlng, {
-                // icon: iconA
+                icon: iconA
             });
         }
-    })//.addTo(map);
+    }).addTo(map);
 
     var punto = {
         type: 'FeatureCollection',

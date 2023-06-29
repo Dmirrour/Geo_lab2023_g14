@@ -188,10 +188,10 @@ function actualizarMapa(Lat, Lng) {
         fillOpacity: 0.09,
         color: '#035'
     }).addTo(map)
-    //circulo.bindPopup("Circulo")
-    //frmBuscar.style.display = 'none';
-    //btnMostrarBuscador.style.backgroundColor = '#f4f4f4';
-    //map.setView([seleccionEsq.lat, seleccionEsq.lng], 13);
+    circulo.bindPopup("Circulo")
+    // frmBuscar.style.display = 'none';
+    // btnMostrarBuscador.style.backgroundColor = '#f4f4f4';
+    map.setView([seleccionEsq.lat, seleccionEsq.lng], 13);
 
 
     ///////////////// USUARIO
@@ -281,8 +281,8 @@ buscarUbicacionBtn.addEventListener('click', function () {
             console.log('---------- GPS ------------');
             console.log('Latitud: ', coor.latitud);
             console.log('Longitud: ', coor.longitud);
-            coor.longitud = -56.16586446762086;
-            coor.latitud = -34.91755507267872;
+            // coor.longitud = -56.16586446762086;
+            // coor.latitud = -34.91755507267872;
             actualizarMapa(coor.latitud, coor.longitud);
         })
         .catch(function (error) {
