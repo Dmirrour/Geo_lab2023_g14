@@ -45,7 +45,8 @@ public class ServicioEmBean implements Serializable {
     private double longitud; // agregamos la propiedad longitud
     private String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
     private String usuario = "postgres";
-    private String contraseña = "1234";
+    private String contraseña = "admin";
+    //private String contraseña = "1234";
     private int size;
 
     private ServicioEmergenciaDTO servselect;
@@ -138,7 +139,7 @@ public class ServicioEmBean implements Serializable {
             else if(a.getCamasLibres()>totalCama) {
                 camasLibre = totalCama - (a.getTotalCama() - a.getCamasLibres());//si se sacaron camas pero el servicio de emergencia tenia mas agarro la nuevas cantidad de camas y le resto las que estaban ocupadas
                 if (camasLibre < 0) {
-                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Tienes menos camas quelas ocupadas", ""));
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Tienes menos camas que las ocupadas", ""));
                     return;
                 }
             }
@@ -241,6 +242,8 @@ public class ServicioEmBean implements Serializable {
                 }
 
             }else{
+                totalCama=0;
+                nombreS=null;
                 camasLib=null;
             }
         } catch (SQLException  | IOException e) {

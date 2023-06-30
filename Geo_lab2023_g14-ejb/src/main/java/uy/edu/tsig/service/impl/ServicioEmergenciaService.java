@@ -65,11 +65,7 @@ public class ServicioEmergenciaService implements IServicioEmergenciaService {
 
         s.setCamasLibres(serv.getCamasLibres());
         s.setNombre(serv.getNombre());
-        if(s.getTotalCama()<serv.getTotalCama()){
-            s.setTotalCama(serv.getCamasLibres());
-        }else{
-            s.setTotalCama(serv.getTotalCama());
-        }
+        s.setTotalCama(serv.getTotalCama());
         iServicioEmergenciaDAO.modificar(s);
     }
 }
