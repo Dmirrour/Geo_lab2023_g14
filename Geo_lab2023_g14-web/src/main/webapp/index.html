@@ -240,10 +240,8 @@
         map.removeLayer(geojsonLayeres);
         map.removeLayer(geojsonLayer);
       //  map.invalidateSize();
-
        removerLayer();
       //  geojsonLayerBuff.remove();
-
       location.reload();
      //  initLayers(0)
     });
@@ -271,69 +269,15 @@
 <script src="./userAnonimo/scriptLeaflet/MovingMarker.js"></script>
 <!-- <script type="text/javascript" src="./userAnonimo/scriptLeaflet/Leaflet.MovingMarker-master/Leaflet.MovingMarker-master/examples/scriptRecorrido.js"></script> -->
 <script>
-            menuInicio();
-         initLayers(0); // indexInvitado.js
+    menuInicio();
+    initLayers(0); // indexInvitado.js
              
-
- //   map.invalidateSize();
+ // map.invalidateSize();
  // montevideo();
-//zonasSinCobertura();
-// hardcodedDataPoint();
-    // addLayerWFSbuf();
+ // zonasSinCobertura();
+ // hardcodedDataPoint();
+ // addLayerWFSbuf();
     
-    // wfsSelectHospitales(); // controladorUsuario.js // Seleccionar Hospital (control-button)
-    // CrearMapaInvitado(); // ver linea 13 buscadorCalles
+ // wfsSelectHospitales(); // controladorUsuario.js // Seleccionar Hospital (control-button)
+ // CrearMapaInvitado(); // ver linea 13 buscadorCalles
 </script>
-
-
-
-<!-- 
-    // wfsSelectHospitales(); // controladorUsuario.js // Seleccionar Hospital (control-button)
-    // CrearMapaInvitado(); // linea 13 buscadorCalles
-// function obtenerPuntosInicioFin() {
-// // Realiza la solicitud al servidor Geoserver para obtener los puntos de inicio y fin
-// var url = 'http://localhost:8081/geoserver/wfs?' +
-// 'service=WFS&' +
-// 'request=GetFeature&' +
-// 'typeName=Geo_lab2023_g14PersistenceUnit:vista_se_h&' +
-// 'srsName=EPSG:32721&' +
-// 'outputFormat=application/json';
-// axios.get(url, {
-// headers: {
-// "Content-Type": "text/xml"
-// }
-// })
-// .then(function (response) {
-// // Manejar la respuesta del servidor
-// var features = response.data.features;
-// let cantidad = features.length;
-// // let mensaje = "Se encontraron # " + cantidad + " servicios en su área.";
-// // +
-// features.forEach(function (feature) {
-// puntoInicioCoords = feature.geometry.coordinates;
-// mensaje += puntoInicioCoords;
-// // mensaje += "\n\t- " + feature.properties.nombre + " (" + feature.properties.nombrehospital + ") - [" + puntoInicioCoords + "]";
-// });
-// // alert(mensaje);
-// })
-// .catch(function (error) {
-// console.error("Error al obtener los puntos de inicio y fin:", error);
-// });
-// }
--->
-
-<!-- 
- hardcodedDataPoint();    addLayerWFSbuf();
-// hardcodedDataPoint();
-// wfsAllLayers();
-// wfsServicioEmergencia();
-// wfsAmbulancia()
-// wfsBuscarServicioEmergencia(); // se llama desde wfs wfsSelectHospitales
-// wfsBuscarAmbulancia();
- <button id="bufferBtn2">B</button> 
- Cobertura en mi ubicación // esta en btn selec
- var bufferBtn2 = document.getElementById("bufferBtn2");
- bufferBtn2.addEventListener("click", function () {
- intersectpoint();
- limpiarMapa();
- }); --->

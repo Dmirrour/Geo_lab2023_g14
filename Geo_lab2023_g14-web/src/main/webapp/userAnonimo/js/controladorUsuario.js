@@ -37,27 +37,19 @@ function menuInicio() {
             switch (newItemValue) {
                 case 1:
                     console.log("Cobertura en mi ubicación");
+                    obtenerCoordenadasGPS();
                     limpiarButton();
                     //  initLayers(0);
                     map.removeLayer(geojsonLayere);
                     map.removeLayer(geojsonLayeres);
                     removerLayer();
-               
-                    ocultarFrm();
+                    coorUserlon = this.latitudeGPS;
+                    coorUserlat = this.longitudeGPS;
+                    // console.log('Lat obtener Coordenadas: ', coorUserlat, ' ', coorUserlon);
+                    intersectpoint(coorUserlat, coorUserlon);
                     map.removeLayer(geojsonLayer);
-                    obtenerCoordenadas()
-                        .then(function (coor) {
-                            coorUserlon = coor.longitud;
-                            coorUserlat = coor.latitud;
-                            // console.log('Lat obtener Coordenadas: ', coorUserlat, ' ', coorUserlon);
-                            // ocultarFrm();
-                            // map.removeLayer(geojsonLayer);
-                            intersectpoint(coor.latitud, coor.longitud);
-                            // intersectpoint(coorUserlat, coorUserlon);
-                        })
-                        .catch(function (error) {
-                            console.error('Error al obtener las coordenadas:', error);
-                        });
+                    // ocultarFrm();
+                    //  map.removeLayer(geojsonLayer);
                     break;
                 case 21:
                     console.log("Seleccionar hospital");
@@ -88,7 +80,7 @@ function menuInicio() {
                     // geojsonLayeres.removeFrom(map);
 
                     // map.removerLayer(marker3);
-                   dibujarPolyline();
+                    dibujarPolyline();
                     // ocultarFrm();
                     // selectCtrlHospital.remove();
                     break;
@@ -425,6 +417,9 @@ var iconA = L.icon({
 
 ////////// VER AMBULANCIAS Y SERVICIOSEMERGENCIA CON COBERTURA EN MI ZONA //////////
 function intersectpoint(coorUserlat, coorUserlon) {
+    obtenerCoordenadasGPS();
+    coorUserlat = this.latitudeGPS;
+    coorUserlon = this.longitudeGPS;
     let iconoPersonalizado = L.icon({
         iconUrl: 'resources/marker-icons/marker-iconnaranjaf.png',
         iconSize: [22, 36],
@@ -444,7 +439,7 @@ function intersectpoint(coorUserlat, coorUserlon) {
         opacity: 1,
         fillOpacity: 0.09,
         color: '#035'
-    }).addTo(map)
+    }).addTo(map);
 
     geojsonLayer = L.geoJSON(null, {
         style: {
@@ -513,7 +508,7 @@ function intersectpoint(coorUserlat, coorUserlon) {
             }
         },
         ]
-    }; L.geoJSON(puntos2).addTo(map);
+    }; //L.geoJSON(puntos2).addTo(map);
     L.geoJSON(punto, {
         pointToLayer: function (feature, latlng) {
             let idh = feature.properties.idhospital * 20;
@@ -528,6 +523,7 @@ function intersectpoint(coorUserlat, coorUserlon) {
             });
         }
     }).addTo(map);
+
 }
 
 
@@ -591,7 +587,7 @@ function limpiarMapa() {
 
 //////////////// ARRIBA SE ESTA USANDO///////////////////
 
-function obtenerCoordenadasGPSs() {// ver repetido
+function obtenerCoordenadasGPS() {// ver repetido
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
             this.latitudeGPS = position.coords.latitude;
@@ -609,6 +605,7 @@ function obtenerCoordenadasGPSs() {// ver repetido
         console.error("Tu navegador no admite la geolocalización.");
     }
 }
+
 
 ////////// Ver Ambulancias y ServiciosEmergencia con cobertura en mi zona //////////
 function intersectpoint2() {  ///adriana
@@ -683,7 +680,7 @@ function intersectpoint2() {  ///adriana
             }
         },
         ]
-    }; // L.geoJSON(puntos2).addTo(map);
+    }; L.geoJSON(puntos2).addTo(map);
     L.geoJSON(punto, {
         pointToLayer: function (feature, latlng) {
             let idh = feature.properties.idhospital * 20;
