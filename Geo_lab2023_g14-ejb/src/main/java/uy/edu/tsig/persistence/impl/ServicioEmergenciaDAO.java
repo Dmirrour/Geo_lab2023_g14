@@ -36,7 +36,8 @@ public class ServicioEmergenciaDAO implements IServicioEmergenciaDAO {
 
         if(se!=null){
             Hospital h = se.getHospital();
-            h.setServicioEmergencia(null);
+            h.getServicioEmergencia().remove(se);
+            //h.setServicioEmergencia(null);
             se.setHospital(null);
             em.remove(se);
             return true;

@@ -20,7 +20,6 @@ import java.util.List;
 @Entity
 public class Hospital implements Serializable {
     private static final Long serialVersionUID = 1L;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idHospital;
@@ -31,7 +30,7 @@ public class Hospital implements Serializable {
 
     @Builder.Default
     @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true)
-    List<ServicioEmergencia> ServicioEmergencia= new ArrayList<>();
+    List<ServicioEmergencia> ServicioEmergencia = new ArrayList<>();
  
     @Builder.Default
     @OneToMany(fetch = FetchType.EAGER, orphanRemoval = true)

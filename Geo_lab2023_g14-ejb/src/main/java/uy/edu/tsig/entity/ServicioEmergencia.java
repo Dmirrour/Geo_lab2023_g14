@@ -19,7 +19,6 @@ import java.io.Serializable;
 public class ServicioEmergencia implements Serializable {
 
     private static final Long serialVersionUID = 1L;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idServicio;
@@ -27,7 +26,7 @@ public class ServicioEmergencia implements Serializable {
     private String nombre;
     private int totalCama;
     private int camasLibres;
-     @ManyToOne
+    @ManyToOne
     private Hospital hospital;
 
     // En tu clase de entidad, donde tienes el campo point, asegúrate de utilizar la

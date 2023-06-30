@@ -45,8 +45,7 @@ public class ServicioEmBean implements Serializable {
     private double longitud; // agregamos la propiedad longitud
     private String url = "jdbc:postgresql://localhost:5432/Geo_lab2023_g14PersistenceUnit";
     private String usuario = "postgres";
-    //private String contraseña = "admin";1234
-    private String contraseña = "lapass";
+    private String contraseña = "1234";
     private int size;
 
     private ServicioEmergenciaDTO servselect;
