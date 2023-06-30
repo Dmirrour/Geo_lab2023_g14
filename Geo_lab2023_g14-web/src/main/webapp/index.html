@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>AAAS</title>
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>  
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous" />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="scripts/lib/ol-v6.13.0/ol.css">
@@ -16,7 +16,7 @@
     <script src="scripts/lib/ol-ext-v3.2.23/ol-ext.js"></script>
     <link rel="stylesheet" href="scripts/lib/ol-ext-v3.2.23/font-awesome.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
-    
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="Leaflet.GeojsonLayerSwitcher.min.css" />
     <script src="Leaflet.GeojsonLayerSwitcher.min.js"></script>
@@ -33,9 +33,9 @@
     <!-- <script src="scripts/geolet.js"></script> -->
 
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
-  <link rel="stylesheet" href="./userAnonimo/scriptLeaflet/Leaflet.MovingMarker-master/Leaflet.MovingMarker-master/examples/style.css" />
+    <!-- CSS -->
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+    <link rel="stylesheet" href="./userAnonimo/scriptLeaflet/Leaflet.MovingMarker-master/Leaflet.MovingMarker-master/examples/style.css" />
 
 
 
@@ -57,139 +57,139 @@
 </head>
 
 <body>
-    <div id="navbar">
-        <nav class="navbar navbar-expand-sm navbar-black bg-black">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="javascript:void(0)"></a>
-                <img id="logo" src="./admin/lib/images/logo.jpg" alt="AAAS"></img>
+<div id="navbar">
+    <nav class="navbar navbar-expand-sm navbar-black bg-black">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="javascript:void(0)"></a>
+            <img id="logo" src="./admin/lib/images/logo.jpg" alt="AAAS"></img>
 
-                <div class="d-flex" id="mynavbar">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" style="color:#00a5ff" href="/Geo_lab2023_g14-web/login.xhtml">Ingresar</a>
-                        </li>
-                    </ul>
-                </div>
+            <div class="d-flex" id="mynavbar">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" style="color:#00a5ff" href="/Geo_lab2023_g14-web/login.xhtml">Ingresar</a>
+                    </li>
+                </ul>
             </div>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </nav>
-        <!-- 
-        <button id="buscarUbicacion"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-geo" viewBox="0 0 16 16">
-                <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm0-15a7 7 0 1 1 0 14A7 7 0 0 1 8 1zm0 4a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm0 1a2 2 0 1 1 0 4 2 2 0 0 1 0-4z" />
-            </svg></button> -->
-        <!-- <button id="mostrarBuscador"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-signpost-2" viewBox="0 0 16 16">
-                <path d="M7 1.414V2H2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h5v1H2.5a1 1 0 0 0-.8.4L.725 8.7a.5.5 0 0 0 0 .6l.975 1.3a1 1 0 0 0 .8.4H7v5h2v-5h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H9V6h4.5a1 1 0 0 0 .8-.4l.975-1.3a.5.5 0 0 0 0-.6L14.3 2.4a1 1 0 0 0-.8-.4H9v-.586a1 1 0 0 0-2 0zM13.5 3l.75 1-.75 1H2V3h11.5zm.5 5v2H2.5l-.75-1 .75-1H14z" />
-            </svg></button>  -->
-        <div id="contenedorFrmBuscar" style="display: none;">
-            <form id="frmBuscador" action="#" method="post">
-                <div id="ubicacion">
-                    <div class="card card-header-actions border-success mb-5" style=" position: relative; top: -30px; left: 35px;">
-                        <div class=" card-header ">
-                            <div class=" input-group">
-                                <span class="input-group-text" id="basic-addon3">Calle</span>
-                                <input type="text" placeholder="Escriba el nombre de la calle..." class="form-control buscador-fluid" id="buscador" name="buscador" onkeyup="sugerencia(this.value)" aria-describedby="basic-addon3 basic-addon4">
-                            </div>
-                            <div class="dropdown-notifications">
-                                <div class="dropdown-menu dropdown-menu-right border-0 shadow" id="" aria-labelledby="navbarDropdownAlerts">
-                                </div>
+        </div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </nav>
+    <!--
+    <button id="buscarUbicacion"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-geo" viewBox="0 0 16 16">
+            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm0-15a7 7 0 1 1 0 14A7 7 0 0 1 8 1zm0 4a3 3 0 1 0 0 6 3 3 0 0 0 0-6zm0 1a2 2 0 1 1 0 4 2 2 0 0 1 0-4z" />
+        </svg></button> -->
+    <!-- <button id="mostrarBuscador"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-signpost-2" viewBox="0 0 16 16">
+            <path d="M7 1.414V2H2a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h5v1H2.5a1 1 0 0 0-.8.4L.725 8.7a.5.5 0 0 0 0 .6l.975 1.3a1 1 0 0 0 .8.4H7v5h2v-5h5a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1H9V6h4.5a1 1 0 0 0 .8-.4l.975-1.3a.5.5 0 0 0 0-.6L14.3 2.4a1 1 0 0 0-.8-.4H9v-.586a1 1 0 0 0-2 0zM13.5 3l.75 1-.75 1H2V3h11.5zm.5 5v2H2.5l-.75-1 .75-1H14z" />
+        </svg></button>  -->
+    <div id="contenedorFrmBuscar" style="display: none;">
+        <form id="frmBuscador" action="#" method="post">
+            <div id="ubicacion">
+                <div class="card card-header-actions border-success mb-5" style=" position: relative; top: -30px; left: 35px;">
+                    <div class=" card-header ">
+                        <div class=" input-group">
+                            <span class="input-group-text" id="basic-addon3">Calle</span>
+                            <input type="text" placeholder="Escriba el nombre de la calle..." class="form-control buscador-fluid" id="buscador" name="buscador" onkeyup="sugerencia(this.value)" aria-describedby="basic-addon3 basic-addon4">
+                        </div>
+                        <div class="dropdown-notifications">
+                            <div class="dropdown-menu dropdown-menu-right border-0 shadow" id="" aria-labelledby="navbarDropdownAlerts">
                             </div>
                         </div>
-                        <div class="card-body">
-                            <!---------------------------------------------------------------------------
-                                                UBICACION
-                            ------------------------------------------------------------------------------>
-                            <div class="row justify-content-center">
-                                <!-- notificaciones -->
-                                <div class="dropdown-notifications">
-                                    <div class="dropdown-menu dropdown-menu-right border-0 shadow" id="visorDeListado" aria-labelledby="navbarDropdownAlerts">
-                                    </div>
+                    </div>
+                    <div class="card-body">
+                        <!---------------------------------------------------------------------------
+                                            UBICACION
+                        ------------------------------------------------------------------------------>
+                        <div class="row justify-content-center">
+                            <!-- notificaciones -->
+                            <div class="dropdown-notifications">
+                                <div class="dropdown-menu dropdown-menu-right border-0 shadow" id="visorDeListado" aria-labelledby="navbarDropdownAlerts">
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="row">
-                                            <!-- departamento -->
-                                            <div class="col-md-6">
-                                                <label for="departamento" class="form-label">Departamento</label>
-                                                <input type="text" class="form-control" id="departamento" name="departamento" disabled>
-                                            </div>
-                                            <!-- localidad -->
-                                            <div class="col-md-6">
-                                                <label for="barrio" class="form-label">Localidad</label>
-                                                <input type="text" class="form-control" id="barrio" name="barrio" disabled>
-                                            </div>
-                                            <!-- calle -->
-                                            <div class="col-md-12 pb-4">
-                                                <label for="calle" class="form-label">Calle</label>
-                                                <input type="text" class="form-control" id="calle" name="calle" disabled>
-                                            </div>
-                                            <!-- Acordeón 1: Selector de esquina -->
-                                            <div class="col-md-12">
-                                                <div class="accordion" id="acordeonEsquina">
-                                                    <div class="accordion-item">
-                                                        <h2 class="accordion-header" id="headingEsquina">
-                                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEsquina" aria-expanded="true" aria-controls="collapseEsquina">
-                                                                Esquina
-                                                            </button>
-                                                        </h2>
-                                                        <div id="collapseEsquina" class="accordion-collapse collapse show" aria-labelledby="headingEsquina" data-bs-parent="#acordeonEsquina">
-                                                            <div class="accordion-body">
-                                                                <div class="col-md-12" id="esquinaDiv">
-                                                                    <input type="text" class="form-control" id="idSelectEsquina" name="idSelectEsquina" value="" disabled>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- Acordeón 2: Número de calle y botón de búsqueda -->
-                                            <div class="col-md-12">
-                                                <div class="accordion" id="acordeonNumero">
-                                                    <div class="accordion-item">
-                                                        <h2 class="accordion-header" id="headingNumero">
-                                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNumero" aria-expanded="false" aria-controls="collapseNumero">
-                                                                Número de calle y búsqueda
-                                                            </button>
-                                                        </h2>
-                                                        <div id="collapseNumero" class="accordion-collapse collapse" aria-labelledby="headingNumero" data-bs-parent="#acordeonNumero">
-                                                            <div class="accordion-body">
-                                                                <div class="row">
-                                                                    <div class="col-md-6">
-                                                                        <input type="number" placeholder="Numero" class="form-control" id="numeroCalle" name="numeroCalle">
-                                                                    </div>
-                                                                    <div class="col-md-6">
-                                                                        <button type="button" class="btn btn-primary" onclick="buscarCalleNumero(this);">Buscar</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <input type="text" style="visibility: hidden;" id="direccion" name="Direccion" value="" disabled>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <!-- departamento -->
+                                        <div class="col-md-6">
+                                            <label for="departamento" class="form-label">Departamento</label>
+                                            <input type="text" class="form-control" id="departamento" name="departamento" disabled>
                                         </div>
+                                        <!-- localidad -->
+                                        <div class="col-md-6">
+                                            <label for="barrio" class="form-label">Localidad</label>
+                                            <input type="text" class="form-control" id="barrio" name="barrio" disabled>
+                                        </div>
+                                        <!-- calle -->
+                                        <div class="col-md-12 pb-4">
+                                            <label for="calle" class="form-label">Calle</label>
+                                            <input type="text" class="form-control" id="calle" name="calle" disabled>
+                                        </div>
+                                        <!-- Acordeón 1: Selector de esquina -->
+                                        <div class="col-md-12">
+                                            <div class="accordion" id="acordeonEsquina">
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header" id="headingEsquina">
+                                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEsquina" aria-expanded="true" aria-controls="collapseEsquina">
+                                                            Esquina
+                                                        </button>
+                                                    </h2>
+                                                    <div id="collapseEsquina" class="accordion-collapse collapse show" aria-labelledby="headingEsquina" data-bs-parent="#acordeonEsquina">
+                                                        <div class="accordion-body">
+                                                            <div class="col-md-12" id="esquinaDiv">
+                                                                <input type="text" class="form-control" id="idSelectEsquina" name="idSelectEsquina" value="" disabled>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Acordeón 2: Número de calle y botón de búsqueda -->
+                                        <div class="col-md-12">
+                                            <div class="accordion" id="acordeonNumero">
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header" id="headingNumero">
+                                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNumero" aria-expanded="false" aria-controls="collapseNumero">
+                                                            Número de calle y búsqueda
+                                                        </button>
+                                                    </h2>
+                                                    <div id="collapseNumero" class="accordion-collapse collapse" aria-labelledby="headingNumero" data-bs-parent="#acordeonNumero">
+                                                        <div class="accordion-body">
+                                                            <div class="row">
+                                                                <div class="col-md-6">
+                                                                    <input type="number" placeholder="Numero" class="form-control" id="numeroCalle" name="numeroCalle">
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <button type="button" class="btn btn-primary" onclick="buscarCalleNumero(this);">Buscar</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <input type="text" style="visibility: hidden;" id="direccion" name="Direccion" value="" disabled>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- termina form -->
                 </div>
-            </form>
-        </div>
-
-        <button id="buscarUbicacion" title="Solicitar ambulancia">🝊</button>
-        <button id="btnUpdate" title="Actualizar Mapa">↺</button>
-        <!-- <button id="crearRecorridoBtn">R</button>  -->
-        <!-- <button id="mostrarBuscador">M</button> -->
-        <!-- <button id="contenedorFrmBuscar">M</button> -->
-        <button id="bufferBtn2" title="Mostrar Buffer">BFR</button>
-
-        <div id="map-container">
-            <div id="map"></div>
-        </div>
+                <!-- termina form -->
+            </div>
+        </form>
     </div>
+
+    <button id="buscarUbicacion" title="Solicitar ambulancia">🝊</button>
+    <button id="btnUpdate" title="Actualizar Mapa">↺</button>
+    <!-- <button id="crearRecorridoBtn">R</button>  -->
+    <!-- <button id="mostrarBuscador">M</button> -->
+    <!-- <button id="contenedorFrmBuscar">M</button> -->
+    <button id="bufferBtn2" title="Mostrar Buffer">BFR</button>
+
+    <div id="map-container">
+        <div id="map"></div>
+    </div>
+</div>
 
 </body>
 
@@ -212,7 +212,7 @@
         if (mostrarOcultarBtn.style.display === 'block') {
             mostrarOcultarBtn.style.display = 'none';
         }
-    } 
+    }
 </script>
 
 <script>
@@ -235,30 +235,28 @@
     var btnUpdate = document.getElementById("btnUpdate");
     var bufferBtn2 = document.getElementById("bufferBtn2");
     btnUpdate.addEventListener("click", function () {
-       // menuInicio();
+        // menuInicio();
         map.removeLayer(geojsonLayere);
         map.removeLayer(geojsonLayeres);
         map.removeLayer(geojsonLayer);
-      //  map.invalidateSize();
-
-       removerLayer();
-      //  geojsonLayerBuff.remove();
-
-      location.reload();
-     //  initLayers(0)
+        //  map.invalidateSize();
+        removerLayer();
+        //  geojsonLayerBuff.remove();
+        location.reload();
+        //  initLayers(0)
     });
-    
+
     bufferBtn2.addEventListener("click", function () {
         // if (contenedorFrmBuscar.style.display === 'none') {
-                        // } else {
-                //     contenedorFrmBuscar.style.display = 'none';
-                // }
-                if (geojsonLayerBuff != null) {
-                    geojsonLayerBuff.remove();
-                    geojsonLayerBuff = null;
-                } else {
-                    addLayerWFSbuf();
-                }
+        // } else {
+        //     contenedorFrmBuscar.style.display = 'none';
+        // }
+        if (geojsonLayerBuff != null) {
+            geojsonLayerBuff.remove();
+            geojsonLayerBuff = null;
+        } else {
+            addLayerWFSbuf();
+        }
     });
 </script>
 
@@ -271,69 +269,15 @@
 <script src="./userAnonimo/scriptLeaflet/MovingMarker.js"></script>
 <!-- <script type="text/javascript" src="./userAnonimo/scriptLeaflet/Leaflet.MovingMarker-master/Leaflet.MovingMarker-master/examples/scriptRecorrido.js"></script> -->
 <script>
-            menuInicio();
-         initLayers(0); // indexInvitado.js
-             
+    menuInicio();
+    initLayers(0); // indexInvitado.js
 
- //   map.invalidateSize();
- // montevideo();
-//zonasSinCobertura();
-// hardcodedDataPoint();
+    // map.invalidateSize();
+    // montevideo();
+    // zonasSinCobertura();
+    // hardcodedDataPoint();
     // addLayerWFSbuf();
-    
+
     // wfsSelectHospitales(); // controladorUsuario.js // Seleccionar Hospital (control-button)
     // CrearMapaInvitado(); // ver linea 13 buscadorCalles
 </script>
-
-
-
-<!-- 
-    // wfsSelectHospitales(); // controladorUsuario.js // Seleccionar Hospital (control-button)
-    // CrearMapaInvitado(); // linea 13 buscadorCalles
-// function obtenerPuntosInicioFin() {
-// // Realiza la solicitud al servidor Geoserver para obtener los puntos de inicio y fin
-// var url = 'http://localhost:8081/geoserver/wfs?' +
-// 'service=WFS&' +
-// 'request=GetFeature&' +
-// 'typeName=Geo_lab2023_g14PersistenceUnit:vista_se_h&' +
-// 'srsName=EPSG:32721&' +
-// 'outputFormat=application/json';
-// axios.get(url, {
-// headers: {
-// "Content-Type": "text/xml"
-// }
-// })
-// .then(function (response) {
-// // Manejar la respuesta del servidor
-// var features = response.data.features;
-// let cantidad = features.length;
-// // let mensaje = "Se encontraron # " + cantidad + " servicios en su área.";
-// // +
-// features.forEach(function (feature) {
-// puntoInicioCoords = feature.geometry.coordinates;
-// mensaje += puntoInicioCoords;
-// // mensaje += "\n\t- " + feature.properties.nombre + " (" + feature.properties.nombrehospital + ") - [" + puntoInicioCoords + "]";
-// });
-// // alert(mensaje);
-// })
-// .catch(function (error) {
-// console.error("Error al obtener los puntos de inicio y fin:", error);
-// });
-// }
--->
-
-<!-- 
- hardcodedDataPoint();    addLayerWFSbuf();
-// hardcodedDataPoint();
-// wfsAllLayers();
-// wfsServicioEmergencia();
-// wfsAmbulancia()
-// wfsBuscarServicioEmergencia(); // se llama desde wfs wfsSelectHospitales
-// wfsBuscarAmbulancia();
- <button id="bufferBtn2">B</button> 
- Cobertura en mi ubicación // esta en btn selec
- var bufferBtn2 = document.getElementById("bufferBtn2");
- bufferBtn2.addEventListener("click", function () {
- intersectpoint();
- limpiarMapa();
- }); --->

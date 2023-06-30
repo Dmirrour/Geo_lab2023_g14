@@ -37,27 +37,19 @@ function menuInicio() {
             switch (newItemValue) {
                 case 1:
                     console.log("Cobertura en mi ubicación");
+                    obtenerCoordenadasGPS();
                     limpiarButton();
                     //  initLayers(0);
                     map.removeLayer(geojsonLayere);
                     map.removeLayer(geojsonLayeres);
                     removerLayer();
-               
-                    ocultarFrm();
+                    coorUserlon = this.latitudeGPS;
+                    coorUserlat = this.longitudeGPS;
+                    // console.log('Lat obtener Coordenadas: ', coorUserlat, ' ', coorUserlon);
+                    intersectpoint(coorUserlat, coorUserlon);
                     map.removeLayer(geojsonLayer);
-                    obtenerCoordenadas()
-                        .then(function (coor) {
-                            coorUserlon = coor.longitud;
-                            coorUserlat = coor.latitud;
-                            // console.log('Lat obtener Coordenadas: ', coorUserlat, ' ', coorUserlon);
-                            // ocultarFrm();
-                            // map.removeLayer(geojsonLayer);
-                            intersectpoint(coor.latitud, coor.longitud);
-                            // intersectpoint(coorUserlat, coorUserlon);
-                        })
-                        .catch(function (error) {
-                            console.error('Error al obtener las coordenadas:', error);
-                        });
+                    // ocultarFrm();
+                    //  map.removeLayer(geojsonLayer);
                     break;
                 case 21:
                     console.log("Seleccionar hospital");
@@ -88,7 +80,7 @@ function menuInicio() {
                     // geojsonLayeres.removeFrom(map);
 
                     // map.removerLayer(marker3);
-                   dibujarPolyline();
+                    dibujarPolyline();
                     // ocultarFrm();
                     // selectCtrlHospital.remove();
                     break;
@@ -124,47 +116,47 @@ function wfsSelectHospitales() {
         .then(function (response) {
             return response.json();
         }).then(function (data) {
-            var features = data.features;
-            for (var i = 0; i < features.length; i++) {
-                var item = features[i].properties;
-                var idH = i + 1;
-                //  console.log(idH + " - " + item.nombrehospital);
-                listaSelect.push({ label: item.nombrehospital, value: idH });
-            }
-            let t = listaSelect.length + 1;
-            listaSelect.push({ label: "↪ Mostrar Todo", value: t });
-            defaultValue = listaSelect[0];
-            var defaultValue = listaSelect[0].label;
+        var features = data.features;
+        for (var i = 0; i < features.length; i++) {
+            var item = features[i].properties;
+            var idH = i + 1;
+            //  console.log(idH + " - " + item.nombrehospital);
+            listaSelect.push({ label: item.nombrehospital, value: idH });
+        }
+        let t = listaSelect.length + 1;
+        listaSelect.push({ label: "↪ Mostrar Todo", value: t });
+        defaultValue = listaSelect[0];
+        var defaultValue = listaSelect[0].label;
 
-            this.selectCtrlHospital = L.control.select({
-                position: "topleft",
-                selectedDefault: defaultValue,
-                iconMain: "➥",
-                items: listaSelect,
-                onSelect: function (newItemValue) {
-                    if (newItemValue == t) {
-                        map.removeLayer(geojsonLayere);
-                        map.removeLayer(geojsonLayeres);
-                        map.removeLayer(geojsonLayer);
-                        removerLayer();
-                        ocultarFrm();
-                        initLayers(0);
-                        //  selectCtrlHospital.remove();
-                        //  selectCtrlInicio();
-                    } else {
-                        map.removeLayer(geojsonLayere);
-                        map.removeLayer(geojsonLayeres);
-                        removerLayer();
-                        initLayers(newItemValue);
-                        //  openFrm();
-                        //  masCercana(newItemValue);
-                        //  buscarUbicacion; // crear recorrido
-                        // var buscarUbicacionBtn = document.getElementById('buscarUbicacion');
-                        //    selectCtrlHospital.remove();
-                    }
-                },
-            }).addTo(map);
-        })
+        this.selectCtrlHospital = L.control.select({
+            position: "topleft",
+            selectedDefault: defaultValue,
+            iconMain: "➥",
+            items: listaSelect,
+            onSelect: function (newItemValue) {
+                if (newItemValue == t) {
+                    map.removeLayer(geojsonLayere);
+                    map.removeLayer(geojsonLayeres);
+                    map.removeLayer(geojsonLayer);
+                    removerLayer();
+                    ocultarFrm();
+                    initLayers(0);
+                    //  selectCtrlHospital.remove();
+                    //  selectCtrlInicio();
+                } else {
+                    map.removeLayer(geojsonLayere);
+                    map.removeLayer(geojsonLayeres);
+                    removerLayer();
+                    initLayers(newItemValue);
+                    //  openFrm();
+                    //  masCercana(newItemValue);
+                    //  buscarUbicacion; // crear recorrido
+                    // var buscarUbicacionBtn = document.getElementById('buscarUbicacion');
+                    //    selectCtrlHospital.remove();
+                }
+            },
+        }).addTo(map);
+    })
         .catch(function (error) {
             console.error('Error:', error);
         });
@@ -201,7 +193,7 @@ function camasDisponibles() {
                 fillOpacity: 0.8
             });
         }
-    }).addTo(map); // Crear una capa de GeoJSON, agrega los puntos de SERVICIO EMERGENCIA 
+    }).addTo(map); // Crear una capa de GeoJSON, agrega los puntos de SERVICIO EMERGENCIA
     fetch(urlCamas)
         .then(function (response) {
             return response.json();
@@ -301,7 +293,7 @@ function dibujarPolyline() {
         concatenarPoints = concatenarPoints.slice(0, -1);
         var coordPointText = '[' + concatenarPoints + ']';
         var coordPoint = JSON.parse(coordPointText);
-        coordPoint[0].push(coordPoint[0][0]); // Para que la primera y ultima coordenada sean iguales 
+        coordPoint[0].push(coordPoint[0][0]); // Para que la primera y ultima coordenada sean iguales
         var points = turf.points(coordPoint);
 
         // polygon
@@ -312,7 +304,7 @@ function dibujarPolyline() {
         var coordPolygon = JSON.parse(coordText);
 
         console.log(coordText);
-        coordPolygon[0].push(coordPolygon[0][0]); // Para que la primera y ultima coordenada sean iguales 
+        coordPolygon[0].push(coordPolygon[0][0]); // Para que la primera y ultima coordenada sean iguales
         var polygons = turf.polygon(coordPolygon, {
             "fill": "#00F",
             "fill-opacity": 0.1
@@ -425,6 +417,9 @@ var iconA = L.icon({
 
 ////////// VER AMBULANCIAS Y SERVICIOSEMERGENCIA CON COBERTURA EN MI ZONA //////////
 function intersectpoint(coorUserlat, coorUserlon) {
+    obtenerCoordenadasGPS();
+    coorUserlat = this.latitudeGPS;
+    coorUserlon = this.longitudeGPS;
     let iconoPersonalizado = L.icon({
         iconUrl: 'resources/marker-icons/marker-iconnaranjaf.png',
         iconSize: [22, 36],
@@ -444,7 +439,7 @@ function intersectpoint(coorUserlat, coorUserlon) {
         opacity: 1,
         fillOpacity: 0.09,
         color: '#035'
-    }).addTo(map)
+    }).addTo(map);
 
     geojsonLayer = L.geoJSON(null, {
         style: {
@@ -513,7 +508,7 @@ function intersectpoint(coorUserlat, coorUserlon) {
             }
         },
         ]
-    }; L.geoJSON(puntos2).addTo(map);
+    }; //L.geoJSON(puntos2).addTo(map);
     L.geoJSON(punto, {
         pointToLayer: function (feature, latlng) {
             let idh = feature.properties.idhospital * 20;
@@ -528,6 +523,7 @@ function intersectpoint(coorUserlat, coorUserlon) {
             });
         }
     }).addTo(map);
+
 }
 
 
@@ -591,7 +587,7 @@ function limpiarMapa() {
 
 //////////////// ARRIBA SE ESTA USANDO///////////////////
 
-function obtenerCoordenadasGPSs() {// ver repetido
+function obtenerCoordenadasGPS() {// ver repetido
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
             this.latitudeGPS = position.coords.latitude;
@@ -609,6 +605,7 @@ function obtenerCoordenadasGPSs() {// ver repetido
         console.error("Tu navegador no admite la geolocalización.");
     }
 }
+
 
 ////////// Ver Ambulancias y ServiciosEmergencia con cobertura en mi zona //////////
 function intersectpoint2() {  ///adriana
@@ -683,7 +680,7 @@ function intersectpoint2() {  ///adriana
             }
         },
         ]
-    }; // L.geoJSON(puntos2).addTo(map);
+    }; L.geoJSON(puntos2).addTo(map);
     L.geoJSON(punto, {
         pointToLayer: function (feature, latlng) {
             let idh = feature.properties.idhospital * 20;
@@ -703,4 +700,3 @@ var iconA = L.icon({
     iconUrl: './resources/marker-icons/ambulance.png',
     iconSize: [22, 22]
 });
-

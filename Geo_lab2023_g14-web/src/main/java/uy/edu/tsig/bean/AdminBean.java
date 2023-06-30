@@ -333,7 +333,7 @@ public class AdminBean implements Serializable {
             addMensaje("Hospitales", msj,"exito");
             redirectH();
         }catch (Exception e) {
-            String msj = String.format("Se nombre de hospital %s repetido.", nombreH);
+            String msj = String.format("El nombre de hospital %s ya existe.", nombreH);
             addMensaje("Hospitales", msj, "error");
         }
     }
