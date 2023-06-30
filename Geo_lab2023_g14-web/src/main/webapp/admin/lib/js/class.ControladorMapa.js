@@ -25,6 +25,8 @@ class ControladorMapa extends Configuracion {
     capaAddLayerWFSSE;
     capaAddLayerWFSLine;
     capaAddLayerWFSZonaSCobertura;
+    capaMapaDeCalorSE;
+    capaMapaDeCalorAmbulancias;
 
     constructor() {
         super();
@@ -50,8 +52,8 @@ class ControladorMapa extends Configuracion {
         this.map = L.map('map', {
             center: [-34.870046767198566, -56.16937894760009],
             zoom: 13,
-            minZoom: 11,
-            maxZoom: 20,
+            minZoom: 9,
+            maxZoom: 18,
             layers: [this.openst],
             zoomControl: true
         });
@@ -75,6 +77,7 @@ class ControladorMapa extends Configuracion {
             }
         });
 
+        L.control.scale({ position: 'bottomright' }).addTo(this.map);
         this.map.addLayer(this.drawLayers);
         this.map.addControl(drawControl);
 
@@ -86,6 +89,8 @@ class ControladorMapa extends Configuracion {
 
         this.agregarBotonFormularioGPS();
         this.agregarBotonFormualrioDireccion();
+        this.agregarBotonMostrarOcularMapaCalor();
+        this.agregarBotonMostrarOcularMapaCalorAmbulancia();
         this.agregarBotonZonaSinCobertura();
         this.agregarBotonServicioMasAmbulancia();
         this.agregarBotonMostrarBuffer();
@@ -184,6 +189,28 @@ class ControladorMapa extends Configuracion {
         };
 
         btnMOSE.addTo(this.map);
+    }
+    agregarBotonMostrarOcularMapaCalor() {
+        // Crear el botón
+        let btnMCalor = L.control({ position: 'topright' });
+        btnMCalor.onAdd = function (map) {
+            let button = L.DomUtil.create('button', 'leaflet-touch');
+            button.id = "btnMOCalor";
+            button.innerHTML = 'MCS';
+            return button;
+        };
+        btnMCalor.addTo(this.map);
+    }
+    agregarBotonMostrarOcularMapaCalorAmbulancia() {
+        // Crear el botón
+        let btnMCalor = L.control({ position: 'topright' });
+        btnMCalor.onAdd = function (map) {
+            let button = L.DomUtil.create('button', 'leaflet-touch');
+            button.id = "btnMOCalorAmbulancia";
+            button.innerHTML = 'MCA';
+            return button;
+        };
+        btnMCalor.addTo(this.map);
     }
     agregarBotonMostrarOcultarRecorridos(mapaAdmin) {
         // Crear el botón
@@ -362,6 +389,16 @@ class ControladorMapa extends Configuracion {
                         mapaAdmin.capaAddLayerWFSZonaSCobertura.remove();
                         mapaAdmin.capaAddLayerWFSZonaSCobertura = null;
                     }
+                    if (mapaAdmin.capaMapaDeCalorSE) {
+                        btnMOCalor.style.backgroundColor = '#f4f4f4';
+                        mapaAdmin.capaMapaDeCalorSE.remove();
+                        mapaAdmin.capaMapaDeCalorSE = null;
+                    }
+                    if (mapaAdmin.capaMapaDeCalorAmbulancias) {
+                        btnMOCalorAmb.style.backgroundColor = '#f4f4f4';
+                        mapaAdmin.capaMapaDeCalorAmbulancias.remove();
+                        mapaAdmin.capaMapaDeCalorAmbulancias = null;
+                    }
                 } else {
                     alert('Tu navegador no es compatible con la geolocalización.');
                 }
@@ -436,6 +473,76 @@ class ControladorMapa extends Configuracion {
                 console.error('Error addLayersWFS: ', error);
             });
         this.capaAddLayerWFSSE = geojsonLayer;
+    }
+    mapaCalorSE() {
+        let url =
+            'http://localhost:' +
+            this.puertoGeoServer +
+            '/geoserver/wfs?service=WFS&' +
+            'request=GetFeature&typeName=' +
+            this.baseDatos + ':' +
+            this.vista_SEH +
+            '&srsName=' + this.srid +
+            '&outputFormat=application/json';
+        fetch(url)
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                let puntos = data.features.map(function (feature) {
+                    return [feature.geometry.coordinates[1], feature.geometry.coordinates[0], 1];
+                });
+                let heatmapLayer = L.heatLayer(puntos, {
+                    radius: 30,
+                    blur: 10,
+                    maxZoom: 17,
+                    minOpacity: 0.5
+                }).addTo(mapaAdmin.map);
+                console.log('heatmapLayer: ', heatmapLayer);
+                mapaAdmin.capaMapaDeCalorSE = heatmapLayer;
+            })
+            .catch(function (error) {
+                console.error('Error mapaCalorSE: ', error);
+            });
+    }
+    mapaCalorAmbulancias() {
+        let url =
+            'http://localhost:' +
+            this.puertoGeoServer +
+            '/geoserver/wfs?service=WFS&' +
+            'request=GetFeature&typeName=' +
+            this.baseDatos + ':' +
+            this.vista_LineString +
+            '&srsName=' + this.srid +
+            '&outputFormat=application/json';
+        fetch(url)
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                let puntos = data.features.map(function (feature) {
+                    let firstPoint = feature.geometry.coordinates[0];
+                    return [firstPoint[1], firstPoint[0], 1];
+                });
+                //let puntos = [];
+                //data.features.forEach(function (feature) {
+                //    let coordinates = feature.geometry.coordinates;
+                //    coordinates.forEach(function (coordinate) {
+                //        puntos.push([coordinate[1], coordinate[0], 1]);
+                //    });
+                //});
+                let heatmapLayer = L.heatLayer(puntos, {
+                    radius: 30,
+                    blur: 10,
+                    maxZoom: 17,
+                    minOpacity: 0.5
+                }).addTo(mapaAdmin.map);
+                console.log('heatmapLayer: ', heatmapLayer);
+                mapaAdmin.capaMapaDeCalorAmbulancias = heatmapLayer;
+            })
+            .catch(function (error) {
+                console.error('Error mapaCalorAmbulancias: ', error);
+            });
     }
     addLayerWFSLine() {
         let geojsonLayer = L.geoJSON(null, {
@@ -755,7 +862,7 @@ class ControladorMapa extends Configuracion {
                                 }
                                 geojsonLayer = L.geoJSON(intersection, {
                                     style: {
-                                        color: 'blue',
+                                        color: 'red',
                                         weight: 1,
                                         opacity: 0.7
                                     },

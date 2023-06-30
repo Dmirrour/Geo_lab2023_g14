@@ -156,6 +156,7 @@
          collapseEsquina.hide(); // Ocultar el acordeón de Esquina
       });
    </script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.heat/0.2.0/leaflet-heat.js"></script>
    <script type="text/javascript" src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
    <script type="text/javascript">
       function ocultarDlgs() {
@@ -177,9 +178,6 @@
 
       let mapaAdmin = new ControladorMapa();
       mapaAdmin.crearMapaAdmin();
-      //mapaAdmin.addLayerWFSbuf();
-      //mapaAdmin.addLayersWFS();
-      //mapaAdmin.addLayerWFSLine();
 
       function mostrarMarker() {
          mapaAdmin.cargarMapaAltaSE();
@@ -230,6 +228,50 @@
             title: "Servicios de emergencia.",
             trigger: "hover"
          });
+      });
+
+      // Botono de mostrar/ocular mapa de calor
+      var btnMOCalor = document.getElementById("btnMOCalor");
+      btnMOCalor.addEventListener("click", function () {
+         //console.log("click en btnMOCalor");
+         if (mapaAdmin.capaMapaDeCalorSE != null) {
+             btnMOCalor.style.backgroundColor = '#f4f4f4';
+             mapaAdmin.capaMapaDeCalorSE.remove();
+             mapaAdmin.capaMapaDeCalorSE = null;
+         }else {
+             // Mapa de calor
+             btnMOCalor.style.backgroundColor = '#f60707';
+             mapaAdmin.mapaCalorSE();
+         }
+      });
+      $(document).ready(function() {
+             $(btnMOCalor).tooltip({
+                placement: "left",
+                title: "Mapa de calor de servicios de emergencia.",
+                trigger: "hover"
+             });
+        });
+
+      // Boton de mostrar/ocultar mapa calor ambulancias
+      var btnMOCalorAmb = document.getElementById("btnMOCalorAmbulancia");
+      btnMOCalorAmb.addEventListener("click", function () {
+           //console.log("click en btnMOCalorAmb");
+           if (mapaAdmin.capaMapaDeCalorAmbulancias != null) {
+              btnMOCalorAmb.style.backgroundColor = '#f4f4f4';
+              mapaAdmin.capaMapaDeCalorAmbulancias.remove();
+              mapaAdmin.capaMapaDeCalorAmbulancias = null;
+           }else {
+              // Mapa de calor
+              btnMOCalorAmb.style.backgroundColor = '#f60707';
+              mapaAdmin.mapaCalorAmbulancias();
+           }
+        });
+      $(document).ready(function() {
+           $(btnMOCalorAmb).tooltip({
+              placement: "left",
+              title: "Mapa de calor de ambulancias.",
+              trigger: "hover"
+           });
       });
 
       // Botón de mostrar/ocultar recorridos

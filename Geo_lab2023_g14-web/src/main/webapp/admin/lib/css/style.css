@@ -188,7 +188,9 @@ body {
   z-index: 1700;
 }
 
-#btnMBuffer, #mostrarBuscador, #btnServMasAmb, #btnGPS, #btnMORecorridos, #btnMBuffer, #btnMOSerEme, #btnZsC, #btnLimpiar {
+#btnMBuffer, #mostrarBuscador, #btnServMasAmb, #btnGPS,
+#btnMORecorridos, #btnMBuffer, #btnMOSerEme, #btnZsC, #btnLimpiar,
+#btnMOCalor, #btnMOCalorAmbulancia {
   width: 34px;
   height: 34px;
   border-radius: 4px;
@@ -196,7 +198,9 @@ body {
   color: black;
 }
 
-#mostrarBuscador:hover, #btnMBuffer:hover, #btnServMasAmb:hover, #btnGPS:hover, #btnMORecorridos:hover, #btnMBuffer:hover, #btnMOSerEme:hover, #btnZsC:hover, #btnLimpiar:hover {
+#mostrarBuscador:hover, #btnMBuffer:hover, #btnServMasAmb:hover, #btnGPS:hover,
+#btnMORecorridos:hover, #btnMBuffer:hover, #btnMOSerEme:hover, #btnZsC:hover, #btnLimpiar:hover,
+#btnMOCalor:hover, #btnMOCalorAmbulancia:hover {
   background-color: orange !important;
 }
 
