@@ -1,7 +1,6 @@
 # Laboratorio TSIG 2023
 ## Grupo 14
 
-> Diego Poblete 
 
 > Adriana Pisano
 
@@ -11,13 +10,9 @@
 
 > Wilson Arriola
 
-<<<<<<< HEAD
 > Damian Vera
 =======
 > Damián Vera
->>>>>>> origin/rama_wilson
-
-****
 
 ### **Tecnologías Utilizadas**
 * WildFly 27.0.1
